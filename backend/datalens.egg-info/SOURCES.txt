@@ -1,0 +1,8 @@
+pyproject.toml
+datalens/__init__.py
+datalens/main.py
+datalens.egg-info/PKG-INFO
+datalens.egg-info/SOURCES.txt
+datalens.egg-info/dependency_links.txt
+datalens.egg-info/requires.txt
+datalens.egg-info/top_level.txt
