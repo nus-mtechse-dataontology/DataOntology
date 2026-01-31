@@ -2,11 +2,12 @@
 
 This repository contains the backend for DataLens.
 
-## Prerequisites
+### Prerequisites
 - Python 3.11 or newer
 - Git
 - uv (Python environment and package manager)
 
+### Steps
 1. Install uv if not already available:
 ```bash
 python3.11 -m pip install –user uv
