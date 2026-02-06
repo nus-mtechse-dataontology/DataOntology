@@ -55,7 +55,7 @@ wheels = [
 ]
 
 [[package]]
-name = "datalens"
+name = "dataontology"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

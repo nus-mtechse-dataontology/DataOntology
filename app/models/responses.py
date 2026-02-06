@@ -1,13 +1,9 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Optional
 from pydantic import BaseModel
 
-from datalens.models.result_models import QueryResult
-
-
-class QueryRequest(BaseModel):
-    query: str
+from app.models.results import QueryResult
 
 
 class QueryResponse(BaseModel):
