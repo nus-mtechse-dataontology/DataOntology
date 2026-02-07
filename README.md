@@ -3,14 +3,14 @@
 This repository contains the app for DataOntology.
 
 ### Prerequisites
-- Python 3.11 or newer
+- Python 3.14 or newer
 - Git
 - uv (Python environment and package manager)
 
 ### Steps
 1. Install uv if not already available:
 ```bash
-python3.11 -m pip install --user uv
+python3.14 -m pip install --user uv
 ```
 
 2. Clone the repository:
