@@ -61,3 +61,6 @@ All tests should pass on a clean checkout.
 
 ### Documentation:
 - See docs/README.md for API notes and local development details.
+
+## Jira Board
+- [Data Ontology Jira Board](https://nus-mtechse-data-ontology.atlassian.net/jira/software/projects/DAT/boards/1)

@@ -19,3 +19,6 @@ If FastAPI's interactive docs are enabled, you can also visit:
 - `app/ontology/`: ontology loading and lookup
 - `app/models/`: shared data contracts
 - `tests/`: unit and integration tests
+
+## Jira Board
+- [Data Ontology Jira Board](https://nus-mtechse-data-ontology.atlassian.net/jira/software/projects/DAT/boards/1)
