@@ -1,0 +1,178 @@
+@prefix hdb: <http://hdb_property_inforomation_data.gov/> .
+@prefix hdbprop: <http://hdb_property_inforomation_data.gov/property/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+hdb:HDBProperty a rdfs:Class ;
+    rdfs:label "HDB Property" ;
+    rdfs:comment "Represents an HDB (Housing and Development Board) property in Singapore" .
+
+hdbprop:1room_rental a rdf:Property ;
+    rdfs:label "1room_rental" ;
+    hdb:requiresQuotes true ;
+    hdb:sqlColumn "1room_rental" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:1room_sold a rdf:Property ;
+    rdfs:label "1room_sold" ;
+    hdb:requiresQuotes true ;
+    hdb:sqlColumn "1room_sold" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:2room_rental a rdf:Property ;
+    rdfs:label "2room_rental" ;
+    hdb:requiresQuotes true ;
+    hdb:sqlColumn "2room_rental" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:2room_sold a rdf:Property ;
+    rdfs:label "2room_sold" ;
+    hdb:requiresQuotes true ;
+    hdb:sqlColumn "2room_sold" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:3room_rental a rdf:Property ;
+    rdfs:label "3room_rental" ;
+    hdb:requiresQuotes true ;
+    hdb:sqlColumn "3room_rental" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:3room_sold a rdf:Property ;
+    rdfs:label "3room_sold" ;
+    hdb:requiresQuotes true ;
+    hdb:sqlColumn "3room_sold" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:4room_sold a rdf:Property ;
+    rdfs:label "4room_sold" ;
+    hdb:requiresQuotes true ;
+    hdb:sqlColumn "4room_sold" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:5room_sold a rdf:Property ;
+    rdfs:label "5room_sold" ;
+    hdb:requiresQuotes true ;
+    hdb:sqlColumn "5room_sold" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:bldg_contract_town a rdf:Property ;
+    rdfs:label "bldg_contract_town" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "bldg_contract_town" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:string .
+
+hdbprop:blk_no a rdf:Property ;
+    rdfs:label "blk_no" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "blk_no" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:string .
+
+hdbprop:commercial a rdf:Property ;
+    rdfs:label "commercial" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "commercial" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:string .
+
+hdbprop:exec_sold a rdf:Property ;
+    rdfs:label "exec_sold" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "exec_sold" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:market_hawker a rdf:Property ;
+    rdfs:label "market_hawker" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "market_hawker" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:string .
+
+hdbprop:max_floor_lvl a rdf:Property ;
+    rdfs:label "max_floor_lvl" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "max_floor_lvl" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:miscellaneous a rdf:Property ;
+    rdfs:label "miscellaneous" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "miscellaneous" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:string .
+
+hdbprop:multigen_sold a rdf:Property ;
+    rdfs:label "multigen_sold" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "multigen_sold" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:multistorey_carpark a rdf:Property ;
+    rdfs:label "multistorey_carpark" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "multistorey_carpark" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:string .
+
+hdbprop:other_room_rental a rdf:Property ;
+    rdfs:label "other_room_rental" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "other_room_rental" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:precinct_pavilion a rdf:Property ;
+    rdfs:label "precinct_pavilion" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "precinct_pavilion" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:string .
+
+hdbprop:residential a rdf:Property ;
+    rdfs:label "residential" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "residential" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:string .
+
+hdbprop:street a rdf:Property ;
+    rdfs:label "street" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "street" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:string .
+
+hdbprop:studio_apartment_sold a rdf:Property ;
+    rdfs:label "studio_apartment_sold" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "studio_apartment_sold" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:total_dwelling_units a rdf:Property ;
+    rdfs:label "total_dwelling_units" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "total_dwelling_units" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
+hdbprop:year_completed a rdf:Property ;
+    rdfs:label "year_completed" ;
+    hdb:requiresQuotes false ;
+    hdb:sqlColumn "year_completed" ;
+    rdfs:domain hdb:HDBProperty ;
+    rdfs:range xsd:integer .
+
