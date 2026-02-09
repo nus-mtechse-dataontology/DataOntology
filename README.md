@@ -24,7 +24,13 @@ uv venv
 uv pip install -e ".[dev]"
 ```
 
-4. Run the backend:
+4. Update enviornment and packages fully:
+```bash
+uv sync --all-extras # update whole enviornment and library
+uv sync # updates library only
+```
+
+5. Run the backend:
 ```bash
 uv run uvicorn app.main:app --reload
 ```
