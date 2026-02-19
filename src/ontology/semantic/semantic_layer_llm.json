@@ -1,0 +1,124 @@
+{
+  "version": "1.1",
+  "description": "LLM-facing semantic metadata for intent and parameter extraction. SQL templates are intentionally excluded.",
+  "entities": {
+    "airport": {
+      "synonyms": ["airport", "city", "destination", "origin"]
+    },
+    "country": {
+      "synonyms": ["country", "nation"]
+    }
+  },
+  "param_schema": {
+    "origin": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA airport code for the origin airport"
+    },
+    "destination": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA airport code for the destination airport"
+    },
+    "country": {
+      "type": "string",
+      "format": "country_name",
+      "description": "Country name, e.g. Japan"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Start date in ISO format YYYY-MM-DD"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "End date in ISO format YYYY-MM-DD"
+    },
+    "max_price": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Maximum acceptable return fare amount in the query currency"
+    },
+    "outbound_origin": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA origin code for outbound leg"
+    },
+    "outbound_destination": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA destination code for outbound leg"
+    },
+    "return_origin": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA origin code for return leg"
+    },
+    "return_destination": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA destination code for return leg"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Maximum number of rows to return"
+    }
+  },
+  "intents": {
+    "cheapest_return_flight": {
+      "description": "Find the lowest-priced return flight between two airports within an outbound departure date range.",
+      "examples": [
+        "What is the cheapest return flight from SIN to BKK?",
+        "Find the lowest return fare from SIN to BKK between 2019-09-01 and 2019-09-30.",
+        "Cheapest round-trip option from BKK to SIN in September 2019?"
+      ],
+      "required_params": ["origin", "destination", "start_date", "end_date"]
+    },
+    "destinations_under_budget_return": {
+      "description": "List return-trip destinations from an origin airport within a maximum budget and outbound departure date range.",
+      "examples": [
+        "Where can I fly to from Singapore under 300 SGD return?",
+        "Show return destinations from SIN below 300 between 2019-09-01 and 2019-09-30.",
+        "Find round-trip options under 260 from BKK in September 2019."
+      ],
+      "required_params": ["origin", "max_price", "start_date", "end_date"]
+    },
+    "route_departure_options": {
+      "description": "Return departure options between two airports in a date window, ordered by earliest departure.",
+      "examples": [
+        "Show me departures from SIN to BKK between 2019-09-12 and 2019-09-12.",
+        "List BKK to SIN departures on 2019-09-19.",
+        "What are the earliest SIN to BKK departures in September 2019?"
+      ],
+      "required_params": ["origin", "destination", "start_date", "end_date"]
+    },
+    "return_fare_options": {
+      "description": "List return fare options for a route with price breakdown and currency.",
+      "examples": [
+        "Show return fare options from SIN to BKK in September 2019.",
+        "List fare breakdown for BKK to SIN return itineraries.",
+        "What are the available return prices for SIN-BKK?"
+      ],
+      "required_params": ["origin", "destination", "start_date", "end_date"]
+    },
+    "destinations_by_country_from_origin": {
+      "description": "List destination airports in a specific country reachable from an origin in a date window.",
+      "examples": [
+        "From SIN, what destinations in Thailand are available in September 2019?",
+        "Show routes from BKK to destinations in Singapore between 2019-09-01 and 2019-09-30.",
+        "List destination airports in Thailand from SIN."
+      ],
+      "required_params": ["origin", "country", "start_date", "end_date"]
+    }
+  }
+}
