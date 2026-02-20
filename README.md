@@ -32,6 +32,8 @@ uv run uvicorn app.main:app --reload
 The API will be available at:
 http://127.0.0.1:8000/health
 
+go to the Swagger API UI: http://127.0.0.1:8000/docs#/
+
 Health check endpoint:
 GET /health
 
