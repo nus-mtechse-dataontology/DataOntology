@@ -29,12 +29,6 @@ uv pip install -e ".[dev]"
 uv run uvicorn app.main:app --reload
 ```
 
-The API will be available at:
-http://127.0.0.1:8000/health
-
-Health check endpoint:
-GET /health
-
 5. Run tests:
 ```bash
 uv run pytest
@@ -61,3 +55,19 @@ All tests should pass on a clean checkout.
 
 ### Documentation:
 - See docs/README.md for API notes and local development details.
+
+
+### Swagger URL:
+go to the Swagger API UI: http://127.0.0.1:8000/docs#/
+
+### Redoc URL:
+go to the Redoc API UI: http://127.0.0.1:8000/redoc/
+
+### Health check endpoint:
+GET http://127.0.0.1:8000/ontology/actuator/health/liveness
+
+GET http://127.0.0.1:8000/ontology/actuator/health/readiness
+
+### To terminate the application:
+POST http://127.0.0.1:8000/ontology/actuator/shutdown/
+

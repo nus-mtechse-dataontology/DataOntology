@@ -1,0 +1,148 @@
+{
+  "version": "1.1",
+  "description": "Semantic layer for NL-to-query-plan mapping over flight pricing tables and deterministic SQL compilation",
+  "entities": {
+    "airport": {
+      "synonyms": ["airport", "city", "destination", "origin"],
+      "table": "airport",
+      "key": "airport_code"
+    },
+    "country": {
+      "synonyms": ["country", "nation"],
+      "table": "airport",
+      "field": "country_name"
+    }
+  },
+  "param_schema": {
+    "origin": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA airport code for the origin airport"
+    },
+    "destination": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA airport code for the destination airport"
+    },
+    "country": {
+      "type": "string",
+      "format": "country_name",
+      "description": "Country name, e.g. Japan"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Start date in ISO format YYYY-MM-DD"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "End date in ISO format YYYY-MM-DD"
+    },
+    "max_price": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Maximum acceptable return fare amount in the query currency"
+    },
+    "outbound_origin": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA origin code for outbound leg"
+    },
+    "outbound_destination": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA destination code for outbound leg"
+    },
+    "return_origin": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA origin code for return leg"
+    },
+    "return_destination": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA destination code for return leg"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Maximum number of rows to return"
+    }
+  },
+  "metrics": {
+    "cheapest_return_price": {
+      "description": "Lowest total recommendation fare for a return trip",
+      "expression": "MIN(r.fare_total_amount)",
+      "currency_field": "sr.currency_code"
+    },
+    "earliest_departure": {
+      "description": "Earliest segment departure datetime",
+      "expression": "MIN(fs.departure_datetime)"
+    },
+    "avg_route_price": {
+      "description": "Average recommendation fare by route",
+      "expression": "AVG(r.fare_total_amount)"
+    }
+  },
+  "intents": {
+    "cheapest_return_flight": {
+      "description": "Find the lowest-priced return flight between two airports within an outbound departure date range.",
+      "examples": [
+        "What is the cheapest return flight from SIN to BKK?",
+        "Find the lowest return fare from SIN to BKK between 2019-09-01 and 2019-09-30.",
+        "Cheapest round-trip option from BKK to SIN in September 2019?"
+      ],
+      "required_params": ["origin", "destination", "start_date", "end_date"],
+      "sql_template": "SELECT sr.session_id, sr.currency_code, MIN(r.fare_total_amount) AS cheapest_return_price, MIN(f_out.departure_date) AS outbound_date, MIN(f_in.departure_date) AS return_date FROM search_response sr JOIN recommendation r ON r.payload_id = sr.payload_id JOIN flight f_out ON f_out.payload_id = sr.payload_id JOIN flight f_in ON f_in.payload_id = sr.payload_id WHERE sr.trip_type = 'R' AND f_out.origin_airport_code = :origin AND f_out.destination_airport_code = :destination AND f_in.origin_airport_code = :destination AND f_in.destination_airport_code = :origin AND date(f_out.departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY sr.session_id, sr.currency_code ORDER BY cheapest_return_price ASC LIMIT :limit"
+    },
+    "destinations_under_budget_return": {
+      "description": "List return-trip destinations from an origin airport within a maximum budget and outbound departure date range.",
+      "examples": [
+        "Where can I fly to from Singapore under 300 SGD return?",
+        "Show return destinations from SIN below 300 between 2019-09-01 and 2019-09-30.",
+        "Find round-trip options under 260 from BKK in September 2019."
+      ],
+      "required_params": ["origin", "max_price", "start_date", "end_date"],
+      "sql_template": "SELECT DISTINCT f_out.destination_airport_code AS destination, a.city_name, a.country_name, MIN(r.fare_total_amount) AS min_return_price, sr.currency_code FROM search_response sr JOIN recommendation r ON r.payload_id = sr.payload_id JOIN flight f_out ON f_out.payload_id = sr.payload_id JOIN flight f_in ON f_in.payload_id = sr.payload_id JOIN airport a ON a.payload_id = f_out.payload_id AND a.airport_code = f_out.destination_airport_code WHERE sr.trip_type = 'R' AND f_out.origin_airport_code = :origin AND f_in.destination_airport_code = :origin AND f_out.destination_airport_code = f_in.origin_airport_code AND date(f_out.departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f_out.destination_airport_code, a.city_name, a.country_name, sr.currency_code HAVING MIN(r.fare_total_amount) <= :max_price ORDER BY min_return_price ASC LIMIT :limit"
+    },
+    "route_departure_options": {
+      "description": "Return departure options between two airports in a date window, ordered by earliest departure.",
+      "examples": [
+        "Show me departures from SIN to BKK between 2019-09-12 and 2019-09-12.",
+        "List BKK to SIN departures on 2019-09-19.",
+        "What are the earliest SIN to BKK departures in September 2019?"
+      ],
+      "required_params": ["origin", "destination", "start_date", "end_date"],
+      "sql_template": "SELECT f.payload_id, f.origin_airport_code, f.destination_airport_code, fs.departure_datetime, fs.arrival_datetime, lg.flight_number FROM flight f JOIN flight_segment fs ON fs.payload_id = f.payload_id AND fs.flight_idx = f.flight_idx LEFT JOIN flight_leg lg ON lg.payload_id = fs.payload_id AND lg.flight_idx = fs.flight_idx AND lg.segment_idx = fs.segment_idx AND lg.leg_idx = 0 WHERE f.origin_airport_code = :origin AND f.destination_airport_code = :destination AND datetime(fs.departure_datetime) BETWEEN datetime(:start_date) AND datetime(:end_date) ORDER BY datetime(fs.departure_datetime) ASC LIMIT :limit"
+    },
+    "return_fare_options": {
+      "description": "List return fare options for a route with price breakdown and currency.",
+      "examples": [
+        "Show return fare options from SIN to BKK in September 2019.",
+        "List fare breakdown for BKK to SIN return itineraries.",
+        "What are the available return prices for SIN-BKK?"
+      ],
+      "required_params": ["origin", "destination", "start_date", "end_date"],
+      "sql_template": "SELECT r.recommendation_id, r.fare_total_amount, r.fare_amount_without_tax, r.fare_tax, r.fare_family, sr.currency_code FROM search_response sr JOIN recommendation r ON r.payload_id = sr.payload_id WHERE EXISTS (SELECT 1 FROM flight f_out WHERE f_out.payload_id = sr.payload_id AND f_out.origin_airport_code = :origin AND f_out.destination_airport_code = :destination AND date(f_out.departure_date) BETWEEN date(:start_date) AND date(:end_date)) AND EXISTS (SELECT 1 FROM flight f_in WHERE f_in.payload_id = sr.payload_id AND f_in.origin_airport_code = :destination AND f_in.destination_airport_code = :origin) ORDER BY r.fare_total_amount ASC LIMIT :limit"
+    },
+    "destinations_by_country_from_origin": {
+      "description": "List destination airports in a specific country reachable from an origin in a date window.",
+      "examples": [
+        "From SIN, what destinations in Thailand are available in September 2019?",
+        "Show routes from BKK to destinations in Singapore between 2019-09-01 and 2019-09-30.",
+        "List destination airports in Thailand from SIN."
+      ],
+      "required_params": ["origin", "country", "start_date", "end_date"],
+      "sql_template": "SELECT DISTINCT f.destination_airport_code AS destination, a.city_name, a.country_name, MIN(f.departure_date) AS first_departure_date FROM flight f JOIN airport a ON a.payload_id = f.payload_id AND a.airport_code = f.destination_airport_code WHERE f.origin_airport_code = :origin AND a.country_name = :country AND date(f.departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.destination_airport_code, a.city_name, a.country_name ORDER BY first_departure_date ASC LIMIT :limit"
+    }
+  }
+}

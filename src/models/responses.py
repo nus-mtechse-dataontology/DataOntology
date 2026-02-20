@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from app.models.results import QueryResult
+from models.results import QueryResult
 
 
 class QueryResponse(BaseModel):
