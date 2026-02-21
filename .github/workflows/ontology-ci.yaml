@@ -2,7 +2,7 @@ name: DataOntology CI/CD
 
 on:
   push:
-    branches: [ main, feat/sam-lambda-setup ]
+    branches: [ main ]
   pull_request:
     branches: [ main, feat/sam-lambda-setup ]
 
