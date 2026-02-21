@@ -2,9 +2,9 @@ name: DataOntology CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, feat/sam-lambda-setup ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, feat/sam-lambda-setup ]
 
 jobs:
   # 1. QUALITY GATE: Scans code, not containers
