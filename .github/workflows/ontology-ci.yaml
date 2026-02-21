@@ -1,4 +1,4 @@
-name: DataOntology CD (SAM + Docker)
+name: DataOntology CI/CD
 
 on:
   push:
@@ -7,54 +7,89 @@ on:
     branches: [ main ]
 
 jobs:
-  # Job 1: Build and Test (Runs on every Push and PR)
-  test-and-validate:
+  # 1. QUALITY GATE: Scans code, not containers
+  quality-and-sec:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Essential for SonarQube blame data
 
-      - name: Set up Python 3.14
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.14'
 
-      - name: Install dependencies and run tests
+      - name: Install Dependencies
         run: |
           python -m pip install uv
           uv pip install --system .[dev]
-          uv run pytest
 
-      - name: SAM Validate
-        run: sam validate --no-insider
+      # --- UNIT TESTS ---
+      - name: Run Tests
+        run: uv run pytest --cov=app --cov-report=xml
 
-  # Job 2: Deploy (Only runs when code is actually on main/mvp1)
+      # --- SNYK (Python Library Scan) ---
+      - name: Snyk Python Scan
+        uses: snyk/actions/python@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+      # --- SONARQUBE (Python Logic Scan) ---
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v3
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=DataOntology_Orchestrator
+            -Dsonar.python.version=3.14
+            -Dsonar.sources=app
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+
+  # 2. DEPLOY: Build & Ship to AWS
   deploy:
-    needs: test-and-validate
-    # This condition ensures deployment ONLY happens on a push/merge to main/mvp1
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mvp1')
+    needs: quality-and-sec
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    outputs:
+      lambda_url: ${{ steps.get-url.outputs.url }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: ap-southeast-1
 
-      - name: Setup AWS SAM
-        uses: aws-actions/setup-sam@v2
-
-      - name: SAM Build
-        run: sam build --use-container
-
+      - uses: aws-actions/setup-sam@v2
+      - run: sam build --use-container
       - name: SAM Deploy
         run: |
           sam deploy --no-confirm-changeset --no-fail-on-empty-changeset \
             --stack-name data-ontology-api \
             --resolve-s3 \
             --capabilities CAPABILITY_IAM \
+            --region ap-southeast-1 \
             --image-repository ${{ secrets.ECR_REPOSITORY_URI }}
+
+      - name: Get Lambda URL
+        id: get-url
+        run: |
+          URL=$(aws cloudformation describe-stacks --stack-name data-ontology-api --query "Stacks[0].Outputs[?OutputKey=='DataOntologyFunctionUrl'].OutputValue" --output text)
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+  # 3. ZAP SCAN: Dynamic Attack on the URL
+  zap-scan:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: ZAP Full Scan
+        uses: zaproxy/action-full-scan@v0.13.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target: ${{ needs.deploy.outputs.lambda_url }}
+          cmd_options: '-a'
