@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  DataOntologyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      MemorySize: 512 # Increased for faster startup
+      Timeout: 30
+      # Enable the Function URL
+      FunctionUrlConfig:
+        AuthType: NONE # Publicly accessible
+      Environment:
+        Variables:
+          PROJECT_PATH: /var/task
+          PYTHONPATH: /var/task/src
+          PORT: 8000
+          HOST: 0.0.0.0
+          AWS_LWA_PORT: 8000
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: .
+
+Outputs:
+  # This will print the URL in your terminal after deployment
+  OntologyApiUrl:
+    Description: "Lambda Function URL"
+    Value: !GetAtt DataOntologyFunctionUrl.FunctionUrl

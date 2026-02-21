@@ -14,5 +14,4 @@ __all__ = [
     "QueryRequest",
     "QueryResponse",
     "QueryResult",
-    "ValidatedQueryPlan",
 ]

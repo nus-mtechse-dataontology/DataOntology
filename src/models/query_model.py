@@ -55,7 +55,6 @@ class QueryPlan:
             confidence=confidence,
         )
 
-
 @dataclass(frozen=True)
 class CompiledQuery:
     intent: str
