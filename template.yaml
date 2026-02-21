@@ -1,0 +1,145 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: "Data Ontology API: Secure RDS, Lambda URL, and SSM Bridge"
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: "ID of your Default VPC"
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: "Select at least 2 Subnets"
+  MasterDBPassword:
+    Type: String
+    NoEcho: true
+    Description: "Password for RDS (Alphanumeric only, no @, /, \", or spaces)"
+    MinLength: 8
+
+Resources:
+
+  # --- 2. DB PASSWORD (Stored in SSM for Lambda to find) ---
+  DBPasswordParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /data-ontology/db/password
+      Type: String
+      Value: !Ref MasterDBPassword
+      Description: "Master password for DataOntology RDS"
+
+# --- 3. THE DATABASE ---
+  DataOntologyDB:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Delete
+    Properties:
+      DBInstanceIdentifier: data-ontology-db
+      AllocatedStorage: '20'
+      DBInstanceClass: db.t3.micro
+      Engine: postgres
+      MasterUsername: dbadmin
+      # RDS fetches the password directly from SSM during creation
+      MasterUserPassword: !Ref MasterDBPassword
+      PubliclyAccessible: false
+      VPCSecurityGroups: [ !Ref DBSecurityGroup ]
+      DeleteAutomatedBackups: true
+      BackupRetentionPeriod: 0
+
+  # --- 4. THE LAMBDA FUNCTION ---
+  DataOntologyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      MemorySize: 512
+      Timeout: 30
+      FunctionUrlConfig:
+        AuthType: NONE
+      VpcConfig:
+        SecurityGroupIds: [ !Ref LambdaSecurityGroup ]
+        SubnetIds: !Ref SubnetIds
+      Environment:
+        Variables:
+          PORT: "8000"
+          # Tell the adapter to just check the root if actuator is 404ing
+          READINESS_CHECK_PATH: "/" 
+          # Give the app more time to handle its "boot-admin" connection retries
+          AWS_LWA_READINESS_CHECK_MIN_UNHEALTHY_STATUS_COUNT: "5"
+          # Optional: If you want to see exactly what LWA is doing in CloudWatch
+          AWS_LWA_LOG_LEVEL: "debug"
+          DB_HOST: !GetAtt DataOntologyDB.Endpoint.Address
+          DB_USER: dbadmin
+          # Only pass the NAME of the parameter, not the secret itself
+          DB_PASS_PARAM: /data-ontology/db/password
+      Policies:
+        # Give Lambda permission to read the SSM Parameter
+        - SSMParameterReadPolicy:
+            ParameterName: data-ontology/db/password
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: .
+      DockerTag: v1
+
+  # --- 5. THE SSM BRIDGE (EC2 Bridge) ---
+  SSMBridgeInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.micro
+      ImageId: resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64
+      IamInstanceProfile: !Ref SSMBridgeProfile
+      SubnetId: !Select [ 0, !Ref SubnetIds ]
+      SecurityGroupIds: [ !Ref SSMBridgeSecurityGroup ]
+      Tags:
+        - Key: Name
+          Value: SSMBridgeInstance
+
+  # --- 6. SECURITY GROUPS ---
+  LambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Lambda Security Group"
+      VpcId: !Ref VpcId
+
+  DBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow access to RDS"
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref LambdaSecurityGroup
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref SSMBridgeSecurityGroup
+
+  SSMBridgeSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Bridge Security Group"
+      VpcId: !Ref VpcId
+
+  # --- 7. IAM ROLES ---
+  SSMBridgeRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: { Service: [ ec2.amazonaws.com ] }
+            Action: [ sts:AssumeRole ]
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  SSMBridgeProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: [ !Ref SSMBridgeRole ]
+
+Outputs:
+  LambdaFunctionUrl:
+    Description: "Public API URL"
+    Value: !GetAtt DataOntologyFunctionUrl.FunctionUrl
+  RDSEndpoint:
+    Description: "RDS Endpoint"
+    Value: !GetAtt DataOntologyDB.Endpoint.Address
