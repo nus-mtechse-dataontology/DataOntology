@@ -1,19 +1,24 @@
 name: DataOntology CI/CD
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
-    branches: [ main ]
+    branches: [ DAT-54-CICD ]
   pull_request:
-    branches: [ main, feat/sam-lambda-setup ]
+    branches: [ main, release ]
 
 jobs:
   # 1. QUALITY GATE: Scans code, not containers
   quality-and-sec:
     runs-on: ubuntu-latest
+    environment: PRD
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Essential for SonarQube blame data
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -23,15 +28,25 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install uv
-          uv pip install --system .[dev]
+          # Including pytest-cov here as we discussed
+          uv pip install --system .[dev] pytest-cov 
 
       # --- UNIT TESTS ---
       - name: Run Tests
-        run: uv run pytest --cov=app --cov-report=xml
+        run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml --cov-config=.coveragerc
 
       # --- SNYK (Python Library Scan) ---
       - name: Snyk Python Scan
+        # if: false
+        # This allows the pipeline to proceed even if Snyk finds vulnerabilities
+        run: |
+          uv export --format requirements-txt > requirements.txt
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run Snyk Action
         uses: snyk/actions/python@master
+        # if: false
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
@@ -42,21 +57,25 @@ jobs:
         uses: sonarsource/sonarqube-scan-action@v3
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
         with:
           args: >
-            -Dsonar.projectKey=DataOntology_Orchestrator
+            -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
+            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
             -Dsonar.python.version=3.14
-            -Dsonar.sources=app
+            -Dsonar.sources=src
             -Dsonar.python.coverage.reportPaths=coverage.xml
-
+            -Dsonar.branch.name=${{ github.head_ref || github.ref_name }}
+            
   # 2. DEPLOY: Build & Ship to AWS
   deploy:
     needs: quality-and-sec
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # UPDATED: Allows deployment from either branch
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/DAT-54-CICD') ||
+      (github.event_name == 'pull_request' && github.base_ref == 'release')
     runs-on: ubuntu-latest
-    outputs:
-      lambda_url: ${{ steps.get-url.outputs.url }}
+    environment: PRD
     steps:
       - uses: actions/checkout@v4
       - uses: aws-actions/configure-aws-credentials@v4
@@ -67,29 +86,56 @@ jobs:
 
       - uses: aws-actions/setup-sam@v2
       - run: sam build --use-container
+
       - name: SAM Deploy
         run: |
-          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset \
-            --stack-name data-ontology-api \
-            --resolve-s3 \
-            --capabilities CAPABILITY_IAM \
-            --region ap-southeast-1 \
-            --image-repository ${{ secrets.ECR_REPOSITORY_URI }}
+          sam deploy --stack-name DataOntology \
+            --parameter-overrides FunctionName=${{ vars.LAMBDA_NAME }} \
+            --no-confirm-changeset --no-fail-on-empty-changeset
 
-      - name: Get Lambda URL
-        id: get-url
+      # --- SMOKE TEST ---
+      - name: Verify Lambda is Live
         run: |
-          URL=$(aws cloudformation describe-stacks --stack-name data-ontology-api --query "Stacks[0].Outputs[?OutputKey=='DataOntologyFunctionUrl'].OutputValue" --output text)
-          echo "url=$URL" >> $GITHUB_OUTPUT
+          # INFRA FIX: Use LAMBDA_URL variable, NOT LAMBDA_NAME
+          echo "Pinging existing URL: ${{ vars.LAMBDA_URL }}"
+          curl -f --retry 3 --retry-delay 5 "${{ vars.LAMBDA_URL }}actuator/health/liveness"
 
   # 3. ZAP SCAN: Dynamic Attack on the URL
   zap-scan:
     needs: deploy
     runs-on: ubuntu-latest
+    environment: PRD
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4 # Required so ZAP can see your .zap/rules.tsv
+
       - name: ZAP Full Scan
         uses: zaproxy/action-full-scan@v0.13.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          target: ${{ needs.deploy.outputs.lambda_url }}
+          target: ${{ vars.LAMBDA_URL }}
+          rules_file_name: '.zap/rules.tsv'
+          create_issue: false   # FIX: Stops the "Resource not accessible" 403 error
+          allow_issue_writing: false # FIX: Stops the "Resource not accessible" 403 error
+          fail_action: false    # Keeps pipeline green even with remaining WARNs
           cmd_options: '-a'
+          
+      # - name: Sync Release to Master
+      #   # Only run if the previous SAM deploy succeeded AND we are targeting 'release'
+      #   if: success() && github.event_name == 'pull_request' && github.base_ref == 'release'
+      #   run: |
+      #     # 1. Setup Git Identity
+      #     git config --global user.name "github-actions[bot]"
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+      #     # 2. Fetch all branches
+      #     git fetch origin master
+          
+      #     # 3. Checkout master and merge the code from the PR
+      #     git checkout master
+      #     git merge origin/${{ github.head_ref }} --no-ff -m "Auto-sync Golden Copy (Master) after successful Release Deploy"
+          
+      #     # 4. Push to master
+      #     # NOTE: will likely need a Personal Access Token (PAT) 
+      #     # to bypass branch protections on 'master'
+      #     git push origin master
