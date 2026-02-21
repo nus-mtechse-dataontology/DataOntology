@@ -8,6 +8,7 @@ dependencies = [
   "pydantic",
   "python-dotenv",
   "pyctuator",
+  "pytest-cov",
 ]
 
 [project.optional-dependencies]
