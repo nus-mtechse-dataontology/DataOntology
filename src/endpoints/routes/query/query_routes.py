@@ -5,8 +5,8 @@ from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
 from fastapi.requests import Request
 
-from models.requests import QueryRequest
-from models.responses import ErrorResponse, QueryResponse
+from models.common import ErrorDetails, ErrorResponse
+from models.pipeline import NLQRequest
 
 
 query_router = APIRouter(prefix="/query", tags=["query"])
@@ -27,19 +27,21 @@ async def get_query(request: Request):
 
 @query_router.post(
     "/query",
-    response_model=QueryResponse,
+    response_model=ErrorResponse,
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": ErrorResponse},
         status.HTTP_500_INTERNAL_SERVER_ERROR: {"model": ErrorResponse},
         status.HTTP_501_NOT_IMPLEMENTED: {"model": ErrorResponse},
     },
 )
-async def query(request: QueryRequest):
-    _ = request
+async def query(request: NLQRequest):
     error = ErrorResponse(
-        stage="api",
-        error_code="not_implemented",
-        message="Query endpoint not implemented",
+        request_id=request.request_id,
+        error=ErrorDetails(
+            code="not_implemented",
+            message="Query endpoint not implemented",
+            component="api",
+        ),
     )
     return JSONResponse(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,

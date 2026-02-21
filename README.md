@@ -38,12 +38,14 @@ All tests should pass on a clean checkout.
 
 ### Project structure (high level):
 - api: HTTP API layer (routers and route modules)
-- orchestrator: workflow orchestration
-- planner: NLQ to QueryPlan
-- grounding: validation and safety checks
-- compiler: QueryPlan to SQL
-- executor: SQL execution
-- ontology: ontology loading and lookup
+- Orchestrator: workflow orchestration
+- PromptBuilder: Builds prompt from prompt template
+- LLMGateway: Connects to external LLM and submit prompt
+- SyntacticValidator: Validates format and structure of raw LLM output string
+- SemanticValidator: Validates semantic information in LLM output
+- SQLCompiler: Compiles SQL from LLM generated query plan
+- SQLExecutor: Connects to db and executes query
+- ontology: ontology loading and semantics model
 - models: shared data contracts
 - tests: unit and integration tests
 
