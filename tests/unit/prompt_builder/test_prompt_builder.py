@@ -34,13 +34,11 @@ def test_build_prompt_success_contains_required_context_and_structure():
     payload = response.data.user_message
     assert request.question in payload
     assert "semantic_whitelist" in payload
-    assert "output_format_instructions" in payload
-    assert "Return only valid JSON." in payload
+    assert "valid JSON" in response.data.system_message
 
     semantic_block = payload.split("Semantic model: ", maxsplit=1)[1]
     parsed = json.loads(semantic_block)
     assert "intents" in parsed["semantic_whitelist"]
-    assert "required_output" in parsed["output_format_instructions"]
 
 
 def test_build_prompt_returns_error_for_invalid_template_placeholders():
@@ -73,3 +71,30 @@ def test_build_prompt_returns_error_for_invalid_semantic_model():
     assert isinstance(response, ErrorResponse)
     assert response.request_id == request.request_id
     assert response.error.code == "invalid_semantic_model"
+
+
+def test_build_prompt_uses_default_query_plan_template_when_empty_template():
+    request = PromptRequest(
+        request_id="req-4",
+        question="Show return fare options from SIN to BKK.",
+        prompt_template="",
+        semantic_model={
+            "intents": {
+                "return_fare_options": {
+                    "required_params": ["origin", "destination", "start_date", "end_date"]
+                }
+            },
+            "param_schema": {
+                "origin": {"type": "string"},
+                "destination": {"type": "string"},
+            },
+        },
+    )
+
+    response = PromptBuilder().build(request)
+
+    assert isinstance(response, SuccessResponse)
+    assert response.status == "SUCCESS"
+    assert "Role: You are an AI query planner for flight analytics." in response.data.user_message
+    assert request.question in response.data.user_message
+    assert "Semantic context:" in response.data.user_message

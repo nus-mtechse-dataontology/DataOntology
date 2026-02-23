@@ -2,12 +2,20 @@
 
 import json
 from datetime import datetime, timezone
+from pathlib import Path
 
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
 from models.pipeline import PromptBundle, PromptRequest
 
 
 class PromptBuilder:
+    def __init__(self, template_path: str | None = None) -> None:
+        default_path = Path(__file__).with_name("templates").joinpath("query_plan_prompt.j2")
+        self._template_path = Path(template_path) if template_path else default_path
+
+    def _load_default_template(self) -> str:
+        return self._template_path.read_text(encoding="utf-8")
+
     def build(self, request: PromptRequest) -> SuccessResponse[PromptBundle] | ErrorResponse:
         try:
             if not request.question.strip():
@@ -36,39 +44,19 @@ class PromptBuilder:
                 "param_schema": request.semantic_model.get("param_schema", {}),
             }
 
-            output_format_instructions = {
-                "required_output": {
-                    "intent": "string",
-                    "parameters": "object",
-                    "missing_params": "array<string>",
-                    "follow_up_question": "string|null",
-                    "confidence": "number between 0 and 1",
-                },
-                "rules": [
-                    "Return only valid JSON.",
-                    "Do not include markdown fences.",
-                    "Use an intent from the semantic whitelist only.",
-                ],
-            }
-
             current_time = datetime.now(timezone.utc).isoformat()
-            prompt_context = {
-                "semantic_whitelist": semantic_whitelist,
-                "output_format_instructions": output_format_instructions,
-            }
 
-            user_message = request.prompt_template.format(
+            template = request.prompt_template.strip() or self._load_default_template()
+
+            user_message = template.format(
                 question=request.question,
                 current_time=current_time,
-                semantic_model=json.dumps(prompt_context, ensure_ascii=False, indent=2),
+                semantic_model=json.dumps({"semantic_whitelist": semantic_whitelist}, ensure_ascii=False, indent=2),
             )
 
             bundle = PromptBundle(
                 request_id=request.request_id,
-                system_message=(
-                    "You are an NLQ planner. Produce strictly valid JSON that matches the required schema "
-                    "and only use intents/parameters from the semantic whitelist."
-                ),
+                system_message="You are an AI query planner. Return strictly valid JSON only.",
                 user_message=user_message,
             )
             return SuccessResponse[PromptBundle](
