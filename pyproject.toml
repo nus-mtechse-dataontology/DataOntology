@@ -6,6 +6,7 @@ dependencies = [
   "fastapi",
   "uvicorn[standard]",
   "pydantic",
+  "pydantic-ai",
   "python-dotenv",
 ]
 
@@ -18,6 +19,7 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
+pythonpath = ["src"]
 
 [tool.ruff]
 target-version = "py314"

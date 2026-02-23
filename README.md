@@ -34,6 +34,18 @@ uv run uvicorn app.main:app --reload
 uv run pytest
 ```
 
+6. (Optional) Test PromptBuilder + Gemini gateway via debug script:
+
+Create a `.env` file in the repository root with:
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+Then run:
+```bash
+uv run python debug_llm.py
+```
+
 All tests should pass on a clean checkout.
 
 ### Project structure (high level):
