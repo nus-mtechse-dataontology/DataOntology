@@ -18,7 +18,7 @@ class GeminiGateway(LLMGateway):
         timeout_seconds: int = 30,
     ) -> None:
         self._api_key = api_key
-        self._model = model or os.getenv("GEMINI_MODEL", "gemini-3-flash")
+        self._model = model or os.getenv("GEMINI_MODEL", "gemini-3-flash-preview")
         del timeout_seconds
 
     def submit_prompt(self, bundle: PromptBundle) -> LLMRawResponse:
