@@ -2,7 +2,7 @@
 
 from typing import Any, Callable
 
-from models.common import ErrorResponse, SuccessResponse
+from models.common import ErrorDetails, ErrorResponse, SuccessResponse
 from models.pipeline import (
     CompiledSQL,
     LLMRawResponse,
@@ -38,5 +38,136 @@ class Orchestrator:
         self._now_provider = now_provider
 
     def handle_question(self, request: NLQRequest) -> SuccessResponse[QuestionResponse] | ErrorResponse:
-        del request
-        raise NotImplementedError("Orchestrator.handle_question is not implemented yet.")
+        if not isinstance(request, NLQRequest):
+            request_id = "unknown"
+            if isinstance(request, dict):
+                candidate = request.get("request_id")
+                if isinstance(candidate, str) and candidate:
+                    request_id = candidate
+            return ErrorResponse(
+                request_id=request_id,
+                error=ErrorDetails(
+                    code="invalid_request",
+                    message="Request must be an NLQRequest",
+                    component="orchestrator",
+                ),
+            )
+
+        semantic_model_response = self._semantic_model_provider()
+        if isinstance(semantic_model_response, ErrorResponse):
+            self._response_builder(semantic_model_response)
+            return semantic_model_response
+        semantic_model = semantic_model_response.data
+
+        current_time = self._now_provider()
+        prompt_bundle_response = self._prompt_builder(
+            request.request_id,
+            request.question,
+            semantic_model,
+            current_time,
+        )
+        if isinstance(prompt_bundle_response, ErrorResponse):
+            self._response_builder(prompt_bundle_response)
+            return prompt_bundle_response
+        prompt_bundle = prompt_bundle_response.data
+        if not isinstance(prompt_bundle, PromptBundle):
+            error = ErrorResponse(
+                request_id=request.request_id,
+                error=ErrorDetails(
+                    code="invalid_payload",
+                    message="prompt_builder must return SuccessResponse[PromptBundle]",
+                    component="prompt_builder",
+                ),
+            )
+            self._response_builder(error)
+            return error
+
+        raw_response_response = self._llm_gateway(prompt_bundle)
+        if isinstance(raw_response_response, ErrorResponse):
+            self._response_builder(raw_response_response)
+            return raw_response_response
+        raw_response = raw_response_response.data
+        if not isinstance(raw_response, LLMRawResponse):
+            error = ErrorResponse(
+                request_id=request.request_id,
+                error=ErrorDetails(
+                    code="invalid_payload",
+                    message="llm_gateway must return SuccessResponse[LLMRawResponse]",
+                    component="llm_gateway",
+                ),
+            )
+            self._response_builder(error)
+            return error
+
+        query_plan_response = self._syntactic_validator(raw_response)
+        if isinstance(query_plan_response, ErrorResponse):
+            self._response_builder(query_plan_response)
+            return query_plan_response
+        query_plan = query_plan_response.data
+        if not isinstance(query_plan, QueryPlan):
+            error = ErrorResponse(
+                request_id=request.request_id,
+                error=ErrorDetails(
+                    code="invalid_payload",
+                    message="syntactic_validator must return SuccessResponse[QueryPlan]",
+                    component="syntactic_validator",
+                ),
+            )
+            self._response_builder(error)
+            return error
+
+        validated_query_plan_response = self._semantic_validator(query_plan, semantic_model)
+        if isinstance(validated_query_plan_response, ErrorResponse):
+            self._response_builder(validated_query_plan_response)
+            return validated_query_plan_response
+        validated_query_plan = validated_query_plan_response.data
+        if not isinstance(validated_query_plan, QueryPlan):
+            error = ErrorResponse(
+                request_id=request.request_id,
+                error=ErrorDetails(
+                    code="invalid_payload",
+                    message="semantic_validator must return SuccessResponse[QueryPlan]",
+                    component="semantic_validator",
+                ),
+            )
+            self._response_builder(error)
+            return error
+
+        compiled_sql_response = self._sql_compiler(validated_query_plan, semantic_model)
+        if isinstance(compiled_sql_response, ErrorResponse):
+            self._response_builder(compiled_sql_response)
+            return compiled_sql_response
+        compiled_sql = compiled_sql_response.data
+        if not isinstance(compiled_sql, CompiledSQL):
+            error = ErrorResponse(
+                request_id=request.request_id,
+                error=ErrorDetails(
+                    code="invalid_payload",
+                    message="sql_compiler must return SuccessResponse[CompiledSQL]",
+                    component="sql_compiler",
+                ),
+            )
+            self._response_builder(error)
+            return error
+
+        result_set_response = self._sql_executor(compiled_sql)
+        if isinstance(result_set_response, ErrorResponse):
+            self._response_builder(result_set_response)
+            return result_set_response
+        result_set = result_set_response.data
+        if not isinstance(result_set, ResultSet):
+            error = ErrorResponse(
+                request_id=request.request_id,
+                error=ErrorDetails(
+                    code="invalid_payload",
+                    message="sql_executor must return SuccessResponse[ResultSet]",
+                    component="sql_executor",
+                ),
+            )
+            self._response_builder(error)
+            return error
+
+        response = self._response_builder(result_set)
+        if isinstance(response, ErrorResponse):
+            return response
+        return response
