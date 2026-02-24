@@ -99,6 +99,7 @@ def _build_orchestrator(
     sql_compiler: Any | None = None,
     sql_executor: Any | None = None,
     response_builder: Any | None = None,
+    error_response_builder: Any | None = None,
     now_provider: Any | None = None,
 ) -> tuple[Orchestrator, dict[str, Mock]]:
     mocks = {
@@ -115,6 +116,7 @@ def _build_orchestrator(
         "sql_executor": sql_executor or Mock(return_value=_success(payloads["result_set"])),
         "response_builder": response_builder
         or Mock(return_value=_success(payloads["question_response"])),
+        "error_response_builder": error_response_builder or Mock(side_effect=lambda error: error),
         "now_provider": now_provider or Mock(return_value=NOW),
     }
     return (
@@ -127,6 +129,7 @@ def _build_orchestrator(
             sql_compiler=mocks["sql_compiler"],
             sql_executor=mocks["sql_executor"],
             response_builder=mocks["response_builder"],
+            error_response_builder=mocks["error_response_builder"],
             now_provider=mocks["now_provider"],
         ),
         mocks,
@@ -334,6 +337,8 @@ def test_handle_question_stops_on_first_failure_and_skips_downstream_stages(
     mocks["semantic_validator"].assert_not_called()
     mocks["sql_compiler"].assert_not_called()
     mocks["sql_executor"].assert_not_called()
+    mocks["response_builder"].assert_not_called()
+    mocks["error_response_builder"].assert_called_once_with(stage_error)
 
 
 @pytest.mark.parametrize(
@@ -365,14 +370,13 @@ def test_handle_question_failure_at_any_stage_returns_meaningful_error_response(
     _assert_error_contract(result)
     assert result.error.component == failed_stage
     assert "failed" in result.error.message.lower()
-    if failed_stage != "response_builder":
-        mocks["response_builder"].assert_called_once()
+    mocks["error_response_builder"].assert_called_once_with(stage_error)
 
 
 def test_handle_question_expects_prompt_builder_success_payload_to_wrap_prompt_bundle(
     nlq_request: NLQRequest, payloads: dict[str, Any]
 ):
-    orchestrator, _ = _build_orchestrator(
+    orchestrator, mocks = _build_orchestrator(
         payloads,
         prompt_builder=Mock(return_value=_success({"not": "prompt_bundle"})),
     )
@@ -381,12 +385,13 @@ def test_handle_question_expects_prompt_builder_success_payload_to_wrap_prompt_b
 
     _assert_error_contract(result)
     assert result.error.component == "prompt_builder"
+    mocks["error_response_builder"].assert_called_once()
 
 
 def test_handle_question_expects_llm_gateway_success_payload_to_wrap_llm_raw_response(
     nlq_request: NLQRequest, payloads: dict[str, Any]
 ):
-    orchestrator, _ = _build_orchestrator(
+    orchestrator, mocks = _build_orchestrator(
         payloads,
         llm_gateway=Mock(return_value=_success({"not": "llm_raw_response"})),
     )
@@ -395,12 +400,13 @@ def test_handle_question_expects_llm_gateway_success_payload_to_wrap_llm_raw_res
 
     _assert_error_contract(result)
     assert result.error.component == "llm_gateway"
+    mocks["error_response_builder"].assert_called_once()
 
 
 def test_handle_question_expects_syntactic_validator_success_payload_to_wrap_query_plan(
     nlq_request: NLQRequest, payloads: dict[str, Any]
 ):
-    orchestrator, _ = _build_orchestrator(
+    orchestrator, mocks = _build_orchestrator(
         payloads,
         syntactic_validator=Mock(return_value=_success({"not": "query_plan"})),
     )
@@ -409,12 +415,13 @@ def test_handle_question_expects_syntactic_validator_success_payload_to_wrap_que
 
     _assert_error_contract(result)
     assert result.error.component == "syntactic_validator"
+    mocks["error_response_builder"].assert_called_once()
 
 
 def test_handle_question_expects_semantic_validator_success_payload_to_wrap_query_plan(
     nlq_request: NLQRequest, payloads: dict[str, Any]
 ):
-    orchestrator, _ = _build_orchestrator(
+    orchestrator, mocks = _build_orchestrator(
         payloads,
         semantic_validator=Mock(return_value=_success({"not": "query_plan"})),
     )
@@ -423,12 +430,13 @@ def test_handle_question_expects_semantic_validator_success_payload_to_wrap_quer
 
     _assert_error_contract(result)
     assert result.error.component == "semantic_validator"
+    mocks["error_response_builder"].assert_called_once()
 
 
 def test_handle_question_expects_sql_compiler_success_payload_to_wrap_compiled_sql(
     nlq_request: NLQRequest, payloads: dict[str, Any]
 ):
-    orchestrator, _ = _build_orchestrator(
+    orchestrator, mocks = _build_orchestrator(
         payloads,
         sql_compiler=Mock(return_value=_success({"not": "compiled_sql"})),
     )
@@ -437,12 +445,13 @@ def test_handle_question_expects_sql_compiler_success_payload_to_wrap_compiled_s
 
     _assert_error_contract(result)
     assert result.error.component == "sql_compiler"
+    mocks["error_response_builder"].assert_called_once()
 
 
 def test_handle_question_expects_sql_executor_success_payload_to_wrap_result_set(
     nlq_request: NLQRequest, payloads: dict[str, Any]
 ):
-    orchestrator, _ = _build_orchestrator(
+    orchestrator, mocks = _build_orchestrator(
         payloads,
         sql_executor=Mock(return_value=_success({"not": "result_set"})),
     )
@@ -451,13 +460,14 @@ def test_handle_question_expects_sql_executor_success_payload_to_wrap_result_set
 
     _assert_error_contract(result)
     assert result.error.component == "sql_executor"
+    mocks["error_response_builder"].assert_called_once()
 
 
 def test_handle_question_calls_response_builder_before_final_return_on_success(
     nlq_request: NLQRequest, payloads: dict[str, Any]
 ):
     response_builder = Mock(return_value=_success(payloads["question_response"]))
-    orchestrator, _ = _build_orchestrator(
+    orchestrator, mocks = _build_orchestrator(
         payloads,
         response_builder=response_builder,
     )
@@ -465,24 +475,25 @@ def test_handle_question_calls_response_builder_before_final_return_on_success(
     orchestrator.handle_question(nlq_request)
 
     response_builder.assert_called_once()
+    mocks["error_response_builder"].assert_not_called()
 
 
-def test_handle_question_calls_response_builder_before_final_return_on_error(
+def test_handle_question_calls_error_response_builder_before_final_return_on_error(
     nlq_request: NLQRequest, payloads: dict[str, Any]
 ):
     stage_error = _build_error(component="llm_gateway", message="Gateway failed")
-    response_builder = Mock(
-        return_value=_build_error(component="response_builder", message="error response")
+    error_response_builder = Mock(
+        return_value=_build_error(component="error_response_builder", message="error response")
     )
     orchestrator, _ = _build_orchestrator(
         payloads,
         llm_gateway=Mock(return_value=stage_error),
-        response_builder=response_builder,
+        error_response_builder=error_response_builder,
     )
 
     orchestrator.handle_question(nlq_request)
 
-    response_builder.assert_called_once_with(stage_error)
+    error_response_builder.assert_called_once_with(stage_error)
 
 
 def test_handle_question_rejects_non_nlq_request_and_returns_error_response(
