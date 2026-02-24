@@ -18,6 +18,11 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
+markers = [
+  "integration: marks integration tests",
+  "e2e: marks end-to-end tests",
+  "external: marks tests that depend on external services",
+]
 
 [tool.ruff]
 target-version = "py314"
