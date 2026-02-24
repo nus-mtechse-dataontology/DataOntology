@@ -73,6 +73,7 @@ uv run pytest tests/integration/orchestrator -vv
 Use for:
 - near-production behavior with external systems
 - final confidence before release
+- golden-question regression checks against known expected outcomes
 
 Run all E2E:
 ```bash
@@ -82,6 +83,14 @@ uv run pytest tests/e2e -vv
 Run only tests marked as E2E or external:
 ```bash
 uv run pytest -m "e2e or external" -vv
+```
+
+Golden-question scaffold:
+- `tests/e2e/test_golden_questions.py`
+
+Run golden-question suite only:
+```bash
+uv run pytest tests/e2e/test_golden_questions.py -vv
 ```
 
 ## When To Run What
@@ -100,6 +109,7 @@ uv run pytest tests/unit tests/integration -q
 
 ### Before merging/release
 - Run full test suite including E2E (if environment and credentials are available).
+- Ensure golden questions still return expected answers.
 
 ```bash
 uv run pytest -vv
@@ -124,4 +134,9 @@ uv run pytest -k "orchestrator and failure" -vv
 Run only Telegram tests:
 ```bash
 uv run pytest -k "telegram" -vv
+```
+
+Run only golden-question tests:
+```bash
+uv run pytest -k "golden_questions" -vv
 ```
