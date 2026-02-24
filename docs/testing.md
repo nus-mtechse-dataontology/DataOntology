@@ -13,6 +13,7 @@ Use for:
 - model contracts
 - orchestrator branching logic
 - builder formatting behavior
+- adapter mapping/formatting logic (for example, Telegram)
 
 Run:
 ```bash
@@ -24,10 +25,32 @@ Use for:
 - component wiring and data propagation
 - failure short-circuiting across boundaries
 - request/response mapping at API level
+- webhook route behavior for adapters (for example, Telegram)
 
 Run:
 ```bash
 uv run pytest tests/integration -vv
+```
+
+### Telegram Adapter Tests
+Use for:
+- validating Telegram update mapping to `NLQRequest`
+- validating orchestration response formatting to Telegram text
+- validating webhook handler behavior and delivery error mapping
+
+Current files:
+- `tests/unit/adapters/telegram/test_telegram_mapper.py`
+- `tests/unit/adapters/telegram/test_telegram_webhook_handler.py`
+- `tests/integration/api/test_telegram_webhook_integration.py`
+
+Run Telegram unit tests:
+```bash
+uv run pytest tests/unit/adapters/telegram -vv
+```
+
+Run Telegram route integration test:
+```bash
+uv run pytest tests/integration/api/test_telegram_webhook_integration.py -vv
 ```
 
 ### Seam Integration (`tests/integration/orchestrator/`)
@@ -98,3 +121,7 @@ Run by keyword:
 uv run pytest -k "orchestrator and failure" -vv
 ```
 
+Run only Telegram tests:
+```bash
+uv run pytest -k "telegram" -vv
+```
