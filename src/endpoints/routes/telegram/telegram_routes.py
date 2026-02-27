@@ -1,0 +1,71 @@
+import os
+from uuid import uuid4
+
+from fastapi import APIRouter, Header, Request, status
+from fastapi.responses import JSONResponse
+
+from adapters.telegram.client import TelegramClient
+from adapters.telegram.webhook_handler import handle_telegram_update
+from models.common import ErrorDetails, ErrorResponse, SuccessResponse
+from models.pipeline import NLQRequest, QuestionResponse
+
+telegram_router = APIRouter(prefix="/telegram", tags=["telegram"])
+
+
+def _default_orchestrator_handle_question(
+    request: NLQRequest,
+) -> SuccessResponse[QuestionResponse] | ErrorResponse:
+    return ErrorResponse(
+        request_id=request.request_id,
+        error=ErrorDetails(
+            code="not_implemented",
+            message="Orchestrator is not wired to Telegram route yet.",
+            component="telegram_webhook",
+        ),
+    )
+
+
+@telegram_router.post("/webhook")
+async def telegram_webhook(
+    request: Request,
+    x_telegram_bot_api_secret_token: str | None = Header(default=None),
+):
+    configured_secret = os.getenv("TELEGRAM_WEBHOOK_SECRET")
+    if configured_secret and x_telegram_bot_api_secret_token != configured_secret:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={
+                "error": "invalid_webhook_secret",
+                "message": "Invalid Telegram webhook secret token.",
+            },
+        )
+
+    bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
+    if not bot_token:
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={
+                "error": "telegram_token_missing",
+                "message": "TELEGRAM_BOT_TOKEN is not configured.",
+            },
+        )
+
+    payload = await request.json()
+    telegram_client = TelegramClient(bot_token=bot_token)
+    result = handle_telegram_update(
+        update=payload,
+        orchestrator_handle_question=_default_orchestrator_handle_question,
+        send_message=telegram_client.send_message,
+        request_id_provider=lambda: str(uuid4()),
+    )
+
+    if isinstance(result, ErrorResponse):
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content=result.model_dump(),
+        )
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=result.model_dump(),
+    )
