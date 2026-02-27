@@ -1,22 +1,22 @@
+from logging.config import dictConfig
 from typing import Any
 
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from logging.config import dictConfig
-
-from pyctuator.pyctuator import Pyctuator
 from pyctuator.auth import BasicAuth
-import uvicorn
+from pyctuator.pyctuator import Pyctuator
 
 from configurations.admin_config import AdminConfig
 from configurations.app_config import AppConfig
 from configurations.logger_config import LoggerConfig
 from endpoints.routes.query.query_routes import query_router
 from endpoints.routes.status.status_routes import status_router
+from endpoints.routes.telegram.telegram_routes import telegram_router
 from lifecycle_hooks.startup import startup
-from models.app_model import AppModel
 from models.admin_model import AdminModel
+from models.app_model import AppModel
 
 
 class DataOntology:
@@ -25,6 +25,7 @@ class DataOntology:
         self._admin_config: AdminModel | None = None
         self._config: AppModel | None = None
         self._logger_config: dict[str, Any] | None = None
+        self._pyctuator: Pyctuator | None = None
 
     def start(self):
         """
@@ -35,7 +36,7 @@ class DataOntology:
         self._load_config()
         self._init_app()
 
-        pyctuator = Pyctuator(
+        self._pyctuator = Pyctuator(
             self._app,
             app_name='Data Ontology',
             app_url=f"{self._config.scheme}://{self._config.host}:{self._config.port}",
@@ -90,6 +91,7 @@ class DataOntology:
     def _include_routers(self):
         self._app.include_router(query_router)
         self._app.include_router(status_router)
+        self._app.include_router(telegram_router)
 
 
 if __name__ == "__main__":
