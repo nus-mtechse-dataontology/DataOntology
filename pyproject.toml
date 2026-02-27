@@ -6,6 +6,7 @@ dependencies = [
   "fastapi",
   "uvicorn[standard]",
   "pydantic",
+  "pydantic-ai",
   "python-dotenv",
   "pyctuator>=1.2.0",
 ]
@@ -19,6 +20,7 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
+pythonpath = ["src"]
 markers = [
   "integration: marks integration tests",
   "e2e: marks end-to-end tests",
