@@ -1,0 +1,27 @@
+2026-02-23 21:46:31 - [32mINFO[0m:     Started server process [[36m49276[0m]
+2026-02-23 21:46:31 - [32mINFO[0m:     Waiting for application startup.
+2026-02-23 21:46:31 - [32mINFO[0m:     Application startup complete.
+2026-02-23 21:46:31 - [32mINFO[0m:     Uvicorn running on [1mhttp://127.0.0.1:8000[0m (Press CTRL+C to quit)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+WARNING:root:Failed registering with boot-admin, [Errno 61] Connection refused (<class 'ConnectionRefusedError'>)
+2026-02-23 21:48:57 - data_ontology   - status_routes.py [INFO    ]: Status: Shutdown initiated...
+INFO:data_ontology:Status: Shutdown initiated...
+2026-02-23 21:48:57 - [32mINFO[0m:     127.0.0.1:60659 - "POST /actuator/shutdown/ HTTP/1.1" 200
+2026-02-23 21:48:57 - data_ontology   - status_routes.py [INFO    ]: Status: Attempting to shutdown server gracefully... 
+INFO:data_ontology:Status: Attempting to shutdown server gracefully... 
+2026-02-23 21:48:57 - [32mINFO[0m:     Shutting down
+2026-02-23 21:48:57 - [32mINFO[0m:     Waiting for application shutdown.
+2026-02-23 21:48:57 - [32mINFO[0m:     Application shutdown complete.
+2026-02-23 21:48:57 - [32mINFO[0m:     Finished server process [[36m49276[0m]
