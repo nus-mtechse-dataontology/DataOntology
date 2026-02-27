@@ -1,5 +1,3 @@
-"""Debug script to test PromptBuilder + GeminiGateway with real LLM."""
-
 import json
 import os
 import sys

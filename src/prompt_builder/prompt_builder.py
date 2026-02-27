@@ -1,5 +1,3 @@
-"""Prompt builder for NLQ planning."""
-
 import json
 from datetime import datetime, timezone
 from pathlib import Path
