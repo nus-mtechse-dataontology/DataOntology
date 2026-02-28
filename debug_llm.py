@@ -43,7 +43,18 @@ def main():
 
     try:
         gateway = GeminiGateway(api_key=api_key)
-        llm_response = gateway.submit_prompt(prompt_bundle)
+        llm_result = gateway.submit_prompt(prompt_bundle)
+
+        if llm_result.status != "SUCCESS":
+            print("Question:")
+            print(question)
+            print("\nLLM call failed:")
+            print(f"Code: {llm_result.error.code}")
+            print(f"Message: {llm_result.error.message}")
+            print(f"Component: {llm_result.error.component}")
+            return
+
+        llm_response = llm_result.data
 
         print("Question:")
         print(question)
