@@ -36,7 +36,8 @@ def test_gemini_gateway_submit_prompt_success(monkeypatch):
     result = gateway.submit_prompt(bundle)
 
     assert result.request_id == bundle.request_id
-    assert result.raw_response_text.startswith('{"intent":')
+    assert result.status == "SUCCESS"
+    assert result.data.raw_response_text.startswith('{"intent":')
     assert captured["model_name"] == "google-gla:gemini-3-flash"
     assert captured["system_prompt"] == bundle.system_message
     assert captured["user_message"] == bundle.user_message
@@ -47,8 +48,11 @@ def test_gemini_gateway_requires_api_key(monkeypatch):
     gateway = GeminiGateway(api_key=None)
     bundle = PromptBundle(request_id="req-2", system_message="x", user_message="y")
 
-    with pytest.raises(ValueError, match="GEMINI_API_KEY"):
-        gateway.submit_prompt(bundle)
+    result = gateway.submit_prompt(bundle)
+
+    assert result.status == "ERROR"
+    assert result.error.code == "missing_auth"
+    assert "GEMINI_API_KEY" in result.error.message
 
 
 def test_gemini_gateway_raises_when_pydantic_ai_missing(monkeypatch):
@@ -57,5 +61,8 @@ def test_gemini_gateway_raises_when_pydantic_ai_missing(monkeypatch):
     gateway = GeminiGateway(api_key="key-123")
     bundle = PromptBundle(request_id="req-3", system_message="x", user_message="y")
 
-    with pytest.raises(RuntimeError, match="pydantic-ai"):
-        gateway.submit_prompt(bundle)
+    result = gateway.submit_prompt(bundle)
+
+    assert result.status == "ERROR"
+    assert result.error.code == "missing_dependency"
+    assert "pydantic-ai" in result.error.message
