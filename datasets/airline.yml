@@ -1,0 +1,42 @@
+name: "Airline Info Ingestion"
+description: "Ingestion pipeline for data processing and transformation."
+version: "1.0.0"
+
+dataset:
+  name: "Airline Info"
+  description: "Dataset containing Airline information."
+  source:
+    type: "file"
+    url: "file:///datafiles/airline.csv"
+    encoding: "utf-8"
+    delimiter: ","
+    quotechar: '"'
+
+datasource:
+  driver:
+    package: "drivers.postgres_driver"
+    class: "PostgresDriver"
+    options:
+  database:
+    drivername: "postgresql+psycopg2"
+    name: "data_ontology"
+    host: "localhost"
+    port: 5432
+    options:
+      user: "postgres.user"
+      password: "postgres.password"
+      echo: false
+  table:
+    name: "dim_airline"
+    columns: []
+    mode: "truncate"
+    batch_size: 1000
+    options:
+
+modules:
+  entry:
+    package: "ingestion.entry.file_entry"
+    class: "FileEntry"
+  ingestion:
+    package: "ingestion.source.file_source.file_ingestion"
+    class: "FileIngestion"

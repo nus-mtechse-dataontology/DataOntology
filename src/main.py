@@ -5,8 +5,6 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from pyctuator.auth import BasicAuth
-from pyctuator.pyctuator import Pyctuator
 
 from configurations.admin_config import AdminConfig
 from configurations.app_config import AppConfig
@@ -14,6 +12,7 @@ from configurations.logger_config import LoggerConfig
 from endpoints.routes.query.query_routes import query_router
 from endpoints.routes.status.status_routes import status_router
 from endpoints.routes.telegram.telegram_routes import telegram_router
+from endpoints.routes.ingestion.ingestion_routes import ingestion_router
 from lifecycle_hooks.startup import startup
 from models.admin_model import AdminModel
 from models.app_model import AppModel
@@ -25,7 +24,6 @@ class DataOntology:
         self._admin_config: AdminModel | None = None
         self._config: AppModel | None = None
         self._logger_config: dict[str, Any] | None = None
-        self._pyctuator: Pyctuator | None = None
 
     def start(self):
         """
@@ -35,19 +33,6 @@ class DataOntology:
         """
         self._load_config()
         self._init_app()
-
-        self._pyctuator = Pyctuator(
-            self._app,
-            app_name='Data Ontology',
-            app_url=f"{self._config.scheme}://{self._config.host}:{self._config.port}",
-            pyctuator_endpoint_url=f"{self._config.scheme}://{self._config.host}:{self._config.port}/actuator",
-            registration_url=f"{self._admin_config.scheme}://{self._admin_config.admin_host}:"
-                             f"{self._admin_config.admin_port}{self._admin_config.context_path}",
-            registration_auth=BasicAuth(
-                username='admin',
-                password='admin123'
-            )
-        )
 
         uvicorn.run(
             self._app,
@@ -92,6 +77,7 @@ class DataOntology:
         self._app.include_router(query_router)
         self._app.include_router(status_router)
         self._app.include_router(telegram_router)
+        self._app.include_router(ingestion_router)
 
 
 if __name__ == "__main__":

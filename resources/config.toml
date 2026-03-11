@@ -39,7 +39,7 @@ use_colors = true
 datefmt = "%Y-%m-%d %H:%M:%S"
 
 [logger.formatters.data_ontology_default]
-format = "%(asctime)s - %(name)-15s - %(filename)-15s [%(levelname)-8s]: %(message)s"
+format = "%(asctime)s - %(name)-15s - %(filename)-35s [%(levelname)-8s]: %(message)s"
 datefmt = "%Y-%m-%d %H:%M:%S"
 
 [logger.loggers.data_ontology]
@@ -80,3 +80,20 @@ admin_host = "127.0.0.1"
 admin_port = 8080
 context_path = "/admin/instances"
 scheme = "http"
+
+[datasource]
+[datasource.driver]
+package = "drivers.postgres_driver"
+class = "PostgresDriver"
+options = {}
+
+[datasource.database]
+drivername = "postgresql+psycopg2"
+name = "data_ontology"
+host = "localhost"
+port = 5432
+
+[datasource.database.options]
+user = "postgres.user"
+password = "postgres.password"
+echo = false
