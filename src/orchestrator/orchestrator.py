@@ -9,6 +9,7 @@ from models.pipeline import (
     LLMRawResponse,
     NLQRequest,
     PromptBundle,
+    PromptRequest,
     QueryPlan,
     QuestionResponse,
     ResultSet,
@@ -19,7 +20,7 @@ class Orchestrator:
     def __init__(
         self,
         semantic_model_provider: Callable[[], dict[str, Any]],
-        prompt_builder: Callable[[str, str, dict[str, Any], str], PromptBundle],
+        prompt_builder: Callable[[PromptRequest], SuccessResponse[PromptBundle] | ErrorResponse],
         llm_gateway: Callable[[PromptBundle], LLMRawResponse],
         syntactic_validator: Callable[[LLMRawResponse], QueryPlan],
         semantic_validator: Callable[[QueryPlan, dict[str, Any]], QueryPlan],
@@ -66,12 +67,13 @@ class Orchestrator:
         semantic_model = semantic_model_response.data
 
         current_time = self._now_provider()
-        prompt_bundle_response = self._prompt_builder(
-            request.request_id,
-            request.question,
-            semantic_model,
-            current_time,
+        prompt_request = PromptRequest(
+            request_id=request.request_id,
+            question=request.question,
+            prompt_template="",
+            semantic_model=semantic_model,
         )
+        prompt_bundle_response = self._prompt_builder(prompt_request)
         if isinstance(prompt_bundle_response, ErrorResponse):
             return self._error_response_builder(prompt_bundle_response)
         prompt_bundle = prompt_bundle_response.data

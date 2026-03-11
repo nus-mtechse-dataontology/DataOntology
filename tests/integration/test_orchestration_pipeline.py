@@ -7,6 +7,7 @@ from models.pipeline import (
     LLMRawResponse,
     NLQRequest,
     PromptBundle,
+    PromptRequest,
     QueryPlan,
     ResultSet,
     Row,
@@ -25,12 +26,12 @@ def test_orchestrator_pipeline_with_faked_components_returns_success_contract():
         call_order.append("semantic_model_provider")
         return SuccessResponse(request_id=request.request_id, data=semantic_model)
 
-    def prompt_builder(request_id: str, question: str, model: dict, now: str):
+    def prompt_builder(prompt_request: PromptRequest):
         call_order.append("prompt_builder")
-        assert request_id == request.request_id
-        assert question == request.question
-        assert model == semantic_model
-        assert now == "2026-02-24T22:00:00Z"
+        assert isinstance(prompt_request, PromptRequest)
+        assert prompt_request.request_id == request.request_id
+        assert prompt_request.question == request.question
+        assert prompt_request.semantic_model == semantic_model
         return SuccessResponse(
             request_id=request.request_id,
             data=PromptBundle(
@@ -140,7 +141,7 @@ def test_orchestrator_pipeline_with_faked_components_short_circuits_on_failure()
             data={"intents": {"top_holdings": {}}},
         )
 
-    def prompt_builder(*_args):
+    def prompt_builder(prompt_request: PromptRequest):
         calls.append("prompt_builder")
         return SuccessResponse(
             request_id=request.request_id,

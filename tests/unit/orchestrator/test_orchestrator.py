@@ -9,6 +9,7 @@ from models.pipeline import (
     LLMRawResponse,
     NLQRequest,
     PromptBundle,
+    PromptRequest,
     QueryPlan,
     QuestionResponse,
     ResultSet,
@@ -247,12 +248,13 @@ def test_handle_question_calls_prompt_builder_with_expected_arguments(
 
     orchestrator.handle_question(nlq_request)
 
-    mocks["prompt_builder"].assert_called_once_with(
-        REQUEST_ID,
-        nlq_request.question,
-        payloads["semantic_model"],
-        NOW,
-    )
+    mocks["prompt_builder"].assert_called_once()
+    call_args = mocks["prompt_builder"].call_args[0]
+    prompt_request = call_args[0]
+    assert isinstance(prompt_request, PromptRequest)
+    assert prompt_request.request_id == REQUEST_ID
+    assert prompt_request.question == nlq_request.question
+    assert prompt_request.semantic_model == payloads["semantic_model"]
 
 
 def test_handle_question_calls_llm_gateway_with_expected_prompt_bundle(
