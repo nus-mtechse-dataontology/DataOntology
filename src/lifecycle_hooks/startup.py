@@ -5,10 +5,15 @@ import os
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
+import tomllib
+import traceback
 
 from fastapi import FastAPI
+from sqlmodel import SQLModel
 
 from compiler.sql_compiler import SQLCompiler
+from session.db_session import DBSession
+from entities import *
 from execution.sql_executor import SQLExecutor
 from llm_gateway.providers.gemini_gateway import GeminiGateway
 from models.common import SuccessResponse
@@ -20,12 +25,26 @@ from prompt_builder.prompt_builder import PromptBuilder
 from validators.semantic.semantic_validator import SemanticValidator
 from validators.syntactic.syntactic_validator import SyntacticValidator
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("data_ontology")
 
 # Default paths (relative to project root)
 _SRC_DIR = Path(__file__).resolve().parent.parent
 _DEFAULT_SEMANTIC_MODEL_PATH = str(_SRC_DIR / "ontology" / "semantic_layer.json")
 _DEFAULT_DB_PATH = str(_SRC_DIR.parent / "resources" / "flights.db")
+
+
+def load_config() -> dict:
+    """
+    Loads the config for the named ingestion.
+    """
+    with open(Path(os.getenv("PROJECT_PATH", os.getcwd()), "resources", "config.toml")) as cf:
+        try:
+            return tomllib.loads(cf.read())
+        
+        except tomllib.TOMLDecodeError as exc:
+            logger.error("Startup: error while loading config, %s", exc)
+            logger.error(traceback.format_exc())
+            raise exc
 
 
 @asynccontextmanager
@@ -78,13 +97,18 @@ async def startup(app: FastAPI):
         error_response_builder=error_response_builder.build,
         now_provider=lambda: datetime.now(timezone.utc).isoformat(),
     )
-
-    app.state.orchestrator = orchestrator
-
+    
     logger.info("Orchestrator wired — pipeline ready (db=%s)", db_path)
     if not gemini_api_key:
         logger.warning("GEMINI_API_KEY not set — LLM calls will fail")
     if not Path(db_path).exists():
         logger.warning("Database not found at %s — SQL execution will fail", db_path)
-
+    
+    config = load_config()
+    session = DBSession(config)
+    SQLModel.metadata.create_all(session.engine)
+    
+    app.state.orchestrator = orchestrator
+    app.state.session = session
+    
     yield
