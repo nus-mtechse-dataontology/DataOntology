@@ -90,7 +90,7 @@ options = {}
 [datasource.database]
 drivername = "postgresql+psycopg2"
 name = "data_ontology"
-host = "localhost"
+host = "host.docker.internal"
 port = 5432
 
 [datasource.database.options]
