@@ -1,14 +1,19 @@
 import logging
 import os
-from pathlib import Path
 import tomllib
 import traceback
+from pathlib import Path
 
 
 class BaseConfig:
     def __init__(self):
         self._log = logging.getLogger("data_ontology")
-        self._root = os.getenv('PROJECT_PATH', Path('home', 'default'))
+        env_project_path = os.getenv("PROJECT_PATH")
+        if env_project_path:
+            self._root = Path(env_project_path).expanduser().resolve()
+        else:
+            # src/configurations/base_config.py -> project root
+            self._root = Path(__file__).resolve().parents[2]
 
     def _load_config(self, config_type: str):
         try:
