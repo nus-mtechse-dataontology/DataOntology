@@ -2,6 +2,20 @@
 
 A Natural Language Query (NLQ) to SQL pipeline — ask questions in plain English, get answers from a flight database.
 
+## Run on Local using Docker
+### pre-requisites
+- aws installation is setup using the script given and configure AWS profile
+- Run RDS connect script to start the secure tunnel to connect to RDS
+
+### running the app
+- docker build --no-cache -t data-ontology-api .
+- docker run -p 9000:8000  -e GEMINI_API_KEY="<REPLACE-WITH-GEMINI-API-KEY>"  -e DB_PASSWORD="<REPLACE-WITH-DB-PASSWORD" data-ontology-api
+
+### Running tests
+- curl -X POST http://localhost:9000/query/query -H "Content-Type: application/json" -d '{"request_id":"test-1","question":"What is the cheapest return flight from SIN to BKK from 2026-06-01 to 2026-06-15?","start_date":"2026-06-01","end_date":"2026-06-15","origin":"SIN","destination":"BKK"}'
+
+
+## Run on local using uv
 ### Prerequisites
 - Python 3.14 or newer
 - Git
