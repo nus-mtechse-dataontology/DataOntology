@@ -19,6 +19,8 @@ COPY --from=builder /install /var/lang/lib/python3.14/site-packages
 # 3. Copy app code
 COPY src/ ./src/
 COPY resources/ ./resources/
+COPY datasets/ ./datasets/
+COPY vault/ ./vault/
 
 # 4. Pathing hack
 RUN mkdir -p home/default && ln -s /var/task/resources /var/task/home/default/resources
