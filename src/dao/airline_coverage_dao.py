@@ -5,7 +5,7 @@ from dao.base_dao import BaseDAO
 
 
 class AirlineCoverageDAO(BaseDAO):
-	def __init__(self,engine):
+	def __init__(self, engine):
 		super().__init__(engine)
 	
 	def get_all_coverage(self) -> list[AirlineCoverage]:
