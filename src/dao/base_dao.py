@@ -11,7 +11,7 @@ T = TypeVar('T')
 class BaseDAO[T](ABC):
 	def __init__(self, engine):
 		self._engine = engine
-		self._log = logging.getLogger("ingestion")
+		self._log = logging.getLogger("data_ontology")
 	
 	def insert_many(self, obj: list[T]) -> list[T]:
 		self._log.info("BaseDAO: Inserting data into table...")

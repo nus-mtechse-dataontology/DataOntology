@@ -11,8 +11,9 @@ dependencies = [
   "sqlmodel>=0.0.37",
   "asyncpg>=0.31.0",
   "psycopg2-binary>=2.9.11",
-  "pytest-cov>=7.0.0",
-  "pyctuator",
+  "pyjwt>=2.11.0",
+  "pwdlib[argon2]>=0.3.0",
+  "grpcio>=1.78.0",
   "pytest-cov",
 ]
 

@@ -5,13 +5,19 @@ import os
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
+import secrets
 import tomllib
 import traceback
 
 from fastapi import FastAPI
 from sqlmodel import SQLModel
 
+from services.auth.jwt_handler import JWTHandler
+from dao.registration_dao import RegistrationDAO
+from services.auth.authentication_service import AuthenticationService
+from services.registration.registration_service import RegistrationService
 from compiler.sql_compiler import SQLCompiler
+from dao.accounts_dao import AccountsDAO
 from session.db_session import DBSession
 from entities import *
 from execution.sql_executor import SQLExecutor
@@ -45,7 +51,9 @@ def load_config() -> dict:
             logger.error("Startup: error while loading config, %s", exc)
             logger.error(traceback.format_exc())
             raise exc
-
+        
+def get_key() -> str:
+    return secrets.token_urlsafe(32)
 
 @asynccontextmanager
 async def startup(app: FastAPI):
@@ -108,7 +116,17 @@ async def startup(app: FastAPI):
     session = DBSession(config)
     SQLModel.metadata.create_all(session.engine)
     
+    account_dao = AccountsDAO(session.engine)
+    registration_dao = RegistrationDAO(session.engine)
+    jwt_handler = JWTHandler(
+        secrets.token_urlsafe(32),
+        config["jwt"]["expire_mins"],
+        config["jwt"]["algo"]
+    )
+    
     app.state.orchestrator = orchestrator
     app.state.session = session
+    app.state.auth = AuthenticationService(account_dao, jwt_handler)
+    app.state.registration = RegistrationService(registration_dao, account_dao)
     
     yield
