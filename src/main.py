@@ -10,9 +10,11 @@ from configurations.admin_config import AdminConfig
 from configurations.app_config import AppConfig
 from configurations.logger_config import LoggerConfig
 from endpoints.routes.query.query_routes import query_router
+from endpoints.routes.register.register_routes import register_router
 from endpoints.routes.status.status_routes import status_router
 from endpoints.routes.telegram.telegram_routes import telegram_router
 from endpoints.routes.ingestion.ingestion_routes import ingestion_router
+from endpoints.routes.auth.auth_routes import auth_router
 from lifecycle_hooks.startup import startup
 from models.admin_model import AdminModel
 from models.app_model import AppModel
@@ -78,6 +80,8 @@ class DataOntology:
         self._app.include_router(status_router)
         self._app.include_router(telegram_router)
         self._app.include_router(ingestion_router)
+        self._app.include_router(auth_router)
+        self._app.include_router(register_router)
 
 
 if __name__ == "__main__":

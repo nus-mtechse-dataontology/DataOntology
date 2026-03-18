@@ -1,23 +1,28 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Depends, status
 from fastapi.responses import JSONResponse
 
 from sqlalchemy import inspect
 
+from dependencies.jwt_auth import JWTAuth
 from ingestion.source.manual_source.manual_ingestion import ManualIngestion
 from models.ingestion_model import IngestionModel
+from models.users import UserModel
 from session.db_session import DBSession
 
 ingestion_router = APIRouter(prefix="/ingestion", tags=["ingestion"])
 
 
 @ingestion_router.get('/get_schema')
-async def get_schema(request: Request) -> JSONResponse:
+async def get_schema(request: Request, user: UserModel = Depends(JWTAuth())) -> JSONResponse:
 	session = request.app.state.session
 	
-	result = await get_schema_from_db(session)
+	if not user.disabled:
+		result = await get_schema_from_db(session)
+	else:
+		result = []
 	
 	return JSONResponse(
-		status_code=200,
+		status_code=status.HTTP_200_OK,
 		content={
 			"tables": result
 		}
@@ -25,8 +30,22 @@ async def get_schema(request: Request) -> JSONResponse:
 
 
 @ingestion_router.post('/upload')
-async def upload(request: Request, payload: IngestionModel) -> JSONResponse:
-	return await upload_data(request.app.state.session, payload)
+async def upload(request: Request, payload: IngestionModel, user: UserModel = Depends(JWTAuth())) -> JSONResponse:
+	if not user.disabled:
+		upload_status = await upload_data(request.app.state.session, payload)
+		return JSONResponse(
+			status_code=status.HTTP_200_OK,
+			content={
+				**upload_status
+			}
+		)
+	else:
+		return JSONResponse(
+			status_code=status.HTTP_403_FORBIDDEN,
+			content={
+				"message": "User does not have permission to perform this action"
+			}
+		)
 
 
 async def get_schema_from_db(session: DBSession) -> list[dict[str, str | bool | None]]:
@@ -61,13 +80,7 @@ async def get_schema_from_db(session: DBSession) -> list[dict[str, str | bool | 
 	return table_lists
 
 
-async def upload_data(session: DBSession, payload: IngestionModel) -> JSONResponse:
+async def upload_data(session: DBSession, payload: IngestionModel) -> dict[str, str | int]:
 	manual_ingestion = ManualIngestion(session, payload)
 	upload_status = manual_ingestion.ingest()
-	
-	return JSONResponse(
-		status_code=200,
-		content={
-			**upload_status
-		}
-	)
+	return upload_status
