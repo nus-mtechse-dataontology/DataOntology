@@ -75,6 +75,14 @@ redoc_url = ""
 reload = false
 scheme = "http"
 
+[llm]
+provider = "gemini"
+timeout_seconds = 30
+[llm.providers.gemini]
+model = "gemini-3-flash-preview"
+[llm.providers.openai]
+model = "gpt-5.4-nano"
+
 [jwt]
 expire_mins = 15
 algo = "HS256"
