@@ -12,6 +12,7 @@ import traceback
 from fastapi import FastAPI
 from sqlmodel import SQLModel
 
+from dao.fact_flight_info_dao import FactFlightInfoDAO
 from services.auth.jwt_handler import JWTHandler
 from dao.registration_dao import RegistrationDAO
 from services.auth.authentication_service import AuthenticationService
@@ -66,6 +67,20 @@ async def startup(app: FastAPI):
         DB_PATH          – Path to SQLite database (default: resources/flights.db)
         SEMANTIC_MODEL_PATH – Path to semantic_layer.json (default: auto-detected)
     """
+    
+    config = load_config()
+    session = DBSession(config)
+    SQLModel.metadata.create_all(session.engine)
+    
+    account_dao = AccountsDAO(session.engine)
+    registration_dao = RegistrationDAO(session.engine)
+    fact_flight_info_dao = FactFlightInfoDAO(session.engine)
+    
+    jwt_handler = JWTHandler(
+        secrets.token_urlsafe(32),
+        config["jwt"]["expire_mins"],
+        config["jwt"]["algo"]
+    )
 
     # ── Configuration ────────────────────────────────────────────────
     gemini_api_key = os.getenv("GEMINI_API_KEY")
@@ -88,7 +103,7 @@ async def startup(app: FastAPI):
     syntactic_validator = SyntacticValidator()
     semantic_validator = SemanticValidator()
     sql_compiler = SQLCompiler()
-    sql_executor = SQLExecutor(db_path)
+    sql_executor = SQLExecutor(fact_flight_info_dao)
     response_builder = ResponseBuilder()
     error_response_builder = ErrorResponseBuilder()
 
@@ -111,18 +126,6 @@ async def startup(app: FastAPI):
         logger.warning("GEMINI_API_KEY not set — LLM calls will fail")
     if not Path(db_path).exists():
         logger.warning("Database not found at %s — SQL execution will fail", db_path)
-    
-    config = load_config()
-    session = DBSession(config)
-    SQLModel.metadata.create_all(session.engine)
-    
-    account_dao = AccountsDAO(session.engine)
-    registration_dao = RegistrationDAO(session.engine)
-    jwt_handler = JWTHandler(
-        secrets.token_urlsafe(32),
-        config["jwt"]["expire_mins"],
-        config["jwt"]["algo"]
-    )
     
     app.state.orchestrator = orchestrator
     app.state.session = session
