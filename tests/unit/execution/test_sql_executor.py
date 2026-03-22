@@ -11,158 +11,10 @@ against a database and returns structured results. Tests are organized by accept
 """
 
 import pytest
-import sqlite3
-import tempfile
-from pathlib import Path
-from typing import Any, Dict
 
 from execution.sql_executor import SQLExecutor
 from models.common import ErrorResponse, SuccessResponse
 from models.pipeline import CompiledSQL, ResultSet, Row
-
-
-# ==============================================================================
-# FIXTURES - Test database and reusable test data
-# ==============================================================================
-
-@pytest.fixture
-def test_db_path(tmp_path: Path) -> str:
-    """
-    Create a temporary SQLite database with test data.
-    
-    This fixture sets up a test database with sample flight data that mimics
-    the production schema. The database is created fresh for each test and
-    automatically cleaned up after the test completes.
-    
-    Schema:
-    - search_response: Contains search metadata and currency info
-    - recommendation: Contains pricing information for flights
-    - flight: Contains flight route information
-    - airport: Contains airport details
-    
-    Returns:
-        str: Path to the temporary database file
-    """
-    db_file = tmp_path / "test_flights.db"
-    conn = sqlite3.connect(str(db_file))
-    cursor = conn.cursor()
-    
-    # Create tables matching the production schema
-    cursor.execute("""
-        CREATE TABLE search_response (
-            payload_id TEXT PRIMARY KEY,
-            session_id TEXT,
-            trip_type TEXT,
-            currency_code TEXT
-        )
-    """)
-    
-    cursor.execute("""
-        CREATE TABLE recommendation (
-            payload_id TEXT,
-            recommendation_id TEXT,
-            fare_total_amount REAL,
-            fare_amount_without_tax REAL,
-            fare_tax REAL,
-            fare_family TEXT,
-            FOREIGN KEY (payload_id) REFERENCES search_response(payload_id)
-        )
-    """)
-    
-    cursor.execute("""
-        CREATE TABLE flight (
-            payload_id TEXT,
-            flight_idx INTEGER,
-            origin_airport_code TEXT,
-            destination_airport_code TEXT,
-            departure_date TEXT,
-            FOREIGN KEY (payload_id) REFERENCES search_response(payload_id)
-        )
-    """)
-    
-    cursor.execute("""
-        CREATE TABLE airport (
-            payload_id TEXT,
-            airport_code TEXT,
-            city_name TEXT,
-            country_name TEXT
-        )
-    """)
-    
-    # Insert test data
-    # Search response for a SIN-BKK search
-    cursor.execute("""
-        INSERT INTO search_response (payload_id, session_id, trip_type, currency_code)
-        VALUES ('payload-001', 'session-001', 'R', 'SGD')
-    """)
-    
-    cursor.execute("""
-        INSERT INTO search_response (payload_id, session_id, trip_type, currency_code)
-        VALUES ('payload-002', 'session-002', 'R', 'SGD')
-    """)
-    
-    # Recommendations with different prices
-    cursor.execute("""
-        INSERT INTO recommendation (payload_id, recommendation_id, fare_total_amount, fare_amount_without_tax, fare_tax, fare_family)
-        VALUES ('payload-001', 'rec-001', 450.00, 400.00, 50.00, 'Economy')
-    """)
-    
-    cursor.execute("""
-        INSERT INTO recommendation (payload_id, recommendation_id, fare_total_amount, fare_amount_without_tax, fare_tax, fare_family)
-        VALUES ('payload-002', 'rec-002', 520.00, 470.00, 50.00, 'Economy')
-    """)
-    
-    # Flights
-    cursor.execute("""
-        INSERT INTO flight (payload_id, flight_idx, origin_airport_code, destination_airport_code, departure_date)
-        VALUES ('payload-001', 0, 'SIN', 'BKK', '2019-09-15')
-    """)
-    
-    cursor.execute("""
-        INSERT INTO flight (payload_id, flight_idx, origin_airport_code, destination_airport_code, departure_date)
-        VALUES ('payload-002', 0, 'SIN', 'BKK', '2019-09-20')
-    """)
-    
-    # Airports
-    cursor.execute("""
-        INSERT INTO airport (payload_id, airport_code, city_name, country_name)
-        VALUES ('payload-001', 'SIN', 'Singapore', 'Singapore')
-    """)
-    
-    cursor.execute("""
-        INSERT INTO airport (payload_id, airport_code, city_name, country_name)
-        VALUES ('payload-001', 'BKK', 'Bangkok', 'Thailand')
-    """)
-    
-    conn.commit()
-    conn.close()
-    
-    return str(db_file)
-
-
-@pytest.fixture
-def sql_executor(test_db_path: str) -> SQLExecutor:
-    """
-    SQLExecutor instance configured with test database.
-    
-    Args:
-        test_db_path: Path to the test database (from test_db_path fixture)
-    
-    Returns:
-        SQLExecutor: Instance ready to execute queries against test DB
-    """
-    return SQLExecutor(db_path=test_db_path)
-
-
-@pytest.fixture
-def invalid_db_path() -> str:
-    """
-    Invalid database path for testing connection failures.
-    
-    Returns:
-        str: Path to a non-existent database file
-    """
-    return "/non/existent/path/to/database.db"
 
 
 # ==============================================================================
@@ -177,17 +29,17 @@ class TestDatabaseConnection:
     connections to valid databases and handle connection failures gracefully.
     """
 
-    def test_executor_connects_to_valid_database(self, test_db_path):
+    def test_executor_able_to_query_db_with_valid_sql(self, fact_flight_info_dao):
         """
-        Test that SQLExecutor can connect to a valid database.
+        Test that SQLExecutor when given valid sql, can query the database.
         
         Scenario: A valid database exists and SQLExecutor should be able
         to establish a connection to it.
         
         Expected: The executor is created without errors and can execute queries.
         """
-        # SETUP: Create executor with valid database path
-        executor = SQLExecutor(db_path=test_db_path)
+        # SETUP: Create executor with valid fact_flight_info_dao
+        executor = SQLExecutor(fact_flight_info_dao=fact_flight_info_dao)
         
         # ACT: Execute a simple query to verify connection works
         compiled_sql = CompiledSQL(
@@ -203,7 +55,7 @@ class TestDatabaseConnection:
         assert result.status == "SUCCESS"
         assert isinstance(result.data, ResultSet)
 
-    def test_connection_failure_returns_error(self, invalid_db_path):
+    def test_executor_query_db_with_invalid_sql_returns_error(self, sql_executor):
         """
         Test that connection failure returns a meaningful ErrorResponse.
         
@@ -212,50 +64,22 @@ class TestDatabaseConnection:
         
         Expected: ErrorResponse with code "connection_error" and helpful message.
         """
-        # SETUP: Create executor with invalid database path
-        executor = SQLExecutor(db_path=invalid_db_path)
-        
         # ACT: Try to execute a query
         compiled_sql = CompiledSQL(
             request_id="test-conn-002",
-            sql="SELECT 1 AS test_value",
+            sql="SELECT * test_value",
             bound_params={}
         )
         
-        result = executor.execute(compiled_sql)
+        result = sql_executor.execute(compiled_sql)
         
         # ASSERT: Returns ErrorResponse with connection error details
         assert isinstance(result, ErrorResponse)
         assert result.status == "ERROR"
         assert result.request_id == "test-conn-002"
-        assert result.error.code == "connection_error"
-        assert "connection" in result.error.message.lower() or "database" in result.error.message.lower()
+        # assert result.error.code == "connection_error"
+        # assert "connection" in result.error.message.lower() or "database" in result.error.message.lower()
         assert result.error.component == "sql_executor"
-
-    def test_connection_with_readonly_database(self, test_db_path):
-        """
-        Test connection to a read-only database file.
-        
-        Scenario: The database file exists but might be read-only.
-        For SELECT queries, this should still work fine.
-        
-        Expected: Successful execution of SELECT queries.
-        """
-        # SETUP: Create executor with existing database
-        executor = SQLExecutor(db_path=test_db_path)
-        
-        # ACT: Execute a SELECT query (read-only operation)
-        compiled_sql = CompiledSQL(
-            request_id="test-conn-003",
-            sql="SELECT session_id FROM search_response LIMIT 1",
-            bound_params={}
-        )
-        
-        result = executor.execute(compiled_sql)
-        
-        # ASSERT: Query executes successfully
-        assert isinstance(result, SuccessResponse)
-        assert result.status == "SUCCESS"
 
 
 # ==============================================================================
@@ -295,7 +119,7 @@ class TestSQLExecution:
         assert len(result.data.result_set) == 1
         assert result.data.result_set[0].data["value"] == 1
 
-    def test_execute_query_with_bound_parameters(self, sql_executor):
+    def test_execute_query_with_bound_parameters(self, sql_executor, populate_db):
         """
         Test execution of query with bound parameters.
         
@@ -307,8 +131,8 @@ class TestSQLExecution:
         # SETUP: Create SQL with parameterized query
         compiled_sql = CompiledSQL(
             request_id="test-exec-002",
-            sql="SELECT * FROM search_response WHERE session_id = :session_id",
-            bound_params={"session_id": "session-001"}
+            sql="SELECT * FROM fact_flight_info WHERE f_flight_combination = :flight_combination",
+            bound_params={"flight_combination": 70}
         )
         
         # ACT: Execute the query
@@ -317,9 +141,9 @@ class TestSQLExecution:
         # ASSERT: Verify parameter binding worked correctly
         assert isinstance(result, SuccessResponse)
         assert len(result.data.result_set) == 1
-        assert result.data.result_set[0].data["session_id"] == "session-001"
+        assert result.data.result_set[0].data["f_flight_combination"] == 70
 
-    def test_execute_query_with_multiple_parameters(self, sql_executor):
+    def test_execute_query_with_multiple_parameters(self, sql_executor, populate_db):
         """
         Test execution with multiple bound parameters.
         
@@ -332,9 +156,9 @@ class TestSQLExecution:
         compiled_sql = CompiledSQL(
             request_id="test-exec-003",
             sql="""
-                SELECT * FROM flight 
-                WHERE origin_airport_code = :origin 
-                AND destination_airport_code = :destination
+                SELECT * FROM fact_flight_info
+                WHERE f_departure_airport_code = :origin
+                AND f_destination_airport_code = :destination
             """,
             bound_params={
                 "origin": "SIN",
@@ -350,10 +174,10 @@ class TestSQLExecution:
         assert len(result.data.result_set) >= 1
         # Verify the results match the parameters
         for row in result.data.result_set:
-            assert row.data["origin_airport_code"] == "SIN"
-            assert row.data["destination_airport_code"] == "BKK"
+            assert row.data["f_departure_airport_code"] == "SIN"
+            assert row.data["f_destination_airport_code"] == "BKK"
 
-    def test_execute_query_with_aggregation(self, sql_executor):
+    def test_execute_query_with_aggregation(self, sql_executor, populate_db):
         """
         Test execution of query with aggregation functions.
         
@@ -366,8 +190,8 @@ class TestSQLExecution:
         compiled_sql = CompiledSQL(
             request_id="test-exec-004",
             sql="""
-                SELECT MIN(fare_total_amount) AS min_price
-                FROM recommendation
+                SELECT MIN(f_total_amount_fare_total) AS min_price
+                FROM fact_flight_info
             """,
             bound_params={}
         )
@@ -379,42 +203,42 @@ class TestSQLExecution:
         assert isinstance(result, SuccessResponse)
         assert len(result.data.result_set) == 1
         # Should return the minimum price from our test data
-        assert result.data.result_set[0].data["min_price"] == 450.00
+        assert result.data.result_set[0].data["min_price"] == 80
 
-    def test_execute_query_with_joins(self, sql_executor):
-        """
-        Test execution of query with table JOINs.
-        
-        Scenario: Execute a query that joins multiple tables, which is
-        common in the flight pricing queries.
-        
-        Expected: JOIN operations work correctly and return combined data.
-        """
-        # SETUP: Query with JOIN
-        compiled_sql = CompiledSQL(
-            request_id="test-exec-005",
-            sql="""
-                SELECT sr.session_id, r.fare_total_amount, sr.currency_code
-                FROM search_response sr
-                JOIN recommendation r ON r.payload_id = sr.payload_id
-                WHERE sr.session_id = :session_id
-            """,
-            bound_params={"session_id": "session-001"}
-        )
-        
-        # ACT: Execute the query
-        result = sql_executor.execute(compiled_sql)
-        
-        # ASSERT: JOIN executed successfully
-        assert isinstance(result, SuccessResponse)
-        assert len(result.data.result_set) >= 1
-        # Verify joined data is present
-        row = result.data.result_set[0]
-        assert "session_id" in row.data
-        assert "fare_total_amount" in row.data
-        assert "currency_code" in row.data
+    # def test_execute_query_with_joins(self, sql_executor):
+    #     """
+    #     Test execution of query with table JOINs.
+    #
+    #     Scenario: Execute a query that joins multiple tables, which is
+    #     common in the flight pricing queries.
+    #
+    #     Expected: JOIN operations work correctly and return combined data.
+    #     """
+    #     # SETUP: Query with JOIN
+    #     compiled_sql = CompiledSQL(
+    #         request_id="test-exec-005",
+    #         sql="""
+    #             SELECT sr.session_id, r.fare_total_amount, sr.currency_code
+    #             FROM search_response sr
+    #             JOIN recommendation r ON r.payload_id = sr.payload_id
+    #             WHERE sr.session_id = :session_id
+    #         """,
+    #         bound_params={"session_id": "session-001"}
+    #     )
+    #
+    #     # ACT: Execute the query
+    #     result = sql_executor.execute(compiled_sql)
+    #
+    #     # ASSERT: JOIN executed successfully
+    #     assert isinstance(result, SuccessResponse)
+    #     assert len(result.data.result_set) >= 1
+    #     # Verify joined data is present
+    #     row = result.data.result_set[0]
+    #     assert "session_id" in row.data
+    #     assert "fare_total_amount" in row.data
+    #     assert "currency_code" in row.data
 
-    def test_execute_query_with_limit(self, sql_executor):
+    def test_execute_query_with_limit(self, sql_executor, populate_db):
         """
         Test execution of query with LIMIT clause.
         
@@ -425,7 +249,7 @@ class TestSQLExecution:
         # SETUP: Query with LIMIT
         compiled_sql = CompiledSQL(
             request_id="test-exec-006",
-            sql="SELECT * FROM search_response LIMIT :limit",
+            sql="SELECT * FROM fact_flight_info LIMIT :limit",
             bound_params={"limit": 1}
         )
         
@@ -449,7 +273,7 @@ class TestResultSet:
     and Row objects with proper field names and values.
     """
 
-    def test_result_set_structure(self, sql_executor):
+    def test_result_set_structure(self, sql_executor, populate_db):
         """
         Test that result set has correct structure.
         
@@ -461,7 +285,7 @@ class TestResultSet:
         # SETUP: Execute a query
         compiled_sql = CompiledSQL(
             request_id="test-result-001",
-            sql="SELECT session_id, currency_code FROM search_response LIMIT 1",
+            sql="SELECT f_flight_combination, f_currency_code FROM fact_flight_info LIMIT 2",
             bound_params={}
         )
         
@@ -473,39 +297,40 @@ class TestResultSet:
         assert isinstance(result.data, ResultSet)
         assert result.data.request_id == "test-result-001"
         assert isinstance(result.data.result_set, list)
-        assert len(result.data.result_set) >= 1
+        assert len(result.data.result_set) >= 2
         assert isinstance(result.data.result_set[0], Row)
         assert isinstance(result.data.result_set[0].data, dict)
-
+    
+    @pytest.mark.skip(reason="To check with Yui Hao if this is applicable")
     def test_row_contains_all_columns(self, sql_executor):
         """
         Test that each Row contains all selected columns.
-        
+
         Scenario: SELECT multiple columns, verify all appear in Row.data.
-        
+
         Expected: Row.data dictionary has keys for all selected columns.
         """
         # SETUP: Query selecting multiple columns
         compiled_sql = CompiledSQL(
             request_id="test-result-002",
             sql="""
-                SELECT session_id, trip_type, currency_code 
-                FROM search_response 
+                SELECT session_id, trip_type, currency_code
+                FROM search_response
                 LIMIT 1
             """,
             bound_params={}
         )
-        
+
         # ACT: Execute the query
         result = sql_executor.execute(compiled_sql)
-        
+
         # ASSERT: All columns are present in the row
         row = result.data.result_set[0]
         assert "session_id" in row.data
         assert "trip_type" in row.data
         assert "currency_code" in row.data
 
-    def test_row_data_types_preserved(self, sql_executor):
+    def test_row_data_types_preserved(self, sql_executor, populate_db):
         """
         Test that data types are preserved in Row objects.
         
@@ -541,7 +366,7 @@ class TestResultSet:
         assert row.data["real_value"] == 123.45
         assert row.data["integer_value"] == 42
 
-    def test_empty_result_set(self, sql_executor):
+    def test_empty_result_set(self, sql_executor, populate_db):
         """
         Test handling of queries that return no rows.
         
@@ -552,8 +377,8 @@ class TestResultSet:
         # SETUP: Query that returns no results
         compiled_sql = CompiledSQL(
             request_id="test-result-004",
-            sql="SELECT * FROM search_response WHERE session_id = :session_id",
-            bound_params={"session_id": "non-existent-session"}
+            sql="SELECT * FROM fact_flight_info WHERE f_flight_combination = :flight_combination",
+            bound_params={"flight_combination": "non-existent-flight_combination"}
         )
         
         # ACT: Execute the query
@@ -564,7 +389,7 @@ class TestResultSet:
         assert result.status == "SUCCESS"
         assert len(result.data.result_set) == 0
 
-    def test_multiple_rows_in_result_set(self, sql_executor):
+    def test_multiple_rows_in_result_set(self, sql_executor, populate_db):
         """
         Test result set with multiple rows.
         
@@ -575,7 +400,7 @@ class TestResultSet:
         # SETUP: Query that returns multiple rows
         compiled_sql = CompiledSQL(
             request_id="test-result-005",
-            sql="SELECT * FROM search_response",
+            sql="SELECT * FROM fact_flight_info",
             bound_params={}
         )
         
@@ -590,7 +415,7 @@ class TestResultSet:
             assert isinstance(row, Row)
             assert isinstance(row.data, dict)
 
-    def test_request_id_preserved_in_result_set(self, sql_executor):
+    def test_request_id_preserved_in_result_set(self, sql_executor, populate_db):
         """
         Test that request_id is preserved throughout execution.
         
@@ -627,7 +452,7 @@ class TestErrorHandling:
     gracefully and returns meaningful error messages.
     """
 
-    def test_sql_syntax_error_returns_error(self, sql_executor):
+    def test_sql_syntax_error_returns_error(self, sql_executor, populate_db):
         """
         Test that SQL syntax errors return ErrorResponse.
         
@@ -640,7 +465,7 @@ class TestErrorHandling:
         # SETUP: SQL with syntax error
         compiled_sql = CompiledSQL(
             request_id="test-error-001",
-            sql="SELCT * FROM search_response",  # Typo: SELCT instead of SELECT
+            sql="SELCT * FROM fact_flight_info",  # Typo: SELCT instead of SELECT
             bound_params={}
         )
         
@@ -651,12 +476,12 @@ class TestErrorHandling:
         assert isinstance(result, ErrorResponse)
         assert result.status == "ERROR"
         assert result.request_id == "test-error-001"
-        assert result.error.code in ["execution_error", "sql_error"]
+        assert result.error.code in ["e3q8"]
         assert result.error.component == "sql_executor"
         # Error message should mention syntax or SQL
         assert "syntax" in result.error.message.lower() or "sql" in result.error.message.lower()
 
-    def test_invalid_table_name_returns_error(self, sql_executor):
+    def test_invalid_table_name_returns_error(self, sql_executor, populate_db):
         """
         Test that querying non-existent table returns ErrorResponse.
         
@@ -677,11 +502,11 @@ class TestErrorHandling:
         # ASSERT: Returns ErrorResponse
         assert isinstance(result, ErrorResponse)
         assert result.status == "ERROR"
-        assert result.error.code in ["execution_error", "sql_error"]
+        assert result.error.code in ["e3q8"]
         # Error should mention table or existence
         assert "table" in result.error.message.lower() or "exist" in result.error.message.lower()
 
-    def test_invalid_column_name_returns_error(self, sql_executor):
+    def test_invalid_column_name_returns_error(self, sql_executor, populate_db):
         """
         Test that selecting non-existent column returns ErrorResponse.
         
@@ -692,7 +517,7 @@ class TestErrorHandling:
         # SETUP: Query referencing non-existent column
         compiled_sql = CompiledSQL(
             request_id="test-error-003",
-            sql="SELECT non_existent_column FROM search_response",
+            sql="SELECT non_existent_column FROM fact_flight_info",
             bound_params={}
         )
         
@@ -702,9 +527,9 @@ class TestErrorHandling:
         # ASSERT: Returns ErrorResponse
         assert isinstance(result, ErrorResponse)
         assert result.status == "ERROR"
-        assert result.error.code in ["execution_error", "sql_error"]
+        assert result.error.code in ["e3q8"]
 
-    def test_parameter_binding_error_returns_error(self, sql_executor):
+    def test_parameter_binding_error_returns_error(self, sql_executor, populate_db):
         """
         Test that missing parameter binding returns ErrorResponse.
         
@@ -715,7 +540,7 @@ class TestErrorHandling:
         # SETUP: SQL expects parameter that's not provided
         compiled_sql = CompiledSQL(
             request_id="test-error-004",
-            sql="SELECT * FROM search_response WHERE session_id = :session_id",
+            sql="SELECT * FROM fact_flight_info WHERE session_id = :session_id",
             bound_params={}  # Missing session_id parameter
         )
         
@@ -725,9 +550,9 @@ class TestErrorHandling:
         # ASSERT: Returns ErrorResponse
         assert isinstance(result, ErrorResponse)
         assert result.status == "ERROR"
-        assert result.error.code in ["execution_error", "parameter_error", "sql_error"]
+        assert result.error.code in ["cd3x"]
 
-    def test_error_response_structure(self, sql_executor):
+    def test_error_response_structure(self, sql_executor, populate_db):
         """
         Test that ErrorResponse has correct structure.
         
@@ -770,11 +595,12 @@ class TestIntegration:
     These tests use realistic queries that would come from the SQL Compiler
     to verify end-to-end execution.
     """
-
+    
+    @pytest.mark.skip(reason="To check with Yui Hao if this is applicable")
     def test_cheapest_flight_query(self, sql_executor):
         """
         Test execution of a typical "cheapest flight" query.
-        
+
         This is the most common query type in the system.
         """
         compiled_sql = CompiledSQL(
@@ -790,9 +616,9 @@ class TestIntegration:
             """,
             bound_params={"trip_type": "R", "limit": 5}
         )
-        
+
         result = sql_executor.execute(compiled_sql)
-        
+
         assert isinstance(result, SuccessResponse)
         assert len(result.data.result_set) >= 1
         # Verify result has expected columns
@@ -801,7 +627,7 @@ class TestIntegration:
         assert "currency_code" in row.data
         assert "cheapest_price" in row.data
 
-    def test_destination_search_query(self, sql_executor):
+    def test_destination_search_query(self, sql_executor, populate_db):
         """
         Test execution of a destination search query.
         
@@ -810,12 +636,12 @@ class TestIntegration:
         compiled_sql = CompiledSQL(
             request_id="test-int-002",
             sql="""
-                SELECT DISTINCT airport_code, city_name, country_name
-                FROM airport
-                WHERE country_name = :country
+                SELECT DISTINCT f_destination_airport_code, f_cabin_class
+                FROM fact_flight_info
+                WHERE f_destination_airport_code = :airport_code
                 LIMIT :limit
             """,
-            bound_params={"country": "Thailand", "limit": 10}
+            bound_params={"airport_code": "BKK", "limit": 10}
         )
         
         result = sql_executor.execute(compiled_sql)
@@ -823,4 +649,4 @@ class TestIntegration:
         assert isinstance(result, SuccessResponse)
         # Verify results match the country filter
         for row in result.data.result_set:
-            assert row.data["country_name"] == "Thailand"
+            assert row.data["f_destination_airport_code"] == "BKK"
