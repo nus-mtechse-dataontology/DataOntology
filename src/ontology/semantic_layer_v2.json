@@ -1,0 +1,196 @@
+{
+  "version": "2.0",
+  "description": "Semantic layer for NL-to-query-plan mapping over the fact_flight_info star schema and deterministic SQL compilation",
+  "entities": {
+    "airport": {
+      "synonyms": ["airport", "departure", "origin", "destination", "arrival"],
+      "table": "dim_airport",
+      "key": "f_airport_code",
+      "joins": [
+        { "from": "dim_airport.f_city_code", "to": "dim_city.f_city_code" }
+      ]
+    },
+    "city": {
+      "synonyms": ["city", "town", "location"],
+      "table": "dim_city",
+      "key": "f_city_code",
+      "joins": [
+        { "from": "dim_city.f_country_code", "to": "dim_country.f_country_code" }
+      ]
+    },
+    "country": {
+      "synonyms": ["country", "nation"],
+      "table": "dim_country",
+      "key": "f_country_code",
+      "field": "f_country_name"
+    },
+    "airline": {
+      "synonyms": ["airline", "carrier", "operator"],
+      "table": "dim_airline",
+      "key": "f_airline_code"
+    },
+    "aircraft": {
+      "synonyms": ["aircraft", "plane", "model"],
+      "table": "dim_aircraft",
+      "key": "f_aircraft_code"
+    },
+    "currency": {
+      "synonyms": ["currency", "fare currency", "price currency"],
+      "table": "dim_currency_rate",
+      "key": "f_currency_code"
+    }
+  },
+  "param_schema": {
+    "origin": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA airport code for the departure airport"
+    },
+    "destination": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA airport code for the destination airport"
+    },
+    "country": {
+      "type": "string",
+      "format": "country_name",
+      "description": "Country name as stored in dim_country.f_country_name, e.g. Japan"
+    },
+    "airline_code": {
+      "type": "string",
+      "format": "iata_airline_code",
+      "pattern": "^[A-Z0-9]{2,3}$",
+      "description": "IATA airline code, e.g. SQ"
+    },
+    "cabin_class": {
+      "type": "string",
+      "enum": ["ECONOMY", "BUSINESS", "FIRST"],
+      "description": "Cabin class as stored in fact_flight_info.f_cabin_class"
+    },
+    "trip_type": {
+      "type": "string",
+      "enum": ["R", "O"],
+      "description": "R = return/round-trip, O = one-way"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Start of departure date window in ISO format YYYY-MM-DD"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "End of departure date window in ISO format YYYY-MM-DD"
+    },
+    "max_price": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Maximum acceptable fare total amount in the stored currency"
+    },
+    "min_seats": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Minimum number of last seats available on the flight"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 10,
+      "description": "Maximum number of rows to return"
+    }
+  },
+  "metrics": {
+    "cheapest_fare": {
+      "description": "Lowest total fare amount across matching flights",
+      "expression": "MIN(f.f_total_amount_fare_total)"
+    },
+    "avg_fare": {
+      "description": "Average fare total for a route or grouping",
+      "expression": "AVG(f.f_total_amount_fare_total)"
+    },
+    "avg_flight_duration": {
+      "description": "Average flight duration in hours for matching flights",
+      "expression": "AVG(f.f_flight_duration)"
+    },
+    "flight_count": {
+      "description": "Number of distinct flight combinations matching the filter",
+      "expression": "COUNT(f.f_flight_combination)"
+    },
+    "min_last_seats": {
+      "description": "Minimum last-seats count across matching flights (urgency indicator)",
+      "expression": "MIN(f.f_num_of_last_seats)"
+    }
+  },
+  "intents": {
+    "cheapest_flight_on_route": {
+      "description": "Find the cheapest fare for a direct route between two airports within a departure date window.",
+      "examples": [
+        "What is the cheapest flight from SIN to BKK?",
+        "Find the lowest fare from SIN to BKK between 2024-06-01 and 2024-06-30.",
+        "Cheapest one-way from KUL to SIN in June 2024?"
+      ],
+      "required_params": ["origin", "destination", "start_date", "end_date"],
+      "optional_params": ["limit"],
+      "sql_template": "SELECT f.f_departure_airport_code, f.f_destination_airport_code, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_trip_type, MIN(f.f_total_amount_fare_total) AS cheapest_fare, f.f_currency_code, al.f_airline_name FROM fact_flight_info f JOIN dim_airline al ON al.f_airline_code = f.f_airline_code WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_departure_airport_code, f.f_destination_airport_code, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_trip_type, f.f_currency_code, al.f_airline_name ORDER BY cheapest_fare ASC LIMIT :limit"
+    },
+    "destinations_under_budget": {
+      "description": "List all reachable destinations from an origin airport whose cheapest fare falls within a maximum budget, within a departure date window.",
+      "examples": [
+        "Where can I fly from SIN for under 300 in June 2024?",
+        "Show destinations from KUL below 200 between 2024-07-01 and 2024-07-31.",
+        "Flights under 150 from BKK in July 2024?"
+      ],
+      "required_params": ["origin", "max_price", "start_date", "end_date"],
+      "optional_params": ["limit"],
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, da.f_airport_name, ct.f_city_name, co.f_country_name, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f JOIN dim_airport da ON da.f_airport_code = f.f_destination_airport_code JOIN dim_city ct ON ct.f_city_code = da.f_city_code JOIN dim_country co ON co.f_country_code = ct.f_country_code WHERE f.f_departure_airport_code = :origin AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, da.f_airport_name, ct.f_city_name, co.f_country_name, f.f_currency_code HAVING MIN(f.f_total_amount_fare_total) <= :max_price ORDER BY min_fare ASC LIMIT :limit"
+    },
+    "destinations_by_country_from_origin": {
+      "description": "List destination airports in a specific country reachable from an origin airport within a departure date window.",
+      "examples": [
+        "From SIN, which airports in Thailand can I fly to in June 2024?",
+        "Show me destinations in Japan from KUL between 2024-08-01 and 2024-08-31.",
+        "Which Malaysian airports are reachable from SIN in July 2024?"
+      ],
+      "required_params": ["origin", "country", "start_date", "end_date"],
+      "optional_params": ["limit"],
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, da.f_airport_name, ct.f_city_name, co.f_country_name, MIN(f.f_total_amount_fare_total) AS min_fare, f.f_currency_code, MIN(date(f.f_departure_date)) AS first_departure FROM fact_flight_info f JOIN dim_airport da ON da.f_airport_code = f.f_destination_airport_code JOIN dim_city ct ON ct.f_city_code = da.f_city_code JOIN dim_country co ON co.f_country_code = ct.f_country_code WHERE f.f_departure_airport_code = :origin AND co.f_country_name = :country AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, da.f_airport_name, ct.f_city_name, co.f_country_name, f.f_currency_code ORDER BY first_departure ASC LIMIT :limit"
+    },
+    "route_fare_options": {
+      "description": "List all available fare options for a specific route and departure date window, ordered by price. Includes airline, cabin class, aircraft model, and duration.",
+      "examples": [
+        "Show me all fare options from SIN to BKK in June 2024.",
+        "List available fares for KUL to SIN between 2024-07-10 and 2024-07-15.",
+        "What are the fare choices for SIN to NRT in August 2024?"
+      ],
+      "required_params": ["origin", "destination", "start_date", "end_date"],
+      "optional_params": ["limit"],
+      "sql_template": "SELECT f.f_flight_combination, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_trip_type, f.f_total_amount_fare_total, f.f_currency_code, f.f_flight_duration, f.f_num_of_last_seats, al.f_airline_name, ac.f_aircraft_model FROM fact_flight_info f JOIN dim_airline al ON al.f_airline_code = f.f_airline_code JOIN dim_aircraft ac ON ac.f_aircraft_code = f.f_aircraft_code WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) ORDER BY f.f_total_amount_fare_total ASC LIMIT :limit"
+    },
+    "airlines_on_route": {
+      "description": "List all airlines operating flights between two airports within a departure date window, with their cheapest available fare. Currency is resolved at the application layer.",
+      "examples": [
+        "Which airlines fly from SIN to BKK in June 2024?",
+        "What carriers operate KUL to SIN routes in July 2024?",
+        "List airlines and prices for SIN to NRT in August 2024."
+      ],
+      "required_params": ["origin", "destination", "start_date", "end_date"],
+      "optional_params": ["limit"],
+      "sql_template": "SELECT al.f_airline_code, al.f_airline_name, MIN(f.f_total_amount_fare_total) AS min_fare, AVG(f.f_flight_duration) AS avg_duration_hours, COUNT(f.f_flight_combination) AS flight_count FROM fact_flight_info f JOIN dim_airline al ON al.f_airline_code = f.f_airline_code WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY al.f_airline_code, al.f_airline_name ORDER BY min_fare ASC LIMIT :limit"
+    },
+    "last_seat_urgency": {
+      "description": "Find flights on a route with very limited remaining seats, useful for urgency-based prompts or low-availability alerts.",
+      "examples": [
+        "Are there any almost-full flights from SIN to BKK in June 2024?",
+        "Show me SIN to NRT flights with fewer than 3 seats left in July 2024.",
+        "Which KUL to SIN flights are nearly sold out this month?"
+      ],
+      "required_params": ["origin", "destination", "start_date", "end_date"],
+      "optional_params": ["max_seats", "limit"],
+      "sql_template": "SELECT f.f_flight_combination, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_num_of_last_seats, f.f_total_amount_fare_total, f.f_currency_code, al.f_airline_name, ac.f_aircraft_model FROM fact_flight_info f JOIN dim_airline al ON al.f_airline_code = f.f_airline_code JOIN dim_aircraft ac ON ac.f_aircraft_code = f.f_aircraft_code WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) AND f.f_num_of_last_seats <= COALESCE(:max_seats, 5) ORDER BY f.f_num_of_last_seats ASC, f.f_departure_date ASC LIMIT :limit"
+    }
+  }
+}
