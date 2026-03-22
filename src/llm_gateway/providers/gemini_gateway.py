@@ -1,3 +1,14 @@
+"""Gemini-backed LLM gateway implementation.
+
+This provider adapts Gemini calls to the common ``LLMGateway`` interface used by
+the orchestration pipeline. It returns standardized ``SuccessResponse`` and
+``ErrorResponse`` payloads so upstream components can remain provider-agnostic.
+
+Notes:
+- Provider selection is resolved during application startup/factory wiring.
+- This class only handles Gemini-specific auth/model/dependency behavior.
+"""
+
 import json
 import os
 import traceback
@@ -14,12 +25,28 @@ from models.pipeline import LLMRawResponse, PromptBundle
 
 
 class GeminiGateway(LLMGateway):
+    """Gemini provider implementation for ``LLMGateway``.
+
+    The gateway executes prompts via ``pydantic-ai`` and normalizes outputs into
+    the pipeline's ``LLMRawResponse`` contract.
+    """
+
     def __init__(
         self,
         api_key: str | None = None,
         model: str | None = None,
         timeout_seconds: int = 30,
     ) -> None:
+        """Initialize Gemini gateway configuration.
+
+        Args:
+            api_key: Gemini API key. If ``None``, runtime falls back to
+                ``GEMINI_API_KEY``.
+            model: Gemini model name. If ``None``, falls back to
+                ``GEMINI_MODEL`` or ``gemini-3-flash-preview``.
+            timeout_seconds: Max request duration before returning
+                ``llm_timeout``.
+        """
         self._api_key = api_key
         self._model = model or os.getenv("GEMINI_MODEL", "gemini-3-flash-preview")
         self._timeout_seconds = timeout_seconds
@@ -27,6 +54,24 @@ class GeminiGateway(LLMGateway):
     def submit_prompt(
         self, bundle: PromptBundle
     ) -> SuccessResponse[LLMRawResponse] | ErrorResponse:
+        """Submit prompt bundle to Gemini and normalize response shape.
+
+        Args:
+            bundle: Prompt payload containing ``request_id``, ``system_message``,
+                and ``user_message``.
+
+        Returns:
+            ``SuccessResponse[LLMRawResponse]`` on successful generation, or
+            ``ErrorResponse`` for validation/dependency/auth/timeout/runtime
+            failures.
+
+        Error codes produced:
+            - ``missing_auth``: Gemini API key is unavailable.
+            - ``missing_dependency``: ``pydantic-ai`` is not installed.
+            - ``llm_timeout``: request exceeded configured timeout.
+            - ``llm_auth_error``: provider returned auth-like failure.
+            - ``llm_gateway_failed``: any other runtime/provider error.
+        """
         try:
             api_key = self._api_key or os.getenv("GEMINI_API_KEY")
             if not api_key:
