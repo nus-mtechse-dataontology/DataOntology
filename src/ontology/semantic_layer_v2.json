@@ -171,7 +171,7 @@
       "sql_template": "SELECT f.f_flight_combination, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_trip_type, f.f_total_amount_fare_total, f.f_currency_code, f.f_flight_duration, f.f_num_of_last_seats, al.f_airline_name, ac.f_aircraft_model FROM fact_flight_info f JOIN dim_airline al ON al.f_airline_code = f.f_airline_code JOIN dim_aircraft ac ON ac.f_aircraft_code = f.f_aircraft_code WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) {{AND f.f_cabin_class = :cabin_class}} {{AND f.f_airline_code = :airline_code}} ORDER BY f.f_total_amount_fare_total ASC LIMIT :limit"
     },
     "airlines_on_route": {
-      "description": "List all airlines operating flights between two airports within a departure date window, with their cheapest available fare.",
+      "description": "List all airlines operating flights between two airports within a departure date window, with their cheapest available fare. Currency is resolved at the application layer.",
       "examples": [
         "Which airlines fly from SIN to BKK in June 2024?",
         "What carriers operate KUL to SIN routes in July 2024?",
@@ -179,7 +179,7 @@
       ],
       "required_params": ["origin", "destination", "start_date", "end_date"],
       "optional_params": ["limit"],
-      "sql_template": "SELECT al.f_airline_code, al.f_airline_name, MIN(f.f_total_amount_fare_total) AS min_fare, f.f_currency_code, AVG(f.f_flight_duration) AS avg_duration_hours, COUNT(f.f_flight_combination) AS flight_count FROM fact_flight_info f JOIN dim_airline al ON al.f_airline_code = f.f_airline_code WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY al.f_airline_code, al.f_airline_name, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit"
+      "sql_template": "SELECT al.f_airline_code, al.f_airline_name, MIN(f.f_total_amount_fare_total) AS min_fare, AVG(f.f_flight_duration) AS avg_duration_hours, COUNT(f.f_flight_combination) AS flight_count FROM fact_flight_info f JOIN dim_airline al ON al.f_airline_code = f.f_airline_code WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY al.f_airline_code, al.f_airline_name ORDER BY min_fare ASC LIMIT :limit"
     },
     "last_seat_urgency": {
       "description": "Find flights on a route with very limited remaining seats, useful for urgency-based prompts or low-availability alerts.",
@@ -189,18 +189,8 @@
         "Which KUL to SIN flights are nearly sold out this month?"
       ],
       "required_params": ["origin", "destination", "start_date", "end_date"],
-      "optional_params": ["min_seats", "limit"],
-      "sql_template": "SELECT f.f_flight_combination, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_num_of_last_seats, f.f_total_amount_fare_total, f.f_currency_code, al.f_airline_name, ac.f_aircraft_model FROM fact_flight_info f JOIN dim_airline al ON al.f_airline_code = f.f_airline_code JOIN dim_aircraft ac ON ac.f_aircraft_code = f.f_aircraft_code WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) AND f.f_num_of_last_seats <= COALESCE(:min_seats, 5) ORDER BY f.f_num_of_last_seats ASC, f.f_departure_date ASC LIMIT :limit"
-    },
-    "currency_fare_comparison": {
-      "description": "Compare fares for a route across different currency codes, converting using stored exchange rates.",
-      "examples": [
-        "Show SIN to BKK fares in USD and SGD in June 2024.",
-        "What does a KUL to SIN flight cost in MYR vs SGD?"
-      ],
-      "required_params": ["origin", "destination", "start_date", "end_date"],
-      "optional_params": ["limit"],
-      "sql_template": "SELECT f.f_currency_code, cr.f_currency_name, cr.f_currency_rate, MIN(f.f_total_amount_fare_total) AS min_fare_local, MIN(f.f_total_amount_fare_total / cr.f_currency_rate) AS min_fare_base FROM fact_flight_info f JOIN dim_currency_rate cr ON cr.f_currency_code = f.f_currency_code WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_currency_code, cr.f_currency_name, cr.f_currency_rate ORDER BY min_fare_base ASC LIMIT :limit"
+      "optional_params": ["max_seats", "limit"],
+      "sql_template": "SELECT f.f_flight_combination, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_num_of_last_seats, f.f_total_amount_fare_total, f.f_currency_code, al.f_airline_name, ac.f_aircraft_model FROM fact_flight_info f JOIN dim_airline al ON al.f_airline_code = f.f_airline_code JOIN dim_aircraft ac ON ac.f_aircraft_code = f.f_aircraft_code WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) AND f.f_num_of_last_seats <= COALESCE(:max_seats, 5) ORDER BY f.f_num_of_last_seats ASC, f.f_departure_date ASC LIMIT :limit"
     }
   }
 }
