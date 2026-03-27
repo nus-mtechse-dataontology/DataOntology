@@ -67,6 +67,7 @@ jobs:
             
   # 2. DEPLOY: Build & Ship to AWS
   deploy:
+    needs: quality-and-sec
     # UPDATED: Allows deployment from either branch
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/DAT-54-CICD') ||
