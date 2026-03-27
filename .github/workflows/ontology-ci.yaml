@@ -13,7 +13,6 @@ on:
 jobs:
   # 1. QUALITY GATE: Scans code, not containers
   quality-and-sec:
-    if: false # Temporary: disable quality/scanning while testing Lambda deploy.
     runs-on: ubuntu-latest
     environment: PRD
     steps:
@@ -100,7 +99,6 @@ jobs:
 
   # 3. ZAP SCAN: Dynamic Attack on the URL
   zap-scan:
-    if: false # Temporary: disable DAST scan while testing Lambda deploy.
     needs: deploy
     runs-on: ubuntu-latest
     environment: PRD
