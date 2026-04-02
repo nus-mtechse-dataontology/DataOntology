@@ -26,7 +26,7 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-ra"
+addopts = "-ra -m 'not e2e and not external'"
 pythonpath = ["src"]
 markers = [
   "integration: marks integration tests",
