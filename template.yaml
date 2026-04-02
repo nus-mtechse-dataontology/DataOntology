@@ -22,6 +22,143 @@ Parameters:
 
 Resources:
 
+  # --- 1. NETWORK EGRESS FOR LAMBDA (PRIVATE SUBNET + NAT INSTANCE) ---
+  PrivateLambdaSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      CidrBlock: 172.31.48.0/20
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: DataOntologyPrivateLambdaSubnet
+
+  PrivateDbSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      CidrBlock: 172.31.64.0/20
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: DataOntologyPrivateDbSubnetA
+
+  PrivateDbSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      CidrBlock: 172.31.80.0/20
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: DataOntologyPrivateDbSubnetB
+
+  NatInstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "NAT Instance Security Group"
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: "-1"
+          CidrIp: 172.31.0.0/16
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          CidrIp: 0.0.0.0/0
+
+  NatInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: [ ec2.amazonaws.com ]
+            Action: [ sts:AssumeRole ]
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  NatInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: [ !Ref NatInstanceRole ]
+
+  NatInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.micro
+      ImageId: resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64
+      IamInstanceProfile: !Ref NatInstanceProfile
+      SubnetId: !Select [ 0, !Ref SubnetIds ]
+      SecurityGroupIds: [ !Ref NatInstanceSecurityGroup ]
+      SourceDestCheck: false
+      Tags:
+        - Key: Name
+          Value: DataOntologyNatInstance
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -eux
+          sysctl -w net.ipv4.ip_forward=1
+          cat <<'EOF' >/etc/sysctl.d/99-nat.conf
+          net.ipv4.ip_forward = 1
+          EOF
+          dnf -y install iptables || true
+          iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE || true
+
+  NatInstanceEip:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  PrivateLambdaRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VpcId
+      Tags:
+        - Key: Name
+          Value: DataOntologyPrivateLambdaRouteTable
+
+  PrivateLambdaDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: NatInstanceEipAssociation
+    Properties:
+      RouteTableId: !Ref PrivateLambdaRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      InstanceId: !Ref NatInstance
+
+  PrivateLambdaSubnetRouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateLambdaRouteTable
+      SubnetId: !Ref PrivateLambdaSubnet
+
+  NatInstanceEipAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId: !GetAtt NatInstanceEip.AllocationId
+      InstanceId: !Ref NatInstance
+
+  PrivateDbSubnetRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VpcId
+      Tags:
+        - Key: Name
+          Value: DataOntologyPrivateDbRouteTable
+
+  PrivateDbSubnetARouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateDbSubnetRouteTable
+      SubnetId: !Ref PrivateDbSubnetA
+
+  PrivateDbSubnetBRouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateDbSubnetRouteTable
+      SubnetId: !Ref PrivateDbSubnetB
+
   # --- 2. DB PASSWORD (Stored in SSM for Lambda to find) ---
   DBPasswordParam:
     Type: AWS::SSM::Parameter
@@ -30,6 +167,14 @@ Resources:
       Type: String
       Value: !Ref MasterDBPassword
       Description: "Master password for DataOntology RDS"
+
+  DataOntologyDbSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "Private subnet group for DataOntology RDS"
+      SubnetIds:
+        - !Ref PrivateDbSubnetA
+        - !Ref PrivateDbSubnetB
 
 # --- 3. THE DATABASE ---
   DataOntologyDB:
@@ -44,6 +189,7 @@ Resources:
       # RDS fetches the password directly from SSM during creation
       MasterUserPassword: !Ref MasterDBPassword
       PubliclyAccessible: false
+      DBSubnetGroupName: !Ref DataOntologyDbSubnetGroup
       VPCSecurityGroups: [ !Ref DBSecurityGroup ]
       DeleteAutomatedBackups: true
       BackupRetentionPeriod: 0
@@ -59,7 +205,8 @@ Resources:
         AuthType: NONE
       VpcConfig:
         SecurityGroupIds: [ !Ref LambdaSecurityGroup ]
-        SubnetIds: !Ref SubnetIds
+        SubnetIds:
+          - !Ref PrivateLambdaSubnet
       Environment:
         Variables:
           PORT: "8000"
