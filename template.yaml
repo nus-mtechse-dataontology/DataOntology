@@ -14,10 +14,11 @@ Parameters:
     NoEcho: true
     Description: "Password for RDS (Alphanumeric only, no @, /, \", or spaces)"
     MinLength: 8
-  # GeminiApiKey:
-  #   Type: String
-  #   NoEcho: true
-  #   Description: "API Key for Gemini (if using Gemini adapter)"
+  GeminiApiKey:
+    Type: String
+    NoEcho: true
+    Description: "API Key for Gemini (if using Gemini adapter)"
+    Default: ""
 
 Resources:
 
@@ -74,10 +75,8 @@ Resources:
           AWS_LWA_READINESS_CHECK_MIN_UNHEALTHY_STATUS_COUNT: "5"
           # Optional: If you want to see exactly what LWA is doing in CloudWatch
           AWS_LWA_LOG_LEVEL: "debug"
-          # DB_HOST: !GetAtt DataOntologyDB.Endpoint.Address
-          # DB_USER: dbadmin
-          # DB_PASS_PARAM: !Ref MasterDBPassword
-          # GEMINI_API_KEY: !Ref GeminiApiKey
+          # LLM API Key (for Gemini or other providers)
+          GEMINI_API_KEY: !Ref GeminiApiKey
       Policies:
         # Give Lambda permission to read the SSM Parameter
         - SSMParameterReadPolicy:

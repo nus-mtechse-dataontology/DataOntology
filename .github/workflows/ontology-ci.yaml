@@ -90,7 +90,7 @@ jobs:
       - name: SAM Deploy
         run: |
           sam deploy --stack-name DataOntology \
-            --parameter-overrides FunctionName=${{ vars.LAMBDA_NAME }} \
+            --parameter-overrides FunctionName=${{ vars.LAMBDA_NAME }} GeminiApiKey=${{ secrets.GEMINI_API_KEY }} \
             --no-confirm-changeset --no-fail-on-empty-changeset
 
       # --- SMOKE TEST ---
