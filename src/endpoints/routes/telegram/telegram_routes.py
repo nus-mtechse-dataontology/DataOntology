@@ -6,9 +6,23 @@ from fastapi.responses import JSONResponse
 
 from adapters.telegram.client import TelegramClient
 from adapters.telegram.webhook_handler import handle_telegram_update
-from models.common import ErrorDetails, ErrorResponse
+from models.common import ErrorDetails, ErrorResponse, SuccessResponse
+from models.pipeline import NLQRequest, QuestionResponse
 
 telegram_router = APIRouter(prefix="/telegram", tags=["telegram"])
+
+
+def _fallback_orchestrator_handle_question(
+    nlq_request: NLQRequest,
+) -> SuccessResponse[QuestionResponse] | ErrorResponse:
+    return ErrorResponse(
+        request_id=nlq_request.request_id,
+        error=ErrorDetails(
+            code="not_implemented",
+            message="Orchestrator is not wired to Telegram route yet.",
+            component="telegram_webhook",
+        ),
+    )
 
 
 @telegram_router.post("/webhook")
@@ -37,24 +51,15 @@ async def telegram_webhook(
         )
 
     payload = await request.json()
-    orchestrator = getattr(request.app.state, "orchestrator", None)
-    if orchestrator is None:
-        return JSONResponse(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content=ErrorResponse(
-                request_id=str(uuid4()),
-                error=ErrorDetails(
-                    code="orchestrator_unavailable",
-                    message="Orchestrator is not available in application state.",
-                    component="telegram_webhook",
-                ),
-            ).model_dump(),
-        )
+    orchestrator = getattr(getattr(request, "app", None), "state", None)
+    orchestrator_handle_question = _fallback_orchestrator_handle_question
+    if orchestrator is not None and getattr(orchestrator, "orchestrator", None) is not None:
+        orchestrator_handle_question = orchestrator.orchestrator.handle_question
 
     telegram_client = TelegramClient(bot_token=bot_token)
     result = handle_telegram_update(
         update=payload,
-        orchestrator_handle_question=orchestrator.handle_question,
+        orchestrator_handle_question=orchestrator_handle_question,
         send_message=telegram_client.send_message,
         request_id_provider=lambda: str(uuid4()),
     )
