@@ -112,16 +112,18 @@ def test_webhook_valid_secret_passes(client, orchestrator, valid_update, success
     assert response.status_code == 200
 
 
-def test_webhook_invalid_update_returns_400(client, orchestrator, monkeypatch):
+def test_webhook_invalid_update_returns_400(client, orchestrator, monkeypatch, caplog):
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "test-token")
     monkeypatch.setattr("adapters.telegram.client.TelegramClient.send_message", Mock())
 
     invalid_update = {"update_id": 1, "message": {"chat": {"id": 12345}}}  # missing text
 
-    response = client.post("/telegram/webhook", json=invalid_update)
+    with caplog.at_level("ERROR", logger="data_ontology"):
+        response = client.post("/telegram/webhook", json=invalid_update)
 
     assert response.status_code == 400
     orchestrator.handle_question.assert_not_called()
+    assert any("returning 400" in r.message for r in caplog.records)
 
 
 def test_webhook_orchestrator_error_still_delivers_message_and_returns_200(

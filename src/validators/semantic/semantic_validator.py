@@ -1,5 +1,6 @@
 """Semantic validator against semantic model intents and required params."""
 
+import logging
 import re
 from typing import Any, Dict
 
@@ -23,6 +24,9 @@ class SemanticValidator:
     """
 
     COMPONENT_NAME = "semantic_validator"
+
+    def __init__(self) -> None:
+        self._log = logging.getLogger("data_ontology")
 
     def validate(
         self,
@@ -129,6 +133,7 @@ class SemanticValidator:
         # -----------------------------------------------
         # Success
         # -----------------------------------------------
+        self._log.info("[%s] Semantic validation passed for intent=%s params=%s", plan.request_id, plan.intent, list(plan.parameters.keys()))
         return SuccessResponse(
             request_id=plan.request_id,
             data=plan,
@@ -141,6 +146,7 @@ class SemanticValidator:
         message: str,
         details: Dict[str, Any] | None = None,
     ) -> ErrorResponse:
+        self._log.error("[%s] Semantic validation failed [%s]: %s", request_id, code, message)
         return ErrorResponse(
             request_id=request_id,
             error=ErrorDetails(
