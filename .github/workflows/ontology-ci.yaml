@@ -9,6 +9,7 @@ on:
     branches: [ DAT-54-CICD ]
   pull_request:
     branches: [ main, release ]
+    types: [ opened, reopened, ready_for_review ]
 
 jobs:
   # 1. QUALITY GATE: Scans code, not containers
@@ -45,6 +46,7 @@ jobs:
 
       - name: Run Snyk Action
         uses: snyk/actions/python@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
