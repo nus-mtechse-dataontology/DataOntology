@@ -1,6 +1,7 @@
 """Syntactic validator for raw LLM output."""
 
 import json
+import logging
 
 from pydantic import ValidationError
 
@@ -25,6 +26,9 @@ class SyntacticValidator:
         ErrorResponse on failure
     """
 
+    def __init__(self) -> None:
+        self._log = logging.getLogger("data_ontology")
+
     def validate(
         self, raw_response: LLMRawResponse
     ) -> SuccessResponse[QueryPlan] | ErrorResponse:
@@ -38,6 +42,8 @@ class SyntacticValidator:
         try:
             parsed = json.loads(cleaned_text)
         except json.JSONDecodeError as e:
+            self._log.error("[%s] Syntactic validation failed - malformed JSON: %s", request_id, str(e))
+            self._log.debug("[%s] Raw LLM text that failed parsing: %s", request_id, cleaned_text)
             return ErrorResponse(
                 request_id=request_id,
                 error=ErrorDetails(
@@ -55,6 +61,7 @@ class SyntacticValidator:
         try:
             query_plan = QueryPlan(**parsed)
         except ValidationError as e:
+            self._log.error("[%s] Syntactic validation failed - schema error: %s", request_id, e.errors())
             return ErrorResponse(
                 request_id=request_id,
                 error=ErrorDetails(
@@ -67,6 +74,7 @@ class SyntacticValidator:
 
         # Step 5: Confidence range guard
         if not (0.0 <= query_plan.confidence <= 1.0):
+            self._log.error("[%s] Syntactic validation failed - confidence out of range: %s", request_id, query_plan.confidence)
             return ErrorResponse(
                 request_id=request_id,
                 error=ErrorDetails(
@@ -77,6 +85,8 @@ class SyntacticValidator:
                 ),
             )
 
+        self._log.info("[%s] Parsed intent=%s confidence=%.2f", request_id, query_plan.intent, query_plan.confidence)
+        self._log.debug("[%s] QueryPlan: %s", request_id, query_plan.model_dump())
         return SuccessResponse(
             request_id=request_id,
             data=query_plan,

@@ -1,3 +1,4 @@
+import logging
 import os
 from uuid import uuid4
 
@@ -7,6 +8,8 @@ from fastapi.responses import JSONResponse
 from adapters.telegram.client import TelegramClient
 from adapters.telegram.webhook_handler import handle_telegram_update
 from models.common import ErrorResponse
+
+_log = logging.getLogger("data_ontology")
 
 telegram_router = APIRouter(prefix="/telegram", tags=["telegram"])
 
@@ -46,6 +49,7 @@ async def telegram_webhook(
     )
 
     if isinstance(result, ErrorResponse):
+        _log.error("[%s] Telegram webhook returning 400 [%s]: %s", result.request_id, result.error.code, result.error.message)
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content=result.model_dump(),

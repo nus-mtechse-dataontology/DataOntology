@@ -1,5 +1,7 @@
 import json
+import logging
 import os
+import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
 
@@ -23,6 +25,7 @@ class OpenAIGateway(LLMGateway):
         self._api_key = api_key
         self._model = model or os.getenv("OPENAI_MODEL", "gpt-5.4-nano")
         self._timeout_seconds = timeout_seconds
+        self._log = logging.getLogger("data_ontology")
 
     def submit_prompt(
         self, bundle: PromptBundle
@@ -55,16 +58,22 @@ class OpenAIGateway(LLMGateway):
             if ":" not in model_name:
                 model_name = f"openai:{model_name}"
 
+            self._log.info("[%s] Submitting prompt to OpenAI model=%s", bundle.request_id, model_name)
             agent = _PydanticAIAgent(model_name, system_prompt=bundle.system_message)
+            _start = time.monotonic()
             with ThreadPoolExecutor(max_workers=1) as executor:
                 future = executor.submit(agent.run_sync, bundle.user_message)
                 result = future.result(timeout=self._timeout_seconds)
+            elapsed = time.monotonic() - _start
 
             raw_text = getattr(result, "output", result)
             if isinstance(raw_text, str):
                 text_output = raw_text
             else:
                 text_output = json.dumps(raw_text, ensure_ascii=False)
+
+            self._log.info("[%s] OpenAI responded in %.2fs", bundle.request_id, elapsed)
+            self._log.debug("[%s] LLM raw response: %s", bundle.request_id, text_output.strip())
 
             return SuccessResponse[LLMRawResponse](
                 request_id=bundle.request_id,
@@ -75,6 +84,7 @@ class OpenAIGateway(LLMGateway):
             )
 
         except FutureTimeoutError:
+            self._log.error("[%s] OpenAI request timed out after %ds", bundle.request_id, self._timeout_seconds)
             return ErrorResponse(
                 request_id=bundle.request_id,
                 error=ErrorDetails(
@@ -94,6 +104,7 @@ class OpenAIGateway(LLMGateway):
             else:
                 code = "llm_gateway_failed"
 
+            self._log.error("[%s] OpenAI gateway error [%s]: %s", bundle.request_id, code, message)
             return ErrorResponse(
                 request_id=bundle.request_id,
                 error=ErrorDetails(

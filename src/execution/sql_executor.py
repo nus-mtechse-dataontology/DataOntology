@@ -1,5 +1,6 @@
 """Execute compiled SQL against the configured database."""
 
+import logging
 from typing import Union
 
 from sqlalchemy.exc import SQLAlchemyError
@@ -32,6 +33,7 @@ class SQLExecutor:
             fact_flight_info_dao: The Fact Flight Info DAO
         """
         self._dao = fact_flight_info_dao
+        self._log = logging.getLogger("data_ontology")
 
     def execute(
         self, compiled_sql: CompiledSQL
@@ -76,14 +78,18 @@ class SQLExecutor:
                 request_id=compiled_sql.request_id,
                 result_set=[Row(data=res) for res in result_rows]
             )
-            
+
+            self._log.info("[%s] Query returned %d row(s)", compiled_sql.request_id, len(result_set.result_set))
+            self._log.debug("[%s] Result set: %s", compiled_sql.request_id, [row.data for row in result_set.result_set])
+
             return SuccessResponse[ResultSet](
                 request_id=compiled_sql.request_id,
                 status="SUCCESS",
                 data=result_set
             )
-        
+
         except SQLAlchemyError as e:
+            self._log.error("[%s] SQL execution error: %s", compiled_sql.request_id, str(e))
             return ErrorResponse(
                 request_id=compiled_sql.request_id,
                 error=ErrorDetails(
