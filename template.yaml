@@ -133,40 +133,6 @@ Resources:
       RouteTableId: !Ref PrivateLambdaRouteTable
       SubnetId: !Ref PrivateLambdaSubnet
 
-  PublicRouteTable:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref VpcId
-      Tags:
-        - Key: Name
-          Value: DataOntologyPublicRouteTable
-
-  PublicInternetGatewayRoute:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref PublicRouteTable
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref InternetGateway
-
-  InternetGateway:
-    Type: AWS::EC2::InternetGateway
-    Properties:
-      Tags:
-        - Key: Name
-          Value: DataOntologyIGW
-
-  AttachGateway:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      VpcId: !Ref VpcId
-      InternetGatewayId: !Ref InternetGateway
-
-  NatInstanceSubnetRouteAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref PublicRouteTable
-      SubnetId: !Select [ 0, !Ref SubnetIds ]
-
   NatInstanceEipAssociation:
     Type: AWS::EC2::EIPAssociation
     Properties:
@@ -213,10 +179,8 @@ Resources:
 # --- 3. THE DATABASE ---
   DataOntologyDB:
     Type: AWS::RDS::DBInstance
-    DeletionPolicy: Snapshot
-    UpdateReplacePolicy: Snapshot
     Properties:
-      DBInstanceIdentifier: data-ontology-db-v2
+      DBInstanceIdentifier: data-ontology-db
       AllocatedStorage: '20'
       DBInstanceClass: db.t3.micro
       Engine: postgres
@@ -287,9 +251,6 @@ Resources:
     Properties:
       GroupDescription: "Lambda Security Group"
       VpcId: !Ref VpcId
-      SecurityGroupEgress:
-        - IpProtocol: "-1"
-          CidrIp: 0.0.0.0/0
 
   DBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
