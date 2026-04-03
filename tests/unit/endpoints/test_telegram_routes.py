@@ -112,7 +112,7 @@ def test_webhook_valid_secret_passes(client, orchestrator, valid_update, success
     assert response.status_code == 200
 
 
-def test_webhook_invalid_update_returns_400(client, orchestrator, monkeypatch):
+def test_webhook_invalid_update_returns_200(client, orchestrator, monkeypatch):
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "test-token")
     monkeypatch.setattr("adapters.telegram.client.TelegramClient.send_message", Mock())
 
@@ -120,7 +120,7 @@ def test_webhook_invalid_update_returns_400(client, orchestrator, monkeypatch):
 
     response = client.post("/telegram/webhook", json=invalid_update)
 
-    assert response.status_code == 400
+    assert response.status_code == 200
     orchestrator.handle_question.assert_not_called()
 
 

@@ -1,4 +1,5 @@
 import os
+import logging
 from uuid import uuid4
 
 from fastapi import APIRouter, Header, Request, status
@@ -9,6 +10,7 @@ from adapters.telegram.webhook_handler import handle_telegram_update
 from models.common import ErrorResponse
 
 telegram_router = APIRouter(prefix="/telegram", tags=["telegram"])
+logger = logging.getLogger("data_ontology")
 
 
 @telegram_router.post("/webhook")
@@ -36,22 +38,32 @@ async def telegram_webhook(
             },
         )
 
-    payload = await request.json()
-    telegram_client = TelegramClient(bot_token=bot_token)
-    result = handle_telegram_update(
-        update=payload,
-        orchestrator_handle_question=request.app.state.orchestrator.handle_question,
-        send_message=telegram_client.send_message,
-        request_id_provider=lambda: str(uuid4()),
-    )
-
-    if isinstance(result, ErrorResponse):
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content=result.model_dump(),
+    try:
+        payload = await request.json()
+        telegram_client = TelegramClient(bot_token=bot_token)
+        result = handle_telegram_update(
+            update=payload,
+            orchestrator_handle_question=request.app.state.orchestrator.handle_question,
+            send_message=telegram_client.send_message,
+            request_id_provider=lambda: str(uuid4()),
         )
 
-    return JSONResponse(
-        status_code=status.HTTP_200_OK,
-        content=result.model_dump(),
-    )
+        if isinstance(result, ErrorResponse):
+            logger.warning(
+                "Telegram webhook handled with error response: %s",
+                result.model_dump(),
+            )
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content=result.model_dump(),
+        )
+    except Exception as exc:
+        logger.exception("Unhandled error in Telegram webhook: %s", exc)
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={
+                "ok": True,
+                "status": "accepted",
+                "message": "Telegram update accepted for processing.",
+            },
+        )
