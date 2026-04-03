@@ -1,5 +1,7 @@
 """Pipeline orchestrator for NLQ execution."""
 
+import logging
+import time
 from collections.abc import Callable
 from typing import Any
 
@@ -40,6 +42,7 @@ class Orchestrator:
         self._response_builder = response_builder
         self._error_response_builder = error_response_builder
         self._now_provider = now_provider
+        self._log = logging.getLogger("data_ontology")
 
     def handle_question(
         self, request: NLQRequest
@@ -50,6 +53,7 @@ class Orchestrator:
                 candidate = request.get("request_id")
                 if isinstance(candidate, str) and candidate:
                     request_id = candidate
+            self._log.error("[%s] Invalid request type: %s", request_id, type(request).__name__)
             return self._error_response_builder(
                 ErrorResponse(
                 request_id=request_id,
@@ -61,8 +65,12 @@ class Orchestrator:
                 )
             )
 
+        self._log.info("[%s] Received question: %s", request.request_id, request.question)
+        _start = time.monotonic()
+
         semantic_model_response = self._semantic_model_provider()
         if isinstance(semantic_model_response, ErrorResponse):
+            self._log.error("[%s] Stage semantic_model_provider failed: %s", request.request_id, semantic_model_response.error.message)
             return self._error_response_builder(semantic_model_response)
         semantic_model = semantic_model_response.data
 
@@ -75,6 +83,7 @@ class Orchestrator:
         )
         prompt_bundle_response = self._prompt_builder(prompt_request)
         if isinstance(prompt_bundle_response, ErrorResponse):
+            self._log.error("[%s] Stage prompt_builder failed: %s", request.request_id, prompt_bundle_response.error.message)
             return self._error_response_builder(prompt_bundle_response)
         prompt_bundle = prompt_bundle_response.data
         if not isinstance(prompt_bundle, PromptBundle):
@@ -90,6 +99,7 @@ class Orchestrator:
 
         raw_response_response = self._llm_gateway(prompt_bundle)
         if isinstance(raw_response_response, ErrorResponse):
+            self._log.error("[%s] Stage llm_gateway failed: %s", request.request_id, raw_response_response.error.message)
             return self._error_response_builder(raw_response_response)
         raw_response = raw_response_response.data
         if not isinstance(raw_response, LLMRawResponse):
@@ -105,6 +115,7 @@ class Orchestrator:
 
         query_plan_response = self._syntactic_validator(raw_response)
         if isinstance(query_plan_response, ErrorResponse):
+            self._log.error("[%s] Stage syntactic_validator failed: %s", request.request_id, query_plan_response.error.message)
             return self._error_response_builder(query_plan_response)
         query_plan = query_plan_response.data
         if not isinstance(query_plan, QueryPlan):
@@ -120,6 +131,7 @@ class Orchestrator:
 
         validated_query_plan_response = self._semantic_validator(query_plan, semantic_model)
         if isinstance(validated_query_plan_response, ErrorResponse):
+            self._log.error("[%s] Stage semantic_validator failed: %s", request.request_id, validated_query_plan_response.error.message)
             return self._error_response_builder(validated_query_plan_response)
         validated_query_plan = validated_query_plan_response.data
         if not isinstance(validated_query_plan, QueryPlan):
@@ -135,6 +147,7 @@ class Orchestrator:
 
         compiled_sql_response = self._sql_compiler(validated_query_plan, semantic_model)
         if isinstance(compiled_sql_response, ErrorResponse):
+            self._log.error("[%s] Stage sql_compiler failed: %s", request.request_id, compiled_sql_response.error.message)
             return self._error_response_builder(compiled_sql_response)
         compiled_sql = compiled_sql_response.data
         if not isinstance(compiled_sql, CompiledSQL):
@@ -150,6 +163,7 @@ class Orchestrator:
 
         result_set_response = self._sql_executor(compiled_sql)
         if isinstance(result_set_response, ErrorResponse):
+            self._log.error("[%s] Stage sql_executor failed: %s", request.request_id, result_set_response.error.message)
             return self._error_response_builder(result_set_response)
         result_set = result_set_response.data
         if not isinstance(result_set, ResultSet):
@@ -165,5 +179,9 @@ class Orchestrator:
 
         response = self._response_builder(result_set)
         if isinstance(response, ErrorResponse):
+            self._log.error("[%s] Stage response_builder failed: %s", request.request_id, response.error.message)
             return self._error_response_builder(response)
+
+        elapsed = time.monotonic() - _start
+        self._log.info("[%s] Pipeline completed in %.2fs", request.request_id, elapsed)
         return response

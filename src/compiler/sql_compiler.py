@@ -1,5 +1,6 @@
 """Compile a validated QueryPlan into SQL and bound parameters."""
 
+import logging
 from typing import Any, Dict, Union
 
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
@@ -19,6 +20,9 @@ class SQLCompiler:
     passed in a bound_params dictionary using SQLite parameterized query format
     (e.g., :param_name) to prevent SQL injection.
     """
+
+    def __init__(self) -> None:
+        self._log = logging.getLogger("data_ontology")
 
     def compile(
         self, plan: QueryPlan, semantic_model: Dict[str, Any]
@@ -155,7 +159,10 @@ class SQLCompiler:
             sql=sql_template,
             bound_params=bound_params
         )
-        
+
+        self._log.info("[%s] SQL compiled for intent=%s", plan.request_id, plan.intent)
+        self._log.debug("[%s] SQL: %s | params: %s", plan.request_id, sql_template, bound_params)
+
         return SuccessResponse[CompiledSQL](
             request_id=plan.request_id,
             status="SUCCESS",

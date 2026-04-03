@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -10,6 +11,7 @@ class PromptBuilder:
     def __init__(self, template_path: str | None = None) -> None:
         default_path = Path(__file__).with_name("templates").joinpath("query_plan_prompt.j2")
         self._template_path = Path(template_path) if template_path else default_path
+        self._log = logging.getLogger("data_ontology")
 
     def _load_default_template(self) -> str:
         return self._template_path.read_text(encoding="utf-8")
@@ -57,6 +59,9 @@ class PromptBuilder:
                 system_message="You are an AI query planner. Return strictly valid JSON only.",
                 user_message=user_message,
             )
+            self._log.info("[%s] Prompt built", request.request_id)
+            self._log.debug("[%s] system_message: %s", request.request_id, bundle.system_message)
+            self._log.debug("[%s] user_message: %s", request.request_id, bundle.user_message)
             return SuccessResponse[PromptBundle](
                 request_id=request.request_id,
                 data=bundle,

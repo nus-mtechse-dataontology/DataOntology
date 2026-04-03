@@ -77,7 +77,7 @@ def test_handle_telegram_update_orchestrator_error_still_sends_message():
     assert "Malformed LLM output" in sent_text
 
 
-def test_handle_telegram_update_invalid_update_returns_error_and_skips_calls():
+def test_handle_telegram_update_invalid_update_returns_error_and_skips_calls(caplog):
     update = {
         "update_id": 9103,
         "message": {
@@ -89,21 +89,23 @@ def test_handle_telegram_update_invalid_update_returns_error_and_skips_calls():
     orchestrator = Mock()
     send_message = Mock()
 
-    result = handle_telegram_update(
-        update=update,
-        orchestrator_handle_question=orchestrator,
-        send_message=send_message,
-        request_id_provider=lambda: "req-tg-h3",
-    )
+    with caplog.at_level("ERROR", logger="data_ontology"):
+        result = handle_telegram_update(
+            update=update,
+            orchestrator_handle_question=orchestrator,
+            send_message=send_message,
+            request_id_provider=lambda: "req-tg-h3",
+        )
 
     assert isinstance(result, ErrorResponse)
     assert result.request_id == "req-tg-h3"
     assert result.error.component == "telegram_mapper"
     orchestrator.assert_not_called()
     send_message.assert_not_called()
+    assert any("Mapper failed" in r.message for r in caplog.records)
 
 
-def test_handle_telegram_update_send_failure_returns_delivery_error_response():
+def test_handle_telegram_update_send_failure_returns_delivery_error_response(caplog):
     update = {
         "update_id": 9104,
         "message": {
@@ -123,14 +125,16 @@ def test_handle_telegram_update_send_failure_returns_delivery_error_response():
     )
     send_message = Mock(side_effect=RuntimeError("Telegram unavailable"))
 
-    result = handle_telegram_update(
-        update=update,
-        orchestrator_handle_question=orchestrator,
-        send_message=send_message,
-        request_id_provider=lambda: "req-tg-h4",
-    )
+    with caplog.at_level("ERROR", logger="data_ontology"):
+        result = handle_telegram_update(
+            update=update,
+            orchestrator_handle_question=orchestrator,
+            send_message=send_message,
+            request_id_provider=lambda: "req-tg-h4",
+        )
 
     assert isinstance(result, ErrorResponse)
     assert result.request_id == "req-tg-h4"
     assert result.error.component == "telegram_webhook"
     assert result.error.code == "telegram_delivery_failed"
+    assert any("send_message failed" in r.message and "Telegram unavailable" in r.message for r in caplog.records)
