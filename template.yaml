@@ -209,7 +209,7 @@ Resources:
     Properties:
       PackageType: Image
       MemorySize: 512
-      Timeout: 30
+      Timeout: 60
       FunctionUrlConfig:
         AuthType: NONE
       VpcConfig:
