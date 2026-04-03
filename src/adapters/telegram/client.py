@@ -15,7 +15,7 @@ class TelegramClient:
         self._bot_token = bot_token
         self._base_url = f"https://api.telegram.org/bot{bot_token}"
         self._session = requests.Session()
-        self._timeout_seconds = 5
+        self._timeout_seconds = 15
         self._max_attempts = 2
         self._retry_delay_seconds = 0.2
 
