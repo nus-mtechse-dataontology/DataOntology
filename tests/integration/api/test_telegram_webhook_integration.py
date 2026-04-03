@@ -1,12 +1,27 @@
 import asyncio
+from unittest.mock import Mock
 
 from adapters.telegram.client import TelegramClient
 from endpoints.routes.telegram.telegram_routes import telegram_webhook
+from models.common import SuccessResponse
+from models.pipeline import QuestionResponse
+
+
+class _FakeApp:
+    def __init__(self):
+        orchestrator = Mock()
+        orchestrator.handle_question.return_value = SuccessResponse(
+            request_id="req-1",
+            data=QuestionResponse(request_id="req-1", response="Test response."),
+        )
+        self.state = Mock()
+        self.state.orchestrator = orchestrator
 
 
 class _FakeRequest:
     def __init__(self, payload):
         self._payload = payload
+        self.app = _FakeApp()
 
     async def json(self):
         return self._payload

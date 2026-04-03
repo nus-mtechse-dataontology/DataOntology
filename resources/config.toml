@@ -79,7 +79,7 @@ scheme = "http"
 provider = "gemini"
 timeout_seconds = 30
 [llm.providers.gemini]
-model = "gemini-3-flash-preview"
+model = "gemini-2.5-flash"
 [llm.providers.openai]
 model = "gpt-5.4-nano"
 
