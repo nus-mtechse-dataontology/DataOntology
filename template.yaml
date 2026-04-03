@@ -180,7 +180,7 @@ Resources:
   DataOntologyDB:
     Type: AWS::RDS::DBInstance
     Properties:
-      DBInstanceIdentifier: data-ontology-db
+      DBInstanceIdentifier: data-ontology-db-v2
       AllocatedStorage: '20'
       DBInstanceClass: db.t3.micro
       Engine: postgres
