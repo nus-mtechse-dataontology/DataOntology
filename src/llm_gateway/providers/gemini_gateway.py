@@ -9,10 +9,12 @@ Notes:
 - This class only handles Gemini-specific auth/model/dependency behavior.
 """
 
+import asyncio
 import json
 import os
+import threading
 import traceback
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
+from concurrent.futures import TimeoutError as FutureTimeoutError
 
 try:
     from pydantic_ai import Agent as _PydanticAIAgent
@@ -22,6 +24,13 @@ except Exception:
 from llm_gateway.llm_gateway import LLMGateway
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
 from models.pipeline import LLMRawResponse, PromptBundle
+
+
+def _make_background_loop() -> asyncio.AbstractEventLoop:
+    loop = asyncio.new_event_loop()
+    thread = threading.Thread(target=loop.run_forever, daemon=True)
+    thread.start()
+    return loop
 
 
 class GeminiGateway(LLMGateway):
@@ -37,6 +46,7 @@ class GeminiGateway(LLMGateway):
         model: str | None = None,
         timeout_seconds: int = 30,
     ) -> None:
+        self._bg_loop = _make_background_loop()
         """Initialize Gemini gateway configuration.
 
         Args:
@@ -101,9 +111,11 @@ class GeminiGateway(LLMGateway):
                 model_name = f"google-gla:{model_name}"
 
             agent = _PydanticAIAgent(model_name, system_prompt=bundle.system_message)
-            with ThreadPoolExecutor(max_workers=1) as executor:
-                future = executor.submit(agent.run_sync, bundle.user_message)
-                result = future.result(timeout=self._timeout_seconds)
+
+            future = asyncio.run_coroutine_threadsafe(
+                agent.run(bundle.user_message), self._bg_loop
+            )
+            result = future.result(timeout=self._timeout_seconds)
 
             raw_text = getattr(result, "output", result)
             if isinstance(raw_text, str):

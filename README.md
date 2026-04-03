@@ -133,3 +133,90 @@ User Question → PromptBuilder → LLM Gateway (Gemini)
 - Swagger UI: http://127.0.0.1:8000/docs
 - ReDoc: http://127.0.0.1:8000/redoc/
 - Health: http://127.0.0.1:8000/ontology/actuator/health/liveness
+
+---
+
+## Local E2E Testing (Telegram Bot)
+
+### One-time setup
+
+1. Create a Telegram bot via [@BotFather](https://t.me/botfather) and save the `TELEGRAM_BOT_TOKEN`
+2. Install ngrok and authenticate:
+```bash
+brew install ngrok
+ngrok config add-authtoken <your-ngrok-authtoken>
+```
+3. Set vault credentials for local Postgres:
+```bash
+echo -n "postgres" > vault/postgres.user
+echo -n "postgres" > vault/postgres.password
+```
+
+### Every session
+
+1. Start local Postgres:
+```bash
+docker run --name dataontology \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=data_ontology \
+  -p 5432:5432 -d postgres
+```
+If the container already exists: `docker start dataontology`
+
+2. Load seed data:
+```bash
+psql -h localhost -U postgres -d data_ontology -f resources/seed_local.sql
+```
+
+3. Start the server:
+```bash
+export GEMINI_API_KEY=<your-gemini-api-key>
+export TELEGRAM_BOT_TOKEN=<your-telegram-bot-token>
+uv run python src/main.py
+```
+
+4. Start ngrok in a separate terminal:
+```bash
+ngrok http 8000
+```
+Copy the `https://....ngrok-free.dev` URL from the output.
+
+5. Register the webhook with Telegram (required each session — ngrok URL changes on restart):
+```bash
+curl -X POST "https://api.telegram.org/bot<TOKEN>/setWebhook" \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://<ngrok-url>/telegram/webhook"}'
+```
+
+### Test questions
+
+Send these to your bot in Telegram to verify each intent, or run them automatically (see below):
+
+| Intent | Question |
+|---|---|
+| Cheapest flight on route | `What is the cheapest flight from SIN to BKK between 1 June and 30 June 2025?` |
+| Destinations under budget | `Where can I fly from SIN for under 300 SGD between 1 June and 30 June 2025?` |
+| Destinations by country | `From SIN, which airports in Thailand can I fly to in June 2025?` |
+| All fare options | `Show me all fare options from SIN to BKK between 1 June and 30 June 2025` |
+| Airlines on route | `Which airlines fly from SIN to BKK in June 2025?` |
+| Last seat urgency | `Are there any almost-full flights from SIN to BKK in June 2025?` |
+
+### Expected results
+
+- **Cheapest flight** — 6 records, AirAsia Economy at SGD 89 cheapest
+- **Under budget** — 3 destinations (KUL, BKK, CNX), NRT excluded as it exceeds 300 SGD
+- **Thailand airports** — 2 airports (BKK, CNX)
+- **Fare options** — 6 records across Economy and Business
+- **Airlines** — 4 airlines (AirAsia, Malaysia Airlines, Thai Airways, Singapore Airlines)
+- **Last seat urgency** — 5 flights with ≤5 seats remaining
+
+### Running golden questions automatically
+
+The same questions are codified as e2e tests and can be run directly against the orchestrator (no Telegram or ngrok needed):
+
+```bash
+uv run pytest -m e2e -v
+```
+
+Requires local Postgres running with seed data and `GEMINI_API_KEY` set. These tests are excluded from the default `uv run pytest` run and must be triggered deliberately.

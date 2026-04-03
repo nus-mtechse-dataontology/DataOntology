@@ -39,7 +39,7 @@ logger = logging.getLogger("data_ontology")
 
 # Default paths (relative to project root)
 _SRC_DIR = Path(__file__).resolve().parent.parent
-_DEFAULT_SEMANTIC_MODEL_PATH = str(_SRC_DIR / "ontology" / "semantic_layer.json")
+_DEFAULT_SEMANTIC_MODEL_PATH = str(_SRC_DIR / "ontology" / "semantic_layer_v2.json")
 _DEFAULT_DB_PATH = str(_SRC_DIR.parent / "resources" / "flights.db")
 
 

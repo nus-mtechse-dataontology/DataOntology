@@ -18,7 +18,7 @@ def test_gemini_gateway_submit_prompt_success(monkeypatch):
             captured["model_name"] = model_name
             captured["system_prompt"] = system_prompt
 
-        def run_sync(self, user_message):
+        async def run(self, user_message):
             captured["user_message"] = user_message
             return _FakeResult(
                 '{"intent":"route_departure_options","parameters":{},"missing_params":[],"follow_up_question":null,"confidence":0.8}'

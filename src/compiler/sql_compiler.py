@@ -134,6 +134,11 @@ class SQLCompiler:
         # Ensure 'limit' parameter exists (defaults to 10 if not provided)
         if "limit" not in bound_params:
             bound_params["limit"] = 10
+
+        # Inject None for any optional params not provided by the LLM
+        for param in intent_def.get("optional_params", []):
+            if param not in bound_params:
+                bound_params[param] = None
         
         # =======================================================================
         # STEP 5: Return the compiled SQL

@@ -6,23 +6,9 @@ from fastapi.responses import JSONResponse
 
 from adapters.telegram.client import TelegramClient
 from adapters.telegram.webhook_handler import handle_telegram_update
-from models.common import ErrorDetails, ErrorResponse, SuccessResponse
-from models.pipeline import NLQRequest, QuestionResponse
+from models.common import ErrorResponse
 
 telegram_router = APIRouter(prefix="/telegram", tags=["telegram"])
-
-
-def _default_orchestrator_handle_question(
-    request: NLQRequest,
-) -> SuccessResponse[QuestionResponse] | ErrorResponse:
-    return ErrorResponse(
-        request_id=request.request_id,
-        error=ErrorDetails(
-            code="not_implemented",
-            message="Orchestrator is not wired to Telegram route yet.",
-            component="telegram_webhook",
-        ),
-    )
 
 
 @telegram_router.post("/webhook")
@@ -54,7 +40,7 @@ async def telegram_webhook(
     telegram_client = TelegramClient(bot_token=bot_token)
     result = handle_telegram_update(
         update=payload,
-        orchestrator_handle_question=_default_orchestrator_handle_question,
+        orchestrator_handle_question=request.app.state.orchestrator.handle_question,
         send_message=telegram_client.send_message,
         request_id_provider=lambda: str(uuid4()),
     )
