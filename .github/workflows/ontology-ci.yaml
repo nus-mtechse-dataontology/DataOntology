@@ -90,7 +90,7 @@ jobs:
       - name: SAM Deploy
         run: |
           sam deploy --stack-name DataOntology \
-            --parameter-overrides FunctionName=${{ vars.LAMBDA_NAME }} GeminiApiKey=${{ secrets.GEMINI_API_KEY }} \
+            --parameter-overrides GeminiApiKey=${{ secrets.GEMINI_API_KEY }} TelegramBotToken=${{ secrets.TELEGRAM_BOT_TOKEN }} TelegramWebhookSecret=${{ secrets.TELEGRAM_WEBHOOK_SECRET }} \
             --no-confirm-changeset --no-fail-on-empty-changeset
 
       # --- SMOKE TEST ---

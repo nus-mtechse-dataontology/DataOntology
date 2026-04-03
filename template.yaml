@@ -19,6 +19,16 @@ Parameters:
     NoEcho: true
     Description: "API Key for Gemini (if using Gemini adapter)"
     Default: ""
+  TelegramBotToken:
+    Type: String
+    NoEcho: true
+    Description: "Telegram bot token used by webhook handler"
+    Default: ""
+  TelegramWebhookSecret:
+    Type: String
+    NoEcho: true
+    Description: "Optional Telegram webhook verification secret"
+    Default: ""
 
 Resources:
 
@@ -223,6 +233,9 @@ Resources:
           AWS_LWA_LOG_LEVEL: "debug"
           # LLM API Key (for Gemini or other providers)
           GEMINI_API_KEY: !Ref GeminiApiKey
+          # Telegram webhook settings (deploy-time injection)
+          TELEGRAM_BOT_TOKEN: !Ref TelegramBotToken
+          TELEGRAM_WEBHOOK_SECRET: !Ref TelegramWebhookSecret
       Policies:
         # Give Lambda permission to read the SSM Parameter
         - SSMParameterReadPolicy:
