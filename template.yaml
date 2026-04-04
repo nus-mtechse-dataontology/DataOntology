@@ -29,18 +29,6 @@ Parameters:
     NoEcho: true
     Description: "Optional Telegram webhook verification secret"
     Default: ""
-  EgressMode:
-    Type: String
-    Description: "Internet egress mode for Lambda private subnet"
-    Default: no-egress
-    AllowedValues:
-      - nat-gateway
-      - nat-instance
-      - no-egress
-
-Conditions:
-  UseNatGateway: !Equals [!Ref EgressMode, nat-gateway]
-  UseNatInstance: !Equals [!Ref EgressMode, nat-instance]
 
 Resources:
 
@@ -75,24 +63,7 @@ Resources:
         - Key: Name
           Value: DataOntologyPrivateDbSubnetB
 
-  NatGatewayEip:
-    Condition: UseNatGateway
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
-
-  NatGateway:
-    Condition: UseNatGateway
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt NatGatewayEip.AllocationId
-      SubnetId: !Select [ 0, !Ref SubnetIds ]
-      Tags:
-        - Key: Name
-          Value: DataOntologyNatGateway
-
   NatInstanceSecurityGroup:
-    Condition: UseNatInstance
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: "NAT Instance Security Group"
@@ -107,7 +78,6 @@ Resources:
           Description: "Allow NAT instance internet egress"
 
   NatInstance:
-    Condition: UseNatInstance
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t3.small
@@ -139,13 +109,11 @@ Resources:
           systemctl restart iptables || true
 
   NatInstanceEip:
-    Condition: UseNatInstance
     Type: AWS::EC2::EIP
     Properties:
       Domain: vpc
 
   NatInstanceEipAssociation:
-    Condition: UseNatInstance
     Type: AWS::EC2::EIPAssociation
     Properties:
       AllocationId: !GetAtt NatInstanceEip.AllocationId
@@ -159,16 +127,7 @@ Resources:
         - Key: Name
           Value: DataOntologyPrivateLambdaRouteTable
 
-  PrivateLambdaDefaultRoute:
-    Condition: UseNatGateway
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref PrivateLambdaRouteTable
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NatGateway
-
   PrivateLambdaDefaultRouteViaNatInstance:
-    Condition: UseNatInstance
     Type: AWS::EC2::Route
     Properties:
       RouteTableId: !Ref PrivateLambdaRouteTable
@@ -358,7 +317,6 @@ Resources:
       Roles: [ !Ref SSMBridgeRole ]
 
   NatInstanceRole:
-    Condition: UseNatInstance
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -371,7 +329,6 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
 
   NatInstanceProfile:
-    Condition: UseNatInstance
     Type: AWS::IAM::InstanceProfile
     Properties:
       Roles: [ !Ref NatInstanceRole ]

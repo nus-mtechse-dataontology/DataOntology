@@ -85,12 +85,17 @@ jobs:
           aws-region: ap-southeast-1
 
       - uses: aws-actions/setup-sam@v2
-      - run: sam build --use-container
+      - name: Clean SAM build cache
+        run: rm -rf .aws-sam/build
+
+      - name: SAM Build
+        run: sam build --use-container --template-file template.yaml
 
       - name: SAM Deploy
         run: |
           sam deploy --stack-name DataOntology \
-            --parameter-overrides GeminiApiKey=${{ secrets.GEMINI_API_KEY }} TelegramBotToken=${{ secrets.TELEGRAM_BOT_TOKEN }} TelegramWebhookSecret=${{ secrets.TELEGRAM_WEBHOOK_SECRET }} EgressMode=${{ vars.EGRESS_MODE || 'no-egress' }} \
+            --template-file .aws-sam/build/template.yaml \
+            --parameter-overrides GeminiApiKey=${{ secrets.GEMINI_API_KEY }} TelegramBotToken=${{ secrets.TELEGRAM_BOT_TOKEN }} TelegramWebhookSecret=${{ secrets.TELEGRAM_WEBHOOK_SECRET }} \
             --no-confirm-changeset --no-fail-on-empty-changeset
 
       # --- SMOKE TEST ---
