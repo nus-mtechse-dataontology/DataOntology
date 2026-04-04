@@ -9,8 +9,7 @@ RUN mkdir /install && uv pip install --system --target /install .
 FROM public.ecr.aws/lambda/python:3.14
 
 # 1. Lambda Web Adapter
-ADD https://github.com/awslabs/aws-lambda-web-adapter/releases/download/v0.9.1/lambda-adapter /opt/extensions/lambda-adapter
-RUN chmod +x /opt/extensions/lambda-adapter
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.9.1 /lambda-adapter /opt/extensions/lambda-adapter
 
 WORKDIR /var/task
 
