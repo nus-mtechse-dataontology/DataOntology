@@ -2,13 +2,14 @@
 
 from abc import ABC, abstractmethod
 
+from models import NLQRequest
 from models.common import ErrorResponse, SuccessResponse
-from models.pipeline import LLMRawResponse, PromptBundle
+from models.pipeline import LLMRawResponse
 
 
 class LLMGateway(ABC):
     @abstractmethod
     def submit_prompt(
-        self, bundle: PromptBundle
-    ) -> SuccessResponse[LLMRawResponse] | ErrorResponse:
+        self, bundle: NLQRequest
+    ) -> LLMRawResponse | ErrorResponse:
         raise NotImplementedError

@@ -1,6 +1,6 @@
 from ingestion.entry.base_entry import BaseEntry
 from ingestion.gateway.api_gateway import ApiGateway
-from ingestion.session.db_session import DBSession
+from session.db_session import DBSession
 
 
 class ApiEntry(BaseEntry):

@@ -16,6 +16,7 @@ dependencies = [
   "grpcio>=1.78.0",
   "pytest-cov",
   "authlib>=1.6.9",
+  "sqlalchemy>=2.0.48",
 ]
 
 [project.optional-dependencies]

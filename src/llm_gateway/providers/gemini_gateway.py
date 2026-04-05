@@ -11,10 +11,8 @@ Notes:
 
 import asyncio
 import json
-import logging
 import os
 import threading
-import time
 import traceback
 from concurrent.futures import TimeoutError as FutureTimeoutError
 
@@ -25,7 +23,7 @@ except Exception:
 
 from llm_gateway.llm_gateway import LLMGateway
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
-from models.pipeline import LLMRawResponse, PromptBundle
+from models.pipeline import LLMRawResponse, NLQRequest
 
 
 def _make_background_loop() -> asyncio.AbstractEventLoop:
@@ -49,7 +47,6 @@ class GeminiGateway(LLMGateway):
         timeout_seconds: int = 30,
     ) -> None:
         self._bg_loop = _make_background_loop()
-        self._log = logging.getLogger("data_ontology")
         """Initialize Gemini gateway configuration.
 
         Args:
@@ -65,8 +62,8 @@ class GeminiGateway(LLMGateway):
         self._timeout_seconds = timeout_seconds
 
     def submit_prompt(
-        self, bundle: PromptBundle
-    ) -> SuccessResponse[LLMRawResponse] | ErrorResponse:
+        self, bundle: NLQRequest
+    ) -> LLMRawResponse | ErrorResponse:
         """Submit prompt bundle to Gemini and normalize response shape.
 
         Args:
@@ -74,7 +71,7 @@ class GeminiGateway(LLMGateway):
                 and ``user_message``.
 
         Returns:
-            ``SuccessResponse[LLMRawResponse]`` on successful generation, or
+            ``LLMRawResponse`` on successful generation, or
             ``ErrorResponse`` for validation/dependency/auth/timeout/runtime
             failures.
 
@@ -113,15 +110,12 @@ class GeminiGateway(LLMGateway):
             if ":" not in model_name:
                 model_name = f"google-gla:{model_name}"
 
-            self._log.info("[%s] Submitting prompt to Gemini model=%s", bundle.request_id, model_name)
             agent = _PydanticAIAgent(model_name, system_prompt=bundle.system_message)
 
-            _start = time.monotonic()
             future = asyncio.run_coroutine_threadsafe(
                 agent.run(bundle.user_message), self._bg_loop
             )
             result = future.result(timeout=self._timeout_seconds)
-            elapsed = time.monotonic() - _start
 
             raw_text = getattr(result, "output", result)
             if isinstance(raw_text, str):
@@ -129,19 +123,9 @@ class GeminiGateway(LLMGateway):
             else:
                 text_output = json.dumps(raw_text, ensure_ascii=False)
 
-            self._log.info("[%s] Gemini responded in %.2fs", bundle.request_id, elapsed)
-            self._log.debug("[%s] LLM raw response: %s", bundle.request_id, text_output.strip())
-
-            return SuccessResponse[LLMRawResponse](
-                request_id=bundle.request_id,
-                data=LLMRawResponse(
-                    request_id=bundle.request_id,
-                    raw_response_text=text_output.strip(),
-                ),
-            )
+            return LLMRawResponse(raw_response_text=text_output.strip())
 
         except FutureTimeoutError:
-            self._log.error("[%s] Gemini request timed out after %ds", bundle.request_id, self._timeout_seconds)
             return ErrorResponse(
                 request_id=bundle.request_id,
                 error=ErrorDetails(
@@ -161,7 +145,6 @@ class GeminiGateway(LLMGateway):
             else:
                 code = "llm_gateway_failed"
 
-            self._log.error("[%s] Gemini gateway error [%s]: %s", bundle.request_id, code, message)
             return ErrorResponse(
                 request_id=bundle.request_id,
                 error=ErrorDetails(
