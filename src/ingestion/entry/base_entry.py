@@ -4,7 +4,7 @@ import logging
 from typing import TypeVar
 
 from dao.base_dao import BaseDAO
-from ingestion.session.db_session import DBSession
+from session.db_session import DBSession
 
 T = TypeVar("T")
 

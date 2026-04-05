@@ -1,12 +1,27 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Literal
 
 from pydantic import BaseModel, Field
 
 
 class NLQRequest(BaseModel):
-    request_id: str
-    question: str
-
+    request_id: str = "unknown"
+    request_type: Literal[
+        "request",
+        "prompt",
+        "llm",
+        "syntactic",
+        "semantics",
+        "sql_compile",
+        "sql_executor",
+        "result"
+    ] = "request"
+    question: str = ""
+    system_message: str = ""
+    user_message: str = ""
+    raw_response_text: str = ""
+    query_plan: QueryPlan | None = None
+    compiled_sql: CompiledSQL | None = None
+    result_set: ResultSet | None = None
 
 class PromptRequest(BaseModel):
     request_id: str
@@ -16,13 +31,11 @@ class PromptRequest(BaseModel):
 
 
 class PromptBundle(BaseModel):
-    request_id: str
     system_message: str
     user_message: str
 
 
 class LLMRawResponse(BaseModel):
-    request_id: str
     raw_response_text: str
 
 
