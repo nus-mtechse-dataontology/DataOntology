@@ -12,8 +12,8 @@ on:
     types: [ opened, reopened, ready_for_review ]
 
 jobs:
-  # 1. QUALITY GATE: Scans code, not containers
-  quality-and-sec:
+  # 1. BUILD: Compile and run unit tests first
+  build:
     runs-on: ubuntu-latest
     environment: PRD
     steps:
@@ -36,6 +36,32 @@ jobs:
       - name: Run Tests
         run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml --cov-config=.coveragerc
 
+      - name: Upload Build Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-test-reports-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            coverage.xml
+
+  # 2A. SECURITY SCAN: Snyk (runs in parallel)
+  snyk-scan:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: PRD
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install uv
+          uv pip install --system .[dev]
+
       # --- SNYK (Python Library Scan) ---
       - name: Snyk Python Scan
         run: |
@@ -51,6 +77,39 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --file=requirements.txt --package-manager=pip --severity-threshold=high --json-file-output=snyk-results.json
+
+      - name: Upload Snyk Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snyk-reports-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            requirements.txt
+            snyk-results.json
+
+  # 2B. SECURITY SCAN: SonarQube (runs in parallel)
+  sonarqube-scan:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: PRD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install uv
+          uv pip install --system .[dev] pytest-cov
+
+      - name: Run Tests for Sonar Coverage
+        run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml --cov-config=.coveragerc
 
       # --- SONARQUBE (Python Logic Scan) ---
       - name: SonarQube Scan
@@ -72,21 +131,21 @@ jobs:
         run: |
           curl -sS -u "${{ secrets.SONAR_TOKEN }}:" "${{ vars.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=${{ vars.SONAR_PROJECT_KEY }}&branch=${{ github.head_ref || github.ref_name }}" > sonarqube-quality-gate.json
 
-      - name: Upload Quality and Security Reports
+      - name: Upload SonarQube Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: quality-security-reports-${{ github.run_id }}
+          name: sonarqube-reports-${{ github.run_id }}
           if-no-files-found: warn
           path: |
             coverage.xml
-            requirements.txt
-            snyk-results.json
             sonarqube-quality-gate.json
             
-  # 2. DEPLOY: Build & Ship to AWS
+  # 3. DEPLOY: Build & Ship to AWS
   deploy:
-    needs: quality-and-sec
+    needs:
+      - snyk-scan
+      - sonarqube-scan
     # UPDATED: Allows deployment from either branch
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/DAT-54-CICD') ||
@@ -113,6 +172,7 @@ jobs:
           sam deploy --stack-name DataOntology \
             --template-file .aws-sam/build/template.yaml \
             --parameter-overrides GeminiApiKey=${{ secrets.GEMINI_API_KEY }} TelegramBotToken=${{ secrets.TELEGRAM_BOT_TOKEN }} TelegramWebhookSecret=${{ secrets.TELEGRAM_WEBHOOK_SECRET }} \
+            --resolve-s3 \
             --resolve-image-repos \
             --no-confirm-changeset --no-fail-on-empty-changeset
 
@@ -123,7 +183,7 @@ jobs:
           echo "Pinging existing URL: ${{ vars.LAMBDA_URL }}"
           curl -f --retry 3 --retry-delay 5 "${{ vars.LAMBDA_URL }}actuator/health/liveness"
 
-  # 3. ZAP SCAN: Dynamic Attack on the URL
+  # 4. ZAP SCAN: Dynamic Attack on the URL
   zap-scan:
     needs: deploy
     runs-on: ubuntu-latest
