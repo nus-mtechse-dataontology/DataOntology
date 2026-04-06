@@ -19,6 +19,22 @@ class TelegramClient:
         self._max_attempts = 2
         self._retry_delay_seconds = 0.2
 
+    def send_typing_action(self, chat_id: int) -> None:
+        payload = json.dumps({"chat_id": chat_id, "action": "typing"}).encode("utf-8")
+        req = request.Request(
+            url=f"{self._base_url}/sendChatAction",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with request.urlopen(req, timeout=10) as resp:
+                status = getattr(resp, "status", 200)
+                if status >= 400:
+                    raise RuntimeError(f"Telegram sendChatAction failed with status {status}")
+        except error.URLError as exc:
+            raise RuntimeError(f"Telegram sendChatAction request failed: {exc}") from exc
+
     def send_message(self, chat_id: int, text: str) -> None:
         payload = {"chat_id": chat_id, "text": text}
         url = f"{self._base_url}/sendMessage"

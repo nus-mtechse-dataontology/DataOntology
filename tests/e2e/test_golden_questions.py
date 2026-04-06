@@ -5,7 +5,8 @@ Run deliberately with:
 
 Requires:
     - Local Postgres running with seed data (resources/seed_local.sql)
-    - GEMINI_API_KEY set in environment
+    - GEMINI_API_KEY (or LLM_API_KEY + LLM_PROVIDER) set in environment
+    - PROJECT_PATH set to repo root
     - Server NOT required — tests call the orchestrator directly
 """
 
@@ -62,41 +63,42 @@ GOLDEN_QUESTIONS = [
 @pytest.fixture(scope="module")
 def orchestrator():
     """Wire up a real orchestrator using env vars and local Postgres."""
-    import secrets
     import tomllib
     from pathlib import Path
-    from datetime import datetime, timezone
+
+    from sqlmodel import SQLModel
 
     from compiler.sql_compiler import SQLCompiler
     from dao.fact_flight_info_dao import FactFlightInfoDAO
     from execution.sql_executor import SQLExecutor
+    from handlers import (
+        LLMHandler,
+        PromptHandler,
+        RequestHandler,
+        ResponseBuilderHandler,
+        SemanticsValidationHandler,
+        SQLCompilerHandler,
+        SQLExecutorHandler,
+        SyntacticValidationHandler,
+    )
     from llm_gateway.gateway_factory import LLMGatewayFactory
     from llm_gateway.gateway_registry import GatewayRegistry
     from llm_gateway.providers.gemini_gateway import GeminiGateway
     from llm_gateway.providers.openai_gateway import OpenAIGateway
-    from models.common import SuccessResponse
-    from ontology.semantic_model_loader import SemanticModelLoader
-    from orchestrator.error_response_builder import ErrorResponseBuilder
     from orchestrator.orchestrator import Orchestrator
     from orchestrator.response_builder import ResponseBuilder
     from prompt_builder.prompt_builder import PromptBuilder
     from session.db_session import DBSession
     from validators.semantic.semantic_validator import SemanticValidator
     from validators.syntactic.syntactic_validator import SyntacticValidator
-    from sqlmodel import SQLModel
 
-    config_path = Path(os.getenv("PROJECT_PATH", os.getcwd())) / "resources" / "config.toml"
+    project_path = os.getenv("PROJECT_PATH", os.getcwd())
+    config_path = Path(project_path) / "resources" / "config.toml"
     with open(config_path) as f:
         config = tomllib.loads(f.read())
 
     session = DBSession(config)
     SQLModel.metadata.create_all(session.engine)
-
-    src_dir = Path(__file__).resolve().parent.parent.parent / "src"
-    semantic_model_path = os.getenv(
-        "SEMANTIC_MODEL_PATH",
-        str(src_dir / "ontology" / "semantic_layer_v2.json"),
-    )
 
     GatewayRegistry.register("gemini", GeminiGateway)
     GatewayRegistry.register("openai", OpenAIGateway)
@@ -105,26 +107,26 @@ def orchestrator():
     provider = os.getenv("LLM_PROVIDER") or llm_config.get("provider", "gemini")
     api_key = os.getenv("LLM_API_KEY") or os.getenv("GEMINI_API_KEY") or os.getenv("OPENAI_API_KEY")
     model = os.getenv("LLM_MODEL") or llm_config.get("providers", {}).get(provider, {}).get("model")
-    timeout = int(os.getenv("LLM_TIMEOUT", "30"))
+    timeout = int(os.getenv("LLM_TIMEOUT", str(llm_config.get("providers", {}).get(provider, {}).get("timeout_seconds", 30))))
 
-    llm_gateway = LLMGatewayFactory.create(provider=provider, api_key=api_key, model=model, timeout_seconds=timeout)
-
-    loader = SemanticModelLoader()
-    semantic_model = loader.load(semantic_model_path)
+    llm_gateway = LLMGatewayFactory.create(
+        provider=provider,
+        api_key=api_key,
+        model=model,
+        timeout_seconds=timeout,
+    )
 
     fact_flight_info_dao = FactFlightInfoDAO(session.engine)
 
     return Orchestrator(
-        semantic_model_provider=lambda: SuccessResponse(request_id="system", data=semantic_model),
-        prompt_builder=PromptBuilder().build,
-        llm_gateway=llm_gateway.submit_prompt,
-        syntactic_validator=SyntacticValidator().validate,
-        semantic_validator=SemanticValidator().validate,
-        sql_compiler=SQLCompiler().compile,
-        sql_executor=SQLExecutor(fact_flight_info_dao).execute,
-        response_builder=ResponseBuilder().build,
-        error_response_builder=ErrorResponseBuilder().build,
-        now_provider=lambda: datetime.now(timezone.utc).isoformat(),
+        request_handler=RequestHandler(),
+        prompt_handler=PromptHandler(PromptBuilder()),
+        llm_handler=LLMHandler(llm_gateway),
+        syntactic_validation_handler=SyntacticValidationHandler(SyntacticValidator()),
+        semantics_validation_handler=SemanticsValidationHandler(SemanticValidator()),
+        sql_compiler_handler=SQLCompilerHandler(SQLCompiler()),
+        sql_executor_handler=SQLExecutorHandler(SQLExecutor(fact_flight_info_dao)),
+        response_builder_handler=ResponseBuilderHandler(ResponseBuilder()),
     )
 
 
@@ -132,9 +134,10 @@ def orchestrator():
 @pytest.mark.external
 @pytest.mark.parametrize("case", GOLDEN_QUESTIONS, ids=[c["id"] for c in GOLDEN_QUESTIONS])
 def test_golden_question(orchestrator, case):
-    from models.pipeline import NLQRequest
-    from models.common import SuccessResponse
     import uuid
+
+    from models.common import SuccessResponse
+    from models.pipeline import NLQRequest
 
     request = NLQRequest(request_id=str(uuid.uuid4()), question=case["question"])
     result = orchestrator.handle_question(request)

@@ -45,6 +45,7 @@ async def telegram_webhook(
         update=payload,
         orchestrator_handle_question=request.app.state.orchestrator.handle_question,
         send_message=telegram_client.send_message,
+        send_typing_action=telegram_client.send_typing_action,
         request_id_provider=lambda: str(uuid4()),
     )
 

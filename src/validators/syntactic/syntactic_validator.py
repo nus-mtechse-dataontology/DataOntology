@@ -6,6 +6,7 @@ import logging
 from pydantic import ValidationError
 
 from llm_gateway.parser.raw_response import strip_markdown_fences
+from models import NLQRequest
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
 from models.pipeline import LLMRawResponse, QueryPlan
 
@@ -30,7 +31,7 @@ class SyntacticValidator:
         self._log = logging.getLogger("data_ontology")
 
     def validate(
-        self, raw_response: LLMRawResponse
+        self, raw_response: NLQRequest
     ) -> SuccessResponse[QueryPlan] | ErrorResponse:
 
         request_id = raw_response.request_id

@@ -301,35 +301,6 @@ class TestResultSet:
         assert isinstance(result.data.result_set[0], Row)
         assert isinstance(result.data.result_set[0].data, dict)
     
-    @pytest.mark.skip(reason="To check with Yui Hao if this is applicable")
-    def test_row_contains_all_columns(self, sql_executor):
-        """
-        Test that each Row contains all selected columns.
-
-        Scenario: SELECT multiple columns, verify all appear in Row.data.
-
-        Expected: Row.data dictionary has keys for all selected columns.
-        """
-        # SETUP: Query selecting multiple columns
-        compiled_sql = CompiledSQL(
-            request_id="test-result-002",
-            sql="""
-                SELECT session_id, trip_type, currency_code
-                FROM search_response
-                LIMIT 1
-            """,
-            bound_params={}
-        )
-
-        # ACT: Execute the query
-        result = sql_executor.execute(compiled_sql)
-
-        # ASSERT: All columns are present in the row
-        row = result.data.result_set[0]
-        assert "session_id" in row.data
-        assert "trip_type" in row.data
-        assert "currency_code" in row.data
-
     def test_row_data_types_preserved(self, sql_executor, populate_db):
         """
         Test that data types are preserved in Row objects.
@@ -596,37 +567,6 @@ class TestIntegration:
     to verify end-to-end execution.
     """
     
-    @pytest.mark.skip(reason="To check with Yui Hao if this is applicable")
-    def test_cheapest_flight_query(self, sql_executor):
-        """
-        Test execution of a typical "cheapest flight" query.
-
-        This is the most common query type in the system.
-        """
-        compiled_sql = CompiledSQL(
-            request_id="test-int-001",
-            sql="""
-                SELECT sr.session_id, sr.currency_code, MIN(r.fare_total_amount) AS cheapest_price
-                FROM search_response sr
-                JOIN recommendation r ON r.payload_id = sr.payload_id
-                WHERE sr.trip_type = :trip_type
-                GROUP BY sr.session_id, sr.currency_code
-                ORDER BY cheapest_price ASC
-                LIMIT :limit
-            """,
-            bound_params={"trip_type": "R", "limit": 5}
-        )
-
-        result = sql_executor.execute(compiled_sql)
-
-        assert isinstance(result, SuccessResponse)
-        assert len(result.data.result_set) >= 1
-        # Verify result has expected columns
-        row = result.data.result_set[0]
-        assert "session_id" in row.data
-        assert "currency_code" in row.data
-        assert "cheapest_price" in row.data
-
     def test_destination_search_query(self, sql_executor, populate_db):
         """
         Test execution of a destination search query.

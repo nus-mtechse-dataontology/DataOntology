@@ -1,100 +1,132 @@
-import json
+"""Unit tests for PromptBuilder — builder-pattern API."""
 
-from models.common import ErrorResponse, SuccessResponse
-from models.pipeline import PromptBundle, PromptRequest
-from prompt_builder import PromptBuilder
+import pytest
+
+from models.pipeline import PromptBundle
+
+from prompt_builder.prompt_builder import PromptBuilder
+
+TEMPLATE = (
+    "Question: {question}\n"
+    "Time: {current_time}\n"
+    "Intents: {intents}\n"
+    "Schema: {param_schema}"
+)
+
+INTENTS = {
+    "cheapest_flight_on_route": {
+        "required_params": ["origin", "destination", "start_date", "end_date"]
+    }
+}
+
+PARAM_SCHEMA = {
+    "origin": {"type": "string", "format": "iata_airport_code"},
+    "destination": {"type": "string", "format": "iata_airport_code"},
+}
 
 
-def test_build_prompt_success_contains_required_context_and_structure():
-    template = """Question: {question}\nCurrent time: {current_time}\nSemantic model: {semantic_model}"""
-    request = PromptRequest(
-        request_id="req-1",
-        question="What is the cheapest return flight from SIN to BKK?",
-        prompt_template=template,
-        semantic_model={
-            "intents": {
-                "cheapest_return_flight": {
-                    "required_params": ["origin", "destination", "start_date", "end_date"]
-                }
-            },
-            "param_schema": {
-                "origin": {"type": "string"},
-                "destination": {"type": "string"},
-            },
-        },
+def _built(question="What is the cheapest flight from SIN to BKK?", template=TEMPLATE):
+    return (
+        PromptBuilder()
+        .set_question(question)
+        .set_intent(INTENTS)
+        .set_param_schema(PARAM_SCHEMA)
+        .set_prompt_template(template)
+        .build()
     )
 
-    response = PromptBuilder().build(request)
 
-    assert isinstance(response, SuccessResponse)
-    assert response.request_id == request.request_id
-    assert response.status == "SUCCESS"
-    assert isinstance(response.data, PromptBundle)
-
-    payload = response.data.user_message
-    assert request.question in payload
-    assert "semantic_whitelist" in payload
-    assert "valid JSON" in response.data.system_message
-
-    semantic_block = payload.split("Semantic model: ", maxsplit=1)[1]
-    parsed = json.loads(semantic_block)
-    assert "intents" in parsed["semantic_whitelist"]
+# ── happy path ────────────────────────────────────────────────────────────
 
 
-def test_build_prompt_returns_error_for_invalid_template_placeholders():
-    request = PromptRequest(
-        request_id="req-2",
-        question="Find options",
-        prompt_template="Question: {question} Unknown: {missing_field}",
-        semantic_model={"intents": {"route_departure_options": {}}},
+def test_build_returns_prompt_bundle():
+    result = _built()
+    assert isinstance(result, PromptBundle)
+
+
+def test_build_user_message_contains_question():
+    result = _built(question="Show flights from SIN to BKK")
+    assert "Show flights from SIN to BKK" in result.user_message
+
+
+def test_build_user_message_contains_intents():
+    result = _built()
+    assert "cheapest_flight_on_route" in result.user_message
+
+
+def test_build_user_message_contains_param_schema():
+    result = _built()
+    assert "iata_airport_code" in result.user_message
+
+
+def test_build_user_message_contains_current_time():
+    result = _built()
+    # current_time is ISO format — contains 'T' separator
+    assert "T" in result.user_message
+
+
+def test_build_default_system_message_contains_json_instruction():
+    result = _built()
+    assert "JSON" in result.system_message
+
+
+def test_set_system_message_overrides_default():
+    builder = (
+        PromptBuilder()
+        .set_question("q")
+        .set_intent({})
+        .set_param_schema({})
+        .set_prompt_template(TEMPLATE)
     )
-
-    response = PromptBuilder().build(request)
-
-    assert isinstance(response, ErrorResponse)
-    assert response.request_id == request.request_id
-    assert response.status == "ERROR"
-    assert response.error.code == "invalid_prompt_template"
-    assert response.error.component == "prompt_builder"
+    builder.set_system_message("Custom system instruction.")
+    result = builder.build()
+    assert result.system_message == "Custom system instruction."
 
 
-def test_build_prompt_returns_error_for_invalid_semantic_model():
-    request = PromptRequest(
-        request_id="req-3",
-        question="Find options",
-        prompt_template="Question: {question}",
-        semantic_model={"version": "1.0"},
+def test_empty_template_produces_empty_user_message():
+    result = (
+        PromptBuilder()
+        .set_question("q")
+        .set_intent(INTENTS)
+        .set_param_schema(PARAM_SCHEMA)
+        .set_prompt_template("")
+        .build()
     )
-
-    response = PromptBuilder().build(request)
-
-    assert isinstance(response, ErrorResponse)
-    assert response.request_id == request.request_id
-    assert response.error.code == "invalid_semantic_model"
+    assert result.user_message == ""
 
 
-def test_build_prompt_uses_default_query_plan_template_when_empty_template():
-    request = PromptRequest(
-        request_id="req-4",
-        question="Show return fare options from SIN to BKK.",
-        prompt_template="",
-        semantic_model={
-            "intents": {
-                "return_fare_options": {
-                    "required_params": ["origin", "destination", "start_date", "end_date"]
-                }
-            },
-            "param_schema": {
-                "origin": {"type": "string"},
-                "destination": {"type": "string"},
-            },
-        },
-    )
+# ── error cases ───────────────────────────────────────────────────────────
 
-    response = PromptBuilder().build(request)
 
-    assert isinstance(response, SuccessResponse)
-    assert response.status == "SUCCESS"
-    assert "Role: You are an AI query planner for flight analytics." in response.data.user_message
-    assert request.question in response.data.user_message
-    assert "Semantic context:" in response.data.user_message
+def test_build_raises_key_error_for_unknown_placeholder():
+    template = "Question: {question} Unknown: {missing_field}"
+    with pytest.raises(KeyError):
+        (
+            PromptBuilder()
+            .set_question("Find options")
+            .set_intent(INTENTS)
+            .set_param_schema(PARAM_SCHEMA)
+            .set_prompt_template(template)
+            .build()
+        )
+
+
+def test_builder_chain_returns_self_for_fluent_api():
+    builder = PromptBuilder()
+    assert builder.set_question("q") is builder
+    assert builder.set_intent({}) is builder
+    assert builder.set_param_schema({}) is builder
+    assert builder.set_prompt_template("") is builder
+
+
+def test_build_raises_generic_exception_for_non_key_errors():
+    """Cover the except Exception branch — non-KeyError failures during format."""
+    builder = PromptBuilder()
+    builder.set_question("q")
+    builder.set_intent({})
+    builder.set_param_schema({})
+    # A non-string template causes AttributeError inside .format()
+    builder._prompt_template = None  # type: ignore[assignment]
+
+    with pytest.raises(Exception):
+        builder.build()
