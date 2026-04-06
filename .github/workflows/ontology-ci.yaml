@@ -163,7 +163,7 @@ jobs:
           docker run --rm \
             -v "$PWD:/repo" \
             zricethezav/gitleaks:latest \
-            detect --source=/repo --report-format sarif --report-path=/repo/gitleaks.sarif --redact
+            detect --config=/repo/.gitleaks.toml --source=/repo --report-format sarif --report-path=/repo/gitleaks.sarif --redact
 
       - name: Upload Gitleaks Report
         if: always()
