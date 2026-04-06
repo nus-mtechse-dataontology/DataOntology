@@ -18,6 +18,7 @@ def handle_telegram_update(
         [NLQRequest], SuccessResponse[QuestionResponse] | ErrorResponse
     ],
     send_message: Callable[[int, str], None],
+    send_typing_action: Callable[[int], None],
     request_id_provider: Callable[[], str],
 ) -> SuccessResponse[dict[str, Any]] | ErrorResponse:
     mapped = build_nlq_request_from_update(update, request_id_provider=request_id_provider)
@@ -26,6 +27,12 @@ def handle_telegram_update(
         return mapped
 
     chat_id, nlq_request = mapped
+
+    try:
+        send_typing_action(chat_id)
+    except Exception as exc:
+        _log.warning("[%s] send_typing_action failed for chat_id=%s: %s", nlq_request.request_id, chat_id, exc)
+
     orchestration_response = orchestrator_handle_question(nlq_request)
     telegram_text = build_telegram_text_from_response(orchestration_response)
 
