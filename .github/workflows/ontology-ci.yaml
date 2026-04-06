@@ -70,13 +70,19 @@ jobs:
       - name: Remove local venv before Snyk
         run: rm -rf .venv
 
-      - name: Run Snyk Action
-        uses: snyk/actions/python@master
+      - name: Setup Snyk CLI
+        uses: snyk/actions/setup@master
+
+      - name: Run Snyk Test (requirements mode)
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --file=requirements.txt --package-manager=pip --severity-threshold=high --json-file-output=snyk-results.json
+        run: |
+          snyk test \
+            --file=requirements.txt \
+            --package-manager=pip \
+            --severity-threshold=high \
+            --json-file-output=snyk-results.json
 
       - name: Upload Snyk Reports
         if: always()
@@ -200,7 +206,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           target: ${{ vars.LAMBDA_URL }}
           rules_file_name: '.zap/rules.tsv'
-          create_issue: false   # FIX: Stops the "Resource not accessible" 403 error
           allow_issue_writing: false # FIX: Stops the "Resource not accessible" 403 error
           fail_action: false    # Keeps pipeline green even with remaining WARNs
           cmd_options: '-a'
