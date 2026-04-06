@@ -29,6 +29,7 @@ def test_handle_telegram_update_happy_path_calls_orchestrator_and_sender():
         update=update,
         orchestrator_handle_question=orchestrator,
         send_message=send_message,
+        send_typing_action=Mock(),
         request_id_provider=lambda: "req-tg-h1",
     )
 
@@ -67,6 +68,7 @@ def test_handle_telegram_update_orchestrator_error_still_sends_message():
         update=update,
         orchestrator_handle_question=orchestrator,
         send_message=send_message,
+        send_typing_action=Mock(),
         request_id_provider=lambda: "req-tg-h2",
     )
 
@@ -94,6 +96,7 @@ def test_handle_telegram_update_invalid_update_returns_error_and_skips_calls(cap
             update=update,
             orchestrator_handle_question=orchestrator,
             send_message=send_message,
+            send_typing_action=Mock(),
             request_id_provider=lambda: "req-tg-h3",
         )
 
@@ -130,6 +133,7 @@ def test_handle_telegram_update_send_failure_returns_delivery_error_response(cap
             update=update,
             orchestrator_handle_question=orchestrator,
             send_message=send_message,
+            send_typing_action=Mock(),
             request_id_provider=lambda: "req-tg-h4",
         )
 
