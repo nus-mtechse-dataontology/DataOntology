@@ -146,12 +146,40 @@ jobs:
           path: |
             coverage.xml
             sonarqube-quality-gate.json
+
+  # 2C. SECURITY SCAN: Gitleaks (secret scanning)
+  gitleaks-scan:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: PRD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks (free OSS scanner)
+        continue-on-error: true
+        run: |
+          docker run --rm \
+            -v "$PWD:/repo" \
+            zricethezav/gitleaks:latest \
+            detect --source=/repo --report-format sarif --report-path=/repo/gitleaks.sarif --redact
+
+      - name: Upload Gitleaks Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-reports-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            gitleaks.sarif
             
   # 3. DEPLOY: Build & Ship to AWS
   deploy:
     needs:
       - snyk-scan
       - sonarqube-scan
+      - gitleaks-scan
     # UPDATED: Allows deployment from either branch
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/DAT-54-CICD') ||
