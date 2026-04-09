@@ -1,0 +1,270 @@
+name: DataOntology CI/CD
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches: [ main, release ]
+    types: [ opened, reopened, ready_for_review ]
+
+jobs:
+  # 1. BUILD: Compile and run unit tests first
+  build:
+    runs-on: ubuntu-latest
+    environment: PRD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install uv
+          # Including pytest-cov here as we discussed
+          uv pip install --system .[dev] pytest-cov 
+
+      # --- UNIT TESTS ---
+      - name: Run Tests
+        run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml --cov-config=.coveragerc
+
+      - name: Upload Build Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-test-reports-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            coverage.xml
+
+  # 2A. SECURITY SCAN: Snyk (runs in parallel)
+  snyk-scan:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: PRD
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install uv
+          uv pip install --system .[dev]
+
+      # --- SNYK (Python Library Scan) ---
+      - name: Snyk Python Scan
+        run: |
+          uv export --format requirements-txt --no-hashes > requirements.txt
+
+      - name: Remove local venv before Snyk
+        run: rm -rf .venv
+
+      - name: Setup Snyk CLI
+        uses: snyk/actions/setup@master
+
+      - name: Run Snyk Test (requirements mode)
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          snyk test \
+            --file=requirements.txt \
+            --package-manager=pip \
+            --severity-threshold=high \
+            --json-file-output=snyk-results.json
+
+      - name: Upload Snyk Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snyk-reports-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            requirements.txt
+            snyk-results.json
+
+  # 2B. SECURITY SCAN: SonarQube (runs in parallel)
+  sonarqube-scan:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: PRD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install uv
+          uv pip install --system .[dev] pytest-cov
+
+      - name: Run Tests for Sonar Coverage
+        run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml --cov-config=.coveragerc
+
+      # --- SONARQUBE (Python Logic Scan) ---
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v3
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
+            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
+            -Dsonar.python.version=3.14
+            -Dsonar.sources=src
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.branch.name=${{ github.head_ref || github.ref_name }}
+
+      - name: Export SonarQube Quality Gate Result
+        if: always()
+        run: |
+          curl -sS -u "${{ secrets.SONAR_TOKEN }}:" "${{ vars.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=${{ vars.SONAR_PROJECT_KEY }}&branch=${{ github.head_ref || github.ref_name }}" > sonarqube-quality-gate.json
+
+      - name: Upload SonarQube Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonarqube-reports-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            coverage.xml
+            sonarqube-quality-gate.json
+
+  # 2C. SECURITY SCAN: Gitleaks (secret scanning)
+  gitleaks-scan:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: PRD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks (free OSS scanner)
+        continue-on-error: true
+        run: |
+          docker run --rm \
+            -v "$PWD:/repo" \
+            zricethezav/gitleaks:latest \
+            detect --config=/repo/.gitleaks.toml --source=/repo --report-format sarif --report-path=/repo/gitleaks.sarif --redact
+
+      - name: Upload Gitleaks Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-reports-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            gitleaks.sarif
+            
+  # 3. DEPLOY: Build & Ship to AWS
+  deploy:
+    needs:
+      - snyk-scan
+      - sonarqube-scan
+      - gitleaks-scan
+    # Only deploy on PR to release branch
+    if: |
+      (github.event_name == 'pull_request' && github.base_ref == 'release')
+    runs-on: ubuntu-latest
+    environment: PRD
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-1
+
+      - uses: aws-actions/setup-sam@v2
+      - name: Clean SAM build cache
+        run: rm -rf .aws-sam/build
+
+      - name: SAM Build
+        run: sam build --use-container --template-file template.yaml
+
+      - name: SAM Deploy
+        run: |
+          sam deploy --stack-name DataOntology \
+            --template-file .aws-sam/build/template.yaml \
+            --parameter-overrides GeminiApiKey=${{ secrets.GEMINI_API_KEY }} TelegramBotToken=${{ secrets.TELEGRAM_BOT_TOKEN }} TelegramWebhookSecret=${{ secrets.TELEGRAM_WEBHOOK_SECRET }} \
+            --capabilities CAPABILITY_IAM \
+            --resolve-s3 \
+            --resolve-image-repos \
+            --no-confirm-changeset --no-fail-on-empty-changeset
+
+      # --- SMOKE TEST ---
+      - name: Verify Lambda is Live
+        run: |
+          # INFRA FIX: Use LAMBDA_URL variable, NOT LAMBDA_NAME
+          echo "Pinging existing URL: ${{ vars.LAMBDA_URL }}"
+          curl -f --retry 3 --retry-delay 5 "${{ vars.LAMBDA_URL }}actuator/health/liveness"
+
+  # 4. ZAP SCAN: Dynamic Attack on the URL
+  zap-scan:
+    needs: deploy
+    runs-on: ubuntu-latest
+    environment: PRD
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4 # Required so ZAP can see your .zap/rules.tsv
+
+      - name: ZAP Full Scan
+        id: zap_scan
+        uses: zaproxy/action-full-scan@v0.13.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target: ${{ vars.LAMBDA_URL }}
+          rules_file_name: '.zap/rules.tsv'
+          allow_issue_writing: false # FIX: Stops the "Resource not accessible" 403 error
+          fail_action: false    # Keeps pipeline green even with remaining WARNs
+          cmd_options: '-a'
+
+      - name: Upload ZAP Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-reports-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            report_html.html
+            report_md.md
+            report_json.json
+            zap-report.html
+            zap-report.md
+            zap-report.json
+          
+      - name: Sync Release to Master
+        # Only run if all previous jobs succeeded and we deployed from a PR to release
+        if: success() && github.event_name == 'pull_request' && github.base_ref == 'release'
+        run: |
+          # 1. Setup Git Identity
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 2. Fetch all branches
+          git fetch origin master
+          
+          # 3. Checkout master and merge the code from the PR branch
+          git checkout master
+          git merge origin/${{ github.head_ref }} --no-ff -m "Auto-sync Golden Copy (Master) after successful Release Deploy"
+          
+          # 4. Push to master
+          # NOTE: Requires a Personal Access Token (PAT) via GITHUB_TOKEN secret
+          # to bypass branch protections on 'master'
+          git push origin master

@@ -1,0 +1,11 @@
+title = "DataOntology Gitleaks Configuration"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Ignore curl basic-auth false positive in the SonarQube workflow step"
+targetRules = ["curl-auth-user"]
+paths = [
+  '''\.github/workflows/ontology-ci\.yaml$''',
+]
