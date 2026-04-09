@@ -5,8 +5,6 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  push:
-    branches: [ DAT-54-CICD ]
   pull_request:
     branches: [ main, release ]
     types: [ opened, reopened, ready_for_review ]
@@ -180,9 +178,8 @@ jobs:
       - snyk-scan
       - sonarqube-scan
       - gitleaks-scan
-    # UPDATED: Allows deployment from either branch
+    # Only deploy on PR to release branch
     if: |
-      (github.event_name == 'push' && github.ref == 'refs/heads/DAT-54-CICD') ||
       (github.event_name == 'pull_request' && github.base_ref == 'release')
     runs-on: ubuntu-latest
     environment: PRD
@@ -252,22 +249,22 @@ jobs:
             zap-report.md
             zap-report.json
           
-      # - name: Sync Release to Master
-      #   # Only run if the previous SAM deploy succeeded AND we are targeting 'release'
-      #   if: success() && github.event_name == 'pull_request' && github.base_ref == 'release'
-      #   run: |
-      #     # 1. Setup Git Identity
-      #     git config --global user.name "github-actions[bot]"
-      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Sync Release to Master
+        # Only run if all previous jobs succeeded and we deployed from a PR to release
+        if: success() && github.event_name == 'pull_request' && github.base_ref == 'release'
+        run: |
+          # 1. Setup Git Identity
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-      #     # 2. Fetch all branches
-      #     git fetch origin master
+          # 2. Fetch all branches
+          git fetch origin master
           
-      #     # 3. Checkout master and merge the code from the PR
-      #     git checkout master
-      #     git merge origin/${{ github.head_ref }} --no-ff -m "Auto-sync Golden Copy (Master) after successful Release Deploy"
+          # 3. Checkout master and merge the code from the PR branch
+          git checkout master
+          git merge origin/${{ github.head_ref }} --no-ff -m "Auto-sync Golden Copy (Master) after successful Release Deploy"
           
-      #     # 4. Push to master
-      #     # NOTE: will likely need a Personal Access Token (PAT) 
-      #     # to bypass branch protections on 'master'
-      #     git push origin master
+          # 4. Push to master
+          # NOTE: Requires a Personal Access Token (PAT) via GITHUB_TOKEN secret
+          # to bypass branch protections on 'master'
+          git push origin master
