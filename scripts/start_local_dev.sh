@@ -11,6 +11,7 @@ ENV_FILE="$SCRIPT_DIR/local.env"
 [[ -f "$ENV_FILE" ]] || { echo "ERROR: $ENV_FILE not found. Copy scripts/local.env.example to scripts/local.env and fill in your credentials."; exit 1; }
 # shellcheck source=/dev/null
 source "$ENV_FILE"
+export GEMINI_API_KEY TELEGRAM_BOT_TOKEN TELEGRAM_WEBHOOK_SECRET POSTGRES_USER POSTGRES_PASSWORD
 
 log()  { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 err()  { echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: $*" >&2; exit 1; }
