@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-import json
 import time
 
 import requests
 from requests import RequestException
 from requests.exceptions import HTTPError
 
+from adapters.telegram.interfaces import MessageClient
 
-class TelegramClient:
+
+class TelegramClient(MessageClient):
     def __init__(self, bot_token: str) -> None:
         self._bot_token = bot_token
         self._base_url = f"https://api.telegram.org/bot{bot_token}"
@@ -19,7 +20,7 @@ class TelegramClient:
         self._max_attempts = 2
         self._retry_delay_seconds = 0.2
 
-    def send_typing_action(self, chat_id: int) -> None:
+    def send_typing(self, chat_id: int) -> None:
         try:
             response = self._session.post(
                 url=f"{self._base_url}/sendChatAction",

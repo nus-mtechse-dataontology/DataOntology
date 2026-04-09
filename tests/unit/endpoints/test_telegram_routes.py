@@ -65,6 +65,7 @@ def error_response():
 def test_webhook_happy_path_returns_200(client, orchestrator, valid_update, success_response, monkeypatch):
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "test-token")
     monkeypatch.setattr("adapters.telegram.client.TelegramClient.send_message", Mock())
+    monkeypatch.setattr("adapters.telegram.client.TelegramClient.send_typing", Mock())
     orchestrator.handle_question.return_value = success_response
 
     response = client.post("/telegram/webhook", json=valid_update)
@@ -101,6 +102,7 @@ def test_webhook_valid_secret_passes(client, orchestrator, valid_update, success
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "test-token")
     monkeypatch.setenv("TELEGRAM_WEBHOOK_SECRET", "correct-secret")
     monkeypatch.setattr("adapters.telegram.client.TelegramClient.send_message", Mock())
+    monkeypatch.setattr("adapters.telegram.client.TelegramClient.send_typing", Mock())
     orchestrator.handle_question.return_value = success_response
 
     response = client.post(
@@ -115,6 +117,7 @@ def test_webhook_valid_secret_passes(client, orchestrator, valid_update, success
 def test_webhook_invalid_update_returns_400(client, orchestrator, monkeypatch, caplog):
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "test-token")
     monkeypatch.setattr("adapters.telegram.client.TelegramClient.send_message", Mock())
+    monkeypatch.setattr("adapters.telegram.client.TelegramClient.send_typing", Mock())
 
     invalid_update = {"update_id": 1, "message": {"chat": {"id": 12345}}}  # missing text
 
@@ -132,6 +135,7 @@ def test_webhook_orchestrator_error_still_delivers_message_and_returns_200(
     send_message = Mock()
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "test-token")
     monkeypatch.setattr("adapters.telegram.client.TelegramClient.send_message", send_message)
+    monkeypatch.setattr("adapters.telegram.client.TelegramClient.send_typing", Mock())
     orchestrator.handle_question.return_value = error_response
 
     response = client.post("/telegram/webhook", json=valid_update)
