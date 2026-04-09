@@ -6,7 +6,9 @@ from fastapi import APIRouter, Header, Request, status
 from fastapi.responses import JSONResponse
 
 from adapters.telegram.client import TelegramClient
-from adapters.telegram.webhook_handler import handle_telegram_update
+from adapters.telegram.formatter import TelegramFormatter
+from adapters.telegram.mapper import TelegramUpdateMapper
+from adapters.telegram.webhook_handler import TelegramWebhookHandler
 from models.common import ErrorResponse
 
 _log = logging.getLogger("data_ontology")
@@ -40,14 +42,16 @@ async def telegram_webhook(
         )
 
     payload = await request.json()
-    telegram_client = TelegramClient(bot_token=bot_token)
-    result = handle_telegram_update(
-        update=payload,
+    request_id_provider = lambda: str(uuid4())
+
+    handler = TelegramWebhookHandler(
+        mapper=TelegramUpdateMapper(request_id_provider),
         orchestrator_handle_question=request.app.state.orchestrator.handle_question,
-        send_message=telegram_client.send_message,
-        send_typing_action=telegram_client.send_typing_action,
-        request_id_provider=lambda: str(uuid4()),
+        client=TelegramClient(bot_token=bot_token),
+        formatter=TelegramFormatter(),
     )
+
+    result = handler.handle(payload)
 
     if isinstance(result, ErrorResponse):
         _log.error("[%s] Telegram webhook returning 400 [%s]: %s", result.request_id, result.error.code, result.error.message)
