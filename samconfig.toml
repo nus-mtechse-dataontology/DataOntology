@@ -2,12 +2,17 @@ version = 0.1
 
 [default.deploy.parameters]
 stack_name = "DataOntology"
+template_file = ".aws-sam/build/template.yaml"
 resolve_s3 = true
 s3_prefix = "DataOntology"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
 resolve_image_repos = true
 parameter_overrides = "VpcId=\"vpc-0449c821bccda120d\" SubnetIds=\"subnet-0251bad1bd02583a9,subnet-00f40348312933f15\""
+
+[default.build.parameters]
+template_file = "template.yaml"
+use_container = true
 
 [default.global.parameters]
 region = "ap-southeast-1"

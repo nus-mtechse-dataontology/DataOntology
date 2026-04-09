@@ -38,20 +38,5 @@ ENV PROJECT_PATH=/var/task \
 
 ENTRYPOINT []
 
-# 6. The "Shield" CMD
-# This loop specifically waits for the 200 OK from your actuator endpoint
-CMD ["/bin/sh", "-c", "\
-python -c \"from src.main import DataOntology; d=DataOntology(); d._load_config(); d._init_app(); import uvicorn; uvicorn.run(d._app, host='0.0.0.0', port=8000)\" & \
-# Simple, one-line-compatible check
-until python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/actuator/health/liveness', timeout=1)\" 2>/dev/null; do \
-    echo 'Infra: Waiting for Actuator Health Check at /actuator/health/liveness...'; \
-    sleep 1; \
-done; \
-echo 'Infra: Health Check Passed (200 OK).'; \
-if [ -n \"$AWS_LAMBDA_RUNTIME_API\" ]; then \
-    echo 'Infra: Lambda runtime detected. Starting Lambda Web Adapter.'; \
-    exec /opt/extensions/lambda-adapter; \
-else \
-    echo 'Infra: Local runtime detected. Keeping Uvicorn process running.'; \
-    wait; \
-fi"]
+# Lambda Web Adapter runs as extension automatically; run web app process directly.
+CMD ["/bin/sh", "-c", "set -e; mkdir -p /tmp/project/resources /tmp/project/vault; cp -r /var/task/resources/. /tmp/project/resources/; cp /var/task/vault/* /tmp/project/vault/; if [ -n \"$DB_USER\" ]; then printf \"%s\" \"$DB_USER\" > /tmp/project/vault/postgres.user; fi; if [ -n \"$DB_PASSWORD\" ]; then printf \"%s\" \"$DB_PASSWORD\" > /tmp/project/vault/postgres.password; fi; if [ -n \"$DB_HOST\" ]; then sed -i \"s|host = \\\"localhost\\\"|host = \\\"$DB_HOST\\\"|g\" /tmp/project/resources/config.toml; fi; if [ -n \"$DB_PORT\" ]; then sed -i \"s|port = 5432|port = $DB_PORT|g\" /tmp/project/resources/config.toml; fi; if [ -n \"$DB_NAME\" ]; then sed -i \"s|name = \\\"data_ontology\\\"|name = \\\"$DB_NAME\\\"|g\" /tmp/project/resources/config.toml; fi; export PROJECT_PATH=/tmp/project; python -c \"from src.main import DataOntology; d=DataOntology(); d._load_config(); d._init_app(); import uvicorn; uvicorn.run(d._app, host='0.0.0.0', port=8000)\""]
