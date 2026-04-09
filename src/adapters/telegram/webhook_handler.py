@@ -4,55 +4,85 @@ import logging
 from collections.abc import Callable
 from typing import Any
 
-from adapters.telegram.formatter import build_telegram_text_from_response
-from adapters.telegram.mapper import build_nlq_request_from_update
+from adapters.telegram.interfaces import MessageClient, ResponseFormatter, UpdateMapper
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
 from models.pipeline import NLQRequest, QuestionResponse
 
 _log = logging.getLogger("data_ontology")
 
 
-def handle_telegram_update(
-    update: dict[str, Any],
-    orchestrator_handle_question: Callable[
-        [NLQRequest], SuccessResponse[QuestionResponse] | ErrorResponse
-    ],
-    send_message: Callable[[int, str], None],
-    send_typing_action: Callable[[int], None],
-    request_id_provider: Callable[[], str],
-) -> SuccessResponse[dict[str, Any]] | ErrorResponse:
-    mapped = build_nlq_request_from_update(update, request_id_provider=request_id_provider)
-    if isinstance(mapped, ErrorResponse):
-        _log.error("[%s] Mapper failed [%s]: %s", mapped.request_id, mapped.error.code, mapped.error.message)
-        return mapped
+class TelegramWebhookHandler:
+    def __init__(
+        self,
+        mapper: UpdateMapper,
+        orchestrator_handle_question: Callable[
+            [NLQRequest], SuccessResponse[QuestionResponse] | ErrorResponse
+        ],
+        client: MessageClient,
+        formatter: ResponseFormatter,
+    ) -> None:
+        self._mapper = mapper
+        self._orchestrator_handle_question = orchestrator_handle_question
+        self._client = client
+        self._formatter = formatter
 
-    chat_id, nlq_request = mapped
+    def handle(self, update: dict[str, Any]) -> SuccessResponse[dict[str, Any]] | ErrorResponse:
+        mapped = self._mapper.map(update)
 
-    try:
-        send_typing_action(chat_id)
-    except Exception as exc:
-        _log.warning("[%s] send_typing_action failed for chat_id=%s: %s", nlq_request.request_id, chat_id, exc)
+        if isinstance(mapped, ErrorResponse):
+            _log.error(
+                "[%s] Mapper failed [%s]: %s",
+                mapped.request_id,
+                mapped.error.code,
+                mapped.error.message,
+            )
+            return mapped
 
-    orchestration_response = orchestrator_handle_question(nlq_request)
-    telegram_text = build_telegram_text_from_response(orchestration_response)
+        chat_id, nlq_request = mapped
 
-    try:
-        send_message(chat_id, telegram_text)
-    except Exception as exc:
-        _log.error("[%s] send_message failed for chat_id=%s: %s", nlq_request.request_id, chat_id, exc)
-        return ErrorResponse(
-            request_id=nlq_request.request_id,
-            error=ErrorDetails(
-                code="telegram_delivery_failed",
-                message=f"Failed to deliver Telegram message: {exc}",
-                component="telegram_webhook",
-            ),
+        self._safe_send_typing(chat_id, nlq_request.request_id)
+
+        orchestration_response = self._orchestrator_handle_question(nlq_request)
+        telegram_text = self._formatter.format(orchestration_response)
+
+        return self._deliver_message(chat_id, nlq_request.request_id, telegram_text)
+
+    def _safe_send_typing(self, chat_id: int, request_id: str) -> None:
+        try:
+            self._client.send_typing(chat_id)
+        except Exception as exc:
+            _log.warning(
+                "[%s] send_typing failed for chat_id=%s: %s",
+                request_id,
+                chat_id,
+                exc,
+            )
+
+    def _deliver_message(
+        self,
+        chat_id: int,
+        request_id: str,
+        text: str,
+    ) -> SuccessResponse[dict[str, Any]] | ErrorResponse:
+        try:
+            self._client.send_message(chat_id, text)
+        except Exception as exc:
+            _log.error(
+                "[%s] send_message failed for chat_id=%s: %s",
+                request_id,
+                chat_id,
+                exc,
+            )
+            return ErrorResponse(
+                request_id=request_id,
+                error=ErrorDetails(
+                    code="telegram_delivery_failed",
+                    message=f"Failed to deliver Telegram message: {exc}",
+                    component="telegram_webhook",
+                ),
+            )
+
+        return SuccessResponse(
+            request_id=request_id,
+            data={"chat_id": chat_id, "delivered": True},
         )
-
-    return SuccessResponse(
-        request_id=nlq_request.request_id,
-        data={
-            "chat_id": chat_id,
-            "delivered": True,
-        },
-    )

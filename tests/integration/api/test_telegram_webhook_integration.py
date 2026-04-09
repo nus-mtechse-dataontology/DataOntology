@@ -60,6 +60,7 @@ def test_telegram_webhook_returns_200_and_delivery_status(monkeypatch):
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "token")
     monkeypatch.delenv("TELEGRAM_WEBHOOK_SECRET", raising=False)
     monkeypatch.setattr(TelegramClient, "send_message", lambda self, chat_id, text: None)
+    monkeypatch.setattr(TelegramClient, "send_typing", lambda self, chat_id: None)
     request = _FakeRequest({"message": {"chat": {"id": 123}, "text": "hello"}})
 
     response = asyncio.run(telegram_webhook(request=request))

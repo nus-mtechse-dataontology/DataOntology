@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-import json
 import time
 
 import requests
 from requests import RequestException
 from requests.exceptions import HTTPError
 
+from adapters.telegram.interfaces import MessageClient
 
-class TelegramClient:
+
+class TelegramClient(MessageClient):
     def __init__(self, bot_token: str) -> None:
         self._bot_token = bot_token
         self._base_url = f"https://api.telegram.org/bot{bot_token}"
@@ -19,20 +20,18 @@ class TelegramClient:
         self._max_attempts = 2
         self._retry_delay_seconds = 0.2
 
-    def send_typing_action(self, chat_id: int) -> None:
-        payload = json.dumps({"chat_id": chat_id, "action": "typing"}).encode("utf-8")
-        req = request.Request(
-            url=f"{self._base_url}/sendChatAction",
-            data=payload,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
+    def send_typing(self, chat_id: int) -> None:
         try:
-            with request.urlopen(req, timeout=10) as resp:
-                status = getattr(resp, "status", 200)
-                if status >= 400:
-                    raise RuntimeError(f"Telegram sendChatAction failed with status {status}")
-        except error.URLError as exc:
+            response = self._session.post(
+                url=f"{self._base_url}/sendChatAction",
+                json={"chat_id": chat_id, "action": "typing"},
+                timeout=self._timeout_seconds,
+            )
+            response.raise_for_status()
+        except HTTPError as exc:
+            status = getattr(exc.response, "status_code", "unknown")
+            raise RuntimeError(f"Telegram sendChatAction failed with status {status}") from exc
+        except RequestException as exc:
             raise RuntimeError(f"Telegram sendChatAction request failed: {exc}") from exc
 
     def send_message(self, chat_id: int, text: str) -> None:

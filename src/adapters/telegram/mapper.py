@@ -3,6 +3,7 @@
 from collections.abc import Callable
 from typing import Any
 
+from adapters.telegram.interfaces import UpdateMapper
 from models.common import ErrorDetails, ErrorResponse
 from models.pipeline import NLQRequest
 
@@ -51,3 +52,11 @@ def build_nlq_request_from_update(
         request_id=request_id,
         question=text.strip(),
     )
+
+
+class TelegramUpdateMapper(UpdateMapper):
+    def __init__(self, request_id_provider: Callable[[], str]) -> None:
+        self._request_id_provider = request_id_provider
+
+    def map(self, update: dict[str, Any]) -> tuple[int, NLQRequest] | ErrorResponse:
+        return build_nlq_request_from_update(update, request_id_provider=self._request_id_provider)
