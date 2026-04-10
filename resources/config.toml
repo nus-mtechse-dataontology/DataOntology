@@ -1,0 +1,111 @@
+[logger]
+version = 1
+disable_existing_loggers = false
+
+[logger.handlers.data_ontology_console]
+class = "logging.StreamHandler"
+level = "INFO"
+formatter = "data_ontology_default"
+stream = "ext://sys.stdout"
+
+[logger.handlers.default]
+class = "logging.StreamHandler"
+level = "INFO"
+formatter = "default"
+stream = "ext://sys.stderr"
+
+[logger.handlers.access]
+class = "logging.StreamHandler"
+level = "INFO"
+formatter = "access"
+stream = "ext://sys.stdout"
+
+[logger.handlers.error]
+class = "logging.StreamHandler"
+level = "ERROR"
+formatter = "access"
+stream = "ext://sys.stdout"
+
+[logger.formatters.default]
+"()" = "uvicorn.logging.DefaultFormatter"
+fmt = "%(asctime)s - %(levelprefix)s %(message)s"
+use_colors = true
+datefmt = "%Y-%m-%d %H:%M:%S"
+
+[logger.formatters.access]
+"()" = "uvicorn.logging.AccessFormatter"
+fmt = "%(asctime)s - %(levelprefix)s - %(client_addr)s - \"%(request_line)s\" %(status_code)s"
+use_colors = true
+datefmt = "%Y-%m-%d %H:%M:%S"
+
+[logger.formatters.data_ontology_default]
+format = "%(asctime)s - %(name)-15s - %(filename)-35s [%(levelname)-8s]: %(message)s"
+datefmt = "%Y-%m-%d %H:%M:%S"
+
+[logger.loggers.data_ontology]
+handlers = ["data_ontology_console"]
+level = "INFO"
+
+[logger.loggers.uvicorn]
+handlers = ["default"]
+level = "INFO"
+propagate = false
+
+[logger.loggers.uvicorn_access]
+handlers = ["access"]
+level = "INFO"
+propagate = false
+
+[logger.loggers.uvicorn_error]
+handlers = ["error"]
+level = "ERROR"
+propagate = false
+
+[service]
+title = "Data Ontology"
+root_path = "/ontology"
+port = 8000
+host = "127.0.0.1"
+credentials = true
+allow_origins = ["*"]
+methods = ["*"]
+headers = ["*"]
+docs_url = "/docs"
+redoc_url = ""
+reload = false
+scheme = "http"
+
+[llm]
+provider = "gemini"
+timeout_seconds = 30
+[llm.providers.gemini]
+model = "gemini-2.5-flash"
+[llm.providers.openai]
+model = "gpt-5.4-nano"
+
+[jwt]
+expire_mins = 15
+algo = "HS256"
+
+[admin]
+admin_host = "127.0.0.1"
+admin_port = 8080
+context_path = "/admin/instances"
+scheme = "http"
+
+[datasource]
+[datasource.driver]
+package = "drivers.postgres_driver"
+class = "PostgresDriver"
+options = {}
+
+[datasource.database]
+drivername = "postgresql+psycopg2"
+name = "data_ontology"
+host = "localhost"
+port = 5432
+
+[datasource.database.options]
+user = "postgres.user"
+password = "postgres.password"
+echo = false
