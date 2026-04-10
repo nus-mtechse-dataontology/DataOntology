@@ -1,0 +1,26 @@
+from drivers.driver import Driver
+from factory.driver_factory import DriverFactory
+import importlib as im
+
+from typing import Any
+
+
+class DatabaseFactory(DriverFactory):
+	def __init__(self):
+		super().__init__()
+	
+	def create_driver(self, package: str, class_name: str) -> Any:
+		"""
+		Creates the database driver object.
+		
+		:param package: Database Driver Package
+		:param class_name: Database Driver Class
+		:return: Database Driver Class Object
+		"""
+		self._log.info("Database Factory: Creating driver for: %s", class_name)
+		
+		driver = im.import_module(package, package)
+		driver_class = getattr(driver, class_name)
+		
+		self._log.info("Database Factory: Driver: %s created.", class_name)
+		return driver_class

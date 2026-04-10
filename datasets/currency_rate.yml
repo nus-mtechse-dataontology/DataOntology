@@ -1,0 +1,38 @@
+name: "Currency Rate Ingestion"
+description: "Ingestion pipeline for data processing and transformation."
+version: "1.0.0"
+
+dataset:
+  name: "Currency Rate Info"
+  description: "Dataset containing Currency Rate information."
+  source:
+    type: "file"
+    url: "file:///datafiles/currency.csv"
+    encoding: "utf-8"
+    delimiter: ","
+    quotechar: '"'
+
+datasource:
+  driver:
+    package: "drivers.sqlite_driver"
+    class: "SQLiteDriver"
+    options:
+  database:
+    name: "database.db"
+    connection_url: "sqlite:///storage/database.db"
+    options:
+      echo: false
+  table:
+    name: "dim_currency"
+    columns: []
+    mode: "truncate"
+    batch_size: 1000
+    options:
+
+modules:
+  entry:
+    package: "ingestion.entry.file_entry"
+    class: "FileEntry"
+  ingestion:
+    package: "ingestion.source.file_source.file_ingestion"
+    class: "FileIngestion"
