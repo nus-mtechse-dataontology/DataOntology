@@ -225,7 +225,6 @@ jobs:
   zap-scan:
     needs: deploy
     runs-on: ubuntu-latest
-    environment: PRD
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4 # Required so ZAP can see your .zap/rules.tsv
@@ -237,7 +236,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           target: ${{ vars.LAMBDA_URL }}
           rules_file_name: '.zap/rules.tsv'
-          allow_issue_writing: false # FIX: Stops the "Resource not accessible" 403 error
+          allow_issue_writing: false
           fail_action: false    # Keeps pipeline green even with remaining WARNs
           cmd_options: '-a'
 
