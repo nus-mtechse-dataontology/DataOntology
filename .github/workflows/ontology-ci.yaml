@@ -35,7 +35,7 @@ jobs:
 
       # --- UNIT TESTS ---
       - name: Run Tests
-        run: COVERAGE_CORE=pytrace uv run pytest --cov=. --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
+        run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
 
       - name: Upload Build Test Reports
         if: always()
@@ -121,7 +121,7 @@ jobs:
           uv pip install --system .[dev] pytest-cov
 
       - name: Run Tests for Sonar Coverage
-        run: COVERAGE_CORE=pytrace uv run pytest --cov=. --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
+        run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
 
       # --- SONARQUBE (Python Logic Scan) ---
       - name: SonarQube Scan
