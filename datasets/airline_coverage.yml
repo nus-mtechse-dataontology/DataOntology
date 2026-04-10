@@ -1,0 +1,56 @@
+name: "airline coverage ingestion"
+description: "Ingestion pipeline for data processing and transformation."
+version: "1.0.0"
+
+dataset:
+  name: "coverage"
+  description: "Dataset containing airline coverage information."
+  source:
+    url: "https://apigw.singaporeair.com/api/uat/v1/destinations/get"
+    method: "POST"
+    headers:
+      x-csl-client-uuid: "client_uuid"
+      x-signature: "client_signature"
+      api_key: "api_key"
+      options:
+        context:
+          apiKey: "destination.apiKey"
+          secret: "destination.secret"
+
+datasource:
+  driver:
+    package: "drivers.postgres_driver"
+    class: "PostgresDriver"
+    options:
+  database:
+    drivername: "postgresql+psycopg2"
+    name: "data_ontology"
+    host: "localhost"
+    port: 5432
+    options:
+      user: "postgres.user"
+      password: "postgres.password"
+      echo: false
+  table:
+    name: "dim_airline_coverage"
+    columns: []
+    mode: "truncate"
+    batch_size: 1000
+    options:
+
+modules:
+  entry:
+    package: "ingestion.entry.api_entry"
+    class: "ApiEntry"
+  dao:
+    package: "dao.airline_coverage_dao"
+    class: "AirlineCoverageDAO"
+  ingestion:
+    package: "ingestion.source.api_source.airline_coverage_api_ingestion"
+    class: "AirlineCoverageApiIngestion"
+  api_gateway:
+    package: "ingestion.gateway.api_gateway"
+    class: "ApiGateway"
+  service:
+    package: "ingestion.services.airline_coverage_service"
+    class: "AirlineCoverageService"

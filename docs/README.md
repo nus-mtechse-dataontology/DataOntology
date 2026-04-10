@@ -19,3 +19,6 @@ If FastAPI's interactive docs are enabled, you can also visit:
 - `app/ontology/`: ontology loading and lookup
 - `app/models/`: shared data contracts
 - `tests/`: unit and integration tests
+
+## Testing
+- Testing guide: `docs/testing.md`

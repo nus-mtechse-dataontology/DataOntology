@@ -1,0 +1,342 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: "Data Ontology API: Secure RDS, Lambda URL, and SSM Bridge"
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: "ID of your Default VPC"
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: "Select at least 2 Subnets"
+  MasterDBPassword:
+    Type: String
+    NoEcho: true
+    Description: "Password for RDS (Alphanumeric only, no @, /, \", or spaces)"
+    MinLength: 8
+  GeminiApiKey:
+    Type: String
+    NoEcho: true
+    Description: "API Key for Gemini (if using Gemini adapter)"
+    Default: ""
+  TelegramBotToken:
+    Type: String
+    NoEcho: true
+    Description: "Telegram bot token used by webhook handler"
+    Default: ""
+  TelegramWebhookSecret:
+    Type: String
+    NoEcho: true
+    Description: "Optional Telegram webhook verification secret"
+    Default: ""
+
+Resources:
+
+  # --- 1. NETWORK EGRESS FOR LAMBDA (PRIVATE SUBNET + NAT GATEWAY) ---
+  PrivateLambdaSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      CidrBlock: 172.31.48.0/20
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: DataOntologyPrivateLambdaSubnet
+
+  PrivateDbSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      CidrBlock: 172.31.64.0/20
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: DataOntologyPrivateDbSubnetA
+
+  PrivateDbSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcId
+      CidrBlock: 172.31.80.0/20
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: DataOntologyPrivateDbSubnetB
+
+  NatInstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "NAT Instance Security Group"
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: -1
+          CidrIp: 172.31.48.0/20
+          Description: "Allow forwarded traffic from private Lambda subnet"
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: "Allow NAT instance internet egress"
+
+  NatInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.small
+      ImageId: resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64
+      IamInstanceProfile: !Ref NatInstanceProfile
+      SourceDestCheck: false
+      SubnetId: !Select [ 0, !Ref SubnetIds ]
+      SecurityGroupIds:
+        - !Ref NatInstanceSecurityGroup
+      Tags:
+        - Key: Name
+          Value: DataOntologyNatInstance
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euxo pipefail
+          IFACE=$(ip route get 1.1.1.1 | awk '{print $5; exit}')
+          sysctl -w net.ipv4.ip_forward=1
+          echo 'net.ipv4.ip_forward = 1' > /etc/sysctl.d/99-nat.conf
+          dnf install -y iptables iptables-services
+          iptables -P FORWARD ACCEPT
+          iptables -F
+          iptables -t nat -F
+          iptables -t nat -A POSTROUTING -o "$IFACE" -j MASQUERADE
+          iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+          iptables -A FORWARD -s 172.31.48.0/20 -j ACCEPT
+          service iptables save || true
+          systemctl enable iptables || true
+          systemctl restart iptables || true
+
+  NatInstanceEip:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  NatInstanceEipAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId: !GetAtt NatInstanceEip.AllocationId
+      InstanceId: !Ref NatInstance
+
+  PrivateLambdaRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VpcId
+      Tags:
+        - Key: Name
+          Value: DataOntologyPrivateLambdaRouteTable
+
+  PrivateLambdaDefaultRouteViaNatInstance:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateLambdaRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      InstanceId: !Ref NatInstance
+
+  PrivateLambdaSubnetRouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateLambdaRouteTable
+      SubnetId: !Ref PrivateLambdaSubnet
+
+  PrivateDbSubnetRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VpcId
+      Tags:
+        - Key: Name
+          Value: DataOntologyPrivateDbRouteTable
+
+  PrivateDbSubnetARouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateDbSubnetRouteTable
+      SubnetId: !Ref PrivateDbSubnetA
+
+  PrivateDbSubnetBRouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateDbSubnetRouteTable
+      SubnetId: !Ref PrivateDbSubnetB
+
+  # --- 2. DB PASSWORD (Stored in SSM for Lambda to find) ---
+  DBPasswordParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /data-ontology/db/password
+      Type: String
+      Value: !Ref MasterDBPassword
+      Description: "Master password for DataOntology RDS"
+
+  DataOntologyDbSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "Private subnet group for DataOntology RDS"
+      SubnetIds:
+        - !Ref PrivateDbSubnetA
+        - !Ref PrivateDbSubnetB
+
+# --- 3. THE DATABASE ---
+  DataOntologyDB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: data-ontology-db-v2
+      AllocatedStorage: '20'
+      DBInstanceClass: db.t3.micro
+      Engine: postgres
+      MasterUsername: dbadmin
+      # RDS fetches the password directly from SSM during creation
+      MasterUserPassword: !Ref MasterDBPassword
+      PubliclyAccessible: false
+      DBSubnetGroupName: !Ref DataOntologyDbSubnetGroup
+      VPCSecurityGroups: [ !Ref DBSecurityGroup ]
+      DeleteAutomatedBackups: true
+      BackupRetentionPeriod: 0
+
+  # --- 4. THE LAMBDA FUNCTION ---
+  DataOntologyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      MemorySize: 512
+      Timeout: 60
+      FunctionUrlConfig:
+        AuthType: NONE
+      VpcConfig:
+        SecurityGroupIds: [ !Ref LambdaSecurityGroup ]
+        SubnetIds:
+          - !Ref PrivateLambdaSubnet
+      Environment:
+        Variables:
+          PORT: "8000"
+          DB_USER: "dbadmin"
+          DB_PASSWORD: !Ref MasterDBPassword
+          DB_NAME: "data_ontology"
+          DB_PORT: "5432"
+          DB_HOST: !GetAtt DataOntologyDB.Endpoint.Address
+          PGSSLMODE: "require"
+          # Lambda Web Adapter readiness check path
+          AWS_LWA_READINESS_CHECK_PATH: "/actuator/health/liveness"
+          # Give the app more time to handle its "boot-admin" connection retries
+          AWS_LWA_READINESS_CHECK_MIN_UNHEALTHY_STATUS_COUNT: "5"
+          # Optional: If you want to see exactly what LWA is doing in CloudWatch
+          AWS_LWA_LOG_LEVEL: "debug"
+          # LLM API Key (for Gemini or other providers)
+          GEMINI_API_KEY: !Ref GeminiApiKey
+          # Telegram webhook settings (deploy-time injection)
+          TELEGRAM_BOT_TOKEN: !Ref TelegramBotToken
+          TELEGRAM_WEBHOOK_SECRET: !Ref TelegramWebhookSecret
+      Policies:
+        # Give Lambda permission to read the SSM Parameter
+        - SSMParameterReadPolicy:
+            ParameterName: data-ontology/db/password
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: .
+      DockerTag: v1
+
+  # --- 5. THE SSM BRIDGE (EC2 Bridge) ---
+  SSMBridgeInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.micro
+      ImageId: resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64
+      IamInstanceProfile: !Ref SSMBridgeProfile
+      SubnetId: !Select [ 0, !Ref SubnetIds ]
+      SecurityGroupIds: [ !Ref SSMBridgeSecurityGroup ]
+      Tags:
+        - Key: Name
+          Value: SSMBridgeInstance
+
+  # --- 6. SECURITY GROUPS ---
+  LambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Lambda Security Group"
+      VpcId: !Ref VpcId
+      SecurityGroupEgress:
+        - IpProtocol: udp
+          FromPort: 53
+          ToPort: 53
+          CidrIp: 0.0.0.0/0
+          Description: "DNS over UDP"
+        - IpProtocol: tcp
+          FromPort: 53
+          ToPort: 53
+          CidrIp: 0.0.0.0/0
+          Description: "DNS over TCP"
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: "HTTPS for external APIs"
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 172.31.64.0/20
+          Description: "PostgreSQL to DB subnet"
+
+  DBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow access to RDS"
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref LambdaSecurityGroup
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref SSMBridgeSecurityGroup
+
+  SSMBridgeSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Bridge Security Group"
+      VpcId: !Ref VpcId
+
+  # --- 7. IAM ROLES ---
+  SSMBridgeRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: { Service: [ ec2.amazonaws.com ] }
+            Action: [ sts:AssumeRole ]
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  SSMBridgeProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: [ !Ref SSMBridgeRole ]
+
+  NatInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: { Service: [ ec2.amazonaws.com ] }
+            Action: [ sts:AssumeRole ]
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  NatInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: [ !Ref NatInstanceRole ]
+
+Outputs:
+  LambdaFunctionUrl:
+    Description: "Public API URL"
+    Value: !GetAtt DataOntologyFunctionUrl.FunctionUrl
+  RDSEndpoint:
+    Description: "RDS Endpoint"
+    Value: !GetAtt DataOntologyDB.Endpoint.Address

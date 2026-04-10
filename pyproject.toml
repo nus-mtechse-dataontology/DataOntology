@@ -1,12 +1,22 @@
 [project]
 name = "DataOntology"
 version = "0.1.0"
-requires-python = ">=3.11"
+requires-python = ">=3.14"
 dependencies = [
   "fastapi",
   "uvicorn[standard]",
   "pydantic",
+  "pydantic-ai",
   "python-dotenv",
+  "sqlmodel>=0.0.37",
+  "asyncpg>=0.31.0",
+  "psycopg2-binary>=2.9.11",
+  "pyjwt>=2.11.0",
+  "pwdlib[argon2]>=0.3.0",
+  "grpcio>=1.78.0",
+  "pytest-cov",
+  "authlib>=1.6.9",
+  "sqlalchemy>=2.0.48",
 ]
 
 [project.optional-dependencies]
@@ -17,10 +27,16 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-ra"
+addopts = "-ra -m 'not e2e and not external'"
+pythonpath = ["src"]
+markers = [
+  "integration: marks integration tests",
+  "e2e: marks end-to-end tests",
+  "external: marks tests that depend on external services",
+]
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py314"
 line-length = 100
 extend-exclude = [".venv", "DataOntology.egg-info"]
 

@@ -1,0 +1,57 @@
+name: "airport ingestion"
+description: "Ingestion pipeline for data processing and transformation."
+version: "1.0.0"
+
+dataset:
+  name: "airport"
+  description: "Dataset containing airport information."
+  source:
+    type: "api_endpoint"
+    url: "https://apigw.singaporeair.com/api/uat/v1/destinations/get"
+    method: "POST"
+    headers:
+      x-csl-client-uuid: "client_uuid"
+      x-signature: "client_signature"
+      api_key: "api_key"
+      options:
+        context:
+          apiKey: "destination.apiKey"
+          secret: "destination.secret"
+
+datasource:
+  driver:
+    package: "drivers.postgres_driver"
+    class: "PostgresDriver"
+    options:
+  database:
+    drivername: "postgresql+psycopg2"
+    name: "data_ontology"
+    host: "localhost"
+    port: 5432
+    options:
+      user: "postgres.user"
+      password: "postgres.password"
+      echo: false
+  table:
+    name: "dim_airport"
+    columns: []
+    mode: "truncate"
+    batch_size: 1000
+    options:
+
+modules:
+  entry:
+    package: "ingestion.entry.api_entry"
+    class: "ApiEntry"
+  dao:
+    package: "dao.airport_dao"
+    class: "AirportDAO"
+  ingestion:
+    package: "ingestion.source.api_source.airport_api_ingestion"
+    class: "AirportApiIngestion"
+  api_gateway:
+    package: "ingestion.gateway.api_gateway"
+    class: "ApiGateway"
+  service:
+    package: "ingestion.services.airport_service"
+    class: "AirportService"
