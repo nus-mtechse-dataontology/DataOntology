@@ -1,5 +1,9 @@
 name: DataOntology CI/CD
 
+permissions:
+  contents: write
+  pull-requests: write
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -13,7 +17,6 @@ jobs:
   # 1. BUILD: Compile and run unit tests first
   build:
     runs-on: ubuntu-latest
-    environment: PRD
     steps:
       - uses: actions/checkout@v4
         with:
@@ -47,7 +50,6 @@ jobs:
   snyk-scan:
     needs: build
     runs-on: ubuntu-latest
-    environment: PRD
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
@@ -72,15 +74,22 @@ jobs:
         uses: snyk/actions/setup@master
 
       - name: Run Snyk Test (requirements mode)
-        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
+          # 1. Run the test and generate the JSON report for pipeline artifacts
           snyk test \
             --file=requirements.txt \
             --package-manager=pip \
             --severity-threshold=high \
             --json-file-output=snyk-results.json
+
+          # 2. Update the Snyk Dashboard using your GitHub variables
+          snyk monitor \
+            --file=requirements.txt \
+            --package-manager=pip \
+            --org=${{ vars.SNYK_ORG }} \
+            --project-name=${{ vars.SNYK_PROJECT }}
 
       - name: Upload Snyk Reports
         if: always()
@@ -96,7 +105,6 @@ jobs:
   sonarqube-scan:
     needs: build
     runs-on: ubuntu-latest
-    environment: PRD
     steps:
       - uses: actions/checkout@v4
         with:
@@ -149,14 +157,12 @@ jobs:
   gitleaks-scan:
     needs: build
     runs-on: ubuntu-latest
-    environment: PRD
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Run Gitleaks (free OSS scanner)
-        continue-on-error: true
         run: |
           docker run --rm \
             -v "$PWD:/repo" \
@@ -248,23 +254,38 @@ jobs:
             zap-report.html
             zap-report.md
             zap-report.json
-          
+
+  # 5. SYNC: Create PR from deployed release source branch to master
+  sync-master:
+    needs: zap-scan
+    runs-on: ubuntu-latest
+    if: success() && github.event_name == 'pull_request' && github.base_ref == 'release'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Sync Release to Master
-        # Only run if all previous jobs succeeded and we deployed from a PR to release
-        if: success() && github.event_name == 'pull_request' && github.base_ref == 'release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # 1. Setup Git Identity
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # 2. Fetch all branches
-          git fetch origin master
-          
-          # 3. Checkout master and merge the code from the PR branch
-          git checkout master
+
+          # 2. Fetch target and source branches
+          git fetch origin master ${{ github.head_ref }}
+
+          # 3. Create a sync branch from master and merge PR source branch
+          sync_branch="sync/release-to-master-${{ github.run_id }}"
+          git checkout -B "$sync_branch" origin/master
           git merge origin/${{ github.head_ref }} --no-ff -m "Auto-sync Golden Copy (Master) after successful Release Deploy"
-          
-          # 4. Push to master
-          # NOTE: Requires a Personal Access Token (PAT) via GITHUB_TOKEN secret
-          # to bypass branch protections on 'master'
-          git push origin master
+
+          # 4. Push sync branch and open a PR to master
+          git push origin "$sync_branch"
+          gh pr create \
+            --base master \
+            --head "$sync_branch" \
+            --title "Auto-sync release deployment to master" \
+            --body "Automated PR created after successful deployment from a PR targeting release."
