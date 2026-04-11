@@ -12,6 +12,8 @@ on:
   pull_request:
     branches: [ main, release ]
     types: [ opened, reopened, ready_for_review ]
+  push:
+    branches: [ release ]
 
 jobs:
   # 1. BUILD: Compile and run unit tests first
@@ -35,7 +37,7 @@ jobs:
 
       # --- UNIT TESTS ---
       - name: Run Tests
-        run: COVERAGE_CORE=pytrace uv run pytest --cov=. --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
+        run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
 
       - name: Upload Build Test Reports
         if: always()
@@ -121,7 +123,7 @@ jobs:
           uv pip install --system .[dev] pytest-cov
 
       - name: Run Tests for Sonar Coverage
-        run: COVERAGE_CORE=pytrace uv run pytest --cov=. --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
+        run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
 
       # --- SONARQUBE (Python Logic Scan) ---
       - name: SonarQube Scan
@@ -184,9 +186,8 @@ jobs:
       - snyk-scan
       - sonarqube-scan
       - gitleaks-scan
-    # Only deploy on PR to release branch
-    if: |
-      (github.event_name == 'pull_request' && github.base_ref == 'release')
+    # Deploy only after merge/push to release (not as PR checklist item)
+    if: github.event_name == 'push' && github.ref_name == 'release'
     runs-on: ubuntu-latest
     environment: PRD
     steps:
@@ -258,7 +259,7 @@ jobs:
   sync-master:
     needs: zap-scan
     runs-on: ubuntu-latest
-    if: success() && github.event_name == 'pull_request' && github.base_ref == 'release'
+    if: success() && github.event_name == 'push' && github.ref_name == 'release'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -274,12 +275,12 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           # 2. Fetch target and source branches
-          git fetch origin master ${{ github.head_ref }}
+          git fetch origin master release
 
-          # 3. Create a sync branch from master and merge PR source branch
+          # 3. Create a sync branch from master and merge release branch
           sync_branch="sync/release-to-master-${{ github.run_id }}"
           git checkout -B "$sync_branch" origin/master
-          git merge origin/${{ github.head_ref }} --no-ff -m "Auto-sync Golden Copy (Master) after successful Release Deploy"
+          git merge origin/release --no-ff -m "Auto-sync Golden Copy (Master) after successful Release Deploy"
 
           # 4. Push sync branch and open a PR to master
           git push origin "$sync_branch"
@@ -287,4 +288,4 @@ jobs:
             --base master \
             --head "$sync_branch" \
             --title "Auto-sync release deployment to master" \
-            --body "Automated PR created after successful deployment from a PR targeting release."
+            --body "Automated PR created after successful deployment from push to release."
