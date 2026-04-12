@@ -34,5 +34,5 @@ class ResponseBuilderHandler(AbstractHandler):
 					)
 				)
 		
-		self._log.info("LLMHandler: Unable to process request: %s. Passing it to next handler...", request.request_type)
+		self._log.info("ResponseBuilderHandler: Unable to process request: %s. Passing it to next handler...", request.request_type)
 		return super().handle(request)

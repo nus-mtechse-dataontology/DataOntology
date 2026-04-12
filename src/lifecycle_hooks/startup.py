@@ -2,6 +2,7 @@
 
 import logging
 import os
+import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
 import secrets
@@ -13,6 +14,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from sqlmodel import SQLModel
 
+from adapters.telegram import TelegramWebhookHandler, TelegramClient, TelegramFormatter, TelegramUpdateMapper
 from dao.fact_flight_info_dao import FactFlightInfoDAO
 from handlers import *
 from services.auth.jwt_handler import JWTHandler
@@ -101,6 +103,24 @@ def init_llm_gateway():
         logger.error("Failed to create LLM gateway: %s", e)
         raise
 
+
+def setup_telegram_handler(orchestrator):
+    # ── Set Up telegram bot ────────────────────────────────────────────
+    bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
+    
+    if not bot_token:
+        sys.exit("TELEGRAM_BOT_TOKEN is not configured.")
+    
+    telegram_webhook_handler = TelegramWebhookHandler(
+        mapper=TelegramUpdateMapper(),
+        orchestrator=orchestrator,
+        client=TelegramClient(bot_token),
+        formatter=TelegramFormatter()
+    )
+    
+    return telegram_webhook_handler
+
+
 @asynccontextmanager
 async def startup(app: FastAPI):
     """
@@ -162,6 +182,7 @@ async def startup(app: FastAPI):
     response_builder_handler = ResponseBuilderHandler(response_builder)
     
     # ── Wire orchestrator ────────────────────────────────────────────
+    logger.info("Wiring Orchestrator")
     orchestrator = Orchestrator(
         request_handler,
         prompt_handler,
@@ -172,13 +193,26 @@ async def startup(app: FastAPI):
         sql_executor_handler,
         response_builder_handler
     )
-    
     logger.info("Orchestrator wired — pipeline ready")
+    # ───────────────────────────────────────────────────────────────────
+    
+    
+    # ── Wire Telegram components ───────────────────────────────────────
+    logger.info("Wiring Telegram WebHook")
+    configured_secret = os.getenv("TELEGRAM_WEBHOOK_SECRET")
+    if not configured_secret:
+        sys.exit("TELEGRAM_WEBHOOK_SECRET is not configured.")
+    
+    telegram_handler = setup_telegram_handler(orchestrator)
+    logger.info("Telegram WebHook wired — Telegram WebHook is ready")
+    # ──────────────────────────────────────────────────────────────────────
     
     app.state.orchestrator = orchestrator
     app.state.session = session
     app.state.auth = AuthenticationService(account_dao, jwt_handler)
     app.state.jwt_handler = jwt_handler
+    app.state.telegram_handler = telegram_handler
+    app.state.configured_secret = configured_secret
     app.state.registration = RegistrationService(registration_dao, account_dao)
     
     yield

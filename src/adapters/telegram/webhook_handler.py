@@ -1,48 +1,38 @@
 """Telegram webhook handler orchestration adapter."""
 
 import logging
-from collections.abc import Callable
 from typing import Any
 
-from adapters.telegram.interfaces import MessageClient, ResponseFormatter, UpdateMapper
+from adapters.telegram import TelegramUpdateMapper
+from adapters.telegram.interfaces import MessageClient, ResponseFormatter
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
-from models.pipeline import NLQRequest, QuestionResponse
+from models.telegram_model import Update
+from orchestrator import Orchestrator
 
-_log = logging.getLogger("data_ontology")
 
 
 class TelegramWebhookHandler:
     def __init__(
         self,
-        mapper: UpdateMapper,
-        orchestrator_handle_question: Callable[
-            [NLQRequest], SuccessResponse[QuestionResponse] | ErrorResponse
-        ],
+        mapper: TelegramUpdateMapper,
+        orchestrator: Orchestrator,
         client: MessageClient,
         formatter: ResponseFormatter,
     ) -> None:
         self._mapper = mapper
-        self._orchestrator_handle_question = orchestrator_handle_question
+        self._orchestrator = orchestrator
         self._client = client
         self._formatter = formatter
+        
+        self._log = logging.getLogger("data_ontology")
 
-    def handle(self, update: dict[str, Any]) -> SuccessResponse[dict[str, Any]] | ErrorResponse:
-        mapped = self._mapper.map(update)
-
-        if isinstance(mapped, ErrorResponse):
-            _log.error(
-                "[%s] Mapper failed [%s]: %s",
-                mapped.request_id,
-                mapped.error.code,
-                mapped.error.message,
-            )
-            return mapped
-
-        chat_id, nlq_request = mapped
-
+    def handle(self, update: Update) -> SuccessResponse[dict[str, Any]] | ErrorResponse:
+        self._log.info("Webhook Handler: Attempting to handle new message... ")
+        
+        chat_id, nlq_request = self._mapper.map(update)
         self._safe_send_typing(chat_id, nlq_request.request_id)
 
-        orchestration_response = self._orchestrator_handle_question(nlq_request)
+        orchestration_response = self._orchestrator.handle_question(nlq_request)
         telegram_text = self._formatter.format(orchestration_response)
 
         return self._deliver_message(chat_id, nlq_request.request_id, telegram_text)
@@ -51,12 +41,13 @@ class TelegramWebhookHandler:
         try:
             self._client.send_typing(chat_id)
         except Exception as exc:
-            _log.warning(
+            self._log.warning(
                 "[%s] send_typing failed for chat_id=%s: %s",
                 request_id,
                 chat_id,
                 exc,
             )
+            raise exc
 
     def _deliver_message(
         self,
@@ -67,7 +58,7 @@ class TelegramWebhookHandler:
         try:
             self._client.send_message(chat_id, text)
         except Exception as exc:
-            _log.error(
+            self._log.error(
                 "[%s] send_message failed for chat_id=%s: %s",
                 request_id,
                 chat_id,
