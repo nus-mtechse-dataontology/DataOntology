@@ -16,13 +16,10 @@ import threading
 import traceback
 from concurrent.futures import TimeoutError as FutureTimeoutError
 
-try:
-    from pydantic_ai import Agent as _PydanticAIAgent
-except Exception:  
-    _PydanticAIAgent = None
+from pydantic_ai import Agent as PydanticAIAgent
 
 from llm_gateway.llm_gateway import LLMGateway
-from models.common import ErrorDetails, ErrorResponse, SuccessResponse
+from models.common import ErrorDetails, ErrorResponse
 from models.pipeline import LLMRawResponse, NLQRequest
 
 
@@ -57,9 +54,13 @@ class GeminiGateway(LLMGateway):
             timeout_seconds: Max request duration before returning
                 ``llm_timeout``.
         """
-        self._api_key = api_key
-        self._model = model or os.getenv("GEMINI_MODEL", "gemini-3-flash-preview")
-        self._timeout_seconds = timeout_seconds
+        super().__init__(
+            api_key=api_key,
+            model=model or os.getenv("GEMINI_MODEL", "gemini-3-flash-preview"),
+            timeout_seconds=timeout_seconds,
+        )
+        if self._api_key:
+            os.environ.setdefault("GEMINI_API_KEY", self._api_key)
 
     def submit_prompt(
         self, bundle: NLQRequest
@@ -94,23 +95,11 @@ class GeminiGateway(LLMGateway):
                     ),
                 )
 
-            if _PydanticAIAgent is None:
-                return ErrorResponse(
-                    request_id=bundle.request_id,
-                    error=ErrorDetails(
-                        code="missing_dependency",
-                        message="pydantic-ai is required for GeminiGateway.",
-                        component="llm_gateway",
-                    ),
-                )
-
-            os.environ.setdefault("GEMINI_API_KEY", api_key)
-
             model_name = self._model
             if ":" not in model_name:
                 model_name = f"google-gla:{model_name}"
 
-            agent = _PydanticAIAgent(model_name, system_prompt=bundle.system_message)
+            agent = PydanticAIAgent(model_name, system_prompt=bundle.system_message)
 
             future = asyncio.run_coroutine_threadsafe(
                 agent.run(bundle.user_message), self._bg_loop
@@ -130,7 +119,7 @@ class GeminiGateway(LLMGateway):
                 request_id=bundle.request_id,
                 error=ErrorDetails(
                     code="llm_timeout",
-                    message=f"Gemini request exceeded timeout of {self._timeout_seconds} seconds.",
+                    message=self._timeout_message("Gemini"),
                     component="llm_gateway",
                 ),
             )

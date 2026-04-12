@@ -37,7 +37,7 @@ def test_gemini_gateway_submit_prompt_success(monkeypatch):
                 '"missing_params":[],"follow_up_question":null,"confidence":0.8}'
             )
 
-    monkeypatch.setattr(gemini_gateway, "_PydanticAIAgent", _FakeAgent)
+    monkeypatch.setattr(gemini_gateway, "PydanticAIAgent", _FakeAgent)
 
     gateway = GeminiGateway(api_key="key-123", model="gemini-3-flash", timeout_seconds=5)
     bundle = _make_request()
@@ -61,7 +61,7 @@ def test_gemini_gateway_prefixes_model_name_with_provider(monkeypatch):
         async def run(self, user_message):
             return _FakeResult('{"intent":"x","parameters":{},"missing_params":[],"follow_up_question":null,"confidence":0.5}')
 
-    monkeypatch.setattr(gemini_gateway, "_PydanticAIAgent", _FakeAgent)
+    monkeypatch.setattr(gemini_gateway, "PydanticAIAgent", _FakeAgent)
     gateway = GeminiGateway(api_key="key-123", model="gemini-2.5-flash")
     gateway.submit_prompt(_make_request())
 
@@ -78,7 +78,7 @@ def test_gemini_gateway_skips_prefix_when_already_qualified(monkeypatch):
         async def run(self, user_message):
             return _FakeResult('{"intent":"x","parameters":{},"missing_params":[],"follow_up_question":null,"confidence":0.5}')
 
-    monkeypatch.setattr(gemini_gateway, "_PydanticAIAgent", _FakeAgent)
+    monkeypatch.setattr(gemini_gateway, "PydanticAIAgent", _FakeAgent)
     gateway = GeminiGateway(api_key="key-123", model="google-gla:gemini-2.5-flash")
     gateway.submit_prompt(_make_request())
 
@@ -102,19 +102,6 @@ def test_gemini_gateway_requires_api_key(monkeypatch):
     assert result.request_id == "req-2"
 
 
-def test_gemini_gateway_raises_when_pydantic_ai_missing(monkeypatch):
-    monkeypatch.setattr(gemini_gateway, "_PydanticAIAgent", None)
-    gateway = GeminiGateway(api_key="key-123")
-    bundle = _make_request("req-3")
-
-    result = gateway.submit_prompt(bundle)
-
-    assert isinstance(result, ErrorResponse)
-    assert result.status == "ERROR"
-    assert result.error.code == "missing_dependency"
-    assert "pydantic-ai" in result.error.message
-
-
 def test_gemini_gateway_returns_error_on_timeout(monkeypatch):
     from concurrent.futures import TimeoutError as FutureTimeoutError
 
@@ -125,7 +112,7 @@ def test_gemini_gateway_returns_error_on_timeout(monkeypatch):
         async def run(self, user_message):
             raise FutureTimeoutError()
 
-    monkeypatch.setattr(gemini_gateway, "_PydanticAIAgent", _FakeAgent)
+    monkeypatch.setattr(gemini_gateway, "PydanticAIAgent", _FakeAgent)
     gateway = GeminiGateway(api_key="key-123", model="gemini-3-flash", timeout_seconds=1)
 
     result = gateway.submit_prompt(_make_request("req-timeout"))
