@@ -1,147 +1,144 @@
-import json
+import argparse
 import os
 import sys
 import tomllib
 from pathlib import Path
-
 from dotenv import load_dotenv
+
+
 
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from llm_gateway.gateway_factory import LLMGatewayFactory
-from llm_gateway.gateway_registry import GatewayRegistry
-from llm_gateway.providers.gemini_gateway import GeminiGateway
-from llm_gateway.providers.openai_gateway import OpenAIGateway
-from models.pipeline import PromptRequest
-from ontology.semantic_model_loader import SemanticModelLoader
-from prompt_builder.prompt_builder import PromptBuilder
+
+def _load_runtime_symbols():
+    from llm_gateway.gateway_factory import LLMGatewayFactory
+    from models.pipeline import NLQRequest
+
+    return LLMGatewayFactory, NLQRequest
 
 
-def main():
-    load_dotenv()
-
+def _load_config() -> dict:
     config_path = Path(__file__).parent / "resources" / "config.toml"
     with open(config_path, "rb") as cf:
-        config = tomllib.load(cf)
+        return tomllib.load(cf)
 
+
+def _provider_settings(config: dict, provider: str) -> tuple[str | None, str | None, int]:
     llm_config = config.get("llm", {})
-    providers_config = llm_config.get("providers", {})
+    providers = llm_config.get("providers", {})
+    selected = providers.get(provider, {})
 
-    GatewayRegistry.register("gemini", GeminiGateway)
-    GatewayRegistry.register("openai", OpenAIGateway)
+    api_key = selected.get("api_key")
+    model = selected.get("model")
+    timeout = selected.get("timeout_seconds", llm_config.get("timeout_seconds", 30))
 
-    config_provider = llm_config.get("provider")
-    llm_provider = os.getenv("LLM_PROVIDER") or config_provider
-    gemini_api_key = os.getenv("GEMINI_API_KEY")
-    openai_api_key = os.getenv("OPENAI_API_KEY")
-    gemini_model = os.getenv("GEMINI_MODEL")
-    openai_model = os.getenv("OPENAI_MODEL")
+    return api_key, model, int(timeout)
 
-    if llm_provider:
-        provider = llm_provider
-    else:
-        detected = []
-        if gemini_api_key:
-            detected.append("gemini")
-        if openai_api_key:
-            detected.append("openai")
 
-        if len(detected) == 1:
-            provider = detected[0]
-        elif len(detected) > 1:
-            print(
-                "Error: Multiple provider API keys detected but LLM_PROVIDER is not set. "
-                "Set LLM_PROVIDER=gemini or LLM_PROVIDER=openai in .env."
-            )
-            return
-        else:
-            provider = "gemini"
+def _print_factory_checks(factory_cls) -> None:
+    print("=== Factory checks ===")
+    print("Expected providers: gemini, openai")
 
-    selected_provider_config = providers_config.get(provider, {})
+    for provider in ("gemini", "openai"):
+        gateway = factory_cls.create(provider=provider)
+        print(f"create('{provider}') -> {type(gateway).__name__}")
 
-    api_key = os.getenv("LLM_API_KEY")
-    model = os.getenv("LLM_MODEL") or selected_provider_config.get("model")
-    if not api_key:
-        if provider == "gemini":
-            api_key = gemini_api_key
-        elif provider == "openai":
-            api_key = openai_api_key
-
-    if not model:
-        if provider == "gemini":
-            model = gemini_model
-        elif provider == "openai":
-            model = openai_model
-
-    timeout_raw = os.getenv("LLM_TIMEOUT")
-    if timeout_raw is None:
-        timeout_raw = str(selected_provider_config.get("timeout_seconds", llm_config.get("timeout_seconds", 30)))
     try:
-        llm_timeout_seconds = int(timeout_raw)
-    except (TypeError, ValueError):
-        print(f"Error: Invalid timeout value '{timeout_raw}'.")
-        return
+        factory_cls.create(provider="invalid-provider")
+    except ValueError as exc:
+        print(f"create('invalid-provider') -> expected error: {exc}")
 
-    if not api_key:
-        print(
-            f"Error: Missing API key for provider '{provider}'. "
-            "Set LLM_API_KEY or provider-specific key in .env."
-        )
-        return
 
-    semantic_path = Path(__file__).parent / "src" / "ontology" / "semantic_layer_llm.json"
-    loader = SemanticModelLoader()
-    semantic_model = loader.load(str(semantic_path))
+def _run_live_gateway(
+    factory_cls,
+    request_cls,
+    provider: str,
+    api_key: str | None,
+    model: str | None,
+    timeout: int,
+) -> None:
+    print(f"\n=== Live gateway check: {provider} ===")
 
-    question = "What is the cheapest return flight from Singapore to Bangkok in September 2019?"
-    request = PromptRequest(
-        request_id="debug-001",
-        question=question,
-        prompt_template="",
-        semantic_model=semantic_model,
+    gateway = factory_cls.create(
+        provider=provider,
+        api_key=api_key,
+        model=model,
+        timeout_seconds=timeout,
     )
 
-    builder = PromptBuilder()
-    build_response = builder.build(request)
-    if build_response.status != "SUCCESS":
-        print(f"Error: {build_response.error.message}")
+    bundle = request_cls(
+        request_id=f"debug-{provider}",
+        system_message="You are a helpful assistant. Keep response to one short sentence.",
+        user_message="Say hello and include the provider name in your response.",
+    )
+
+    result = gateway.submit_prompt(bundle)
+    if hasattr(result, "error") and getattr(result, "error") is not None:
+        print(f"Status: ERROR ({result.error.code})")
+        print(f"Message: {result.error.message}")
         return
 
-    prompt_bundle = build_response.data
+    if hasattr(result, "raw_response_text"):
+        print("Status: SUCCESS")
+        print(f"Raw response: {result.raw_response_text}")
+        return
+
+    print(f"Unexpected result type: {type(result).__name__}")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Debug LLM factory and gateways")
+    parser.add_argument(
+        "--live",
+        action="store_true",
+        help="Run real calls for configured providers",
+    )
+    parser.add_argument(
+        "--provider",
+        choices=["gemini", "openai", "all"],
+        default="all",
+        help="Provider to live-test (default: all)",
+    )
+    args = parser.parse_args()
+
+    load_dotenv()
+    config = _load_config()
 
     try:
-        gateway = LLMGatewayFactory.create(
-            provider=provider,
-            api_key=api_key,
-            model=model,
-            timeout_seconds=llm_timeout_seconds,
+        (
+            llm_gateway_factory,
+            nlq_request,
+        ) = _load_runtime_symbols()
+    except Exception as exc:
+        print("Unable to import runtime LLM modules.")
+        print(f"Reason: {exc}")
+        print("Install project dependencies and retry (notably pydantic-ai).")
+        return
+
+    _print_factory_checks(llm_gateway_factory)
+
+    if not args.live:
+        print("\nLive gateway checks skipped. Run with --live to test actual API calls.")
+        return
+
+    targets = ["gemini", "openai"] if args.provider == "all" else [args.provider]
+    for provider in targets:
+        api_key, model, timeout = _provider_settings(config, provider)
+
+        # Respect explicit env overrides for local debugging without editing config.
+        provider_key_env = "GEMINI_API_KEY" if provider == "gemini" else "OPENAI_API_KEY"
+        provider_model_env = "GEMINI_MODEL" if provider == "gemini" else "OPENAI_MODEL"
+        api_key = os.getenv("LLM_API_KEY") or os.getenv(provider_key_env) or api_key
+        model = os.getenv("LLM_MODEL") or os.getenv(provider_model_env) or model
+
+        _run_live_gateway(
+            llm_gateway_factory,
+            nlq_request,
+            provider,
+            api_key,
+            model,
+            timeout,
         )
-        llm_result = gateway.submit_prompt(prompt_bundle)
-
-        if llm_result.status != "SUCCESS":
-            print("Question:")
-            print(question)
-            print("\nLLM call failed:")
-            print(f"Code: {llm_result.error.code}")
-            print(f"Message: {llm_result.error.message}")
-            print(f"Component: {llm_result.error.component}")
-            return
-
-        llm_response = llm_result.data
-
-        print("Question:")
-        print(question)
-        print("\nRaw LLM response:")
-        print(llm_response.raw_response_text)
-
-        try:
-            response_json = json.loads(llm_response.raw_response_text)
-            print("\nParsed JSON:")
-            print(json.dumps(response_json, indent=2))
-        except json.JSONDecodeError:
-            print("\nLLM response is not valid JSON.")
-    except Exception as e:
-        print(f"Error calling {provider}: {e}")
 
 
 if __name__ == "__main__":
