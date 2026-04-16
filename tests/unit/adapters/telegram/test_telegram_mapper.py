@@ -1,44 +1,35 @@
+from adapters.telegram import TelegramUpdateMapper
 from adapters.telegram.formatter import build_telegram_text_from_response
-from adapters.telegram.mapper import build_nlq_request_from_update
 from models.common import ErrorResponse, SuccessResponse
 from models.pipeline import NLQRequest, QuestionResponse
+from models.telegram_model import Update, Message, Chat
+
+from datetime import datetime
 
 
 def test_build_nlq_request_from_valid_update_returns_chat_id_and_nlq_request():
-    update = {
-        "update_id": 9001,
-        "message": {
-            "message_id": 10,
-            "chat": {"id": 123456, "type": "private"},
-            "text": "What are my top holdings?",
-        },
-    }
-
-    chat_id, request = build_nlq_request_from_update(update, request_id_provider=lambda: "req-tg-1")
+    update = Update(
+        update_id=9001,
+        message=Message(
+            message_id=10,
+            text="What are my top holdings?",
+            chat=Chat(
+                id=123456,
+                type="private",
+                first_name="test",
+                last_name="user1",
+                username="testuser1"
+            ),
+            date=int(datetime.now().timestamp())
+        )
+    )
+    
+    chat_id, request = TelegramUpdateMapper().map(update)
 
     assert chat_id == 123456
     assert isinstance(request, NLQRequest)
-    assert request.request_id == "req-tg-1"
+    assert request.request_id == "unknown"
     assert request.question == "What are my top holdings?"
-
-
-def test_build_nlq_request_from_invalid_update_returns_error_response():
-    update = {
-        "update_id": 9002,
-        "message": {
-            "message_id": 11,
-            "chat": {"id": 123456, "type": "private"},
-            # no text field
-        },
-    }
-
-    result = build_nlq_request_from_update(update, request_id_provider=lambda: "req-tg-2")
-
-    assert isinstance(result, ErrorResponse)
-    assert result.request_id == "req-tg-2"
-    assert result.error.component == "telegram_mapper"
-    assert result.error.code == "invalid_telegram_update"
-    assert result.error.message
 
 
 def test_build_telegram_text_from_success_response_uses_question_response_text():

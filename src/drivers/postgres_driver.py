@@ -19,12 +19,12 @@ class PostgresDriver(Driver):
 		"""
 		if self._connection_url is None:
 			self._connection_url = URL.create(
-				self._config["datasource"]["database"]["drivername"],
+				os.getenv("DRIVERNAME") or self._config["datasource"]["database"]["drivername"],
 				self._get_vault(self._config["datasource"]["database"]["options"]["user"]),
 				self._get_vault(self._config["datasource"]["database"]["options"]["password"]),
-				self._config["datasource"]["database"]["host"],
+				os.getenv("DB_HOST") or self._config["datasource"]["database"]["host"],
 				self._config["datasource"]["database"]["port"],
-				self._config["datasource"]["database"]["name"],
+				os.getenv("DB_NAME") or self._config["datasource"]["database"]["name"],
 			)
 		
 		return self._connection_url
@@ -35,5 +35,11 @@ class PostgresDriver(Driver):
 		:param vault_name: Name of vault file
 		:return: vault value
 		"""
-		with open(Path(self._root, "vault", vault_name)) as vf:
+		with open(
+				Path(
+					self._root,
+					os.getenv("VAULT") or "vault",
+					vault_name
+				)
+		) as vf:
 			return vf.read()

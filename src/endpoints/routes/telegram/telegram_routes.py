@@ -1,28 +1,38 @@
 import logging
-import os
-from uuid import uuid4
+from typing import Annotated
 
-from fastapi import APIRouter, Header, Request, status
+from fastapi import APIRouter, Header, Request, status, Depends
 from fastapi.responses import JSONResponse
 
-from adapters.telegram.client import TelegramClient
-from adapters.telegram.formatter import TelegramFormatter
-from adapters.telegram.mapper import TelegramUpdateMapper
-from adapters.telegram.webhook_handler import TelegramWebhookHandler
 from models.common import ErrorResponse
+from models.telegram_model import Update
+
 
 _log = logging.getLogger("data_ontology")
 
 telegram_router = APIRouter(prefix="/telegram", tags=["telegram"])
 
 
+async def check_telegram_webhook_secret(
+    request: Request,
+    x_telegram_bot_api_secret_token: Annotated[str, Header()]
+) -> bool:
+    return x_telegram_bot_api_secret_token == request.app.state.configured_secret
+
+
 @telegram_router.post("/webhook")
 async def telegram_webhook(
     request: Request,
-    x_telegram_bot_api_secret_token: str | None = Header(default=None),
+    payload: Update,
+    verified: Annotated[bool, Depends(check_telegram_webhook_secret)]
 ):
-    configured_secret = os.getenv("TELEGRAM_WEBHOOK_SECRET")
-    if configured_secret and x_telegram_bot_api_secret_token != configured_secret:
+    _log.info(
+        "Telegram Webhook: Received request from: (%s)",
+        payload.message.from_user
+    )
+
+    if not verified:
+        _log.error("Telegram Webhook: Invalid Secret Token...")
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
             content={
@@ -31,30 +41,15 @@ async def telegram_webhook(
             },
         )
 
-    bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
-    if not bot_token:
-        return JSONResponse(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content={
-                "error": "telegram_token_missing",
-                "message": "TELEGRAM_BOT_TOKEN is not configured.",
-            },
-        )
-
-    payload = await request.json()
-    request_id_provider = lambda: str(uuid4())
-
-    handler = TelegramWebhookHandler(
-        mapper=TelegramUpdateMapper(request_id_provider),
-        orchestrator_handle_question=request.app.state.orchestrator.handle_question,
-        client=TelegramClient(bot_token=bot_token),
-        formatter=TelegramFormatter(),
-    )
-
+    handler = request.app.state.telegram_handler
     result = handler.handle(payload)
 
     if isinstance(result, ErrorResponse):
-        _log.error("[%s] Telegram webhook returning 400 [%s]: %s", result.request_id, result.error.code, result.error.message)
+        _log.error(
+            "[%s] Telegram webhook returning 400 [%s]: %s",
+            result.request_id, result.error.code, result.error.message
+        )
+
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content=result.model_dump(),
@@ -63,4 +58,19 @@ async def telegram_webhook(
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content=result.model_dump(),
+    )
+
+
+@telegram_router.post("/webhook/debug")
+async def telegram_webhook(
+    request: Request,
+):
+    response = await request.json()
+    _log.info("Webhook Debug: Received request from: (%s)", response)
+    
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "debug": response,
+        }
     )

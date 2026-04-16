@@ -36,6 +36,7 @@
                     <filter token="db_port" value="5432" />
                     <filter token="package" value="drivers.postgres_driver" />
                     <filter token="driver_class" value="PostgresDriver" />
+                    <filter token="drivername" value="postgresql+psycopg2" />
                   </filterset>
                 </copy>
                 <copy
@@ -44,13 +45,14 @@
                   <filterset>
                     <!-- Service related -->
                     <filter token="port" value="8000" />
-                    <filter token="host" value="127.0.0.1" />
+                    <filter token="host" value="0.0.0.0" />
 
                     <!-- DB related -->
-                    <filter token="db_host" value="127.0.0.1" />
+                    <filter token="db_host" value="${RENDER_DB_HOST}" />
                     <filter token="db_port" value="5432" />
                     <filter token="package" value="drivers.postgres_driver" />
                     <filter token="driver_class" value="PostgresDriver" />
+                    <filter token="drivername" value="postgresql" />
                   </filterset>
                 </copy>
               </target>
