@@ -1,10 +1,9 @@
-import os
 from pathlib import Path
 
 HERE = Path(__file__).parent          # graphdb/
 
 # ── API Keys ──────────────────────────────────────────────────
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+GEMINI_API_KEY = ""  # paste your Gemini API key here
 
 SEMANTIC_LAYER = HERE / "semantic_layer_v3.json"
 PROMPT_TEMPLATE = HERE / "query_plan_prompt.j2"
