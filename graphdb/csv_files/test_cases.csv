@@ -1,0 +1,51 @@
+Test ID|Category|Test Purpose|Prompt Entered|Actual Intent|Actual Phase|Actual Output|Intent Pass|Phase Pass|Output Pass|
+TC001|Primary|Baseline sql_first path — cheapest flight on route|What is the cheapest flight from SIN to BKK in June 2026?|cheapest_flight_on_route|sql_first|"──────────────────────────────────────────────────────────── [Phase 1] LLM intent extraction [llm] Calling gemini-2.5-flash (attempt 1/10)... [llm] Model busy — retrying in 3s... [llm] Calling gemini-2.5-flash (attempt 2/10)... Intent : cheapest_flight_on_route Confidence : 1.00 Params : {'origin': 'SIN', 'destination': 'BKK', 'start_date': '2026-06-01', 'end_date': '2026-06-30'} execution_phase : sql_first sparql_type : select [Phase 2] Routing [Phase 3] SQL execution [sql] Query : SELECT f.f_departure_airport_code, f.f_destination_airport_code, f.f_airline_code, f.f_departure_date, f.f_arrival_date,... [sql] Params: {'start_date': '2026-06-01', 'end_date': '2026-06-30', 'origin': 'SIN', 'destination': 'BKK', 'limit': 10} [sql] Executing... [sql] 10 row(s) [Phase 4] Destination enrichment (SPARQL CONSTRUCT) [sparql] Graph loaded — 186 triples [Phase 6] Formatting ============================================================ Flights to Bangkok, Thailand ============================================================ • SQ | 2 Jun 09:00 → 2 Jun 11:45 | ECONOMY | SGD 150.5 • SQ | 3 Jun 07:05 → 3 Jun 09:50 | ECONOMY | SGD 150.5 • SQ | 9 Jun 07:05 → 9 Jun 09:50 | ECONOMY | SGD 150.5 • SQ | 10 Jun 08:10 → 10 Jun 10:55 | ECONOMY | SGD 150.5 • SQ | 16 Jun 08:10 → 16 Jun 10:55 | ECONOMY | SGD 150.5 • SQ | 17 Jun 09:15 → 17 Jun 12:00 | ECONOMY | SGD 150.5 • SQ | 23 Jun 09:15 → 23 Jun 12:00 | ECONOMY | SGD 150.5 • SQ | 24 Jun 07:50 → 24 Jun 10:35 | ECONOMY | SGD 150.5 • SQ | 30 Jun 07:50 → 30 Jun 10:35 | ECONOMY | SGD 150.5 • SQ | 1 Jun 08:55 → 1 Jun 11:40 | ECONOMY | SGD 156.5 About Bangkok, Thailand Airport : Suvarnabhumi Airport (BKK) Safety : Safe Cost : Easy on the wallet — pricier than Jakarta and Kuala Lumpur, still cheaper than Tokyo. Best time : January · February · November · December Must-see : Grand Palace · Wat Arun Cuisine : Thai Currency : THB · 1 SGD ≈ 25.18383 THB Visa : Provide passport country for visa info Timezone : Asia/Bangkok (UTC+07:00)"|PASS|PASS|PARTIAL — only SQ shown (no budget airlines); June not flagged as off-peak; fare formatted as 150.5 not 150.50; visa placeholder unhelpful|
+TC033|Hybrid|Baseline sparql_then_sql path — travel style filter|Where can I fly for a beach holiday from SIN in June 2026?|||||||['']
+TC063|VacationPlan|Baseline CONSTRUCT vacation plan — full guide|Tell me everything about Bangkok for my trip.|||||||['']
+TC068|VacationPlan|City name resolution — country name resolves to airport code|How is Malaysia in June?|||||||['']
+TC087|Routing|General safety question routes to vacation plan not narrow intent|Is Bangkok safe to visit?|||||||['']
+TC076|Routing|Explicit attractions question routes to destination_attractions|What are the must-see attractions in Bangkok?|||||||['']
+TC058|GraphDB|Pure SPARQL — visa-free destinations for SG passport|Which countries are visa-free for Singapore passport holders?|||||||['']
+TC086|Enrichment|Visa check for specific passport and destination|Do I need a visa to visit Japan with a Singapore passport?|||||||['']
+TC090|Routing|Flight + destination in same question — flight intent wins|What are the cheapest flights from SIN to BKK in June 2026 and what is Bangkok like?|||||||['']
+TC095|MissingParams|Vague query triggers missing params follow-up|Show me flights.|||||||['']
+TC096|Primary|Airline-specific cheapest flight — cheapest_flight_by_airline intent|What is the cheapest Singapore Airlines flight from SIN to NRT in June 2026?|||||||
+TC097|Primary|Route statistics — avg fare min max and duration on a route|What is the average fare from SIN to BKK in June 2026?|||||||
+TC098|Primary|Exact date flights — flights_on_date intent with specific departure date|Show me all flights from SIN to BKK on 2026-06-15.|||||||
+TC099|Primary|All departures from origin on a date — no destination given|What flights depart from SIN on 2026-06-10?|||||||
+TC100|Primary|Next available flight from a date — earliest flight after given date|When is the next flight from SIN to NRT after 2026-06-10?|||||||
+TC101|Primary|Cheapest month — which month has lowest avg fare on route|What month is cheapest to fly from SIN to BKK in 2026?|||||||
+TC102|Primary|Shortest flight on route — fastest flight by duration|What is the fastest flight from SIN to BKK in June 2026?|||||||
+TC103|Primary|Shortest flight from origin to any destination — no route constraint|Which destination from SIN has the shortest flight time in June 2026?|||||||
+TC104|Primary|All destinations from origin — full list of reachable airports with min fares|Where can I fly from SIN in June 2026?|||||||
+TC105|Primary|Budget-capped destinations — destinations_under_budget intent|Where can I fly from SIN with a flight fare under SGD 300 in June 2026?|||||||
+TC106|Primary|All fare options on a route including one-way filter — route_fare_options|Show me all one-way flight options from SIN to BKK in June 2026.|||||||
+TC107|Primary|Airlines on route — which carriers operate a route with fares|Which airlines fly from SIN to BKK in June 2026?|||||||
+TC108|Primary|Aircraft on route — which aircraft type is used on a specific route|What aircraft does Singapore Airlines use on the SIN to NRT route in June 2026?|||||||
+TC109|Primary|Flight count on route — how many distinct flights available|How many flights are available from SIN to BKK in June 2026?|||||||
+TC110|Primary|Short-haul destinations — destinations reachable within 2 hours from SIN|Which destinations from SIN have a flight duration under 2 hours in June 2026?|||||||
+TC111|Hybrid|Country-based destination filter — airports in Thailand via SPARQL then SQL|Which airports in Thailand can I fly to from SIN in June 2026?|||||||
+TC112|Hybrid|Safety tier filter — very safe destinations via SPARQL then SQL|Show me very safe destinations from SIN in June 2026.|||||||
+TC113|Hybrid|Weather profile filter — dry season destinations via SPARQL then SQL|Which destinations from SIN are in dry season in June 2026?|||||||
+TC114|Hybrid|Attraction type filter — cities with beach attractions via SPARQL then SQL|Which destinations from SIN have beach attractions in June 2026?|||||||
+TC115|Hybrid|Festival type filter — cities with cultural festivals via SPARQL then SQL|Which destinations from SIN have cultural festivals in June 2026?|||||||
+TC116|Hybrid|Transport mode filter — cities with metro system via SPARQL then SQL|Which destinations from SIN have a metro system in June 2026?|||||||
+TC117|Hybrid|Visa-free flight search — visa_free_flights_from_origin for SG passport|Where can I fly from SIN without a visa using my Singapore passport in June 2026?|||||||
+TC118|Hybrid|Aircraft model to route lookup — routes_by_aircraft via SPARQL then SQL|Which routes use the Boeing 777-300ER?|||||||
+TC119|GraphDB|Continent-based airport lookup — destinations_by_continent SPARQL only|Which airports in Europe can I fly to from SIN in June 2026?|||||||
+TC120|GraphDB|Region-based airport lookup — destinations_by_region SPARQL only|Which airports are in Southeast Asia?|||||||
+TC121|GraphDB|Airline route coverage check — does a specific airline serve a route|Does Singapore Airlines fly from SIN to LHR?|||||||
+TC122|GraphDB|All routes from origin — full connectivity from one airport SPARQL only|Which airlines operate routes out of Changi Airport?|||||||
+TC123|GraphDB|Airline-specific routes — where does one airline fly from origin|Where does Singapore Airlines fly from SIN?|||||||
+TC124|GraphDB|Visa policy list — countries offering visa on arrival for SG passport|Which countries offer visa on arrival for a Singapore passport?|||||||
+TC125|GraphDB|Currency lookup by region — currencies used in Southeast Asia|What currencies are used in Southeast Asia?|||||||
+TC126|GraphDB|Destination highlights — compact attractions and events for a city in a month|What is good to do in Bangkok in April?|||||||
+TC127|Enrichment|Weather by month — monthly weather profile for a destination|What is the weather like in Bangkok in June?|||||||
+TC128|Enrichment|Best months to visit — months flagged as best time to visit for a destination|When is the best time to visit Tokyo?|||||||
+TC129|Enrichment|Festivals — festivals at a destination in a specific month|Are there any festivals in Bangkok in April?|||||||
+TC130|Enrichment|Transport modes — public transport options at a destination|Does Bangkok have a metro system?|||||||
+TC131|Enrichment|Cuisines — food types associated with a destination city|What food is Bangkok known for?|||||||
+TC132|Enrichment|Language — primary language spoken at a destination|What language do they speak in Bangkok?|||||||
+TC133|Enrichment|Currency — local currency and exchange rate for a destination|What currency does Thailand use and what is the exchange rate from SGD?|||||||
+TC134|Enrichment|Airport amenities — lounge and transit hotel at a specific airport|Does Changi Airport have a lounge and transit hotel?|||||||
+TC135|MissingParams|Budget query without required date params triggers follow-up|Where can I fly cheaply from SIN?|||||||

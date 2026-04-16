@@ -1,0 +1,167 @@
+f_city_code,f_festival_name,f_month_num,f_festival_type
+SIN,National Day Parade,8,national
+HKG,Cheung Chau Bun Festival,5,cultural
+LON,Notting Hill Carnival,8,carnival
+YVR,Vancouver International Jazz Festival,6,music
+SUB,Surabaya Cross Culture International Folk Art Festival,7,cultural
+SGN,Ho Chi Minh City Ao Dai Festival,3,cultural
+TRV,Attukal Pongala,3,religious
+TPE,Taipei Lantern Festival,2,cultural
+SYD,Vivid Sydney,5,arts
+SZG,Salzburg Festival,7,arts
+PEN,George Town Festival,7,arts
+BJS,Beijing International Film Festival,4,film
+NGO,Nagoya Festival,10,cultural
+TYO,Sanja Matsuri,5,religious
+RUH,Riyadh Season,10,entertainment
+SHA,Shanghai International Film Festival,6,film
+BKK,Songkran,4,cultural
+BNE,Brisbane Festival,9,arts
+BOM,Ganesh Chaturthi,9,religious
+BWN,Brunei December Festival,12,cultural
+JKT,Jakarta Fair,6,fair
+CPT,Cape Town International Jazz Festival,3,music
+DAC,Dhaka Art Summit,2,arts
+DPS,Bali Arts Festival,6,arts
+MDC,Manado Fiesta,9,cultural
+PLM,Sriwijaya Festival,6,cultural
+PNH,Bon Om Touk Water Festival,11,cultural
+KLU,Altstadtzauber Klagenfurt,8,cultural
+SEA,Seattle International Film Festival,5,film
+VIE,Viennale,10,film
+KUL,Thaipusam at Batu Caves,2,religious
+MLE,Maldives Food Carnival,7,food
+MNL,Feast of the Black Nazarene,1,religious
+MAN,Manchester International Festival,7,arts
+LNZ,Ars Electronica Festival,9,arts
+CNX,Yi Peng Lantern Festival,11,cultural
+COK,Kochi-Muziris Biennale,12,arts
+LAX,LA Pride,6,cultural
+GRZ,La Strada Graz,7,arts
+HYD,Bathukamma,9,cultural
+SEL,Seoul Lantern Festival,11,cultural
+GVA,Fete de l'Escalade,12,cultural
+HAN,Mid-Autumn Festival in Hanoi Old Quarter,9,cultural
+KCH,Rainforest World Music Festival,7,music
+FRA,Museumsuferfest,8,cultural
+FUK,Hakata Gion Yamakasa,7,religious
+ROM,Festa de Noantri,7,religious
+SPK,Sapporo Snow Festival,2,cultural
+DVO,Kadayawan Festival,8,cultural
+DXB,Dubai Shopping Festival,12,shopping
+NYC,New York Film Festival,9,film
+KTM,Indra Jatra,9,religious
+LGK,Langkawi International Maritime and Aerospace Exhibition,5,expo
+IST,Istanbul International Film Festival,4,film
+DEL,Delhi International Arts Festival,12,arts
+BLR,Bengaluru Karaga,4,religious
+BCN,La Merce,9,cultural
+PKU,Festival Lampu Colok,3,cultural
+CMB,Vesak Festival,5,religious
+CAN,Guangzhou International Light Festival,11,arts
+CCU,Durga Puja,10,religious
+BRU,Brussels Summer Festival,8,music
+CKG,China Chongqing Hot Pot Food Festival,10,food
+CEB,Sinulog Festival,1,religious
+AMD,Navratri Festival,10,religious
+AMI,Bau Nyale Festival,2,cultural
+ATH,Athens Epidaurus Festival,6,arts
+ADL,Adelaide Festival,3,arts
+AKL,Auckland Lantern Festival,2,cultural
+MOW,Moscow International Film Festival,4,film
+CHC,Christchurch Arts Festival,7,arts
+RGN,Thingyan Water Festival,4,cultural
+CPH,Copenhagen Jazz Festival,7,music
+JNB,Arts Alive International Festival,9,arts
+BKI,Kaamatan Festival,5,cultural
+REP,Angkor Photo Festival,12,arts
+JED,Jeddah Season,6,entertainment
+HAK,Hainan Island Carnival,12,cultural
+HDY,Hat Yai Lantern Festival,11,cultural
+CNS,Cairns Festival,8,arts
+ATQ,Baisakhi at Golden Temple,4,religious
+IPH,Nine Emperor Gods Festival,10,religious
+KBV,Krabi Boek Fa Andaman Festival,11,cultural
+KUA,Pahang International Kite Festival,7,cultural
+NKG,Qinhuai Lantern Festival,2,cultural
+OOL,Bleach Festival,8,arts
+MFM,Macau International Fireworks Display Contest,9,arts
+SHE,Shenyang International Ice and Snow Festival,1,cultural
+SRG,Dugderan Festival,3,cultural
+PUS,Busan International Film Festival,10,film
+TSN,Tianjin Mazu Cultural Tourism Festival,9,religious
+CRK,Tigtigan Terakan Keng Dalan,10,cultural
+SIA,Xi'an City Wall Lantern Festival,2,cultural
+WUH,Wuhan Cherry Blossom Festival,3,cultural
+BER,Berlin International Film Festival,2,film
+MAA,Chennai Music Season,12,music
+MES,Medan Ramadhan Fair,3,cultural
+TRZ,Vaikunta Ekadasi at Srirangam,12,religious
+BDO,Asia Africa Festival,5,cultural
+VTE,That Luang Festival,11,religious
+CJU,Jeju Fire Festival,3,cultural
+OSA,Tenjin Matsuri,7,religious
+MUC,Oktoberfest,9,cultural
+INN,Innsbruck Festival of Early Music,8,music
+ZRH,Street Parade,8,music
+MDL,Thingyan Water Festival,4,cultural
+PAR,Bastille Day,7,national
+AMS,King's Day,4,national
+PER,Perth Festival,2,arts
+MEL,Melbourne International Comedy Festival,3,arts
+MIL,Milan Design Week,4,design
+CGO,Zhengzhou International Shaolin Wushu Festival,10,cultural
+KHN,Nanchang Army Day Commemoration,8,national
+NNG,Nanning International Folk Song Arts Festival,9,music
+TNA,Jinan International Spring Cultural Festival,9,cultural
+TAO,Qingdao International Beer Festival,7,food
+DRW,Darwin Festival,8,arts
+BPN,Fabulous Indonesia and Borneo Culture Week,8,cultural
+UPG,Makassar F8 Festival,9,arts
+HKT,Phuket Vegetarian Festival,10,religious
+SFO,San Francisco Pride,6,cultural
+FOC,Fuzhou International Dragon Boat Invitational,5,cultural
+NGB,Ningbo International Fashion Festival,10,design
+BRS,Bristol International Balloon Fiesta,8,cultural
+CWL,Cardiff International Food and Drink Festival,7,food
+OXF,May Morning,5,cultural
+OKA,Okinawa Zento Eisa Matsuri,9,cultural
+SWA,Chaoshan Yingge Dance Festival,2,cultural
+HGH,West Lake International Expo,10,expo
+PSR,Pescara Jazz Festival,7,music
+TPS,Luglio Musicale Trapanese,7,music
+JOG,Yogyakarta UFO Festival,7,arts
+OLB,Red Valley Festival,8,music
+AHO,Alguer Summer Festival,8,arts
+CJB,Thaipusam at Marudhamalai Temple,2,religious
+VTZ,Visakha Utsav,12,cultural
+MYY,Borneo Jazz Festival,10,music
+CTU,Chengdu International Panda Lantern Festival,2,cultural
+AOR,Pesta Kedah,8,cultural
+JHB,Johor Bahru Chingay,2,religious
+TGG,Beautiful Terengganu Malaysia Festival,9,cultural
+BTU,Bintulu Regatta,9,cultural
+SBW,Borneo Cultural Festival,8,cultural
+LBU,Labuan International Sea Challenge,4,sports
+SDK,Sandakan Memorial Day,8,commemoration
+TWU,Tawau International Cultural Festival,3,cultural
+MKZ,Melaka River Festival,5,cultural
+LYS,Festival of Lights,12,cultural
+SXB,Strasbourg Christmas Market,12,cultural
+LIL,Braderie de Lille,9,cultural
+NTE,Le Voyage a Nantes,7,arts
+MRS,Fiesta des Suds,10,music
+KJT,Festival Rampak Genteng,11,arts
+BLQ,Bologna Jazz Festival,10,music
+FLR,Scoppio del Carro,4,religious
+NAP,Naples Pizza Village,6,food
+PSA,Luminara di San Ranieri,6,religious
+VRN,Verona Opera Festival,6,music
+PDG,Tabuik Festival,7,religious
+PQC,Dinh Cau Festival,10,religious
+ILO,Dinagyang Festival,1,religious
+LBJ,Festival Golo Koe,8,religious
+KBR,Festival Cita Rasa Warisan Pantai Timur,9,food
+DAD,Da Nang International Fireworks Festival,6,arts
+CEI,Chiang Rai Flower Festival,12,cultural
+EXT,Exeter Respect Festival,6,cultural

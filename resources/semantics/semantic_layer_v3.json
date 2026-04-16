@@ -1,0 +1,1434 @@
+{
+  "version": "3.0",
+  "description": "Dual-layer semantic model: SQL (fact_flight_info only \u2014 no dim tables) + SPARQL (GraphDB OWL/RDF ontology). SQL owns flight transaction data (codes and numerics only); GraphDB owns all entity resolution, name lookup, and destination enrichment. Enrichment intents only fire after a primary SQL result exists.",
+  "namespace": "http://dataontology.example/graph/",
+  "entities": {
+    "airport": {
+      "synonyms": [
+        "airport",
+        "departure",
+        "origin",
+        "destination",
+        "arrival"
+      ],
+      "graph_class": "ex:Airport",
+      "sql_join_key": "f_departure_airport_code / f_destination_airport_code",
+      "graph_key_property": "ex:prop_airportCode",
+      "note": "Airport entities live only in GraphDB. SQL fact table stores airport codes only \u2014 no dim_airport table exists."
+    },
+    "city": {
+      "synonyms": [
+        "city",
+        "town",
+        "location"
+      ],
+      "graph_class": "ex:City",
+      "graph_key_property": "ex:prop_cityCode",
+      "note": "City entities live only in GraphDB. Resolved via SPARQL airport\u2192city chain."
+    },
+    "country": {
+      "synonyms": [
+        "country",
+        "nation"
+      ],
+      "graph_class": "ex:Country",
+      "graph_key_property": "ex:prop_countryCode",
+      "note": "Country entities live only in GraphDB. Resolved via SPARQL airport\u2192city\u2192country chain."
+    },
+    "airline": {
+      "synonyms": [
+        "airline",
+        "carrier",
+        "operator"
+      ],
+      "graph_class": "ex:Airline",
+      "sql_join_key": "f_airline_code",
+      "graph_key_property": "ex:prop_airlineCode",
+      "note": "Airline names live only in GraphDB. SQL fact table stores the airline code only."
+    },
+    "aircraft": {
+      "synonyms": [
+        "aircraft",
+        "plane",
+        "model"
+      ],
+      "graph_class": "ex:Aircraft",
+      "sql_join_key": "f_aircraft_code",
+      "graph_key_property": "ex:prop_aircraftCode",
+      "note": "Aircraft model names live only in GraphDB. SQL fact table stores the aircraft code only."
+    },
+    "route": {
+      "synonyms": [
+        "route",
+        "coverage",
+        "service"
+      ],
+      "graph_class": "ex:Route",
+      "graph_key_property": "ex:prop_routeKey",
+      "note": "Route entities live only in GraphDB. SQL fact table tracks actual fares per flight combination."
+    }
+  },
+  "param_schema": {
+    "origin": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA airport code for the departure airport"
+    },
+    "destination": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA airport code for the destination airport"
+    },
+    "destination_airport_code": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA airport code for the destination (e.g. BKK, SIN, MAN). Resolve city or country names to their primary airport code \u2014 do not ask the user for the code."
+    },
+    "airport_code": {
+      "type": "string",
+      "format": "iata_airport_code",
+      "pattern": "^[A-Z]{3}$",
+      "description": "IATA airport code \u2014 used for airport-specific queries such as amenities"
+    },
+    "country": {
+      "type": "string",
+      "format": "country_name",
+      "description": "Country name matching ex:prop_countryName in GraphDB, e.g. Japan. Resolved to airport codes via SPARQL before SQL is queried."
+    },
+    "country_name": {
+      "type": "string",
+      "description": "Country name used for standalone country fact queries, e.g. Australia"
+    },
+    "destination_country_code": {
+      "type": "string",
+      "format": "iso_country_code",
+      "pattern": "^[A-Z]{2}$",
+      "description": "ISO 3166-1 alpha-2 country code for the destination country \u2014 resolved from SQL result airport \u2192 city \u2192 country via SPARQL"
+    },
+    "passport_country_code": {
+      "type": "string",
+      "format": "iso_country_code",
+      "pattern": "^[A-Z]{2}$",
+      "description": "ISO 3166-1 alpha-2 country code for the user's passport country \u2014 from account context or explicit user input"
+    },
+    "airline_code": {
+      "type": "string",
+      "format": "iata_airline_code",
+      "pattern": "^[A-Z0-9]{2,3}$",
+      "description": "IATA airline code as stored in fact_flight_info.f_airline_code, e.g. SQ for Singapore Airlines"
+    },
+    "aircraft_model": {
+      "type": "string",
+      "description": "Aircraft model name matching ex:prop_aircraftModel in GraphDB, e.g. B777-300ER, A350-900. Resolved to aircraft code via SPARQL before SQL is queried."
+    },
+    "currency_code": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$",
+      "description": "ISO 4217 currency code to filter fares by, e.g. SGD, THB"
+    },
+    "continent": {
+      "type": "string",
+      "enum": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "North America",
+        "Oceania",
+        "South America"
+      ],
+      "description": "Continent name as stored in GraphDB ex:prop_continent on Country nodes"
+    },
+    "region": {
+      "type": "string",
+      "description": "Sub-continental region as stored in GraphDB ex:prop_region on Country nodes, e.g. Southeast Asia, East Asia, Western Europe"
+    },
+    "travel_style": {
+      "type": "string",
+      "enum": [
+        "adventure",
+        "architecture",
+        "arts_culture",
+        "backwater_escape",
+        "beach_escape",
+        "beer_trip",
+        "budget_friendly",
+        "city_break",
+        "classical_music",
+        "coffee_culture",
+        "cultural_heritage",
+        "design",
+        "diving",
+        "entertainment",
+        "family_friendly",
+        "festival_trip",
+        "foodie",
+        "football_trip",
+        "hiking",
+        "history",
+        "island_escape",
+        "island_gateway",
+        "lgbtq_friendly",
+        "local_culture",
+        "luxury",
+        "mountain_escape",
+        "music_scene",
+        "nature_getaway",
+        "nightlife",
+        "outdoors",
+        "reef_diving",
+        "relaxation",
+        "resort",
+        "river_escape",
+        "romantic",
+        "scenic",
+        "shopping",
+        "ski_trip",
+        "spiritual",
+        "temple_trip",
+        "theme_parks",
+        "wellness",
+        "wildlife",
+        "wine_getaway",
+        "winter_trip"
+      ],
+      "description": "Travel style tag as stored in GraphDB ex:prop_travelStyleName on TravelStyle nodes"
+    },
+    "safety_tier": {
+      "type": "string",
+      "enum": [
+        "very_safe",
+        "safe",
+        "moderate",
+        "caution"
+      ],
+      "description": "Safety tier as stored in GraphDB ex:prop_safetyTier on City nodes"
+    },
+    "weather_profile_code": {
+      "type": "string",
+      "description": "Weather profile code as stored in GraphDB ex:prop_weatherProfileCode, e.g. tropical_rainforest, tropical_monsoon, subtropical"
+    },
+    "season_code": {
+      "type": "string",
+      "description": "Season code as stored in GraphDB ex:prop_seasonCode, e.g. dry, wet, monsoon, summer, winter"
+    },
+    "attraction_type": {
+      "type": "string",
+      "description": "Attraction type as stored in GraphDB ex:prop_attractionType, e.g. beach, museum, nightlife, religious_site, nature"
+    },
+    "festival_type": {
+      "type": "string",
+      "description": "Festival type as stored in GraphDB ex:prop_festivalType, e.g. food, music, cultural, religious, sports"
+    },
+    "transport_mode": {
+      "type": "string",
+      "description": "Transport mode name as stored in GraphDB ex:prop_transportModeName, e.g. metro, tram, high_speed_rail, bus, taxi"
+    },
+    "visa_policy_name": {
+      "type": "string",
+      "enum": [
+        "Visa Not Required",
+        "Visa On Arrival",
+        "eVisa Required",
+        "eVisa or Visa On Arrival",
+        "ETA Required",
+        "Visa Required",
+        "Unverified"
+      ],
+      "description": "Visa policy name as stored in GraphDB ex:prop_visaPolicyName on VisaPolicy nodes"
+    },
+    "cabin_class": {
+      "type": "string",
+      "enum": [
+        "ECONOMY",
+        "BUSINESS",
+        "FIRST"
+      ],
+      "description": "Cabin class as stored in fact_flight_info.f_cabin_class"
+    },
+    "trip_type": {
+      "type": "string",
+      "enum": [
+        "R",
+        "O"
+      ],
+      "description": "R = return/round-trip, O = one-way"
+    },
+    "departure_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Exact departure date in ISO format YYYY-MM-DD"
+    },
+    "from_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Earliest acceptable departure date (inclusive) \u2014 used by next_available_flight"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Start of departure date window in ISO format YYYY-MM-DD"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "End of departure date window in ISO format YYYY-MM-DD"
+    },
+    "max_price": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Maximum acceptable flight fare total in the stored currency. Flight fare only \u2014 does not include hotel, activities or ground costs."
+    },
+    "max_duration_mins": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Maximum flight duration in minutes \u2014 used to find short-haul destinations (e.g. 120 = under 2 hours)"
+    },
+    "min_duration_mins": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Minimum flight duration in minutes \u2014 used to find long-haul destinations (e.g. 600 = over 10 hours)"
+    },
+    "month_num": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12,
+      "description": "Calendar month number (1=January \u2026 12=December) \u2014 used to filter weather observations"
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 10,
+      "description": "Maximum number of rows to return"
+    },
+    "username": {
+      "type": "string",
+      "description": "Authenticated user's username \u2014 used to resolve passport country from GraphDB Account node without requiring the user to state their passport country explicitly"
+    }
+  },
+  "metrics": {
+    "cheapest_fare": {
+      "description": "Lowest total flight fare amount across matching flights",
+      "expression": "MIN(f.f_total_amount_fare_total)"
+    },
+    "avg_fare": {
+      "description": "Average flight fare total for a route or grouping",
+      "expression": "AVG(f.f_total_amount_fare_total)"
+    },
+    "avg_flight_duration": {
+      "description": "Average flight duration in minutes for matching flights",
+      "expression": "AVG(f.f_flight_duration)"
+    },
+    "min_flight_duration": {
+      "description": "Shortest flight duration in minutes for matching flights",
+      "expression": "MIN(f.f_flight_duration)"
+    },
+    "flight_count": {
+      "description": "Number of distinct flight combinations matching the filter",
+      "expression": "COUNT(f.f_flight_combination)"
+    }
+  },
+  "intents": {
+    "cheapest_flight_on_route": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "Find the cheapest flight fare (flight fare only) for a direct route between two airports within a departure date window.",
+      "examples": [
+        "What is the cheapest flight from SIN to BKK in June 2026?",
+        "Find the lowest fare from SIN to BKK between 2026-06-01 and 2026-06-30.",
+        "Cheapest one-way from KUL to SIN in June 2026?"
+      ],
+      "required_params": [
+        "origin",
+        "destination",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "trip_type",
+        "currency_code",
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "destination_weather_by_month",
+        "best_months_to_visit",
+        "destination_attractions",
+        "destination_festivals",
+        "destination_safety",
+        "airport_amenities",
+        "visa_check_for_destination"
+      ],
+      "sql_template": "SELECT f.f_departure_airport_code, f.f_destination_airport_code, f.f_airline_code, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_trip_type, MIN(f.f_total_amount_fare_total) AS cheapest_fare, f.f_currency_code FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_departure_airport_code, f.f_destination_airport_code, f.f_airline_code, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_trip_type, f.f_currency_code ORDER BY cheapest_fare ASC LIMIT :limit",
+      "note": "Append AND f.f_trip_type = :trip_type if trip_type provided. Append AND f.f_currency_code = :currency_code if currency_code provided. Airline name and aircraft model resolved from f_airline_code via GraphDB enrichment."
+    },
+    "cheapest_flight_by_airline": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "Find the cheapest flight fare offered by a specific airline on a route within a date window.",
+      "examples": [
+        "What is the cheapest Singapore Airlines flight from SIN to NRT in June 2026?",
+        "Cheapest SQ fare from SIN to BKK between 2026-06-01 and 2026-06-30.",
+        "Lowest AirAsia price from KUL to SIN in July 2026?"
+      ],
+      "required_params": [
+        "origin",
+        "destination",
+        "airline_code",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "trip_type",
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "destination_safety",
+        "airport_amenities"
+      ],
+      "sql_template": "SELECT f.f_departure_airport_code, f.f_destination_airport_code, f.f_airline_code, f.f_aircraft_code, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_trip_type, MIN(f.f_total_amount_fare_total) AS cheapest_fare, f.f_currency_code FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND f.f_airline_code = :airline_code AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_departure_airport_code, f.f_destination_airport_code, f.f_airline_code, f.f_aircraft_code, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_trip_type, f.f_currency_code ORDER BY cheapest_fare ASC LIMIT :limit",
+      "note": "Airline name and aircraft model resolved from codes via GraphDB enrichment after SQL returns results."
+    },
+    "route_statistics": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "Return summary statistics for a route: average fare, minimum fare, maximum fare, average flight duration, and total flight count within a date window.",
+      "examples": [
+        "What is the average fare from SIN to NRT in June 2026?",
+        "What is the average flight duration from SIN to LHR?",
+        "Give me fare stats for SIN to BKK in June 2026."
+      ],
+      "required_params": [
+        "origin",
+        "destination",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "currency_code"
+      ],
+      "enrichment_triggers": [],
+      "sql_template": "SELECT f.f_departure_airport_code, f.f_destination_airport_code, f.f_currency_code, AVG(f.f_total_amount_fare_total) AS avg_fare, MIN(f.f_total_amount_fare_total) AS min_fare, MAX(f.f_total_amount_fare_total) AS max_fare, AVG(f.f_flight_duration) AS avg_duration_mins, MIN(f.f_flight_duration) AS min_duration_mins, COUNT(f.f_flight_combination) AS flight_count FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_departure_airport_code, f.f_destination_airport_code, f.f_currency_code"
+    },
+    "flights_on_date": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "List all available flights on an exact departure date between two airports.",
+      "examples": [
+        "Show me all flights from SIN to BKK on 2026-05-30.",
+        "What flights are available from KUL to SIN on July 10?",
+        "Flights from SIN to NRT on 2026-08-01."
+      ],
+      "required_params": [
+        "origin",
+        "destination",
+        "departure_date"
+      ],
+      "optional_params": [
+        "trip_type",
+        "currency_code",
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "airport_amenities"
+      ],
+      "sql_template": "SELECT f.f_flight_combination, f.f_airline_code, f.f_aircraft_code, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_trip_type, f.f_total_amount_fare_total, f.f_currency_code, f.f_flight_duration FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) = date(:departure_date) ORDER BY f.f_total_amount_fare_total ASC LIMIT :limit",
+      "note": "Airline name and aircraft model resolved from codes via GraphDB enrichment."
+    },
+    "all_flights_on_date": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "List all flights departing from an origin airport on an exact date, to any destination. Use when no specific destination is given.",
+      "examples": [
+        "What flights are available from SIN on 30 May 2026?",
+        "Show all departures from SIN on 2026-06-15.",
+        "What can I catch from KUL this Saturday?"
+      ],
+      "required_params": [
+        "origin",
+        "departure_date"
+      ],
+      "optional_params": [
+        "currency_code",
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview"
+      ],
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_airline_code, f.f_aircraft_code, f.f_departure_date, f.f_arrival_date, f.f_flight_duration, f.f_total_amount_fare_total, f.f_currency_code FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND date(f.f_departure_date) = date(:departure_date) ORDER BY f.f_total_amount_fare_total ASC LIMIT :limit",
+      "note": "Airport name, city, and country for each destination resolved from f_destination_airport_code via GraphDB destination_overview enrichment."
+    },
+    "next_available_flight": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "Find the earliest available flight on a specific route from a given date onwards.",
+      "examples": [
+        "What is the first available flight from SIN to NRT?",
+        "When is the next flight from SIN to BKK after 2026-06-10?",
+        "Earliest flight from KUL to SIN from today?"
+      ],
+      "required_params": [
+        "origin",
+        "destination",
+        "from_date"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "airport_amenities"
+      ],
+      "sql_template": "SELECT f.f_flight_combination, f.f_airline_code, f.f_aircraft_code, f.f_departure_date, f.f_arrival_date, f.f_flight_duration, f.f_total_amount_fare_total, f.f_currency_code FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) >= date(:from_date) ORDER BY f.f_departure_date ASC, f.f_total_amount_fare_total ASC LIMIT :limit",
+      "note": "Airline name and aircraft model resolved from codes via GraphDB enrichment."
+    },
+    "cheapest_month_for_route": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "Identify which calendar month has the lowest average flight fare for a route within a broader date window.",
+      "examples": [
+        "What month is cheapest to fly from SIN to BKK?",
+        "When is the best time to book SIN to NRT for the lowest fare?",
+        "Which month has the cheapest fares from KUL to SIN?"
+      ],
+      "required_params": [
+        "origin",
+        "destination",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_weather_by_month",
+        "best_months_to_visit",
+        "destination_festivals"
+      ],
+      "sql_template": "SELECT strftime('%Y-%m', f.f_departure_date) AS departure_month, MIN(f.f_total_amount_fare_total) AS min_fare, AVG(f.f_total_amount_fare_total) AS avg_fare, COUNT(f.f_flight_combination) AS flight_count, f.f_currency_code FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY strftime('%Y-%m', f.f_departure_date), f.f_currency_code ORDER BY min_fare ASC LIMIT :limit"
+    },
+    "shortest_flight_on_route": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "Find the fastest flight option between two specific airports within a date window, ordered by flight duration.",
+      "examples": [
+        "What is the fastest flight from SIN to BKK in June 2026?",
+        "Which airline has the shortest flight from SIN to NRT?",
+        "Quickest flight option from KUL to SIN in July 2026?"
+      ],
+      "required_params": [
+        "origin",
+        "destination",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "airport_amenities"
+      ],
+      "sql_template": "SELECT f.f_flight_combination, f.f_airline_code, f.f_aircraft_code, f.f_departure_date, f.f_arrival_date, f.f_flight_duration, f.f_total_amount_fare_total, f.f_currency_code FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) ORDER BY f.f_flight_duration ASC, f.f_total_amount_fare_total ASC LIMIT :limit",
+      "note": "Airline name and aircraft model resolved from codes via GraphDB enrichment."
+    },
+    "shortest_flight_from_origin": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "Find the shortest flight(s) from an origin airport to any destination within a date window. No destination filter \u2014 returns the absolute quickest reachable places.",
+      "examples": [
+        "What is the shortest flight from SIN to any destination in June 2026?",
+        "Which destinations from SIN have the shortest flight time?",
+        "What is the quickest flight I can take from KUL?"
+      ],
+      "required_params": [
+        "origin",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview"
+      ],
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_airline_code, f.f_aircraft_code, MIN(f.f_flight_duration) AS min_duration_mins, MIN(f.f_total_amount_fare_total) AS min_fare, f.f_currency_code FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_airline_code, f.f_aircraft_code, f.f_currency_code ORDER BY min_duration_mins ASC, min_fare ASC LIMIT :limit",
+      "note": "Airport name, city, country resolved from destination code via GraphDB destination_overview enrichment."
+    },
+    "all_destinations_from_origin": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "List all distinct destinations reachable from an origin airport within a date window with their cheapest fare. No budget cap \u2014 returns everything available.",
+      "examples": [
+        "Where can I fly from SIN in June 2026?",
+        "Show all destinations from KUL in July 2026.",
+        "Which destinations can I reach from SIN this weekend?"
+      ],
+      "required_params": [
+        "origin",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "trip_type",
+        "currency_code",
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "destination_safety",
+        "destination_travel_styles"
+      ],
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare, COUNT(DISTINCT f.f_flight_combination) AS flight_count FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit",
+      "note": "Append AND f.f_trip_type = :trip_type if trip_type provided. Append AND f.f_currency_code = :currency_code if currency_code provided. Airport name, city, country resolved via GraphDB destination_overview enrichment per destination code."
+    },
+    "destinations_under_budget": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "List all reachable destinations from an origin airport whose cheapest flight fare falls within a maximum budget, within a departure date window. Budget covers flight fare only \u2014 hotel, activities and ground costs are not included.",
+      "examples": [
+        "Where can I fly from SIN with a flight fare under SGD 200 in June 2026?",
+        "Where can I fly from BKK with a flight fare under THB 5000 in June 2026?",
+        "Flights under 150 from BKK in July 2026?"
+      ],
+      "required_params": [
+        "origin",
+        "max_price",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "trip_type",
+        "currency_code",
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "destination_safety",
+        "destination_travel_styles",
+        "destination_attractions",
+        "visa_check_for_destination"
+      ],
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code HAVING MIN(f.f_total_amount_fare_total) <= :max_price ORDER BY min_fare ASC LIMIT :limit",
+      "note": "Append AND f.f_currency_code = :currency_code in WHERE clause if currency_code provided, so budget and fares are in the same currency. Airport name, city, country resolved via GraphDB enrichment."
+    },
+    "destinations_by_country_from_origin": {
+      "category": "hybrid",
+      "execution_phase": "sparql_then_sql",
+      "description": "List destination airports in a specific country reachable from an origin airport within a departure date window. SPARQL resolves airport codes in the named country; SQL checks real flight availability from origin.",
+      "examples": [
+        "Which airports in Thailand can I fly to from SIN in June 2026?",
+        "Show me destinations in Japan from KUL between 2026-08-01 and 2026-08-31.",
+        "Which Malaysian airports are reachable from SIN in July 2026?"
+      ],
+      "required_params": [
+        "origin",
+        "country",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "destination_weather_by_month",
+        "destination_attractions",
+        "destination_festivals",
+        "destination_safety"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode WHERE { ?airport a ex:Airport ; ex:prop_airportCode ?airportCode ; ex:prop_inCity ?city . ?city ex:prop_belongsToCountry ?country . ?country ex:prop_countryName :country . }",
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare, MIN(date(f.f_departure_date)) AS first_departure FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY first_departure ASC LIMIT :limit",
+      "note": "SPARQL runs first to collect :destination_airport_codes for all airports in the named country. SQL uses that list in the IN clause. Airport name, city, country resolved via GraphDB enrichment."
+    },
+    "route_fare_options": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "List all available flight fare options (flight fare only) for a specific route and departure date window, ordered by price. Includes airline code, cabin class, aircraft code, and duration.",
+      "examples": [
+        "What are all flight options from SIN to HKG in July 2026?",
+        "Show me all fare options from SIN to BKK in June 2026.",
+        "Show me one-way flights from SIN to KUL in June 2026.",
+        "Are there return trip flights from SIN to BKK in June 2026?"
+      ],
+      "required_params": [
+        "origin",
+        "destination",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "trip_type",
+        "currency_code",
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "airport_amenities",
+        "destination_weather_by_month"
+      ],
+      "sql_template": "SELECT f.f_flight_combination, f.f_airline_code, f.f_aircraft_code, f.f_departure_date, f.f_arrival_date, f.f_cabin_class, f.f_trip_type, f.f_total_amount_fare_total, f.f_currency_code, f.f_flight_duration FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) ORDER BY f.f_total_amount_fare_total ASC LIMIT :limit",
+      "note": "Append AND f.f_trip_type = :trip_type if trip_type provided (R=return, O=one-way). Append AND f.f_currency_code = :currency_code if currency_code provided. Airline name and aircraft model resolved from codes via GraphDB enrichment."
+    },
+    "airlines_on_route": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "List all airlines operating flights between two airports within a departure date window, with cheapest fare, average duration, and flight count.",
+      "examples": [
+        "Which airlines fly from SIN to BKK in June 2026?",
+        "What carriers operate KUL to SIN routes in July 2026?",
+        "List airlines and prices for SIN to NRT in August 2026."
+      ],
+      "required_params": [
+        "origin",
+        "destination",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "airport_amenities"
+      ],
+      "sql_template": "SELECT f.f_airline_code, MIN(f.f_total_amount_fare_total) AS min_fare, AVG(f.f_flight_duration) AS avg_duration_mins, COUNT(f.f_flight_combination) AS flight_count, f.f_currency_code FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_airline_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit",
+      "note": "Airline name resolved from f_airline_code via GraphDB enrichment after SQL returns results."
+    },
+    "aircraft_on_route": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "List which aircraft types are used on a route within a date window, with the airlines that operate them.",
+      "examples": [
+        "What aircraft does Singapore Airlines use on the SIN to NRT route?",
+        "Which planes fly the SIN to BKK route in June 2026?",
+        "What type of plane is used on KUL to SIN?"
+      ],
+      "required_params": [
+        "origin",
+        "destination",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "airline_code",
+        "limit"
+      ],
+      "enrichment_triggers": [],
+      "sql_template": "SELECT DISTINCT f.f_aircraft_code, f.f_airline_code FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) ORDER BY f.f_airline_code, f.f_aircraft_code LIMIT :limit",
+      "note": "Airline name and aircraft model name resolved from codes via GraphDB enrichment after SQL returns results. Append AND f.f_airline_code = :airline_code if airline_code provided."
+    },
+    "routes_by_aircraft": {
+      "category": "hybrid",
+      "execution_phase": "sparql_then_sql",
+      "description": "Find all routes that use a specific aircraft model, with the airlines operating them. SPARQL resolves aircraft code from the model name; SQL finds all origin/destination pairs using that aircraft code.",
+      "examples": [
+        "Which routes use the Boeing 777-300ER?",
+        "What routes does the A350-900 fly?",
+        "Which aircraft models are used on long-haul flights from SIN?"
+      ],
+      "required_params": [
+        "aircraft_model"
+      ],
+      "optional_params": [
+        "origin",
+        "start_date",
+        "end_date",
+        "min_duration_mins",
+        "limit"
+      ],
+      "enrichment_triggers": [],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?aircraftCode WHERE { ?aircraft a ex:Aircraft ; ex:prop_aircraftModel :aircraft_model ; ex:prop_aircraftCode ?aircraftCode . }",
+      "sparql_result_binding": {
+        "variable": "aircraftCode",
+        "inject_as": "aircraft_codes"
+      },
+      "sql_template": "SELECT DISTINCT f.f_departure_airport_code, f.f_destination_airport_code, f.f_airline_code, f.f_aircraft_code FROM fact_flight_info f WHERE f.f_aircraft_code IN :aircraft_codes ORDER BY f.f_departure_airport_code, f.f_destination_airport_code LIMIT :limit",
+      "note": "SPARQL resolves :aircraft_codes from the model name. SQL uses that list in the IN clause. Append AND f.f_departure_airport_code = :origin if origin provided. Append AND f.f_flight_duration >= :min_duration_mins to filter for long-haul only. Airline name and aircraft model resolved via GraphDB enrichment."
+    },
+    "flight_count_on_route": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "Return how many distinct flight combinations are available on a route within a date window, and how many airlines serve it.",
+      "examples": [
+        "How many flights are available from SIN to BKK in June 2026?",
+        "How often does SIN to NRT fly in August?",
+        "How many flight options are there from KUL to SIN in July?"
+      ],
+      "required_params": [
+        "origin",
+        "destination",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [],
+      "enrichment_triggers": [],
+      "sql_template": "SELECT f.f_departure_airport_code, f.f_destination_airport_code, COUNT(DISTINCT f.f_flight_combination) AS total_flights, COUNT(DISTINCT f.f_airline_code) AS airline_count, MIN(f.f_total_amount_fare_total) AS min_fare, f.f_currency_code FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code = :destination AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_departure_airport_code, f.f_destination_airport_code, f.f_currency_code"
+    },
+    "destinations_by_duration": {
+      "category": "primary",
+      "execution_phase": "sql_first",
+      "description": "Find destinations reachable from an origin with flight duration within specified bounds. Use max_duration_mins for short-haul (e.g. under 2 hours = 120 mins), min_duration_mins for long-haul (e.g. over 10 hours = 600 mins).",
+      "examples": [
+        "Which destinations from SIN have a flight duration under 2 hours?",
+        "Which destinations from SIN have a flight duration over 10 hours?",
+        "Which long-haul destinations from SIN have flights under SGD 800 in July 2026?",
+        "Show me short flights from SIN in June 2026."
+      ],
+      "required_params": [
+        "origin",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "max_duration_mins",
+        "min_duration_mins",
+        "max_price",
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "destination_safety"
+      ],
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_flight_duration) AS min_duration_mins, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code HAVING MIN(f.f_flight_duration) <= :max_duration_mins ORDER BY min_duration_mins ASC LIMIT :limit",
+      "note": "SQL compiler must build the HAVING clause dynamically: use 'MIN(f.f_flight_duration) <= :max_duration_mins' when max_duration_mins is provided (short-haul); use 'MIN(f.f_flight_duration) >= :min_duration_mins' when min_duration_mins is provided (long-haul); combine both when both are provided (range). Append 'AND MIN(f.f_total_amount_fare_total) <= :max_price' in HAVING if max_price provided. Airport name, city, country resolved via GraphDB enrichment."
+    },
+    "flights_by_travel_style": {
+      "category": "hybrid",
+      "execution_phase": "sparql_then_sql",
+      "description": "Find destinations from an origin that match a travel style (e.g. beach_escape, foodie, adventure), with real flight fares. GraphDB resolves airports in cities tagged with the style; SQL returns actual fares for those airports.",
+      "examples": [
+        "Where can I fly for a beach holiday from SIN in June 2026?",
+        "Find foodie destinations from KUL in July 2026.",
+        "Which destinations from SIN are suited for a foodie trip?",
+        "Family-friendly destinations from SIN in June 2026?",
+        "Where can I go for a diving trip from SIN?",
+        "Which destinations are good for wildlife experiences?"
+      ],
+      "required_params": [
+        "origin",
+        "travel_style",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "destination_travel_styles",
+        "destination_attractions"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode WHERE { ?city a ex:City ; ex:prop_hasTravelStyle ?style . ?style ex:prop_travelStyleName :travel_style . ?airport a ex:Airport ; ex:prop_inCity ?city ; ex:prop_airportCode ?airportCode . }",
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit",
+      "note": "SPARQL runs first to collect :destination_airport_codes. SQL uses that list in the IN clause. Airport name, city, country resolved via GraphDB enrichment."
+    },
+    "destinations_by_safety_tier": {
+      "category": "hybrid",
+      "execution_phase": "sparql_then_sql",
+      "description": "Find destinations at a given safety tier (very_safe, safe, moderate, caution), then check real flight availability from origin.",
+      "examples": [
+        "Show me safe destinations from SIN in June 2026.",
+        "Where are the very safe places I can fly to from SIN?",
+        "Which airlines fly to cities with a very safe rating from SIN?"
+      ],
+      "required_params": [
+        "origin",
+        "safety_tier",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "max_price",
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "destination_safety",
+        "destination_travel_styles"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode WHERE { ?city a ex:City ; ex:prop_safetyTier :safety_tier . ?airport a ex:Airport ; ex:prop_inCity ?city ; ex:prop_airportCode ?airportCode . }",
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit"
+    },
+    "destinations_by_weather_profile": {
+      "category": "hybrid",
+      "execution_phase": "sparql_then_sql",
+      "description": "Find destinations whose city has a matching weather profile or season in a specific month. GraphDB filters cities by weatherProfileCode or seasonCode; SQL checks real flights from origin.",
+      "examples": [
+        "Which destinations from SIN have dry season in July?",
+        "Which destinations from SIN have tropical rainforest climate?",
+        "Which destinations from SIN are in monsoon season in June?",
+        "From my cheapest flight results, which destinations have a tropical climate in June?"
+      ],
+      "required_params": [
+        "origin",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "weather_profile_code",
+        "season_code",
+        "month_num",
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_weather_by_month",
+        "best_months_to_visit"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode WHERE { ?city a ex:City ; ex:prop_hasWeatherObservation ?obs . ?airport a ex:Airport ; ex:prop_inCity ?city ; ex:prop_airportCode ?airportCode . OPTIONAL { ?obs ex:prop_weatherProfileCode ?wpc . FILTER(?wpc = :weather_profile_code) } OPTIONAL { ?obs ex:prop_seasonCode ?sc . FILTER(?sc = :season_code) } OPTIONAL { ?obs ex:prop_monthNum ?mn . FILTER(?mn = :month_num) } }",
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit",
+      "note": "SPARQL compiler must omit OPTIONAL+FILTER blocks for params not provided by the user. At least one of weather_profile_code, season_code, or month_num should be present for meaningful results. Filters can be combined."
+    },
+    "destinations_by_attraction_type": {
+      "category": "hybrid",
+      "execution_phase": "sparql_then_sql",
+      "description": "Find destinations that have attractions of a specific type (beach, museum, nightlife, religious_site, nature), then check real flights from origin.",
+      "examples": [
+        "Which destinations from my results have beach attractions?",
+        "Which cities have nightlife attractions reachable from SIN?",
+        "Which destinations have religious sites worth visiting?"
+      ],
+      "required_params": [
+        "origin",
+        "attraction_type",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_attractions",
+        "destination_overview"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode WHERE { ?city a ex:City ; ex:prop_hasAttraction ?attraction . ?attraction ex:prop_attractionType :attraction_type . ?airport a ex:Airport ; ex:prop_inCity ?city ; ex:prop_airportCode ?airportCode . }",
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit"
+    },
+    "destinations_by_festival_type": {
+      "category": "hybrid",
+      "execution_phase": "sparql_then_sql",
+      "description": "Find destinations that host a specific type of festival (food, music, cultural, religious, sports), then check real flights from origin.",
+      "examples": [
+        "Which destinations have food festivals I can attend from SIN?",
+        "Which destinations have music festivals reachable from SIN?",
+        "Which destinations have religious festivals in December from SIN?",
+        "Which of my flight result destinations have a festival during my travel dates?"
+      ],
+      "required_params": [
+        "origin",
+        "festival_type",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "month_num",
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_festivals",
+        "destination_overview"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode WHERE { ?city a ex:City ; ex:prop_hasFestival ?festival . ?festival ex:prop_festivalType :festival_type . ?airport a ex:Airport ; ex:prop_inCity ?city ; ex:prop_airportCode ?airportCode . }",
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit",
+      "note": "Optionally add AND ?festival ex:prop_festivalMonthNum :month_num in SPARQL if month_num is provided."
+    },
+    "destinations_by_transport_mode": {
+      "category": "hybrid",
+      "execution_phase": "sparql_then_sql",
+      "description": "Find destinations that have a specific transport mode available (metro, tram, high_speed_rail, bus, taxi), then check real flights from origin.",
+      "examples": [
+        "Which destinations from my results have high speed rail?",
+        "Which cities have a tram network reachable from SIN?",
+        "Which destinations from SIN have a metro system?"
+      ],
+      "required_params": [
+        "origin",
+        "transport_mode",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_transport",
+        "destination_overview"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode WHERE { ?city a ex:City ; ex:prop_hasTransportMode ?transport . ?transport ex:prop_transportModeName :transport_mode . ?airport a ex:Airport ; ex:prop_inCity ?city ; ex:prop_airportCode ?airportCode . }",
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit"
+    },
+    "destinations_by_continent": {
+      "category": "graphdb_primary",
+      "execution_phase": "sparql_first",
+      "description": "Find airports in a given continent, resolved via GraphDB Country continent property. Optionally followed by SQL to check which have real flights from origin.",
+      "examples": [
+        "Which airports in Europe can I fly to from SIN in July 2026?",
+        "Show me destinations in Asia from SIN.",
+        "What cities can I reach in Oceania?"
+      ],
+      "required_params": [
+        "continent"
+      ],
+      "optional_params": [
+        "origin",
+        "start_date",
+        "end_date",
+        "limit"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode ?airportName ?cityName ?countryName ?region WHERE { ?airport a ex:Airport ; ex:prop_airportCode ?airportCode ; ex:prop_airportName ?airportName ; ex:prop_inCity ?city . ?city ex:prop_cityName ?cityName ; ex:prop_belongsToCountry ?country . ?country ex:prop_countryName ?countryName ; ex:prop_continent :continent ; ex:prop_region ?region . } ORDER BY ?countryName ?cityName",
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit",
+      "note": "SQL block only runs when origin + date params are provided."
+    },
+    "destinations_by_region": {
+      "category": "graphdb_primary",
+      "execution_phase": "sparql_first",
+      "description": "Find airports in a given sub-continental region, resolved via GraphDB Country region property. Optionally followed by SQL to check real flights from origin.",
+      "examples": [
+        "Which airports are in Southeast Asia?",
+        "Show destinations in Western Europe from SIN.",
+        "What cities can I reach in East Asia?"
+      ],
+      "required_params": [
+        "region"
+      ],
+      "optional_params": [
+        "origin",
+        "start_date",
+        "end_date",
+        "limit"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode ?airportName ?cityName ?countryName ?continent WHERE { ?airport a ex:Airport ; ex:prop_airportCode ?airportCode ; ex:prop_airportName ?airportName ; ex:prop_inCity ?city . ?city ex:prop_cityName ?cityName ; ex:prop_belongsToCountry ?country . ?country ex:prop_countryName ?countryName ; ex:prop_continent ?continent ; ex:prop_region :region . } ORDER BY ?countryName ?cityName",
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit",
+      "note": "SQL block only runs when origin + date params are provided."
+    },
+    "airlines_covering_route": {
+      "category": "graphdb_primary",
+      "execution_phase": "sparql_only",
+      "description": "Find which airlines have route coverage between two airports according to GraphDB Route entities. Reflects airline schedule coverage, not actual available fares.",
+      "examples": [
+        "Does Singapore Airlines fly to LHR from SIN?",
+        "What carriers cover the SIN to BKK route?"
+      ],
+      "required_params": [
+        "origin",
+        "destination"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?airlineCode ?airlineName ?routeKey WHERE { ?route a ex:Route ; ex:prop_hasOriginAirport ?orig ; ex:prop_hasDestinationAirport ?dest ; ex:prop_operatedBy ?airline ; ex:prop_routeKey ?routeKey . ?orig ex:prop_airportCode :origin . ?dest ex:prop_airportCode :destination . ?airline ex:prop_airlineCode ?airlineCode ; ex:prop_airlineName ?airlineName . } ORDER BY ?airlineName"
+    },
+    "all_routes_from_origin": {
+      "category": "graphdb_primary",
+      "execution_phase": "sparql_only",
+      "description": "List all airline route coverage from a specific origin airport according to GraphDB Route entities. Shows connectivity regardless of actual fare data.",
+      "examples": [
+        "Which airlines operate routes out of SIN?",
+        "What destinations does SIN connect to?",
+        "Show all routes available from Changi Airport."
+      ],
+      "required_params": [
+        "origin"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode ?airportName ?cityName ?countryName ?airlineCode ?airlineName WHERE { ?route a ex:Route ; ex:prop_hasOriginAirport ?orig ; ex:prop_hasDestinationAirport ?dest ; ex:prop_operatedBy ?airline . ?orig ex:prop_airportCode :origin . ?dest ex:prop_airportCode ?airportCode ; ex:prop_airportName ?airportName ; ex:prop_inCity ?city . ?city ex:prop_cityName ?cityName ; ex:prop_belongsToCountry ?country . ?country ex:prop_countryName ?countryName . ?airline ex:prop_airlineCode ?airlineCode ; ex:prop_airlineName ?airlineName . } ORDER BY ?countryName ?cityName"
+    },
+    "routes_by_airline": {
+      "category": "graphdb_primary",
+      "execution_phase": "sparql_only",
+      "description": "List all destinations an airline serves from a specific origin airport, based on GraphDB Route entities.",
+      "examples": [
+        "Where does Singapore Airlines fly from SIN?",
+        "How many destinations does SQ fly to from SIN?",
+        "Show all AirAsia destinations from KUL."
+      ],
+      "required_params": [
+        "origin",
+        "airline_code"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?airportCode ?airportName ?cityName ?countryName ?routeKey WHERE { ?route a ex:Route ; ex:prop_hasOriginAirport ?orig ; ex:prop_hasDestinationAirport ?dest ; ex:prop_operatedBy ?airline ; ex:prop_routeKey ?routeKey . ?orig ex:prop_airportCode :origin . ?airline ex:prop_airlineCode :airline_code . ?dest ex:prop_airportCode ?airportCode ; ex:prop_airportName ?airportName ; ex:prop_inCity ?city . ?city ex:prop_cityName ?cityName ; ex:prop_belongsToCountry ?country . ?country ex:prop_countryName ?countryName . } ORDER BY ?countryName ?cityName"
+    },
+    "visa_free_flights_from_origin": {
+      "category": "hybrid",
+      "execution_phase": "sparql_then_sql",
+      "description": "Find destinations reachable from an origin where the user's passport country does not require a visa. GraphDB resolves all airport codes in visa-free destination countries; SQL then checks real flight fares for those airports.",
+      "examples": [
+        "Where can I fly from SIN without a visa using my Singapore passport?",
+        "From SIN, which destinations in Japan have flights available AND no visa required for a Singapore passport?",
+        "Show visa-free destinations from KUL for Malaysian passport holders in June 2026."
+      ],
+      "required_params": [
+        "origin",
+        "passport_country_code",
+        "start_date",
+        "end_date"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "enrichment_triggers": [
+        "destination_overview",
+        "visa_check_for_destination",
+        "destination_safety"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode WHERE { ?req a ex:CountryVisaRequirement ; ex:prop_passportCountry ?passport ; ex:prop_destinationCountry ?dest ; ex:prop_visaRequired false . ?passport ex:prop_countryCode :passport_country_code . ?airport a ex:Airport ; ex:prop_inCity ?city ; ex:prop_airportCode ?airportCode . ?city ex:prop_belongsToCountry ?dest . }",
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit",
+      "note": "SPARQL resolves :destination_airport_codes for all airports in visa-free countries. SQL uses that list in the IN clause. Airport name, city, country resolved via GraphDB enrichment."
+    },
+    "visa_destinations_by_policy": {
+      "category": "graphdb_primary",
+      "execution_phase": "sparql_only",
+      "description": "List all destination countries that have a specific visa policy for a given passport country. Standalone \u2014 does not require a flight result. Use for questions like 'which countries are visa-free', 'which require eVisa', or 'which offer visa on arrival'.",
+      "examples": [
+        "Which countries are visa-free for Singapore passport holders?",
+        "Which countries require a full visa for Singapore passport holders?",
+        "Which destinations offer eVisa for Malaysian passport holders?",
+        "Is an eVisa available for India?",
+        "Which countries offer visa on arrival for a Singapore passport?"
+      ],
+      "required_params": [
+        "passport_country_code",
+        "visa_policy_name"
+      ],
+      "optional_params": [
+        "limit"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?destinationCountryName ?destinationCountryCode ?visaPolicyName ?visaPolicyDescription ?onlineApplyUrl ?visaDurationDays WHERE { ?req a ex:CountryVisaRequirement ; ex:prop_passportCountry ?passport ; ex:prop_destinationCountry ?dest ; ex:prop_usesVisaPolicy ?policy . ?passport ex:prop_countryCode :passport_country_code . ?dest ex:prop_countryCode ?destinationCountryCode ; ex:prop_countryName ?destinationCountryName . ?policy ex:prop_visaPolicyName :visa_policy_name ; ex:prop_visaPolicyDescription ?visaPolicyDescription . OPTIONAL { ?req ex:prop_onlineApplyUrl ?onlineApplyUrl . } OPTIONAL { ?req ex:prop_visaDurationDays ?visaDurationDays . } } ORDER BY ?destinationCountryName"
+    },
+    "currencies_by_region": {
+      "category": "graphdb_primary",
+      "execution_phase": "sparql_only",
+      "description": "List all currencies used by countries in a specific region or continent. Standalone informational query.",
+      "examples": [
+        "What currencies are used in Southeast Asia?",
+        "What currencies are used across my flight results?",
+        "Which currencies are common in Europe?"
+      ],
+      "required_params": [
+        "region"
+      ],
+      "optional_params": [],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?countryName ?currencyCode ?currencyName ?exchangeRate WHERE { ?country a ex:Country ; ex:prop_countryName ?countryName ; ex:prop_region :region ; ex:prop_hasCurrency ?currency . ?currency ex:prop_currencyCode ?currencyCode ; ex:prop_currencyName ?currencyName . OPTIONAL { ?currency ex:prop_exchangeRate ?exchangeRate . } } ORDER BY ?countryName",
+      "note": "Replace ex:prop_region with ex:prop_continent if user asks by continent instead."
+    },
+    "destination_overview": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "Resolve full destination context for an airport code: airport name, city, country, continent, region, capital city of the country, safety tier, solo-female safety rating, and cost of living index.",
+      "examples": [
+        "Tell me about Bangkok \u2014 what should I know before I book?",
+        "What country does BNE airport belong to?",
+        "What continent and region is Kuala Lumpur in?",
+        "What is the cost of living like in Tokyo?",
+        "What is the capital city of Australia?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?airportName ?cityName ?countryName ?countryCode ?continent ?region ?capitalCityName ?safetyTier ?soloFemaleSafe ?costOfLivingIndex WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_airportName ?airportName ; ex:prop_inCity ?city . ?city ex:prop_cityName ?cityName ; ex:prop_belongsToCountry ?country . ?country ex:prop_countryName ?countryName ; ex:prop_countryCode ?countryCode ; ex:prop_continent ?continent ; ex:prop_region ?region . OPTIONAL { ?country ex:prop_capitalCity ?capital . ?capital ex:prop_cityName ?capitalCityName . } OPTIONAL { ?city ex:prop_safetyTier ?safetyTier . } OPTIONAL { ?city ex:prop_soloFemaleSafe ?soloFemaleSafe . } OPTIONAL { ?city ex:prop_costOfLivingIndex ?costOfLivingIndex . } }"
+    },
+    "destination_weather_by_month": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "Return monthly weather observations for a destination city: average temperature, rainfall, weather profile, season, and best-time-to-visit flag.",
+      "examples": [
+        "What is the weather like in Bangkok throughout the year?",
+        "What is the average temperature in Singapore in December?",
+        "What season is it in Bali in June?",
+        "What months should I avoid Bangkok due to rain?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "optional_params": [
+        "month_num"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?monthNum ?monthName ?avgTempC ?avgRainfallMm ?weatherProfileCode ?seasonCode ?bestTimeToVisit ?weatherSummary WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_hasWeatherObservation ?obs . ?obs ex:prop_monthNum ?monthNum ; ex:prop_monthName ?monthName ; ex:prop_avgTempC ?avgTempC ; ex:prop_avgRainfallMm ?avgRainfallMm ; ex:prop_weatherProfileCode ?weatherProfileCode ; ex:prop_seasonCode ?seasonCode ; ex:prop_bestTimeToVisit ?bestTimeToVisit ; ex:prop_weatherSummary ?weatherSummary . } ORDER BY ?monthNum"
+    },
+    "best_months_to_visit": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "Return only the months flagged as best time to visit for a destination city.",
+      "examples": [
+        "When is the best time to visit Tokyo?",
+        "What months should I go to Bangkok?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?monthNum ?monthName ?avgTempC ?avgRainfallMm ?weatherSummary WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_hasWeatherObservation ?obs . ?obs ex:prop_bestTimeToVisit true ; ex:prop_monthNum ?monthNum ; ex:prop_monthName ?monthName ; ex:prop_avgTempC ?avgTempC ; ex:prop_avgRainfallMm ?avgRainfallMm ; ex:prop_weatherSummary ?weatherSummary . } ORDER BY ?monthNum"
+    },
+    "destination_attractions": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "List attractions at a destination city: name, type (landmark, museum, beach, nightlife, nature, religious_site, etc.), and tier (must_see, popular, local_gem).",
+      "examples": [
+        "What are the must-see attractions in Bangkok?",
+        "What are the hidden gem attractions in Singapore?",
+        "What museums can I visit in Tokyo?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "optional_params": [
+        "attraction_type"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?attractionName ?attractionType ?attractionTier WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_hasAttraction ?attraction . ?attraction ex:prop_attractionName ?attractionName ; ex:prop_attractionType ?attractionType ; ex:prop_attractionTier ?attractionTier . } ORDER BY ?attractionTier ?attractionName",
+      "note": "Append FILTER(?attractionType = :attraction_type) if attraction_type param provided."
+    },
+    "destination_festivals": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "List festivals and events at a destination city, with month and festival type.",
+      "examples": [
+        "Are there any festivals in Bangkok in June?",
+        "What cultural events happen in Tokyo in April?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "optional_params": [
+        "month_num",
+        "festival_type"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?festivalName ?monthNum ?festivalType WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_hasFestival ?festival . ?festival ex:prop_festivalName ?festivalName ; ex:prop_festivalMonthNum ?monthNum ; ex:prop_festivalType ?festivalType . } ORDER BY ?monthNum ?festivalName",
+      "note": "Append FILTER(?monthNum = :month_num) and/or FILTER(?festivalType = :festival_type) when those params are provided."
+    },
+    "destination_travel_styles": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "List all travel style tags associated with a destination city.",
+      "examples": [
+        "What type of travel is Bangkok good for?",
+        "Which of my flight results are good for a beach holiday?",
+        "Which cities from my results have a good music scene?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?travelStyleName WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_hasTravelStyle ?style . ?style ex:prop_travelStyleName ?travelStyleName . } ORDER BY ?travelStyleName"
+    },
+    "destination_safety": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "Return safety information for a destination city: safety tier (very_safe, safe, moderate, caution) and solo-female safety rating.",
+      "examples": [
+        "Is Bangkok safe to travel to?",
+        "Is Tokyo safe for solo female travellers?",
+        "What is the safety rating of Colombo?",
+        "Which of my flight results are in cities rated very safe?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?cityName ?safetyTier ?soloFemaleSafe ?safetyIndex WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_cityName ?cityName ; ex:prop_safetyTier ?safetyTier ; ex:prop_soloFemaleSafe ?soloFemaleSafe . OPTIONAL { ?city ex:prop_safetyIndex ?safetyIndex . } }"
+    },
+    "destination_transport": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "List available transport modes at a destination city and whether public transport is widely used in that country.",
+      "examples": [
+        "Does Bangkok have a metro system?",
+        "What public transport is available in Kuala Lumpur?",
+        "Is public transport widely used in Singapore?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?transportModeName ?publicTransportWidelyUsed WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_hasTransportMode ?transport . ?transport ex:prop_transportModeName ?transportModeName . OPTIONAL { ?city ex:prop_publicTransportWidelyUsedInCountry ?publicTransportWidelyUsed . } } ORDER BY ?transportModeName"
+    },
+    "destination_cuisines": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "List cuisine types available at a destination city.",
+      "examples": [
+        "What food is Bangkok known for?",
+        "What cuisines can I find in Singapore?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?cuisineType WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_hasCuisine ?cuisine . ?cuisine ex:prop_cuisineType ?cuisineType . } ORDER BY ?cuisineType"
+    },
+    "destination_neighborhoods": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "List notable neighborhoods and districts in a destination city with summaries.",
+      "examples": [
+        "What are the neighbourhoods in Bangkok?",
+        "Which area in Singapore is best to stay in?",
+        "Tell me about the Soho area in London."
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?areaName ?areaSummary WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_hasSubcityArea ?area . ?area ex:prop_subcityAreaName ?areaName ; ex:prop_areaSummary ?areaSummary . FILTER NOT EXISTS { ?area ex:prop_researchStatus \"pending\" . } } ORDER BY ?areaName"
+    },
+    "destination_language": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "Return the primary language(s) spoken at a destination city.",
+      "examples": [
+        "What is the main language spoken in Seoul?",
+        "What language do they speak in Bangkok?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?languageName WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_usesPrimaryLanguage ?lang . ?lang ex:prop_languageName ?languageName . }"
+    },
+    "destination_timezone": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "Return the timezone and UTC offset for a destination city.",
+      "examples": [
+        "What timezone is Dubai in?",
+        "What is the time difference with Tokyo?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?cityName ?timezoneName ?utcOffset WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_cityName ?cityName ; ex:prop_timezoneName ?timezoneName ; ex:prop_utcOffset ?utcOffset . }"
+    },
+    "destination_currency": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "Return the local currency for a destination country, including currency code, name, and exchange rate.",
+      "examples": [
+        "What currency does Thailand use?",
+        "What is the exchange rate for Thai Baht to SGD?",
+        "What should I exchange money to for this trip?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?countryName ?currencyCode ?currencyName ?exchangeRate WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_belongsToCountry ?country . ?country ex:prop_countryName ?countryName ; ex:prop_hasCurrency ?currency . ?currency ex:prop_currencyCode ?currencyCode ; ex:prop_currencyName ?currencyName . OPTIONAL { ?currency ex:prop_exchangeRate ?exchangeRate . } }"
+    },
+    "airport_amenities": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_airport_code",
+      "description": "Return amenity details for an airport: type, terminal count, international status, transit hotel availability, and lounge availability.",
+      "examples": [
+        "Does Changi Airport have a lounge?",
+        "Is there a transit hotel at Kuala Lumpur airport?",
+        "How many terminals does Bangkok Suvarnabhumi have?",
+        "Is Hong Kong airport an international airport?",
+        "Which airports from my results have both a lounge and transit hotel?"
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?airportName ?airportType ?terminalCount ?isInternational ?hasTransitHotel ?hasLounge WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_airportName ?airportName . OPTIONAL { ?airport ex:prop_airportType ?airportType . } OPTIONAL { ?airport ex:prop_terminalCount ?terminalCount . } OPTIONAL { ?airport ex:prop_isInternational ?isInternational . } OPTIONAL { ?airport ex:prop_hasTransitHotel ?hasTransitHotel . } OPTIONAL { ?airport ex:prop_hasLounge ?hasLounge . } }"
+    },
+    "visa_check_for_destination": {
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "requires_business_result": true,
+      "input_from": "destination_country_code",
+      "description": "Check visa requirements between a passport country and a destination country. Returns visa required flag, policy name, description, online apply URL, and visa duration.",
+      "examples": [
+        "Do I need a visa to visit Japan with a Singapore passport?",
+        "Can I get a visa on arrival in Thailand with a Malaysian passport?",
+        "How long can I stay in Australia without a visa on a Singapore passport?"
+      ],
+      "required_params": [
+        "passport_country_code",
+        "destination_country_code"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?passportCountryName ?destinationCountryName ?visaRequired ?visaPolicyName ?visaPolicyDescription ?onlineApplyUrl ?visaDurationDays WHERE { ?req a ex:CountryVisaRequirement ; ex:prop_passportCountry ?passport ; ex:prop_destinationCountry ?dest ; ex:prop_visaRequired ?visaRequired . ?passport ex:prop_countryCode :passport_country_code ; ex:prop_countryName ?passportCountryName . ?dest ex:prop_countryCode :destination_country_code ; ex:prop_countryName ?destinationCountryName . OPTIONAL { ?req ex:prop_usesVisaPolicy ?policy . ?policy ex:prop_visaPolicyName ?visaPolicyName ; ex:prop_visaPolicyDescription ?visaPolicyDescription . } OPTIONAL { ?req ex:prop_onlineApplyUrl ?onlineApplyUrl . } OPTIONAL { ?req ex:prop_visaDurationDays ?visaDurationDays . } }"
+    },
+    "user_passport_country": {
+      "category": "graphdb_primary",
+      "execution_phase": "sparql_only",
+      "description": "Resolve the authenticated user's passport country code from their GraphDB Account node using their username. Used by the orchestrator to silently populate passport_country_code for visa-related intents without requiring the user to state their passport country explicitly.",
+      "examples": [
+        "Where can I travel without a visa?",
+        "Show me visa-free destinations from SIN.",
+        "Which countries need a visa for my passport?"
+      ],
+      "required_params": [
+        "username"
+      ],
+      "note": "This intent is called internally by the orchestrator when passport_country_code is required but not explicitly provided by the user. The username is taken from the authenticated session JWT, not from the user's question.",
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?countryCode ?countryName WHERE { ?account a ex:Account ; ex:prop_accountUsername :username ; ex:prop_hasPassportCountry ?country . ?country ex:prop_countryCode ?countryCode ; ex:prop_countryName ?countryName . }"
+    },
+    "destination_vacation_plan": {
+      "category": "graphdb_primary",
+      "execution_phase": "sparql_first",
+      "sparql_type": "construct",
+      "description": "Generate a personalised tour-guide-style vacation summary for a destination city. Issues one SPARQL CONSTRUCT query that traverses the full destination subgraph in a single round-trip \u2014 airport \u2192 city \u2192 country \u2192 currency, language, transport, travel styles, weather, neighbourhoods, cuisines, attractions, festivals \u2014 then a conditional SELECT for visa check when passport_country_code is available. Formats the combined graph result as a structured markdown narrative in the voice of a helpful tour guide.",
+      "examples": [
+        "Tell me everything about Bangkok for my trip.",
+        "Give me a vacation guide to Singapore.",
+        "I'm planning a trip to Tokyo \u2014 what should I know?",
+        "Plan my vacation to Bali.",
+        "What's Bangkok like for a holiday?",
+        "Give me a full destination guide for BKK."
+      ],
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "optional_params": [
+        "month_num",
+        "passport_country_code",
+        "username"
+      ],
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> CONSTRUCT { ?airport ex:prop_airportCode :destination_airport_code ; ex:prop_airportName ?airportName ; ex:prop_airportType ?airportType ; ex:prop_terminalCount ?terminalCount ; ex:prop_isInternational ?isInternational ; ex:prop_hasTransitHotel ?hasTransitHotel ; ex:prop_hasLounge ?hasLounge ; ex:prop_inCity ?city . ?city ex:prop_cityName ?cityName ; ex:prop_safetyTier ?safetyTier ; ex:prop_soloFemaleSafe ?soloFemaleSafe ; ex:prop_safetyIndex ?safetyIndex ; ex:prop_costOfLivingIndex ?costOfLivingIndex ; ex:prop_utcOffset ?utcOffset ; ex:prop_timezoneName ?timezoneName ; ex:prop_publicTransportWidelyUsedInCountry ?publicTransportWidelyUsed ; ex:prop_belongsToCountry ?country ; ex:prop_usesPrimaryLanguage ?lang ; ex:prop_hasTransportMode ?transport ; ex:prop_hasTravelStyle ?style ; ex:prop_hasWeatherObservation ?obs ; ex:prop_hasSubcityArea ?area ; ex:prop_hasCuisine ?cuisine ; ex:prop_hasAttraction ?attraction ; ex:prop_hasFestival ?festival . ?country ex:prop_countryName ?countryName ; ex:prop_countryCode ?countryCode ; ex:prop_continent ?continent ; ex:prop_region ?region ; ex:prop_capitalCity ?capital ; ex:prop_hasCurrency ?currency . ?capital ex:prop_cityName ?capitalCityName . ?currency ex:prop_currencyCode ?currencyCode ; ex:prop_currencyName ?currencyName ; ex:prop_exchangeRate ?exchangeRate . ?lang ex:prop_languageName ?languageName . ?transport ex:prop_transportModeName ?transportModeName . ?style ex:prop_travelStyleName ?travelStyleName . ?obs ex:prop_monthNum ?monthNum ; ex:prop_monthName ?monthName ; ex:prop_avgTempC ?avgTempC ; ex:prop_avgRainfallMm ?avgRainfallMm ; ex:prop_weatherProfileCode ?weatherProfileCode ; ex:prop_seasonCode ?seasonCode ; ex:prop_bestTimeToVisit ?bestTimeToVisit ; ex:prop_weatherSummary ?weatherSummary . ?area ex:prop_subcityAreaName ?areaName ; ex:prop_areaSummary ?areaSummary . ?cuisine ex:prop_cuisineType ?cuisineType . ?attraction ex:prop_attractionName ?attractionName ; ex:prop_attractionType ?attractionType ; ex:prop_attractionTier ?attractionTier . ?festival ex:prop_festivalName ?festivalName ; ex:prop_festivalMonthNum ?festivalMonthNum ; ex:prop_festivalType ?festivalType . } WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_airportName ?airportName ; ex:prop_inCity ?city . ?city ex:prop_cityName ?cityName ; ex:prop_belongsToCountry ?country . ?country ex:prop_countryName ?countryName ; ex:prop_countryCode ?countryCode ; ex:prop_continent ?continent ; ex:prop_region ?region . OPTIONAL { ?airport ex:prop_airportType ?airportType } OPTIONAL { ?airport ex:prop_terminalCount ?terminalCount } OPTIONAL { ?airport ex:prop_isInternational ?isInternational } OPTIONAL { ?airport ex:prop_hasTransitHotel ?hasTransitHotel } OPTIONAL { ?airport ex:prop_hasLounge ?hasLounge } OPTIONAL { ?city ex:prop_safetyTier ?safetyTier } OPTIONAL { ?city ex:prop_soloFemaleSafe ?soloFemaleSafe } OPTIONAL { ?city ex:prop_safetyIndex ?safetyIndex } OPTIONAL { ?city ex:prop_costOfLivingIndex ?costOfLivingIndex } OPTIONAL { ?city ex:prop_utcOffset ?utcOffset } OPTIONAL { ?city ex:prop_timezoneName ?timezoneName } OPTIONAL { ?city ex:prop_publicTransportWidelyUsedInCountry ?publicTransportWidelyUsed } OPTIONAL { ?country ex:prop_capitalCity ?capital . ?capital ex:prop_cityName ?capitalCityName } OPTIONAL { ?country ex:prop_hasCurrency ?currency . ?currency ex:prop_currencyCode ?currencyCode ; ex:prop_currencyName ?currencyName . OPTIONAL { ?currency ex:prop_exchangeRate ?exchangeRate } } OPTIONAL { ?city ex:prop_usesPrimaryLanguage ?lang . ?lang ex:prop_languageName ?languageName } OPTIONAL { ?city ex:prop_hasTransportMode ?transport . ?transport ex:prop_transportModeName ?transportModeName } OPTIONAL { ?city ex:prop_hasTravelStyle ?style . ?style ex:prop_travelStyleName ?travelStyleName } OPTIONAL { ?city ex:prop_hasWeatherObservation ?obs . ?obs ex:prop_monthNum ?monthNum ; ex:prop_monthName ?monthName ; ex:prop_avgTempC ?avgTempC ; ex:prop_avgRainfallMm ?avgRainfallMm ; ex:prop_weatherProfileCode ?weatherProfileCode ; ex:prop_seasonCode ?seasonCode ; ex:prop_bestTimeToVisit ?bestTimeToVisit ; ex:prop_weatherSummary ?weatherSummary } OPTIONAL { ?city ex:prop_hasSubcityArea ?area . ?area ex:prop_subcityAreaName ?areaName ; ex:prop_areaSummary ?areaSummary . FILTER NOT EXISTS { ?area ex:prop_researchStatus \"pending\" } } OPTIONAL { ?city ex:prop_hasCuisine ?cuisine . ?cuisine ex:prop_cuisineType ?cuisineType } OPTIONAL { ?city ex:prop_hasAttraction ?attraction . ?attraction ex:prop_attractionName ?attractionName ; ex:prop_attractionType ?attractionType ; ex:prop_attractionTier ?attractionTier } OPTIONAL { ?city ex:prop_hasFestival ?festival . ?festival ex:prop_festivalName ?festivalName ; ex:prop_festivalMonthNum ?festivalMonthNum ; ex:prop_festivalType ?festivalType } }",
+      "visa_enrichment_trigger": "visa_check_for_destination",
+      "response_format": "vacation_plan",
+      "note": "Single CONSTRUCT query traverses the full destination subgraph in one GraphDB round-trip \u2014 no enrichment_triggers, no parallel fan-out. Parse result with rdflib: airport \u2192 city \u2192 country \u2192 all relationships. Visa check fires as a separate conditional SELECT (visa_check_for_destination) only when passport_country_code is available \u2014 either from explicit param or resolved first via user_passport_country using username. ResponseBuilder walks the graph in narrative order: hook \u2192 when to go (bestTimeToVisit months highlighted, month_num personalised if provided) \u2192 airport amenities \u2192 getting around \u2192 neighbourhoods \u2192 food \u2192 attractions \u2192 events \u2192 travel styles \u2192 visa \u2192 currency \u2192 timezone \u2192 language. This is why we use GraphDB: one traversal captures every relationship without complex relational joins."
+    },
+    "destination_highlights": {
+      "description": "Returns a compact highlights summary for a destination: what to see/do (attractions by tier), any festivals in the specified month, and weather context for that month. Use when the user asks what is good, what to do, what is worth doing, or what is happening in a city, especially with a month specified.",
+      "category": "enrichment",
+      "execution_phase": "sparql_first",
+      "sparql_type": "select",
+      "required_params": [
+        "destination_airport_code"
+      ],
+      "optional_params": [
+        "month_num"
+      ],
+      "response_format": "highlights",
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?resultType ?name ?tier ?festivalType ?monthNum ?avgTempC ?avgRainfallMm ?weatherSummary WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . { ?city ex:prop_hasAttraction ?item . ?item ex:prop_attractionName ?name ; ex:prop_attractionTier ?tier . BIND(\"attraction\" AS ?resultType) } UNION { ?city ex:prop_hasFestival ?item . ?item ex:prop_festivalName ?name ; ex:prop_festivalMonthNum ?monthNum ; ex:prop_festivalType ?festivalType . BIND(\"festival\" AS ?resultType) } UNION { ?city ex:prop_hasWeatherObservation ?item . ?item ex:prop_monthNum ?monthNum ; ex:prop_avgTempC ?avgTempC ; ex:prop_avgRainfallMm ?avgRainfallMm ; ex:prop_weatherSummary ?weatherSummary . BIND(\"weather\" AS ?resultType) } }"
+    }
+  }
+}
