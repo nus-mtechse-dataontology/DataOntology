@@ -82,9 +82,6 @@ def orchestrator():
         SyntacticValidationHandler,
     )
     from llm_gateway.gateway_factory import LLMGatewayFactory
-    from llm_gateway.gateway_registry import GatewayRegistry
-    from llm_gateway.providers.gemini_gateway import GeminiGateway
-    from llm_gateway.providers.openai_gateway import OpenAIGateway
     from orchestrator.orchestrator import Orchestrator
     from orchestrator.response_builder import ResponseBuilder
     from prompt_builder.prompt_builder import PromptBuilder
@@ -99,9 +96,6 @@ def orchestrator():
 
     session = DBSession(config)
     SQLModel.metadata.create_all(session.engine)
-
-    GatewayRegistry.register("gemini", GeminiGateway)
-    GatewayRegistry.register("openai", OpenAIGateway)
 
     llm_config = config.get("llm", {})
     provider = os.getenv("LLM_PROVIDER") or llm_config.get("provider", "gemini")

@@ -8,6 +8,8 @@ import secrets
 import tomllib
 import traceback
 
+from dotenv import load_dotenv
+
 from fastapi import FastAPI
 from sqlmodel import SQLModel
 
@@ -23,9 +25,6 @@ from session.db_session import DBSession
 from entities import *
 from execution.sql_executor import SQLExecutor
 from llm_gateway.gateway_factory import LLMGatewayFactory
-from llm_gateway.gateway_registry import GatewayRegistry
-from llm_gateway.providers.gemini_gateway import GeminiGateway
-from llm_gateway.providers.openai_gateway import OpenAIGateway
 from orchestrator.orchestrator import Orchestrator
 from orchestrator.response_builder import ResponseBuilder
 from prompt_builder.prompt_builder import PromptBuilder
@@ -33,6 +32,15 @@ from validators.semantic.semantic_validator import SemanticValidator
 from validators.syntactic.syntactic_validator import SyntacticValidator
 
 logger = logging.getLogger("data_ontology")
+
+
+def load_env(project_root: Path) -> None:
+    if load_dotenv is None:
+        logger.warning("python-dotenv is not installed; skipping .env loading.")
+        return
+
+    load_dotenv(project_root / ".env", override=False)
+    load_dotenv(project_root / "scripts" / "local.env", override=False)
 
 
 def load_config() -> dict:
@@ -53,81 +61,26 @@ def get_key() -> str:
 
 
 def init_llm_gateway():
-    # ── Register LLM Providers ──────────────────────────────────────
-    GatewayRegistry.register("gemini", GeminiGateway)
-    GatewayRegistry.register("openai", OpenAIGateway)
-    logger.info("Registered LLM providers: %s", ", ".join(GatewayRegistry.get_all().keys()))
-    
-    # ── Configuration ────────────────────────────────────────────────
     config = load_config()
     llm_config = config.get("llm", {})
-    
-    # LLM provider selection policy:
-    # 1) Respect explicit LLM_PROVIDER if set.
-    # 2) If not set and exactly one provider key exists, infer that provider.
-    # 3) If not set and multiple provider keys exist, fail fast and require LLM_PROVIDER.
-    # 4) If not set and no provider keys exist, default to gemini for backward compatibility.
-    config_provider = llm_config.get("provider")
     providers_config = llm_config.get("providers", {})
-    
-    explicit_provider = os.getenv("LLM_PROVIDER") or config_provider
-    gemini_api_key = os.getenv("GEMINI_API_KEY")
-    openai_api_key = os.getenv("OPENAI_API_KEY")
-    gemini_model = os.getenv("GEMINI_MODEL")
-    openai_model = os.getenv("OPENAI_MODEL")
-    
-    if explicit_provider:
-        llm_provider = explicit_provider
-    else:
-        detected_providers: list[str] = []
-        if gemini_api_key:
-            detected_providers.append("gemini")
-        if openai_api_key:
-            detected_providers.append("openai")
-        
-        if len(detected_providers) == 1:
-            llm_provider = detected_providers[0]
-            logger.info("Inferred LLM provider from configured API key: %s", llm_provider)
-        elif len(detected_providers) > 1:
-            raise ValueError(
-                "Multiple LLM API keys detected but LLM_PROVIDER is not set. "
-                "Set LLM_PROVIDER explicitly (e.g., 'gemini' or 'openai')."
-            )
-        else:
-            llm_provider = "gemini"
-            logger.warning(
-                "No provider-specific API key detected and LLM_PROVIDER not set. "
-                "Defaulting to provider=gemini."
-            )
-    
-    llm_api_key = os.getenv("LLM_API_KEY")
-    if not llm_api_key:
-        if llm_provider == "gemini":
-            llm_api_key = gemini_api_key
-        elif llm_provider == "openai":
-            llm_api_key = openai_api_key
-    
+    llm_provider = (llm_config.get("provider") or "gemini").lower()
     selected_provider_config = providers_config.get(llm_provider, {})
-    config_model = selected_provider_config.get("model")
-    config_timeout = selected_provider_config.get("timeout_seconds", 30)
-    
-    llm_model = os.getenv("LLM_MODEL") or config_model
-    if not llm_model:
-        if llm_provider == "gemini":
-            llm_model = gemini_model
-        elif llm_provider == "openai":
-            llm_model = openai_model
-    
-    llm_timeout_raw = os.getenv("LLM_TIMEOUT")
-    if llm_timeout_raw is None:
-        llm_timeout_raw = str(config_timeout)
-    
+
+    llm_api_key = selected_provider_config.get("api_key")
+    llm_model = selected_provider_config.get("model")
+    llm_timeout_raw = str(
+        selected_provider_config.get(
+            "timeout_seconds",
+            llm_config.get("timeout_seconds", 30),
+        )
+    )
+
     try:
         llm_timeout_seconds = int(llm_timeout_raw)
     except (TypeError, ValueError) as exc:
         raise ValueError(f"Invalid LLM timeout value: {llm_timeout_raw}") from exc
-    
-    # ── Create components ────────────────────────────────────────────
+
     try:
         llm_gateway = LLMGatewayFactory.create(
             provider=llm_provider,
@@ -153,41 +106,30 @@ async def startup(app: FastAPI):
     """
     Initialise all dependencies for the Application.
 
-    Environment variables:
-        LLM_PROVIDER     - Optional override for configured LLM provider ('gemini' or 'openai')
-        LLM_API_KEY      - Optional override API key for the selected LLM provider
-        LLM_MODEL        - Optional override model name for the selected LLM provider
-        LLM_TIMEOUT      - Optional override timeout in seconds for the selected provider
-        GEMINI_API_KEY   - (Deprecated) API key for Gemini LLM (use LLM_API_KEY with LLM_PROVIDER=gemini)
-        GEMINI_MODEL     - (Deprecated) Gemini model fallback when LLM_MODEL/config model is absent
-        OPENAI_API_KEY   - (Alternative) OpenAI API key (use LLM_API_KEY with LLM_PROVIDER=openai)
-        OPENAI_MODEL     - (Alternative) OpenAI model fallback when LLM_MODEL/config model is absent
-
     config.toml LLM section:
         [llm]
         provider = "gemini"
+        timeout_seconds = 30
 
         [llm.providers.gemini]
         model = "gemini-3-flash-preview"
-        timeout_seconds = 30
+        # timeout_seconds = 30
+        # api_key = "..."
 
         [llm.providers.openai]
-        model = "gpt-5.4-nano"
-        timeout_seconds = 30
+        model = "gpt-5-nano"
+        # timeout_seconds = 30
+        # api_key = "..."
 
     Provider resolution order:
-        1) LLM_PROVIDER environment override
-        2) config.toml [llm].provider
-        3) If still unset and exactly one provider key exists, infer that provider
-        4) If still unset and multiple provider keys exist, startup fails and requires explicit provider
-        5) If still unset and no provider keys exist, defaults to gemini (backward compatibility)
-
-    If provider is inferred from API keys (no explicit provider from env/config):
-        1) If exactly one provider key exists, infer that provider.
-        2) If multiple provider keys exist, startup fails and requires LLM_PROVIDER.
-        3) If no provider keys exist, defaults to gemini (backward compatibility).
+        1) config.toml [llm].provider
+        2) default 'gemini'
     """
     
+    project_root = Path(__file__).resolve().parents[2]
+    os.environ.setdefault("PROJECT_PATH", str(project_root))
+    load_env(project_root)
+
     config = load_config()
     session = DBSession(config)
     SQLModel.metadata.create_all(session.engine)

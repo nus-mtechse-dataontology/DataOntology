@@ -26,3 +26,6 @@ dist/
 build/
 
 target/
+vault/postgres.password
+vault/postgres.user
+
