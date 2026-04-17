@@ -75,12 +75,13 @@ class SQLExecutor:
         try:
             result_rows = self._dao.execute_raw_query(compiled_sql.sql, compiled_sql.bound_params)
             result_set = ResultSet(
+                type="flights",
                 request_id=compiled_sql.request_id,
-                result_set=[Row(data=res) for res in result_rows]
+                result_set=result_rows
             )
 
             self._log.info("[%s] Query returned %d row(s)", compiled_sql.request_id, len(result_set.result_set))
-            self._log.debug("[%s] Result set: %s", compiled_sql.request_id, [row.data for row in result_set.result_set])
+            self._log.debug("[%s] Result set: %s", compiled_sql.request_id, [row for row in result_set.result_set])
 
             return SuccessResponse[ResultSet](
                 request_id=compiled_sql.request_id,

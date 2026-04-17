@@ -1,5 +1,4 @@
 from adapters.telegram import TelegramUpdateMapper
-from adapters.telegram.formatter import build_telegram_text_from_response
 from models.common import ErrorResponse, SuccessResponse
 from models.pipeline import NLQRequest, QuestionResponse
 from models.telegram_model import Update, Message, Chat

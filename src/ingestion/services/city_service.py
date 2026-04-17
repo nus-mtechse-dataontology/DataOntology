@@ -6,7 +6,7 @@ from dao.city_dao import CityDAO
 
 class CityService:
 	def __init__(self, city_dao: CityDAO):
-		self._log = logging.getLogger("ontology")
+		self._log = logging.getLogger("data_ontology")
 		self._city_dao = city_dao
 	
 	def insert_cities(self, city_payload: dict):

@@ -38,7 +38,7 @@ class TelegramClient(MessageClient):
             raise RuntimeError(f"Telegram sendChatAction request failed: {exc}") from exc
 
     def send_message(self, chat_id: int, text: str) -> None:
-        payload = {"chat_id": chat_id, "text": text}
+        payload = {"chat_id": chat_id, "text": text, "parse_mode": "MarkdownV2"}
         url = f"{self._base_url}/sendMessage"
 
         for attempt in range(1, self._max_attempts + 1):

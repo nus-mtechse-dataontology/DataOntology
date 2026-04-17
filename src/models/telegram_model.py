@@ -14,7 +14,13 @@ class Chat(BaseModel):
 	type_: str = Field(alias="type")
 	first_name: str
 	last_name: str | None = None
-	username: str
+	username: str | None = None
+
+
+class MessageEntity(BaseModel):
+	type_: str = Field(alias="type")
+	offset: int
+	length: int
 	
 
 class Message(BaseModel):
@@ -23,6 +29,7 @@ class Message(BaseModel):
 	from_user: User | None = Field(alias="from", default=None)
 	text: str
 	chat: Chat
+	entities: list[MessageEntity] | None = None
 
 
 class ReactionType(BaseModel):
@@ -39,7 +46,7 @@ class ReactionCount(BaseModel):
 class MessageReactionUpdated(BaseModel):
 	chat: Chat
 	message_id: int
-	user: User | None
+	user: User | None = None
 	date: int
 	old_reaction: list[ReactionType]
 	new_reaction: list[ReactionType]
@@ -54,6 +61,7 @@ class MessageReactionCountUpdated(BaseModel):
 
 class Update(BaseModel):
 	update_id: int
-	message: Message
+	message: Message | None = None
+	edited_message: Message | None = None
 	message_reaction: MessageReactionUpdated | None = None
 	message_reaction_count: MessageReactionCountUpdated | None = None

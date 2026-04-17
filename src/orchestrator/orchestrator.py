@@ -14,7 +14,7 @@ class Orchestrator:
         semantics_validation_handler: SemanticsValidationHandler,
         sql_compiler_handler: SQLCompilerHandler,
         sql_executor_handler: SQLExecutorHandler,
-        response_builder_handler: ResponseBuilderHandler
+        response_builder_handler: ResponseFormatterHandler
     ) -> None:
         self._request_handler = request_handler
         self._prompt_handler = prompt_handler
@@ -38,6 +38,6 @@ class Orchestrator:
 
     def handle_question(
         self, request: NLQRequest
-    ) -> SuccessResponse[QuestionResponse] | ErrorResponse:
+    ) -> SuccessResponse | ErrorResponse:
         return self._request_handler.handle(request)
     

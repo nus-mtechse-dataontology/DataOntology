@@ -2,7 +2,7 @@
 
 from unittest.mock import Mock
 
-from handlers.response_builder_handler import ResponseBuilderHandler
+from handlers.response_formatter_handler import ResponseFormatterHandler
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
 from models.pipeline import NLQRequest, QuestionResponse, ResultSet, Row
 
@@ -18,7 +18,7 @@ def _question_response():
 def _make_handler(builder_return):
     builder = Mock()
     builder.build.return_value = builder_return
-    return ResponseBuilderHandler(response_builder=builder), builder
+    return ResponseFormatterHandler(response_builder=builder), builder
 
 
 def _make_next():

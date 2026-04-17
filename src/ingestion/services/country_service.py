@@ -6,7 +6,7 @@ from dao.country_dao import CountryDAO
 
 class CountryService:
 	def __init__(self, country_dao: CountryDAO):
-		self._log = logging.getLogger("ontology")
+		self._log = logging.getLogger("data_ontology")
 		self._country_dao = country_dao
 	
 	def insert_countries(self, countries_payload: dict):

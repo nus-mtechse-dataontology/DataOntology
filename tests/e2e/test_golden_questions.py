@@ -72,14 +72,14 @@ def orchestrator():
     from dao.fact_flight_info_dao import FactFlightInfoDAO
     from execution.sql_executor import SQLExecutor
     from handlers import (
-        LLMHandler,
-        PromptHandler,
-        RequestHandler,
-        ResponseBuilderHandler,
-        SemanticsValidationHandler,
-        SQLCompilerHandler,
-        SQLExecutorHandler,
-        SyntacticValidationHandler,
+	    LLMHandler,
+	    PromptHandler,
+	    RequestHandler,
+	    ResponseFormatterHandler,
+	    SemanticsValidationHandler,
+	    SQLCompilerHandler,
+	    SQLExecutorHandler,
+	    SyntacticValidationHandler,
     )
     from llm_gateway.gateway_factory import LLMGatewayFactory
     from orchestrator.orchestrator import Orchestrator
@@ -120,7 +120,7 @@ def orchestrator():
         semantics_validation_handler=SemanticsValidationHandler(SemanticValidator()),
         sql_compiler_handler=SQLCompilerHandler(SQLCompiler()),
         sql_executor_handler=SQLExecutorHandler(SQLExecutor(fact_flight_info_dao)),
-        response_builder_handler=ResponseBuilderHandler(ResponseBuilder()),
+        response_builder_handler=ResponseFormatterHandler(ResponseBuilder()),
     )
 
 
