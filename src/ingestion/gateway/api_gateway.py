@@ -8,7 +8,7 @@ from requests.models import PreparedRequest
 
 class ApiGateway:
 	def __init__(self):
-		self._log = logging.getLogger("ontology")
+		self._log = logging.getLogger("data_ontology")
 		self._session = requests.session()
 	
 	def call_api(self, request: PreparedRequest) -> dict[str, Any] | list[Any]:

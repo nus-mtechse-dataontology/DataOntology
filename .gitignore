@@ -29,3 +29,6 @@ target/
 vault/postgres.password
 vault/postgres.user
 
+
+graphify-out
+tmp

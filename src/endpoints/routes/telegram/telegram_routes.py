@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from typing import Annotated
 
@@ -28,7 +29,7 @@ async def telegram_webhook(
 ):
     _log.info(
         "Telegram Webhook: Received request from: (%s)",
-        payload.message.from_user
+        payload.message.from_user if payload.message else payload.edited_message.from_user
     )
 
     if not verified:
@@ -42,7 +43,15 @@ async def telegram_webhook(
         )
 
     handler = request.app.state.telegram_handler
-    result = handler.handle(payload)
+    
+    task = await asyncio.gather(
+        asyncio.to_thread(
+            handle_request,
+            handler,
+            payload
+        )
+    )
+    result = task[0]
 
     if isinstance(result, ErrorResponse):
         _log.error(
@@ -74,3 +83,7 @@ async def telegram_webhook(
             "debug": response,
         }
     )
+
+
+def handle_request(handler, payload):
+    return handler.handle(payload)

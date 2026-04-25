@@ -1,4 +1,3 @@
-from drivers.driver import Driver
 from factory.driver_factory import DriverFactory
 import importlib as im
 

@@ -22,6 +22,7 @@ class NLQRequest(BaseModel):
     query_plan: QueryPlan | None = None
     compiled_sql: CompiledSQL | None = None
     result_set: ResultSet | None = None
+    source: str = "web"
 
 class PromptRequest(BaseModel):
     request_id: str
@@ -59,10 +60,11 @@ class Row(BaseModel):
 
 
 class ResultSet(BaseModel):
+    type_: str = Field(alias="type", default="general")
     request_id: str
-    result_set: List[Row] = Field(default_factory=list)
+    result_set: list[dict]
 
 
 class QuestionResponse(BaseModel):
     request_id: str
-    response: str
+    response: ResultSet

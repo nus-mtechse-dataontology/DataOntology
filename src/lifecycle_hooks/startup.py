@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from sqlmodel import SQLModel
 
-from adapters.telegram import TelegramWebhookHandler, TelegramClient, TelegramFormatter, TelegramUpdateMapper
+from adapters.telegram import TelegramWebhookHandler, TelegramClient, TelegramUpdateMapper
 from dao.fact_flight_info_dao import FactFlightInfoDAO
 from handlers import *
 from services.auth.jwt_handler import JWTHandler
@@ -26,9 +26,10 @@ from dao.accounts_dao import AccountsDAO
 from session.db_session import DBSession
 from entities import *
 from execution.sql_executor import SQLExecutor
+from formatter.telegram_formatter import TelegramFormatter
+from formatter.web_formatter import WebFormatter
 from llm_gateway.gateway_factory import LLMGatewayFactory
 from orchestrator.orchestrator import Orchestrator
-from orchestrator.response_builder import ResponseBuilder
 from prompt_builder.prompt_builder import PromptBuilder
 from validators.semantic.semantic_validator import SemanticValidator
 from validators.syntactic.syntactic_validator import SyntacticValidator
@@ -114,8 +115,7 @@ def setup_telegram_handler(orchestrator):
     telegram_webhook_handler = TelegramWebhookHandler(
         mapper=TelegramUpdateMapper(),
         orchestrator=orchestrator,
-        client=TelegramClient(bot_token),
-        formatter=TelegramFormatter()
+        client=TelegramClient(bot_token)
     )
     
     return telegram_webhook_handler
@@ -170,7 +170,11 @@ async def startup(app: FastAPI):
     semantic_validator = SemanticValidator()
     sql_compiler = SQLCompiler()
     sql_executor = SQLExecutor(fact_flight_info_dao)
-    response_builder = ResponseBuilder()
+    
+    formatters: dict[str, type] = {
+        "telegram": TelegramFormatter,
+        "web": WebFormatter,
+    }
     
     request_handler = RequestHandler()
     prompt_handler = PromptHandler(prompt_builder)
@@ -179,7 +183,7 @@ async def startup(app: FastAPI):
     semantics_validation_handler = SemanticsValidationHandler(semantic_validator)
     sql_compiler_handler = SQLCompilerHandler(sql_compiler)
     sql_executor_handler = SQLExecutorHandler(sql_executor)
-    response_builder_handler = ResponseBuilderHandler(response_builder)
+    response_builder_handler = ResponseFormatterHandler(formatters)
     
     # ── Wire orchestrator ────────────────────────────────────────────
     logger.info("Wiring Orchestrator")

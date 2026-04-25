@@ -6,7 +6,7 @@ from dao.airline_coverage_dao import AirlineCoverageDAO
 
 class AirlineCoverageService:
 	def __init__(self, airline_coverage_dao: AirlineCoverageDAO):
-		self._log = logging.getLogger("ontology")
+		self._log = logging.getLogger("data_ontology")
 		self._airline_coverage_dao = airline_coverage_dao
 		
 	def insert_coverages(self, coverage_payload: dict):
