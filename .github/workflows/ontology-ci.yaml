@@ -37,7 +37,9 @@ jobs:
 
       # --- UNIT TESTS ---
       - name: Run Tests
-        run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+          COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
 
       - name: Upload Build Test Reports
         if: always()
