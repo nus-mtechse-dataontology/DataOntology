@@ -4,7 +4,7 @@ from unittest.mock import Mock
 
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
 from models.pipeline import NLQRequest, QuestionResponse
-from orchestrator.orchestrator import Orchestrator
+from src.orchestrator.orchestrator import Orchestrator
 
 REQUEST_ID = "req-123"
 
