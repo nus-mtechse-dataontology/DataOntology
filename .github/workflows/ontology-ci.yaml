@@ -33,7 +33,7 @@ jobs:
         run: |
           python -m pip install uv
           # Including pytest-cov here as we discussed
-          uv pip install --system .[dev] pytest-cov 
+          uv pip install --system -e .[dev] pytest-cov 
 
       # --- UNIT TESTS ---
       - name: Run Tests
