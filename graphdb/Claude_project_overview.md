@@ -1,5 +1,5 @@
 # DataOntology — Claude Context Document
-_Last updated: 2026-04-16. Reflects verified filesystem state._
+_Last updated: 2026-04-25 (session 5). Reflects verified filesystem state._
 
 ---
 
@@ -14,7 +14,48 @@ Two complementary data stores coexist — they are completely independent and co
 | **SQL** | `fact_flight_info` (SQLite dev / PostgreSQL prod) | Flight transaction data — airport codes, airline codes, aircraft codes, fares, dates, duration, cabin class, trip type, currency | All primary business questions — filtering, aggregation, availability, budgets |
 | **GraphDB** | `data_ontology_dml.ttl` (OWL/RDF) | All entity resolution and enrichment — airport names, city/country/continent/region, airline names, aircraft models, safety, weather, attractions, festivals, visa, travel style, etc. | Resolving codes → names; destination enrichment; geographic/semantic filters; route coverage |
 
-**Critical design rule:** `fact_flight_info` contains ONLY codes and numerics (see schema below). There are NO SQL dimension tables. GraphDB is the single source of truth for all entity names and attributes.
+**Critical design rule:** `fact_flight_info` contains ONLY codes and numerics. There are NO SQL dimension tables. GraphDB is the single source of truth for all entity names and attributes.
+
+---
+
+## How the System Works — End to End
+
+```
+User question (plain English)
+  │
+  ▼
+[1] LLM (Gemma 4 / Gemini) reads semantic layer → produces query plan JSON
+       {intent, parameters, missing_params, confidence}
+  │
+  ▼
+[2] Validator — checks intent is known, params are valid types/enums
+  │
+  ▼
+[3] Router — reads execution_phase from semantic layer, picks one of 4 paths
+  │
+  ├──── sql_first ──────────────────────────────────────────────────────────
+  │       SQL query on fact_flight_info → rows (codes + numbers)
+  │       Optional: SPARQL CONSTRUCT for destination card enrichment
+  │
+  ├──── sparql_then_sql ────────────────────────────────────────────────────
+  │       SPARQL SELECT → list of airport codes matching semantic filter
+  │       SQL: WHERE airport_code IN (that list) → rows (codes + numbers)
+  │
+  ├──── sparql_only / sparql_first ─────────────────────────────────────────
+  │       SPARQL SELECT → direct answer (visa lists, route coverage, etc.)
+  │
+  └──── sparql CONSTRUCT (vacation_plan) ───────────────────────────────────
+          One CONSTRUCT query → full destination subgraph (rdflib Graph)
+          Optional: conditional visa SELECT
+  │
+  ▼
+[4] Destination name enrichment (all sql paths)
+       SPARQL lookup: airport codes → "City, Country (CODE)"
+       Applied in-place to SQL result rows before formatting
+  │
+  ▼
+[5] Formatter → human-readable terminal output
+```
 
 ---
 
@@ -22,16 +63,16 @@ Two complementary data stores coexist — they are completely independent and co
 
 ### Execution Patterns (from `semantic_layer_v3.json`)
 
-**`sql_first` (primary)** — 18 intents
-SQL queries `fact_flight_info` using codes only → returns codes + numerics → GraphDB enrichment resolves names and destination context.
+**`sql_first` (primary)** — 16 intents
+SQL queries `fact_flight_info` using codes only → optional GraphDB CONSTRUCT enrichment for destination context.
 
-**`sparql_then_sql` (hybrid)** — 7 intents
-SPARQL asks GraphDB "which airport codes match this filter?" (travel style, safety tier, weather, etc.) → Python holds the code list → SQL uses `IN :destination_airport_codes` to get real fares for those airports.
+**`sparql_then_sql` (hybrid)** — 11 intents
+SPARQL asks GraphDB "which airport codes match this filter?" (travel style, safety tier, weather, season, attraction type, etc.) → Python holds the code list → SQL uses `IN :destination_airport_codes` to get real fares.
 
-**`sparql_first` / `sparql_only` (graphdb_primary)** — 7 intents
-GraphDB answers the whole question (continent/region lookup, route coverage, visa policy lists, currencies). SQL is an optional bolt-on to validate real flight availability.
+**`sparql_first` / `sparql_only` (graphdb_primary)** — 22 intents
+GraphDB answers the whole question (route coverage, visa policy lists, country info, currencies, airport info, festivals, safe destinations, etc.).
 
-**`sparql_first` + `requires_business_result: true` (enrichment)** — 15 intents
+**`sparql_first` + `requires_business_result: true` (enrichment)** — 17 intents
 After a primary SQL result exists, fires SPARQL per destination airport code to attach city/country context, weather, attractions, safety, transport, festivals, visa, etc.
 
 ### How the Two Stores Communicate
@@ -52,7 +93,7 @@ The shared join keys are:
 - **Airport code** (`f_destination_airport_code` in SQL ↔ `ex:prop_airportCode` in GraphDB)
 - **Airline code** (`f_airline_code` in SQL ↔ `ex:prop_airlineCode` in GraphDB)
 - **Aircraft code** (`f_aircraft_code` in SQL ↔ `ex:prop_aircraftCode` in GraphDB)
-- **Country code** (`f_destination_country_code` resolved via GraphDB ↔ `ex:prop_countryCode`)
+- **Country code** (resolved via GraphDB airport→city→country chain ↔ `ex:prop_countryCode`)
 
 ---
 
@@ -61,112 +102,70 @@ The shared join keys are:
 ```
 /Users/keewenjie/Desktop/NUS/DataOntology/
 ├── DataOntology/           ← main Python service (has its own .git)
-│   ├── src/                ← application source
+│   ├── src/                ← production FastAPI application
+│   ├── graphdb/            ← dev pipeline + graph scripts
+│   │   ├── pipeline.py          ← interactive dev pipeline (keyboard → terminal)
+│   │   ├── config.py            ← paths, API keys, model, dev defaults
+│   │   ├── llm.py               ← LLM call with retry + fallback logic
+│   │   ├── compiler.py          ← SPARQL + SQL template compiler
+│   │   ├── sparql_exec.py       ← GraphDB HTTP client (SELECT + CONSTRUCT)
+│   │   ├── db.py                ← SQLite loader + executor
+│   │   ├── loader.py            ← semantic layer loader + prompt context builder
+│   │   ├── response.py          ← all formatters
+│   │   ├── validator.py         ← query plan validation
+│   │   ├── data_ontology_dml.ttl ← RDF instance data (~1.8 MB, checked in here for dev)
+│   │   ├── Claude_project_overview.md  ← this file
+│   │   ├── csv_files/
+│   │   │   ├── fact_flight_info.csv     ← flight transactions (codes + numerics)
+│   │   │   └── test_cases.csv           ← test cases + results
+│   │   └── utility/
+│   │       └── run_tests.py     ← automated test runner (reads/writes test_cases.csv)
 │   └── resources/
 │       └── semantics/
-│           └── semantic_layer_v3.json   ← dual-layer intent/template model
+│           └── semantic_layer_v3.json   ← dual-layer intent/template model (source of truth)
 ├── graphdb/                ← graph layer scripts + TTL exports
-│   ├── build_graphdb_ttl.py             ← reads tmp/ CSVs → writes TTL files
+│   ├── build_graphdb_ttl.py             ← reads csv_files/ CSVs → writes TTL files
 │   ├── data_ontology_ddl.ttl            ← OWL schema (classes + properties)
 │   └── data_ontology_dml.ttl            ← RDF instance data (~1.8 MB)
-├── tmp/                    ← curated CSV source data + this file
-│   ├── fact_flight_info.csv             ← THE ONLY SQL TABLE (codes + numerics)
-│   ├── dim_*.csv                        ← source data for GraphDB TTL builder ONLY
-│   └── Claude_project_overview.md       ← this file
-├── PROJECT_OVERVIEW.md     ← full human-facing overview (canonical reference)
-└── tmp.zip
+└── tmp/                    ← curated CSV source data (input to build_graphdb_ttl.py only)
 ```
+
+> **Important:** The `graphdb/csv_files/` directory (inside `DataOntology/`) is what `reload_graphdb.py` reads from. The `tmp/` directory at the repo root is where `build_graphdb_ttl.py` reads its source dim files. These are different locations.
 
 The actual git repo root is `DataOntology/DataOntology/` (has `.git`).
 
-> **Important:** All `dim_*.csv` files in `tmp/` are INPUT to `graphdb/build_graphdb_ttl.py`. They are **not** SQL tables and are **not** loaded into any relational database. The only relational data store is `fact_flight_info`.
-
 ---
 
-## Application Architecture (7-Stage Pipeline)
+## Dev Config (`graphdb/config.py`)
 
-```
-NLQRequest
-  [1] PromptBuilder       → PromptBundle (Jinja2 + semantic_layer_v3.json intents + params)
-  [2] LLMGateway          → LLMRawResponse (Gemini or OpenAI)
-  [3] SyntacticValidator  → QueryPlan (JSON parse + schema check)
-  [4] SemanticValidator   → QueryPlan (intent + param check against v3)
-  [5] SQLCompiler         → CompiledSQL (parameterized SQL, fact_flight_info only)
-  [6] SQLExecutor         → ResultSet (codes + numerics)
-  [7] ResponseBuilder     → QuestionResponse
-```
+| Setting | Current Value | Purpose |
+|---------|--------------|---------|
+| `GEMINI_MODEL` | `gemma-4-31b-it` | Primary LLM model |
+| `FALLBACK_MODELS` | `["gemini-2.0-flash", "gemini-2.0-flash-lite"]` | Fallback if primary overloaded |
+| `MAX_RETRIES` | `40` | Per-model retry limit for transient 500/503 errors |
+| `RETRY_DELAY` | `1` | Seconds between retries |
+| `DEFAULT_LIMIT` | `10` | Max rows returned by SQL |
+| `GRAPHDB_TIMEOUT` | `30` | GraphDB HTTP timeout (seconds) |
+| `GRAPHDB_URL` | `http://localhost:7200/repositories/dataontology` | Local GraphDB |
+| `DEV_PASSPORT_COUNTRY` | `"IN"` | Simulates logged-in user's passport for visa enrichment. Set to `"SG"` for Singapore-passport queries. Set to `None` to test no-passport fallback. |
 
-### GraphDB Enhancement (being added — not yet wired)
-
-```
-NLQRequest
-  [1-4]  same as above
-  [5a]  SPARQLCompiler     → CompiledSPARQL (for hybrid/graphdb_primary intents)
-  [5b]  SPARQLExecutor     → airport/country code list (for hybrid) OR full result (for graphdb_primary)
-  [5c]  SQLCompiler        → CompiledSQL with IN :destination_airport_codes injected
-  [6]   SQLExecutor        → ResultSet (codes + numerics from fact_flight_info)
-  [6b]  EnrichmentLoop     → fires enrichment SPARQL per destination code from SQL result
-  [7]   ResponseBuilder    → merges SQL codes + GraphDB names/context → QuestionResponse
+**Run dev pipeline:**
+```bash
+cd /Users/keewenjie/Desktop/NUS/DataOntology/DataOntology/graphdb
+python pipeline.py
 ```
 
-**New handlers needed:**
-- `SPARQLCompilerHandler` — substitutes `:param_name` in SPARQL templates
-- `SPARQLExecutorHandler` — POSTs to GraphDB HTTP endpoint, returns `list[dict]`
-- `EnrichmentHandler` — loops over SQL result rows, fires enrichment intents per destination code
-
-**GraphDB HTTP endpoint:** `POST http://localhost:7200/repositories/dataontology`
-- Body: `application/x-www-form-urlencoded` with `query=<SPARQL string>`
-- Accept: `application/sparql-results+json`
-- No third-party client needed — `urllib.request` (already used in codebase) is sufficient
-
-**Entry points:**
-- HTTP: `src/main.py` (FastAPI, `DataOntology` class, lifespan = `startup`)
-- CLI ingestion: `src/batch_main.py` (Typer)
-
-**DI wiring:** `src/lifecycle_hooks/startup.py` — loads config, wires all components into `Orchestrator`, attaches to `app.state`.
-
----
-
-## Key Files (verified paths)
-
-| File | Purpose |
-|------|---------|
-| `src/main.py` | FastAPI app entry, router wiring |
-| `src/lifecycle_hooks/startup.py` | DI wiring + pipeline assembly |
-| `src/orchestrator/orchestrator.py` | 7-stage pipeline runner (chain of responsibility) |
-| `src/compiler/sql_compiler.py` | QueryPlan → parameterized SQL (fact_flight_info only) |
-| `resources/semantics/semantic_layer_v3.json` | **Source of truth** — intents, SQL+SPARQL templates, param schemas |
-| `src/prompt_builder/templates/query_plan_prompt.j2` | Jinja2 LLM prompt |
-| `src/llm_gateway/providers/gemini_gateway.py` | Gemini provider |
-| `src/llm_gateway/providers/openai_gateway.py` | OpenAI provider |
-
-> **Note:** `src/ontology/semantic_layer.json` is the older v2 SQL-only model still used by the live pipeline. `resources/semantics/semantic_layer_v3.json` is v3 (SQL + SPARQL). When v3 is wired in, v2 is retired.
+Or via test runner interactive mode:
+```bash
+cd /Users/keewenjie/Desktop/NUS/DataOntology/DataOntology/graphdb/utility
+python run_tests.py
+```
 
 ---
 
 ## SQL Schema
 
-### SQL Tables
-
-Two tables exist in the relational database:
-
-1. **`fact_flight_info`** — flight transaction data (codes + numerics only, no names)
-2. **`dim_accounts`** — user auth + identity data (security-sensitive fields kept in SQL)
-
-### dim_accounts
-
-| Column | Type | Notes |
-|--------|------|-------|
-| `f_username` | string (PK) | Shared key with GraphDB Account node |
-| `f_full_name` | string | Display name — PII, SQL only |
-| `f_email` | string | PII, SQL only |
-| `f_hashed_password` | string | Argon2id — never leaves SQL |
-| `f_disabled` | boolean | Auth status — SQL only |
-| `f_passport_country_code` | string (ISO alpha-2) | Denormalised copy for fast JWT/session building at login |
-
-> **Data split rule:** `dim_accounts` in SQL holds ALL fields for auth. GraphDB `Account` node holds ONLY `username` (shared key) + `hasPassportCountry` link to a `Country` node. Full_name, email, hashed_password, disabled are never written to GraphDB.
-
-### fact_flight_info (flight data)
+### fact_flight_info (the only SQL table for queries)
 
 | Column | Type | Description |
 |--------|------|-------------|
@@ -181,25 +180,70 @@ Two tables exist in the relational database:
 | `f_cabin_class` | enum | ECONOMY / BUSINESS / FIRST |
 | `f_trip_type` | enum | O = one-way, R = return |
 | `f_flight_duration` | integer | Flight duration in minutes |
-| `f_total_amount_fare_total` | decimal | Flight fare total (fare only — no hotel/activities) |
+| `f_total_amount_fare_total` | decimal | Flight fare total (fare only) |
 
-**No dimension tables exist in SQL.** SQL queries are simple single-table selects with filters, aggregates, and `IN` clauses. All name resolution (airport name, city, country, airline name, aircraft model) comes from GraphDB.
+**Coverage:** Primary origins: SIN, KUL, HKG. Dates: Jan–Aug 2026. No September 2026 data.
+
+---
+
+## Semantic Layer v3 — Intent Summary
+
+Defined in `resources/semantics/semantic_layer_v3.json`. **66 intents total** (as of session 5).
+
+| Category | Count | Execution pattern |
+|---|---|---|
+| `primary` | 16 | SQL only (fact_flight_info, no JOINs) |
+| `hybrid` | 11 | SPARQL → airport code list → SQL IN clause |
+| `graphdb_primary` | 22 | SPARQL only (standalone) |
+| `enrichment` | 17 | SPARQL per destination code, after SQL result exists |
+| **Total** | **66** | |
+
+### Full Intent List (grouped by category)
+
+**primary (sql_first):**
+`cheapest_flight_on_route`, `cheapest_flight_by_airline`, `route_statistics`, `flights_on_date`, `all_flights_on_date`, `next_available_flight`, `cheapest_month_for_route`, `shortest_flight_on_route`, `shortest_flight_from_origin`, `all_destinations_from_origin`, `destinations_under_budget`, `route_fare_options`, `airlines_on_route`, `aircraft_on_route`, `flight_count_on_route`, `destinations_by_duration`
+
+**hybrid (sparql_then_sql):**
+`destinations_by_country_from_origin`, `routes_by_aircraft`, `flights_by_travel_style`, `destinations_by_safety_tier`, `destinations_by_weather_profile`, `destinations_by_attraction_type`, `destinations_by_festival_type`, `destinations_by_transport_mode`, `visa_free_flights_from_origin`, `destinations_by_season` *(new session 5)*, `destinations_good_weather_in_month` *(new session 5)*
+
+**graphdb_primary (sparql_only or sparql_then_sql for geo filters):**
+`destinations_by_continent`, `destinations_by_region`, `airlines_covering_route`, `all_routes_from_origin`, `routes_by_airline`, `visa_destinations_by_policy`, `currencies_by_region`, `user_passport_country`, `destination_vacation_plan`, `routes_from_origin_by_country`, `destinations_by_language`, `destinations_with_festivals_in_month`, `cities_in_country` *(new session 4)*, `country_info`, `destinations_by_cost_tier`, `destinations_solo_female_friendly` *(new session 4)*, `currency_exchange_rate` *(new session 4)*, `visa_duration_check` *(new session 4)*, `airports_with_amenity` *(new session 4)*, `safe_destinations_list` *(new session 4)*, `festivals_by_type_global` *(new session 4)*, `airport_info` *(new session 5)*
+
+**enrichment (sparql_first, requires_business_result: true):**
+`destination_overview`, `destination_weather_by_month`, `best_months_to_visit`, `destination_attractions`, `destination_festivals`, `destination_travel_styles`, `destination_safety`, `destination_transport`, `destination_cuisines`, `destination_neighborhoods`, `destination_language`, `destination_timezone`, `destination_currency`, `airport_amenities`, `visa_check_for_destination`, `destination_highlights`, `airports_in_city`
+
+### New in Session 5
+
+| Intent | Phase | Key param | Example query |
+|--------|-------|-----------|---------------|
+| `airport_info` | `sparql_only` | `airport_code` | "Tell me about Changi Airport" / "How many terminals does SIN have?" |
+| `destinations_by_season` | `sparql_then_sql` | `season_keyword` + origin + dates | "Summer destinations from SIN in June 2026?" — uses CONTAINS on season_code |
+| `destinations_good_weather_in_month` | `sparql_then_sql` | `month_num` + origin + dates | "Where has nice weather in December from SIN?" — filters on `prop_bestTimeToVisit = true` |
+
+### New in Session 4 (recap)
+
+| Intent | Phase | Example query |
+|--------|-------|---------------|
+| `cities_in_country` | `sparql_only` | "What cities are in Japan?" |
+| `destinations_solo_female_friendly` | `sparql_only` | "Safe cities for solo female travel?" |
+| `currency_exchange_rate` | `sparql_only` | "What is 1 SGD in JPY?" |
+| `visa_duration_check` | `sparql_only` | "How long can I stay in Australia?" |
+| `airports_with_amenity` | `sparql_only` | "Which airports have transit hotels?" |
+| `safe_destinations_list` | `sparql_only` | "Show me very safe destinations" |
+| `festivals_by_type_global` | `sparql_only` | "What music festivals are there?" |
 
 ---
 
 ## Graph Layer
 
-### Scripts (`graphdb/`)
+### Key TTL Properties (important gotchas)
 
-| File | Purpose |
-|------|---------|
-| `build_graphdb_ttl.py` | Reads `tmp/dim_*.csv` source files → writes DDL + DML TTLs |
-| `data_ontology_ddl.ttl` | OWL schema (18 classes + 49+ properties) |
-| `data_ontology_dml.ttl` | RDF instance data (~1.8 MB) |
-
-**Regenerate TTLs:** `python graphdb/build_graphdb_ttl.py` (run from repo root).
-
-> **Legacy files (not needed):** `build_dim_graph_ttl.py`, `export_city_theme_dims.py`, `export_country_visa_policy_dims.py`, `city_enrichment.py` — all belong to an old pipeline. `build_graphdb_ttl.py` fully supersedes them.
+- `prop_capitalCity` stores a **URI** (`ex:City_TYO`), NOT a string. Always dereference: `?country ex:prop_capitalCity ?cap . ?cap ex:prop_cityName ?capitalCityName`
+- `prop_soloFemaleSafe` is a boolean triple (`true`/`false`)
+- `prop_safetyTier` is a string (`"very_safe"`, `"safe"`, `"moderate"`, `"caution"`)
+- `prop_bestTimeToVisit` is a boolean on weather observation nodes
+- City codes vs airport IATA codes: `City_SPK` (Sapporo city) ≠ `Airport_CTS` (New Chitose, the actual airport serving Sapporo). Routes attach to airport nodes via `prop_inCity`.
+- Airport attribute properties: `prop_terminalCount`, `prop_airportType`, `prop_isInternational`, `prop_hasLounge`, `prop_hasTransitHotel`
 
 ### Current Instance Counts (from DML)
 
@@ -230,308 +274,179 @@ Two tables exist in the relational database:
 ### OWL Classes (18)
 `Account`, `Aircraft`, `Airline`, `Airport`, `Attraction`, `City`, `CityMonthlyWeather`, `Country`, `CountryVisaRequirement`, `Cuisine`, `Currency`, `Festival`, `Language`, `Route`, `SubcityArea`, `TransportMode`, `TravelStyle`, `VisaPolicy`
 
-### Key Object Properties (19)
-`City→Country`, `Airport→City`, `Route→Airline`, `Route→OriginAirport`, `Route→DestinationAirport`, `City→TravelStyle`, `City→CityMonthlyWeather`, `City→SubcityArea`, `City→TransportMode`, `City→Language`, `CountryVisaRequirement→PassportCountry`, `CountryVisaRequirement→DestinationCountry`, `CountryVisaRequirement→VisaPolicy`, `Account→PassportCountry`, `Country→Currency`, `Country→CapitalCity`, `City→Festival`, `City→Cuisine`, `City→Attraction`
+### season_code Values (used by `destinations_by_season`)
+`autumn`, `autumn_peak`, `autumn_shoulder`, `cold_snowy`, `cool_dry`, `cool_shoulder`, `cool_wet`, `cool_winter`, `dry_season`, `hot_season`, `humid_season`, `monsoon`, `northeast_monsoon`, `pleasant_peak`, `post_monsoon`, `pre_monsoon`, `rainy_season`, `shoulder`, `spring`, `spring_peak`, `spring_shoulder`, `summer`, `summer_peak`, `summer_warm`, `typhoon_risk`, `typhoon_summer`, `warm_season`, `wet_cool`, `wet_season`, `wettest_season`, `winter`, `winter_peak`, `winter_wet`
 
-### Key Shared Join Keys (SQL ↔ GraphDB)
-
-| Concept | SQL column | GraphDB property |
-|---------|-----------|-----------------|
-| Airport | `f_departure/destination_airport_code` | `ex:prop_airportCode` |
-| Airline | `f_airline_code` | `ex:prop_airlineCode` |
-| Aircraft | `f_aircraft_code` | `ex:prop_aircraftCode` |
-| Country | resolved via GraphDB airport→city→country chain | `ex:prop_countryCode` |
+`destinations_by_season` uses `CONTAINS(LCASE(seasonCode), LCASE(:season_keyword))` — "summer" matches summer, summer_peak, summer_warm. "dry" matches dry_season.
 
 ---
 
-## Curated Dimension Source Files (`tmp/`)
+## Known Data Gaps
 
-These files are **input to `build_graphdb_ttl.py` only**. They are NOT SQL tables.
-
-### Core vs Descriptive Split
-
-There are two categories of dim files. **Core** tables define the structural skeleton — entities and relationships the query pipeline needs to function. **Descriptive** tables layer enrichment data on top for traveller-facing context.
-
-**Core (9 files — structural, needed for queries to work):**
-
-| File | Purpose |
-|------|---------|
-| `fact_flight_info.csv` | **SQL only** — flight transactions (codes + numerics) |
-| `dim_aircraft.csv` | Aircraft type reference nodes |
-| `dim_airline.csv` | Airline reference nodes |
-| `dim_airline_coverage.csv` | Route graph edges (airline → origin/destination airports) |
-| `dim_airport.csv` | Airport nodes (code, name, city link) |
-| `dim_airport_attribute.csv` | Airport amenity properties (terminal count, lounge, transit hotel) |
-| `dim_city.csv` | City nodes (code, name, country link) |
-| `dim_country.csv` | Country nodes (code, name only — see gap note below) |
-| `dim_accounts.csv` | Account nodes — username + passport country link to GraphDB only; all auth fields stay in SQL |
-
-**Descriptive (14 files — enrichment, traveller-facing context):**
-
-| File | GraphDB entities built |
-|------|------------------------|
-| `dim_city_attraction.csv` | Attraction nodes linked to City |
-| `dim_city_country_enrichment.csv` | Continent, region, capital city code, safety index, cost of living index — stored at City level in GraphDB |
-| `dim_city_cuisine.csv` | Cuisine nodes linked to City |
-| `dim_city_festival.csv` | Festival nodes linked to City |
-| `dim_city_language.csv` | Language nodes linked to City |
-| `dim_city_monthly_weather.csv` | CityMonthlyWeather nodes (avg temp, rainfall, season, best-time flag) |
-| `dim_city_safety.csv` | Safety tier + solo female safe properties on City |
-| `dim_city_timezone.csv` | Timezone name + UTC offset on City |
-| `dim_city_travel_style.csv` | TravelStyle nodes linked to City |
-| `dim_subcity_area.csv` | SubcityArea (neighbourhood) nodes linked to City |
-| `dim_transport_mode.csv` | TransportMode nodes linked to City |
-| `dim_country_visa_policy.csv` | CountryVisaRequirement nodes |
-| `dim_currency.csv` | Currency nodes linked to Country |
-| `dim_currency_rate.csv` | Exchange rate properties on Currency |
-| `dim_visa_policy.csv` | VisaPolicy reference nodes |
-
-### Country-Level Descriptive Data Gap
-
-`dim_country.csv` currently holds only `f_country_code` and `f_country_name`. There is no file for country-level descriptive/travel context. The following fields are missing and should be added as a new file **`dim_country_description.csv`** when the data is available:
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `f_country_code` | ISO alpha-2 (PK) | Join key to `dim_country.csv` |
-| `f_country_summary` | string | General travel description of the country as a destination |
-| `f_official_language` | string | National/official language (cities may have additional local languages) |
-| `f_driving_side` | enum: `left` / `right` | Country-wide driving convention |
-| `f_electrical_plug_type` | string | Plug standard (A, B, C, G, etc.) |
-| `f_electrical_voltage` | string | `110V` / `220V` / `230V` |
-| `f_tipping_culture` | enum: `expected` / `optional` / `not_expected` / `offensive` | Cultural tipping norm |
-| `f_internet_quality` | enum: `excellent` / `good` / `moderate` / `limited` | Overall country connectivity |
-| `f_best_season_to_visit` | string | Country-level generalisation, e.g. "November to March" |
-| `f_emergency_number` | string | Police/ambulance number (varies by country) |
-
-> These fields belong at **country level**, not city level, because they are national standards that apply uniformly regardless of which city the traveller is in. When `dim_country_description.csv` is created, `build_graphdb_ttl.py` must be updated to write these as datatype properties on the `Country` node, and a new `country_overview` enrichment intent should be added to `semantic_layer_v3.json`.
+| Gap | Status |
+|-----|--------|
+| NRT/Tokyo — no weather, transport, or language data | Pending data addition |
+| LHR/London — no weather, transport, or language data | Pending data addition |
+| DPS/Bali — transport mode data incorrect | Pending fix |
+| SYD — no Metro transport mode | Pending data addition |
+| Missing festivals: Tokyo Hanami, Sydney Australia Day, HKG CNY, Bali Galungan, SYD NYE | Pending data addition |
+| Some airports have weather but no season_code classification | Pending data addition |
+| KLU flight duration data error in fact_flight_info.csv | Pending fix |
+| Australia visa: was `visa_not_required` — **fixed session 5** to `eta_required` (ETA required, not visa-free) | Fixed in TTL |
+| `routes_by_aircraft` — LLM aircraft model name format mismatch | Pending semantic layer fix (CONTAINS) |
+| Wrong airport code for Tokyo/London queries (LLM resolves to wrong code) | Pending disambiguation examples |
 
 ---
 
-## Semantic Layer v3 — Intent Summary
+## Pipeline Bugs Fixed (all sessions)
 
-Defined in `resources/semantics/semantic_layer_v3.json`.
+### Session 5 (2026-04-25)
 
-| Category | Count | Execution pattern |
-|---|---|---|
-| `primary` | 18 | SQL only (fact_flight_info, no JOINs) |
-| `hybrid` | 7 | SPARQL → airport/country code list → SQL IN clause |
-| `graphdb_primary` | 9 | SPARQL only (or + optional SQL). Includes `user_passport_country` and `destination_vacation_plan` |
-| `enrichment` | 15 | SPARQL per destination code, after SQL result exists |
-| **Total** | **49** | |
+**Multi-leg query crash (`pipeline.py`):**
+- Trigger: "Germany to Australia back to Singapore" — LLM returned a list of query plans
+- Root cause: `query_plan` was a list; `print_query_plan(query_plan)` calls `.get()` which lists don't have
+- Fix: Added `isinstance(query_plan, list)` guard at line 124 → returns: "I can only look up one flight at a time. Please ask about each leg separately."
 
-> `user_passport_country` (graphdb_primary) resolves the logged-in user's passport country from their GraphDB Account node via username from JWT session — allows visa intents to work without the user explicitly stating their passport country.
+**Australia visa data (`data_ontology_dml.ttl`):**
+- Was: `prop_visaRequired false`, `VisaPolicy_visa_not_required`
+- Fix: `prop_visaRequired true`, `VisaPolicy_eta_required`, added `prop_onlineApplyUrl`
 
-### `destination_vacation_plan` — Tour Guide Intent
+**`country_info` capital URI (`semantic_layer_v3.json` + `response.py`):**
+- Was: SPARQL returned raw URI `http://dataontology.example/graph/City_TYO` for capital field
+- Root cause: `prop_capitalCity` stores a URI, not a string literal
+- Fix: SPARQL now dereferences: `?country ex:prop_capitalCity ?cap . ?cap ex:prop_cityName ?capitalCityName`
+- Formatter updated to read `capitalCityName` instead of `capitalCity`
 
-**Added in semantic_layer_v3.json.** A meta-intent that fires when a user wants a full destination guide. Issues **one SPARQL CONSTRUCT query** that traverses the full destination subgraph in a single GraphDB round-trip (airport → city → country → all relationships), then a conditional visa SELECT if `passport_country_code` is available. Formats the combined rdflib graph as a markdown narrative in tour-guide voice.
+### Session 4 (2026-04-25)
 
-**Why CONSTRUCT over 13 parallel enrichment queries:** GraphDB's purpose is to traverse relationships in one shot. Individual per-relationship lookups defeat the point — that's what a relational DB is for. One CONSTRUCT captures everything; rdflib walks the graph; ResponseBuilder assembles the narrative. Zero row explosion, zero round-trip fan-out.
+- SQL optional clause injection: `f_trip_type`, `f_currency_code`, `f_cabin_class` appended after LIMIT → fixed with `_insert_before_group_or_order()` helper in `compiler.py`
+- `destinations_by_duration` HAVING clause position → fixed with `_insert_before_order()`
+- `routes_by_aircraft` IN clause expansion: only `destination_airport_codes` was expanded → loop now handles `aircraft_codes` (prefix `ac`) too
+- `visa_check_for_destination`: no dispatch → fell to `format_table` → `visaDurationDays` shown as "1h30m" → fixed with `format_visa_check()` + dispatch
+- `flight_count_on_route`: no formatter → raw column names → fixed with `format_flight_count()`
+- `destination_highlights`: raw airport code as heading → fixed: pipeline resolves city name via `_resolve_airport_names()` and injects `params["city_name"]`
+- `destination_festivals`: fetched all months but didn't filter → fixed: `format_festivals()` filters by `monthNum`
+- `cheapest_month_for_route`: showed `2026-06` → fixed with `_fmt_month()` helper
+- Bare `return` → `return query_plan` in 3 early-exit paths (sparql_then_sql empty codes, return-trip path, date-out-of-range)
+- 6 new `sparql_only` intents added + `cities_in_country` + `country_info` capital dereference fix
 
-**Triggered by prompts like:**
-- "Tell me everything about Bangkok for my trip."
-- "Give me a vacation guide to Singapore."
-- "I'm planning a trip to Tokyo — what should I know?"
-- "Plan my vacation to Bali."
+### Session 2–3 (2026-04-18 to 2026-04-23)
 
-**CONSTRUCT query covers (all in one graph traversal):**
-
-| # | Data | GraphDB path | Section in output |
-|---|------|-------------|-------------------|
-| 1 | City, country, continent, safety, cost of living | Airport → City → Country | Overview |
-| 2 | Best months to visit | City → CityMonthlyWeather (bestTimeToVisit=true) | When to go |
-| 3 | Airport amenities | Airport properties | Getting there |
-| 4 | Transport modes, public transport flag | City → TransportMode | Getting around |
-| 5 | Neighbourhoods (pending filtered) | City → SubcityArea | Where to stay |
-| 6 | Cuisines | City → Cuisine | What to eat |
-| 7 | Attractions (tiered: must_see → popular → local_gem) | City → Attraction | What to see |
-| 8 | Festivals | City → Festival | Events |
-| 9 | Travel style tags | City → TravelStyle | Travel styles |
-| 10 | Currency + exchange rate | Country → Currency | Currency |
-| 11 | Timezone + UTC offset | City properties | Timezone |
-| 12 | Primary language | City → Language | Language |
-
-**Visa — separate conditional SELECT (`visa_check_for_destination`):** fires only when `passport_country_code` is available (from explicit param or resolved via `user_passport_country` + `username`).
-
-**Optional params for personalisation:**
-- `month_num` — personalises weather and festival sections to that specific month
-- `passport_country_code` — personalises visa section to user's passport
-- `username` — resolves passport country silently from session if passport_country_code not provided
-
-**Output format:** `response_format: "vacation_plan"` — response builder renders as markdown narrative (Option A). Sample output:
-
-```
-🗺 Bangkok, Thailand — Vacation Guide
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📍 OVERVIEW
-Southeast Asia | Asia | Capital: Bangkok
-Safety: Safe | Solo female: Yes | Cost of living index: 45.2
-
-🌤 BEST TIME TO VISIT
-November · December · January · February
-Avg temp 28°C · Dry season · Low rainfall
-
-🛬 AIRPORT
-Suvarnabhumi (BKK) · International · 2 terminals
-✓ Lounge  ✓ Transit hotel
-
-🚇 GETTING AROUND
-BTS Skytrain · MRT Metro · Taxi · Tuk-tuk
-Public transport widely used in Thailand
-
-🏘 NEIGHBOURHOODS
-Sukhumvit     — expats, nightlife, shopping
-Silom         — business district, rooftop bars
-Rattanakosin  — temples, old city, history
-
-🍜 FOOD
-Thai · Street food · Chinese-Thai · Seafood
-
-🎯 ATTRACTIONS
-Must-see  : Grand Palace · Wat Pho · Chatuchak Market
-Popular   : Asiatique · Jim Thompson House
-Local gem : Talat Noi · Bang Krachao
-
-🎪 FESTIVALS (April)
-Songkran — cultural · April
-
-✈ TRAVEL STYLES
-foodie · nightlife · cultural_heritage · temple_trip · shopping
-
-🛂 VISA (Singapore passport)
-Not required · Stay up to 30 days
-
-💱 CURRENCY
-Thai Baht (THB) · 1 SGD ≈ 26.3 THB
-
-🕐 TIMEZONE
-Asia/Bangkok · UTC+7
-
-🗣 LANGUAGE
-Thai
-```
-
-**Integration note:** One SPARQL CONSTRUCT query (`sparql_type: "construct"`) fires against GraphDB and returns an RDF graph. Python parses it with `rdflib`. ResponseBuilder walks the graph in the fixed narrative order above. The visa SELECT fires separately and conditionally. No parallel fan-out, no row explosion — this is the correct use of a graph database.
+- Full `response.py` rewrite: removed ASCII table borders, raw column names, added `_humanize()`, `_fmt_dur()`, `_fmt_dt()`, `_fmt_fare()`, `POLICY_DISPLAY` dict
+- `destinations_by_continent` / `destinations_by_region`: `sparql_first` → `sparql_then_sql` (was returning geography without checking real flight availability)
+- `destinations_by_weather_profile` SPARQL UNION + `_strip_unresolved_union_branches()` in compiler
+- LLM retry hardening: MAX_RETRIES 10→40, RETRY_DELAY 3s→1s, added 500 to retryable set
+- Test runner redesign: LLM Output caching column, auto-clear output columns, debug line stripping via `_DEBUG_RE`
 
 ---
 
-## Dev Testing Ground (`/dev`)
+## Pending Code Backlog
 
-Before any changes are integrated into the prod repo (`DataOntology/`), they are tested in a local pipeline script at:
+All these are identified but not yet implemented:
 
-```
-/Users/keewenjie/Desktop/NUS/DataOntology/dev/
-```
+### response.py
+| # | Issue | Description |
+|---|-------|-------------|
+| NEW3 | `destinations_by_duration` header | Shows short/medium/long-haul without a clear header |
+| NEW4/H1 | Bare-bullet intents | 4 intents output bullets with no header (country, festival-type, transport-mode, visa-free) |
+| TG9 | Attraction filter empty | No message when filtered attraction type has 0 results |
+| TG10 | Silent reinterpretation | When query is silently reinterpreted, should prepend context line |
+| M9/M12 | Empty-state messages | Wording and leading-indent issues |
+| TG3 | Departures footer | Add "Showing N of M departures" count |
+| TG1 | Raw URL | Wrap apply URL in HTML anchor tag |
+| M6 | Cuisine one-word label | Expand to dishes list or remove if too thin |
 
-This folder is the **integration sandbox** — it mimics the prod pipeline end-to-end but without the FastAPI/DI/handler chain overhead. Test here first, integrate after.
+### pipeline.py
+| # | Issue | Description |
+|---|-------|-------------|
+| C4 | Passport parenthetical | "(India)" appears next to visa line — remove |
+| NEW-H | Missing origin | `sparql_then_sql` without origin should route to follow-up |
+| NEW-I | Month-level date | Follow-up should accept "in June" not just exact date |
+| TG12 | Date format | `destinations_under_budget` follow-up shows wrong date format |
 
-### Folder Layout
+### Semantic layer
+| # | Issue | Description |
+|---|-------|-------------|
+| NEW-J | `routes_by_aircraft` | Use `CONTAINS` for aircraft model name matching |
+| NEW-G | City disambiguation | Add Tokyo/London airport disambiguation examples |
 
-```
-dev/
-├── pipeline.py          ← main interactive pipeline (keyboard → terminal)
-├── config.py            ← paths, API keys, dev defaults (DEV_PASSPORT_COUNTRY)
-├── llm.py               ← Gemini call with retry logic
-├── compiler.py          ← SPARQL + SQL template compiler
-├── sparql_exec.py       ← GraphDB HTTP client (SELECT + CONSTRUCT)
-├── db.py                ← SQLite loader + executor
-├── loader.py            ← semantic layer loader + prompt context builder
-├── response.py          ← all formatters (vacation plan, flight table, attractions, etc.)
-├── validator.py         ← query plan validation
-├── requirements.txt     ← dev dependencies
-└── utility/
-    ├── run_tests.py     ← automated test runner (reads/writes tmp/test_cases.csv)
-    └── reload_graphdb.py← full GraphDB rebuild + reload in one command
-```
+### Data
+| # | Issue | Description |
+|---|-------|-------------|
+| — | NRT/LHR transport | Add transport modes for Tokyo, London |
+| — | NRT/LHR language | Add Japanese for Tokyo, English for London |
+| — | NRT/LHR weather | Add 12-month weather records |
+| — | Missing festivals | Tokyo Hanami, Sydney Australia Day, HKG CNY, Bali Galungan, SYD NYE |
+| NEW-F | Season codes | Add season_code to airports with weather but no season classification |
+| M8 | KLU duration | Fix KLU flight duration in fact_flight_info.csv |
 
-### Why
+---
 
-- Avoid breaking the prod pipeline during SPARQL handler development
-- Test CONSTRUCT query parsing, SQL compilation, and response formatting locally without deploying
-- Fast feedback loop: keyboard prompt → terminal output in one Python script run
+## `destination_vacation_plan` — Tour Guide Intent
 
-### Stack Differences
+A meta-intent that fires when a user wants a full destination guide. Issues **one SPARQL CONSTRUCT query** that traverses the full destination subgraph (airport → city → country → all relationships) in a single GraphDB round-trip.
 
-| Concern | Prod | Dev |
-|---------|------|-----|
-| Database | PostgreSQL | SQLite (loaded from `tmp/fact_flight_info.csv`) |
-| HTTP server | FastAPI + Chain of Responsibility | Single Python script, linear flow |
-| LLM | Gemini via pydantic-ai | Gemini via `google-generativeai` SDK directly |
-| GraphDB | Remote/cluster | Local at `http://localhost:7200/repositories/dataontology` |
-| Input | HTTP POST `/nlq` | Keyboard input (`input()`) |
-| Auth/JWT | Full auth middleware | Skipped — `DEV_PASSPORT_COUNTRY` in `config.py` simulates logged-in user |
-| Graph parsing | rdflib (to be wired) | rdflib directly |
+**Triggered by:** "Tell me everything about Bangkok", "Plan my trip to Tokyo", "Give me a vacation guide to Bali"
 
-### Dev Config (`config.py`)
+**CONSTRUCT covers (one query):** city/country/safety/cost, best months, airport amenities, transport modes, neighbourhoods, cuisines, attractions (tiered), festivals, travel styles, currency, timezone, language.
 
-| Setting | Value | Purpose |
-|---------|-------|---------|
-| `GEMINI_MODEL` | `gemini-2.5-flash` | LLM model |
-| `DEFAULT_LIMIT` | `10` | Max rows returned by SQL |
-| `GRAPHDB_TIMEOUT` | `30` | GraphDB HTTP timeout (seconds) |
-| `DEV_PASSPORT_COUNTRY` | `"IN"` | Simulates logged-in user's passport country for visa enrichment. `IN` (India) requires eVisa for Thailand — good for testing visa display. Set to `None` to test the no-passport fallback. |
+**Visa** — separate conditional SELECT (`visa_check_for_destination`), fires only when `passport_country_code` is available.
 
-### Phase Plan
+---
 
-| Phase | What it tests |
-|-------|--------------|
-| **1 — LLM intent extraction** | Keyboard prompt → Gemini → intent + params JSON (same `query_plan_prompt.j2` template) |
-| **2 — Routing** | Branch by `execution_phase` from semantic_layer_v3.json |
-| **3 — SPARQL execution** | Fire SPARQL/CONSTRUCT against local GraphDB; parse CONSTRUCT with rdflib |
-| **4 — Visa SELECT** | Conditional visa check SELECT when `passport_country_code` available (falls back to `DEV_PASSPORT_COUNTRY`) |
-| **5 — SQL execution** | Compile SQL template → execute against SQLite `fact_flight_info` |
-| **6 — Response formatting** | Walk rdflib graph in narrative order → print vacation_plan markdown to terminal |
+## Test Suite
 
-### Test Runner (`utility/run_tests.py`)
-
-Reads `tmp/test_cases.csv`, runs the next pending case, captures full pipeline stdout, and saves it. **Pass/Fail is not determined automatically** — Claude reviews the output and validates from a business perspective.
-
-**CSV columns:**
-
-| Column | Filled by | Purpose |
-|--------|-----------|---------|
-| Test ID | Author | Unique identifier |
-| Category | Author | Grouping (Primary, Hybrid, VacationPlan, Routing, GraphDB, Enrichment, MissingParams) |
-| Test Purpose | Author | What the test is checking |
-| Prompt Entered | Author | Exact user question fed into pipeline |
-| Actual Intent | Runner | Intent the pipeline detected (auto-parsed from stdout) |
-| Actual Phase | Runner | Execution path used (auto-parsed from stdout) |
-| Actual Output | Runner | Full pipeline stdout (whitespace-normalised) |
-| Intent Pass | Claude | Did the right intent fire? |
-| Phase Pass | Claude | Did it use the right execution path? |
-| Output Pass | Claude | Is the response useful to a real user (business judgment)? |
-
-**Run:**
 ```bash
-cd /Users/keewenjie/Desktop/NUS/DataOntology/dev/utility
+cd /Users/keewenjie/Desktop/NUS/DataOntology/DataOntology/graphdb/utility
 python run_tests.py
 ```
 
-`BATCH` (default 1) controls how many cases run per invocation. Cases where all 3 Pass columns are filled are skipped.
+Currently in **interactive demo mode** (batch execution commented out). To re-enable batch, uncomment the batch block in `run_tests.py`.
 
-### GraphDB Reload (`utility/reload_graphdb.py`)
+### LLM Output Caching
+`LLM Output` column caches raw Gemini plan JSON. On re-run, the column is preserved → Gemini is skipped, formatter is re-run with cached plan. To force fresh Gemini call, blank a row's `LLM Output` field.
 
-Rebuilds and reloads GraphDB in one command:
-1. Runs `graphdb/build_graphdb_ttl.py` → regenerates DDL + DML from `tmp/dim_*.csv`
-2. Checks GraphDB is reachable at `localhost:7200`
-3. Creates `dataontology` repository if missing (3-strategy fallback for GraphDB 9/10/11 compatibility)
-4. Clears all existing triples
-5. POSTs `data_ontology_ddl.ttl` (schema)
-6. POSTs `data_ontology_dml.ttl` (instance data)
-7. Verifies triple count (warns if < 10,000; expects ~54k)
+Output columns (`Response`, `Actual Intent`, `Actual Phase`, `Error`, pass columns) are auto-cleared at every run start. `LLM Output` is never cleared.
 
-**Run:**
-```bash
-cd /Users/keewenjie/Desktop/NUS/DataOntology/dev/utility
-python reload_graphdb.py
+### Last Full Run (2026-04-24)
+245/245 responses, 0 errors, 0 missing LLM Output, 100% Gemini cache hit. Test suite not yet re-run against session 4/5 changes.
+
+---
+
+## Application Architecture (Production)
+
+### Dev Pipeline (`graphdb/pipeline.py`)
+
+```
+NLQRequest
+  [1] LLMGateway          → QueryPlan JSON (Gemma / Gemini via google-genai SDK)
+  [2] SyntacticValidator  → checked: JSON parse + schema; list guard (multi-leg queries)
+  [3] SemanticValidator   → checked: intent known + params valid
+  [4] Router              → branch by execution_phase (4 patterns)
+  [5] SPARQLCompiler      → CompiledSPARQL (for hybrid / graphdb_primary / construct intents)
+  [5] SQLCompiler         → CompiledSQL (parameterized, fact_flight_info only)
+  [6] Executor            → SQLite rows + GraphDB result (SELECT or CONSTRUCT graph)
+  [7] DestinationEnricher → SPARQL lookup: raw airport codes → "City, Country (CODE)"
+  [8] ResponseFormatter   → human-readable output
 ```
 
-### Rules
+### Prod Pipeline (`src/orchestrator/orchestrator.py`)
 
-- Dev script reads `semantic_layer_v3.json` directly from `DataOntology/resources/semantics/` — no copy
-- Dev SQLite DB is ephemeral (recreated from CSV each run)
-- Once a phase passes end-to-end, the equivalent prod handler is implemented and wired in
-- Do not re-discuss design decisions already captured here — refer to this section
+FastAPI chain-of-responsibility pattern. Same logical stages as dev but wired via DI in `src/lifecycle_hooks/startup.py`. Uses PostgreSQL instead of SQLite.
+
+---
+
+## Curated Dimension Source Files (`graphdb/csv_files/`)
+
+These files are loaded by `reload_graphdb.py` to rebuild the GraphDB TTL.
+
+**Core:** `dim_aircraft.csv`, `dim_airline.csv`, `dim_airline_coverage.csv`, `dim_airport.csv`, `dim_airport_attribute.csv`, `dim_city.csv`, `dim_country.csv`, `dim_accounts.csv`
+
+**Descriptive (enrichment):** `dim_city_attraction.csv`, `dim_city_country_enrichment.csv`, `dim_city_cuisine.csv`, `dim_city_festival.csv`, `dim_city_language.csv`, `dim_city_monthly_weather.csv`, `dim_city_safety.csv`, `dim_city_timezone.csv`, `dim_city_travel_style.csv`, `dim_subcity_area.csv`, `dim_transport_mode.csv`, `dim_country_visa_policy.csv`, `dim_currency.csv`, `dim_currency_rate.csv`, `dim_visa_policy.csv`
+
+**Fact (SQL only):** `fact_flight_info.csv`
+
+> **Note:** The `dim_*.csv` files here are **not** SQL tables. They are source data for `build_graphdb_ttl.py` → TTL → GraphDB only. The only relational fact table is `fact_flight_info`.
 
 ---
 
@@ -539,59 +454,34 @@ python reload_graphdb.py
 
 | Integration | Auth |
 |-------------|------|
-| Google Gemini (primary LLM) | `GEMINI_API_KEY` / `LLM_API_KEY` |
-| OpenAI (alternative LLM) | `OPENAI_API_KEY` / `LLM_API_KEY` |
-| PostgreSQL (prod DB) | `vault/postgres.user`, `vault/postgres.password` |
-| SQLite (local dev) | `DB_PATH` env var |
+| Google Gemini / Gemma (LLM) | `GEMINI_API_KEY` in `config.py` |
 | GraphDB (graph DB) | `http://localhost:7200/repositories/dataontology` (local) |
+| PostgreSQL (prod DB) | `vault/postgres.user`, `vault/postgres.password` |
+| SQLite (local dev) | Loaded from `csv_files/fact_flight_info.csv` at startup |
 | Telegram Bot | `TELEGRAM_BOT_TOKEN` |
 | AWS Lambda + SAM | IAM role, `template.yaml`, `samconfig.toml` |
-| OWASP ZAP | CI/CD scan |
-| SonarQube | `SONAR_HOST_URL` + token |
-| Snyk | `SNYK_TOKEN` |
 
 ---
 
-## Testing
+## Quick Reference — Common Queries by Intent
 
-**168 tests across 4 layers:**
-
-| Layer | Command |
-|-------|---------|
-| Unit | `uv run pytest tests/unit -vv` |
-| Integration + Seam | `uv run pytest tests/integration -vv` |
-| E2E + Golden | `uv run pytest tests/e2e -vv` |
-| All (default, skips e2e/external) | `uv run pytest` |
-
-> Golden tests will need updating when v3 pipeline is wired in — SQL result shape changes (codes only, no joined names).
-
----
-
-## CI/CD
-
-GitHub Actions (`.github/workflows/ontology-ci.yaml`):
-1. **Quality & Security** — pytest + coverage, Snyk, SonarQube
-2. **Deploy** (deploy branch / PR to release) — `sam build` → `sam deploy` → smoke test
-3. **ZAP Scan** — dynamic security scan against deployed Lambda URL
-
----
-
-## Ingestion CLI
-
-```bash
-uv run src/batch_main.py --ingestion-type="airport" --project-path="$(pwd)"
-```
-
-Convenience scripts in `bin/` (e.g. `bin/airport.sh`, `bin/city.sh`).
-
-Modes: **API** (airports, cities, airlines, countries, currency rates), **File** (CSV via `file:///`), **Manual** (`POST /ingestion/upload`).
-
----
-
-## Config
-
-`resources/config.toml` — LLM provider + model, DB driver, JWT expiry, CORS, service host/port.
-
-Key env vars: `LLM_PROVIDER`, `LLM_API_KEY`, `GEMINI_API_KEY`, `OPENAI_API_KEY`, `DB_PATH`, `GRAPHDB_URL`, `TELEGRAM_BOT_TOKEN`, `PROJECT_PATH`.
-
-Secrets: `vault/postgres.user`, `vault/postgres.password`, `vault/destination.apiKey`, `vault/search.apiKey`.
+| Question type | Intent | Phase |
+|---------------|--------|-------|
+| "Cheapest flight SIN to BKK in June" | `cheapest_flight_on_route` | sql_first |
+| "Flights on 30 May from SIN" | `all_flights_on_date` | sql_first |
+| "Tell me about Bangkok" | `destination_vacation_plan` | sparql CONSTRUCT |
+| "What cities in Japan from SIN?" | `routes_from_origin_by_country` | sparql_only |
+| "What cities are in Japan?" | `cities_in_country` | sparql_only |
+| "Tell me about Japan (country info)" | `country_info` | sparql_only |
+| "Tell me about Changi Airport" | `airport_info` | sparql_only |
+| "Do I need a visa to go to Japan?" | `visa_check_for_destination` | sparql_first (enrichment) |
+| "How long can I stay in Australia?" | `visa_duration_check` | sparql_only |
+| "Visa-free destinations from SIN" | `visa_free_flights_from_origin` | sparql_then_sql |
+| "Safe destinations from SIN in June" | `destinations_by_safety_tier` | sparql_then_sql |
+| "Summer destinations from SIN in June" | `destinations_by_season` | sparql_then_sql |
+| "Nice weather in December from SIN" | `destinations_good_weather_in_month` | sparql_then_sql |
+| "What is 1 SGD in JPY?" | `currency_exchange_rate` | sparql_only |
+| "Solo female safe destinations?" | `destinations_solo_female_friendly` | sparql_only |
+| "Airports with transit hotels?" | `airports_with_amenity` | sparql_only |
+| "Music festivals around the world?" | `festivals_by_type_global` | sparql_only |
+| "Beach holiday from SIN on 15 Jun" | `flights_by_travel_style` | sparql_then_sql |

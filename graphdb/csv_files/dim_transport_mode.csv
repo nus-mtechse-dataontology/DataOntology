@@ -18,6 +18,7 @@ TPE,yes,high_speed_rail
 SYD,no,commuter_rail
 SYD,no,bus
 SYD,no,light_rail
+SYD,no,metro
 SZG,yes,bus
 SZG,yes,commuter_rail
 PEN,yes,bus
@@ -39,6 +40,9 @@ CPT,no,bus
 CPT,no,commuter_rail
 DAC,yes,bus
 DPS,no,bus
+DPS,no,ojek
+DPS,no,private_driver
+DPS,no,scooter_rental
 MDC,no,bus
 PLM,no,bus
 PNH,no,bus
@@ -257,3 +261,12 @@ DAD,yes,bus
 CEI,no,bus
 SIN,yes,metro
 SIN,yes,bus
+NRT,yes,metro
+NRT,yes,subway
+NRT,yes,bus
+NRT,yes,commuter_rail
+NRT,yes,high_speed_rail
+LHR,yes,tube
+LHR,yes,bus
+LHR,yes,commuter_rail
+LHR,yes,overground

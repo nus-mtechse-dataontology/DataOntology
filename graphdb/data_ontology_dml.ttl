@@ -8,27 +8,23 @@ ex:travel-graph-dml a owl:Ontology ;
     rdfs:label "DataOntology travel graph data" ;
     rdfs:comment "Instance data generated from tmp dimensions. fact_flight_info is excluded. Account nodes contain only username + passport country link — auth/PII fields remain in SQL." .
 
-# Source row counts: accounts=4, aircraft=6, airlines=5, coverage=376, airports=909, airport_attributes=161, cities=870, city_attractions=462, city_enrichment=166, city_cuisines=166, city_festivals=166, city_languages=136, city_weather=1632, city_safety=166, city_timezones=166, city_styles=488, countries=170, visa_requirements=1681, currencies=170, currency_rates=129, subcity_areas=550, transport_modes=258, visa_policies=7, fact_flight_info_excluded=true
+# Source row counts: accounts=4, aircraft=6, airlines=5, coverage=376, airports=909, airport_attributes=161, cities=870, city_attractions=462, city_enrichment=166, city_cuisines=166, city_festivals=171, city_languages=876, city_weather=1668, city_safety=166, city_timezones=581, city_styles=488, countries=170, visa_requirements=1681, currencies=170, currency_rates=129, subcity_areas=550, transport_modes=271, visa_policies=7, fact_flight_info_excluded=true
 
 ex:Account_testuser1 a ex:Account ;
     rdfs:label "testuser1" ;
-    ex:prop_accountUsername "testuser1" ;
-    ex:prop_hasPassportCountry ex:Country_SG .
+    ex:prop_accountUsername "testuser1" .
 
 ex:Account_testuser2 a ex:Account ;
     rdfs:label "testuser2" ;
-    ex:prop_accountUsername "testuser2" ;
-    ex:prop_hasPassportCountry ex:Country_SG .
+    ex:prop_accountUsername "testuser2" .
 
 ex:Account_yulnicorn a ex:Account ;
     rdfs:label "yulnicorn" ;
-    ex:prop_accountUsername "yulnicorn" ;
-    ex:prop_hasPassportCountry ex:Country_SG .
+    ex:prop_accountUsername "yulnicorn" .
 
 ex:Account_testuser3 a ex:Account ;
     rdfs:label "testuser3" ;
-    ex:prop_accountUsername "testuser3" ;
-    ex:prop_hasPassportCountry ex:Country_SG .
+    ex:prop_accountUsername "testuser3" .
 
 ex:Country_SG a ex:Country ;
     rdfs:label "Singapore" ;
@@ -16048,13 +16044,49 @@ ex:City_SIN ex:prop_hasTravelStyle ex:TravelStyle_family_friendly .
 
 ex:City_SIN ex:prop_hasTravelStyle ex:TravelStyle_luxury .
 
+ex:Language_Albanian a ex:Language ;
+    rdfs:label "Albanian" ;
+    ex:prop_languageName "Albanian" .
+
+ex:Language_Amharic a ex:Language ;
+    rdfs:label "Amharic" ;
+    ex:prop_languageName "Amharic" .
+
 ex:Language_Arabic a ex:Language ;
     rdfs:label "Arabic" ;
     ex:prop_languageName "Arabic" .
 
+ex:Language_Armenian a ex:Language ;
+    rdfs:label "Armenian" ;
+    ex:prop_languageName "Armenian" .
+
+ex:Language_Assamese a ex:Language ;
+    rdfs:label "Assamese" ;
+    ex:prop_languageName "Assamese" .
+
+ex:Language_Atayal a ex:Language ;
+    rdfs:label "Atayal" ;
+    ex:prop_languageName "Atayal" .
+
+ex:Language_Azerbaijani a ex:Language ;
+    rdfs:label "Azerbaijani" ;
+    ex:prop_languageName "Azerbaijani" .
+
+ex:Language_Belarusian a ex:Language ;
+    rdfs:label "Belarusian" ;
+    ex:prop_languageName "Belarusian" .
+
 ex:Language_Bengali a ex:Language ;
     rdfs:label "Bengali" ;
     ex:prop_languageName "Bengali" .
+
+ex:Language_Bosnian a ex:Language ;
+    rdfs:label "Bosnian" ;
+    ex:prop_languageName "Bosnian" .
+
+ex:Language_Bulgarian a ex:Language ;
+    rdfs:label "Bulgarian" ;
+    ex:prop_languageName "Bulgarian" .
 
 ex:Language_Burmese a ex:Language ;
     rdfs:label "Burmese" ;
@@ -16067,6 +16099,18 @@ ex:Language_Cantonese a ex:Language ;
 ex:Language_Cebuano a ex:Language ;
     rdfs:label "Cebuano" ;
     ex:prop_languageName "Cebuano" .
+
+ex:Language_Chavacano a ex:Language ;
+    rdfs:label "Chavacano" ;
+    ex:prop_languageName "Chavacano" .
+
+ex:Language_Croatian a ex:Language ;
+    rdfs:label "Croatian" ;
+    ex:prop_languageName "Croatian" .
+
+ex:Language_Czech a ex:Language ;
+    rdfs:label "Czech" ;
+    ex:prop_languageName "Czech" .
 
 ex:Language_Danish a ex:Language ;
     rdfs:label "Danish" ;
@@ -16084,13 +16128,29 @@ ex:Language_English a ex:Language ;
     rdfs:label "English" ;
     ex:prop_languageName "English" .
 
+ex:Language_Estonian a ex:Language ;
+    rdfs:label "Estonian" ;
+    ex:prop_languageName "Estonian" .
+
+ex:Language_Faroese a ex:Language ;
+    rdfs:label "Faroese" ;
+    ex:prop_languageName "Faroese" .
+
 ex:Language_Filipino a ex:Language ;
     rdfs:label "Filipino" ;
     ex:prop_languageName "Filipino" .
 
+ex:Language_Finnish a ex:Language ;
+    rdfs:label "Finnish" ;
+    ex:prop_languageName "Finnish" .
+
 ex:Language_French a ex:Language ;
     rdfs:label "French" ;
     ex:prop_languageName "French" .
+
+ex:Language_Georgian a ex:Language ;
+    rdfs:label "Georgian" ;
+    ex:prop_languageName "Georgian" .
 
 ex:Language_German a ex:Language ;
     rdfs:label "German" ;
@@ -16104,9 +16164,33 @@ ex:Language_Gujarati a ex:Language ;
     rdfs:label "Gujarati" ;
     ex:prop_languageName "Gujarati" .
 
+ex:Language_Hausa a ex:Language ;
+    rdfs:label "Hausa" ;
+    ex:prop_languageName "Hausa" .
+
+ex:Language_Hebrew a ex:Language ;
+    rdfs:label "Hebrew" ;
+    ex:prop_languageName "Hebrew" .
+
+ex:Language_Hiligaynon a ex:Language ;
+    rdfs:label "Hiligaynon" ;
+    ex:prop_languageName "Hiligaynon" .
+
 ex:Language_Hindi a ex:Language ;
     rdfs:label "Hindi" ;
     ex:prop_languageName "Hindi" .
+
+ex:Language_Hungarian a ex:Language ;
+    rdfs:label "Hungarian" ;
+    ex:prop_languageName "Hungarian" .
+
+ex:Language_Icelandic a ex:Language ;
+    rdfs:label "Icelandic" ;
+    ex:prop_languageName "Icelandic" .
+
+ex:Language_Ilocano a ex:Language ;
+    rdfs:label "Ilocano" ;
+    ex:prop_languageName "Ilocano" .
 
 ex:Language_Indonesian a ex:Language ;
     rdfs:label "Indonesian" ;
@@ -16124,17 +16208,57 @@ ex:Language_Kannada a ex:Language ;
     rdfs:label "Kannada" ;
     ex:prop_languageName "Kannada" .
 
+ex:Language_Kashmiri a ex:Language ;
+    rdfs:label "Kashmiri" ;
+    ex:prop_languageName "Kashmiri" .
+
+ex:Language_Kazakh a ex:Language ;
+    rdfs:label "Kazakh" ;
+    ex:prop_languageName "Kazakh" .
+
 ex:Language_Khmer a ex:Language ;
     rdfs:label "Khmer" ;
     ex:prop_languageName "Khmer" .
+
+ex:Language_Kinyarwanda a ex:Language ;
+    rdfs:label "Kinyarwanda" ;
+    ex:prop_languageName "Kinyarwanda" .
+
+ex:Language_Konkani a ex:Language ;
+    rdfs:label "Konkani" ;
+    ex:prop_languageName "Konkani" .
 
 ex:Language_Korean a ex:Language ;
     rdfs:label "Korean" ;
     ex:prop_languageName "Korean" .
 
+ex:Language_Kurdish a ex:Language ;
+    rdfs:label "Kurdish" ;
+    ex:prop_languageName "Kurdish" .
+
+ex:Language_Kyrgyz a ex:Language ;
+    rdfs:label "Kyrgyz" ;
+    ex:prop_languageName "Kyrgyz" .
+
 ex:Language_Lao a ex:Language ;
     rdfs:label "Lao" ;
     ex:prop_languageName "Lao" .
+
+ex:Language_Latvian a ex:Language ;
+    rdfs:label "Latvian" ;
+    ex:prop_languageName "Latvian" .
+
+ex:Language_Lithuanian a ex:Language ;
+    rdfs:label "Lithuanian" ;
+    ex:prop_languageName "Lithuanian" .
+
+ex:Language_Luxembourgish a ex:Language ;
+    rdfs:label "Luxembourgish" ;
+    ex:prop_languageName "Luxembourgish" .
+
+ex:Language_Macedonian a ex:Language ;
+    rdfs:label "Macedonian" ;
+    ex:prop_languageName "Macedonian" .
 
 ex:Language_Malay a ex:Language ;
     rdfs:label "Malay" ;
@@ -16144,25 +16268,97 @@ ex:Language_Malayalam a ex:Language ;
     rdfs:label "Malayalam" ;
     ex:prop_languageName "Malayalam" .
 
+ex:Language_Maltese a ex:Language ;
+    rdfs:label "Maltese" ;
+    ex:prop_languageName "Maltese" .
+
 ex:Language_Mandarin a ex:Language ;
     rdfs:label "Mandarin" ;
     ex:prop_languageName "Mandarin" .
+
+ex:Language_Manipuri a ex:Language ;
+    rdfs:label "Manipuri" ;
+    ex:prop_languageName "Manipuri" .
+
+ex:Language_Marathi a ex:Language ;
+    rdfs:label "Marathi" ;
+    ex:prop_languageName "Marathi" .
+
+ex:Language_Mongolian a ex:Language ;
+    rdfs:label "Mongolian" ;
+    ex:prop_languageName "Mongolian" .
+
+ex:Language_Montenegrin a ex:Language ;
+    rdfs:label "Montenegrin" ;
+    ex:prop_languageName "Montenegrin" .
 
 ex:Language_Nepali a ex:Language ;
     rdfs:label "Nepali" ;
     ex:prop_languageName "Nepali" .
 
+ex:Language_Norwegian a ex:Language ;
+    rdfs:label "Norwegian" ;
+    ex:prop_languageName "Norwegian" .
+
+ex:Language_Odia a ex:Language ;
+    rdfs:label "Odia" ;
+    ex:prop_languageName "Odia" .
+
+ex:Language_Persian a ex:Language ;
+    rdfs:label "Persian" ;
+    ex:prop_languageName "Persian" .
+
+ex:Language_Polish a ex:Language ;
+    rdfs:label "Polish" ;
+    ex:prop_languageName "Polish" .
+
+ex:Language_Portuguese a ex:Language ;
+    rdfs:label "Portuguese" ;
+    ex:prop_languageName "Portuguese" .
+
 ex:Language_Punjabi a ex:Language ;
     rdfs:label "Punjabi" ;
     ex:prop_languageName "Punjabi" .
+
+ex:Language_Romanian a ex:Language ;
+    rdfs:label "Romanian" ;
+    ex:prop_languageName "Romanian" .
+
+ex:Language_Russian a ex:Language ;
+    rdfs:label "Russian" ;
+    ex:prop_languageName "Russian" .
+
+ex:Language_Serbian a ex:Language ;
+    rdfs:label "Serbian" ;
+    ex:prop_languageName "Serbian" .
 
 ex:Language_Sinhala a ex:Language ;
     rdfs:label "Sinhala" ;
     ex:prop_languageName "Sinhala" .
 
+ex:Language_Slovak a ex:Language ;
+    rdfs:label "Slovak" ;
+    ex:prop_languageName "Slovak" .
+
+ex:Language_Slovene a ex:Language ;
+    rdfs:label "Slovene" ;
+    ex:prop_languageName "Slovene" .
+
 ex:Language_Spanish a ex:Language ;
     rdfs:label "Spanish" ;
     ex:prop_languageName "Spanish" .
+
+ex:Language_Swahili a ex:Language ;
+    rdfs:label "Swahili" ;
+    ex:prop_languageName "Swahili" .
+
+ex:Language_Swedish a ex:Language ;
+    rdfs:label "Swedish" ;
+    ex:prop_languageName "Swedish" .
+
+ex:Language_Tajik a ex:Language ;
+    rdfs:label "Tajik" ;
+    ex:prop_languageName "Tajik" .
 
 ex:Language_Tamil a ex:Language ;
     rdfs:label "Tamil" ;
@@ -16176,31 +16372,95 @@ ex:Language_Thai a ex:Language ;
     rdfs:label "Thai" ;
     ex:prop_languageName "Thai" .
 
+ex:Language_Tibetan a ex:Language ;
+    rdfs:label "Tibetan" ;
+    ex:prop_languageName "Tibetan" .
+
 ex:Language_Turkish a ex:Language ;
     rdfs:label "Turkish" ;
     ex:prop_languageName "Turkish" .
+
+ex:Language_Ukrainian a ex:Language ;
+    rdfs:label "Ukrainian" ;
+    ex:prop_languageName "Ukrainian" .
+
+ex:Language_Urdu a ex:Language ;
+    rdfs:label "Urdu" ;
+    ex:prop_languageName "Urdu" .
+
+ex:Language_Uyghur a ex:Language ;
+    rdfs:label "Uyghur" ;
+    ex:prop_languageName "Uyghur" .
+
+ex:Language_Uzbek a ex:Language ;
+    rdfs:label "Uzbek" ;
+    ex:prop_languageName "Uzbek" .
 
 ex:Language_Vietnamese a ex:Language ;
     rdfs:label "Vietnamese" ;
     ex:prop_languageName "Vietnamese" .
 
+ex:Language_Waray a ex:Language ;
+    rdfs:label "Waray" ;
+    ex:prop_languageName "Waray" .
+
 ex:City_HKG ex:prop_usesPrimaryLanguage ex:Language_Cantonese .
+
+ex:City_LON ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_YMQ ex:prop_usesPrimaryLanguage ex:Language_French .
 
 ex:City_YVR ex:prop_usesPrimaryLanguage ex:Language_English .
 
+ex:City_XMN ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_YEA ex:prop_usesPrimaryLanguage ex:Language_English .
+
 ex:City_SUB ex:prop_usesPrimaryLanguage ex:Language_Indonesian .
+
+ex:City_SNN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SLC ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SAN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_STL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SGD ex:prop_usesPrimaryLanguage ex:Language_Danish .
 
 ex:City_SGN ex:prop_usesPrimaryLanguage ex:Language_Vietnamese .
 
 ex:City_TRV ex:prop_usesPrimaryLanguage ex:Language_Malayalam .
 
+ex:City_TLS ex:prop_usesPrimaryLanguage ex:Language_French .
+
 ex:City_TPE ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
 
 ex:City_SYD ex:prop_usesPrimaryLanguage ex:Language_English .
 
+ex:City_SVG ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_SYR ex:prop_usesPrimaryLanguage ex:Language_English .
+
 ex:City_SZG ex:prop_usesPrimaryLanguage ex:Language_German .
 
+ex:City_SZX ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_PHX ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PMR ex:prop_usesPrimaryLanguage ex:Language_English .
+
 ex:City_PEN ex:prop_usesPrimaryLanguage ex:Language_Malay .
+
+ex:City_CHI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ORK ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PDX ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BJS ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_NCE ex:prop_usesPrimaryLanguage ex:Language_French .
 
 ex:City_NGO ex:prop_usesPrimaryLanguage ex:Language_Japanese .
 
@@ -16214,11 +16474,71 @@ ex:City_BOM ex:prop_usesPrimaryLanguage ex:Language_Hindi .
 
 ex:City_BWN ex:prop_usesPrimaryLanguage ex:Language_Malay .
 
+ex:City_NCL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_NPE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_NPL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_TYO ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_SAT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_RNN ex:prop_usesPrimaryLanguage ex:Language_Danish .
+
+ex:City_ROT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SHA ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_BOI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_CAI ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
 ex:City_CPT ex:prop_usesPrimaryLanguage ex:Language_English .
 
 ex:City_DAC ex:prop_usesPrimaryLanguage ex:Language_Bengali .
 
 ex:City_DPS ex:prop_usesPrimaryLanguage ex:Language_Indonesian .
+
+ex:City_JKT ex:prop_usesPrimaryLanguage ex:Language_Indonesian .
+
+ex:City_COS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MSP ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_CVG ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_DFW ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MIA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_GOT ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_WAS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_HOU ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_DUS ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_PIT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PLZ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ELS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_OSL ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_TRG ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BIO ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_BWI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LAS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_CTU ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_IBZ ex:prop_usesPrimaryLanguage ex:Language_Spanish .
 
 ex:City_MDC ex:prop_usesPrimaryLanguage ex:Language_Indonesian .
 
@@ -16241,6 +16561,1382 @@ ex:City_MNL ex:prop_usesPrimaryLanguage ex:Language_Filipino .
 ex:City_MAN ex:prop_usesPrimaryLanguage ex:Language_English .
 
 ex:City_LNZ ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_SEL ex:prop_usesPrimaryLanguage ex:Language_Korean .
+
+ex:City_FMO ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_KEL ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_ROM ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_DUB ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SPK ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_DUR ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_NYC ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_DEN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_KWI ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_STO ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_PMI ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_VLC ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_AES ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_BFS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BGO ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_CLE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_CLT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BOS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BSL ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_HAM ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_YYC ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_YTO ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_FDH ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_HAJ ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_AMI ex:prop_usesPrimaryLanguage ex:Language_Indonesian .
+
+ex:City_ATL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_AUS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ABQ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ABZ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_AAL ex:prop_usesPrimaryLanguage ex:Language_Danish .
+
+ex:City_AAR ex:prop_usesPrimaryLanguage ex:Language_Danish .
+
+ex:City_LEJ ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_NUE ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_PAD ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_STR ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_MOW ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_DUD ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ZQN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SAO ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_IVC ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_YOW ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_KRS ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_AYT ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_RIX ex:prop_usesPrimaryLanguage ex:Language_Latvian .
+
+ex:City_KHV ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_FLL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_IDR ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_BLQ ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_BME ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ADA ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_AGP ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_HBA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_HIJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_BUH ex:prop_usesPrimaryLanguage ex:Language_Romanian .
+
+ex:City_CBR ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_CFE ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_CFS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_CGN ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_CUN ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_DMM ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_DTT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BNA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BOD ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_BDQ ex:prop_usesPrimaryLanguage ex:Language_Gujarati .
+
+ex:City_BEG ex:prop_usesPrimaryLanguage ex:Language_Serbian .
+
+ex:City_ASP ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_AYQ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BRI ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_ISA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_JAI ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_JAX ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_JOG ex:prop_usesPrimaryLanguage ex:Language_Indonesian .
+
+ex:City_KHH ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_MPL ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_MPM ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_MRU ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_NAN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_NOU ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_NTL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ORF ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LST ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MCT ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_MKY ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MLA ex:prop_usesPrimaryLanguage ex:Language_Maltese .
+
+ex:City_RDU ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ROC ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ROK ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SEZ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SHV ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_TPA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PNQ ex:prop_usesPrimaryLanguage ex:Language_Marathi .
+
+ex:City_PSP ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ZAG ex:prop_usesPrimaryLanguage ex:Language_Croatian .
+
+ex:City_PLQ ex:prop_usesPrimaryLanguage ex:Language_Lithuanian .
+
+ex:City_TRS ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_TSV ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_USM ex:prop_usesPrimaryLanguage ex:Language_Thai .
+
+ex:City_VNS ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_VRN ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_WAW ex:prop_usesPrimaryLanguage ex:Language_Polish .
+
+ex:City_RAR ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ABX ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BNK ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_HVB ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MCY ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PQQ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MQL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PPP ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PHE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ZNE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ADD ex:prop_usesPrimaryLanguage ex:Language_Amharic .
+
+ex:City_ANC ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BAK ex:prop_usesPrimaryLanguage ex:Language_Azerbaijani .
+
+ex:City_APW ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_OPO ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_SCL ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_ASU ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_CWB ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_GYN ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_IGU ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_TFN ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_GZT ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_KYA ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_DLM ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_ASR ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_SZF ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_TZX ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_DNZ ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_BXN ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_HNL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SIA ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_BBI ex:prop_usesPrimaryLanguage ex:Language_Odia .
+
+ex:City_RIO ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_BSB ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_BHO ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_MES ex:prop_usesPrimaryLanguage ex:Language_Indonesian .
+
+ex:City_AUA ex:prop_usesPrimaryLanguage ex:Language_Dutch .
+
+ex:City_MSY ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PWM ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BHE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_GIS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_KKE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PPQ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_TUO ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_WAG ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_EXT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ABJ ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_ACC ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BUE ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_CSX ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_KMQ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_TOY ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_LUX ex:prop_usesPrimaryLanguage ex:Language_Luxembourgish .
+
+ex:City_GDN ex:prop_usesPrimaryLanguage ex:Language_Polish .
+
+ex:City_POZ ex:prop_usesPrimaryLanguage ex:Language_Polish .
+
+ex:City_WRO ex:prop_usesPrimaryLanguage ex:Language_Polish .
+
+ex:City_ANK ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_BDS ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_CEK ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_CND ex:prop_usesPrimaryLanguage ex:Language_Romanian .
+
+ex:City_IZM ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_KGI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_REK ex:prop_usesPrimaryLanguage ex:Language_Icelandic .
+
+ex:City_OAK ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_KUF ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_SJJ ex:prop_usesPrimaryLanguage ex:Language_Bosnian .
+
+ex:City_TBU ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_TKU ex:prop_usesPrimaryLanguage ex:Language_Finnish .
+
+ex:City_GOI ex:prop_usesPrimaryLanguage ex:Language_Konkani .
+
+ex:City_KTA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SJC ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_HIR ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_GLT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_GOA ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_GRJ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_FLR ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_KMG ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_SXM ex:prop_usesPrimaryLanguage ex:Language_Dutch .
+
+ex:City_UFA ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_VVO ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_UUS ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_BDB ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_GET ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_KNX ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_TMW ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_OSA ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_KRP ex:prop_usesPrimaryLanguage ex:Language_Danish .
+
+ex:City_GLA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MAD ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_TRD ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_MRS ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_LYS ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_NSN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_KLO ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_BFN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_VCE ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_NAP ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_PAR ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_MIL ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_ALG ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_DAR ex:prop_usesPrimaryLanguage ex:Language_Swahili .
+
+ex:City_DBV ex:prop_usesPrimaryLanguage ex:Language_Croatian .
+
+ex:City_BTR ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BTV ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BZG ex:prop_usesPrimaryLanguage ex:Language_Polish .
+
+ex:City_CNJ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_COR ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_CRP ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_GAU ex:prop_usesPrimaryLanguage ex:Language_Assamese .
+
+ex:City_GWT ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_HDF ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_GPT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_GRQ ex:prop_usesPrimaryLanguage ex:Language_Dutch .
+
+ex:City_EBB ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_EMD ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_FKB ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_KLR ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_KRK ex:prop_usesPrimaryLanguage ex:Language_Polish .
+
+ex:City_KRN ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_LAD ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_LLA ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_MDE ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_MJV ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_MNL ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_MVD ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_POG ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_PSA ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_RAK ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_RTM ex:prop_usesPrimaryLanguage ex:Language_Dutch .
+
+ex:City_KRR ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_KWE ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_KZN ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_INV ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_IOM ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_IXB ex:prop_usesPrimaryLanguage ex:Language_Bengali .
+
+ex:City_IXZ ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_JAN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_JER ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_JJN ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_JRO ex:prop_usesPrimaryLanguage ex:Language_Swahili .
+
+ex:City_KGL ex:prop_usesPrimaryLanguage ex:Language_Kinyarwanda .
+
+ex:City_MMH ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MOB ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MOV ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_NDJ ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_NQY ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LGB ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LJU ex:prop_usesPrimaryLanguage ex:Language_Slovene .
+
+ex:City_LPQ ex:prop_usesPrimaryLanguage ex:Language_Lao .
+
+ex:City_LRD ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LUZ ex:prop_usesPrimaryLanguage ex:Language_Polish .
+
+ex:City_MAF ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MBA ex:prop_usesPrimaryLanguage ex:Language_Swahili .
+
+ex:City_MBJ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MFE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PVR ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_RAJ ex:prop_usesPrimaryLanguage ex:Language_Gujarati .
+
+ex:City_RNB ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_NWI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_OSD ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_OUA ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_PBO ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PEE ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_PLS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PNR ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_PUJ ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SUN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SVX ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_SXR ex:prop_usesPrimaryLanguage ex:Language_Kashmiri .
+
+ex:City_ROV ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_FMY ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_RZE ex:prop_usesPrimaryLanguage ex:Language_Polish .
+
+ex:City_SDL ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_SDQ ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SFT ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_SJD ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SJU ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SOU ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SPU ex:prop_usesPrimaryLanguage ex:Language_Croatian .
+
+ex:City_STI ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_STS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_STV ex:prop_usesPrimaryLanguage ex:Language_Gujarati .
+
+ex:City_UME ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_URC ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_VBY ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_VLI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_WNZ ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_WUX ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_BLL ex:prop_usesPrimaryLanguage ex:Language_Danish .
+
+ex:City_BRE ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_WRE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_EDI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_DTM ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_IXC ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_OGG ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LUG ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_WLG ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_DRS ex:prop_usesPrimaryLanguage ex:Language_German .
+
+ex:City_HLZ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BES ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_DLC ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_AOI ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_CAG ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_TRN ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_IXL ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_REG ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_OXF ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PHL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BUF ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ORL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_USN ex:prop_usesPrimaryLanguage ex:Language_Korean .
+
+ex:City_PVD ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_IXJ ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_LKO ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_BHX ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_DSA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LED ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_VNO ex:prop_usesPrimaryLanguage ex:Language_Lithuanian .
+
+ex:City_SKG ex:prop_usesPrimaryLanguage ex:Language_Greek .
+
+ex:City_LIS ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_KTW ex:prop_usesPrimaryLanguage ex:Language_Polish .
+
+ex:City_HTI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_NBO ex:prop_usesPrimaryLanguage ex:Language_Swahili .
+
+ex:City_VFA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PMO ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_TLV ex:prop_usesPrimaryLanguage ex:Language_Hebrew .
+
+ex:City_ULN ex:prop_usesPrimaryLanguage ex:Language_Mongolian .
+
+ex:City_IND ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SUF ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_POM ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_HRB ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_PBI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_TUL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SRQ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_FAT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_AUH ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_YHZ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MKE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BZE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_TUS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ALC ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_HAU ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_HER ex:prop_usesPrimaryLanguage ex:Language_Greek .
+
+ex:City_CMH ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_DOH ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_DSM ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ICT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LHE ex:prop_usesPrimaryLanguage ex:Language_Urdu .
+
+ex:City_IXM ex:prop_usesPrimaryLanguage ex:Language_Tamil .
+
+ex:City_JTR ex:prop_usesPrimaryLanguage ex:Language_Greek .
+
+ex:City_KHI ex:prop_usesPrimaryLanguage ex:Language_Urdu .
+
+ex:City_KKN ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_KOJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_KRT ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_HRE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MSN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MYJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_NLA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LPA ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_LUN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LXR ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_MKC ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MED ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_MEM ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_RHO ex:prop_usesPrimaryLanguage ex:Language_Greek .
+
+ex:City_RIC ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_RNO ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SBA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SJO ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SVQ ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_TNR ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_PPT ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_YWG ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_YYT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_WDH ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_YQR ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_FAO ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_YIH ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_CCJ ex:prop_usesPrimaryLanguage ex:Language_Malayalam .
+
+ex:City_ASM ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_BDA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BEL ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_BEY ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_BGA ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_BGI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BIL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BJR ex:prop_usesPrimaryLanguage ex:Language_Amharic .
+
+ex:City_BKO ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_ASW ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_AVL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_AXM ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_AXT ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_AXU ex:prop_usesPrimaryLanguage ex:Language_Amharic .
+
+ex:City_BAQ ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_ABV ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ADZ ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_AER ex:prop_usesPrimaryLanguage ex:Language_Russian .
+
+ex:City_ALA ex:prop_usesPrimaryLanguage ex:Language_Kazakh .
+
+ex:City_AMM ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_BGW ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_CGQ ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_IFN ex:prop_usesPrimaryLanguage ex:Language_Persian .
+
+ex:City_SYX ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_HKD ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_SAW ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_KMJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_IEV ex:prop_usesPrimaryLanguage ex:Language_Ukrainian .
+
+ex:City_LIH ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MSQ ex:prop_usesPrimaryLanguage ex:Language_Belarusian .
+
+ex:City_MMY ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_ONT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SAC ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SPN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SYZ ex:prop_usesPrimaryLanguage ex:Language_Persian .
+
+ex:City_SKP ex:prop_usesPrimaryLanguage ex:Language_Macedonian .
+
+ex:City_ISB ex:prop_usesPrimaryLanguage ex:Language_Urdu .
+
+ex:City_IXU ex:prop_usesPrimaryLanguage ex:Language_Marathi .
+
+ex:City_NTE ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_YNT ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_GRR ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_GUA ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_GUM ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_GBE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_EUG ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_CUR ex:prop_usesPrimaryLanguage ex:Language_Dutch .
+
+ex:City_TYN ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_TAS ex:prop_usesPrimaryLanguage ex:Language_Uzbek .
+
+ex:City_TBS ex:prop_usesPrimaryLanguage ex:Language_Georgian .
+
+ex:City_EVN ex:prop_usesPrimaryLanguage ex:Language_Armenian .
+
+ex:City_CTG ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_CUZ ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_CZX ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_DCY ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_DKR ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_DLA ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_DLU ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_BLZ ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BUR ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BUS ex:prop_usesPrimaryLanguage ex:Language_Georgian .
+
+ex:City_BZN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_CCS ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_CHS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_CID ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_CLJ ex:prop_usesPrimaryLanguage ex:Language_Romanian .
+
+ex:City_CLO ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_CAS ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_BHZ ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_GAY ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_GCM ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_GDQ ex:prop_usesPrimaryLanguage ex:Language_Amharic .
+
+ex:City_GEG ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_GYE ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_YVA ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_ALY ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_HET ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_HFE ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_HJR ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_HLD ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_HRG ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_HRK ex:prop_usesPrimaryLanguage ex:Language_Ukrainian .
+
+ex:City_GPS ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_DYG ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_DYU ex:prop_usesPrimaryLanguage ex:Language_Tajik .
+
+ex:City_EBL ex:prop_usesPrimaryLanguage ex:Language_Kurdish .
+
+ex:City_ECN ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_FAE ex:prop_usesPrimaryLanguage ex:Language_Faroese .
+
+ex:City_FLN ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_FOR ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_FRU ex:prop_usesPrimaryLanguage ex:Language_Kyrgyz .
+
+ex:City_FSD ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_KOA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_KSC ex:prop_usesPrimaryLanguage ex:Language_Slovak .
+
+ex:City_KSU ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_KWL ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_LBV ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_HSG ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_IKA ex:prop_usesPrimaryLanguage ex:Language_Persian .
+
+ex:City_IMF ex:prop_usesPrimaryLanguage ex:Language_Manipuri .
+
+ex:City_INC ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_IOS ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_ISG ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_ITO ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_IWK ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_IXR ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_JIB ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_JPA ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_JUL ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_JUZ ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_KAN ex:prop_usesPrimaryLanguage ex:Language_Hausa .
+
+ex:City_KCZ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_KHG ex:prop_usesPrimaryLanguage ex:Language_Uyghur .
+
+ex:City_KIN ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_KIV ex:prop_usesPrimaryLanguage ex:Language_Romanian .
+
+ex:City_MOL ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_MQX ex:prop_usesPrimaryLanguage ex:Language_Amharic .
+
+ex:City_NAS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_NAT ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_NAV ex:prop_usesPrimaryLanguage ex:Language_Turkish .
+
+ex:City_NIM ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_YAO ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_NTG ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_MTR ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_LFW ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_LHW ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_LIM ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_LIR ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_LJG ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_LLI ex:prop_usesPrimaryLanguage ex:Language_Indonesian .
+
+ex:City_LOS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LPB ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_LVI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_LWO ex:prop_usesPrimaryLanguage ex:Language_Ukrainian .
+
+ex:City_LXA ex:prop_usesPrimaryLanguage ex:Language_Tibetan .
+
+ex:City_LYI ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_LYR ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_MAO ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_MDT ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MFR ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_MID ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_MIG ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_PUY ex:prop_usesPrimaryLanguage ex:Language_Croatian .
+
+ex:City_RAI ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_REC ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_ROR ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ODS ex:prop_usesPrimaryLanguage ex:Language_Ukrainian .
+
+ex:City_OIT ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_OKJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_ONJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_OZH ex:prop_usesPrimaryLanguage ex:Language_Ukrainian .
+
+ex:City_PAP ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_PAT ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_PDL ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_PEM ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_PNI ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_POA ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_POP ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_POS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_PPN ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_PRN ex:prop_usesPrimaryLanguage ex:Language_Albanian .
+
+ex:City_PTY ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_TAK ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_TKK ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_TKS ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_NQZ ex:prop_usesPrimaryLanguage ex:Language_Kazakh .
+
+ex:City_TTJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_TUN ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_TXN ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_TYS ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_UBJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_TGD ex:prop_usesPrimaryLanguage ex:Language_Montenegrin .
+
+ex:City_TIA ex:prop_usesPrimaryLanguage ex:Language_Albanian .
+
+ex:City_TIU ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_RPR ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_RTB ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SAP ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SAV ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SBZ ex:prop_usesPrimaryLanguage ex:Language_Romanian .
+
+ex:City_SCY ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SID ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_SMR ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SSA ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_SSG ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SSH ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_YGJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_YIN ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_YIW ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_YNJ ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_UIO ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SLU ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_VAR ex:prop_usesPrimaryLanguage ex:Language_Bulgarian .
+
+ex:City_SRZ ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_WXN ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_XAP ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_XFN ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_XNN ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_YAP ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_YBP ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_YCU ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_HAV ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_YTY ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_YYG ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_ZAD ex:prop_usesPrimaryLanguage ex:Language_Croatian .
+
+ex:City_ZHA ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_ZNZ ex:prop_usesPrimaryLanguage ex:Language_Swahili .
+
+ex:City_ZUH ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_DNK ex:prop_usesPrimaryLanguage ex:Language_Ukrainian .
+
+ex:City_KSA ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_NJF ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_NAG ex:prop_usesPrimaryLanguage ex:Language_Marathi .
+
+ex:City_MGA ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SAL ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_YXE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_BDL ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_JDH ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_KMI ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_FNC ex:prop_usesPrimaryLanguage ex:Language_Portuguese .
+
+ex:City_LCA ex:prop_usesPrimaryLanguage ex:Language_Greek .
+
+ex:City_OMA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_UDR ex:prop_usesPrimaryLanguage ex:Language_Hindi .
+
+ex:City_BAH ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_BOG ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_PRG ex:prop_usesPrimaryLanguage ex:Language_Czech .
+
+ex:City_BUD ex:prop_usesPrimaryLanguage ex:Language_Hungarian .
+
+ex:City_LRT ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_PUF ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_BIQ ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_BOO ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_TOS ex:prop_usesPrimaryLanguage ex:Language_Norwegian .
+
+ex:City_AGH ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_MMA ex:prop_usesPrimaryLanguage ex:Language_Swedish .
+
+ex:City_HIA ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_SDR ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SPC ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_VGO ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_VLL ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_ACE ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_EAS ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_FUE ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_GRX ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_LCG ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_LEI ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_OVD ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SCQ ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_XRY ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_MAH ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_TFS ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_GDL ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_HEL ex:prop_usesPrimaryLanguage ex:Language_Finnish .
+
+ex:City_HMO ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_MEX ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_MTY ex:prop_usesPrimaryLanguage ex:Language_Spanish .
+
+ex:City_SOF ex:prop_usesPrimaryLanguage ex:Language_Bulgarian .
+
+ex:City_TLL ex:prop_usesPrimaryLanguage ex:Language_Estonian .
+
+ex:City_AOJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_NGS ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_SDJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_CTA ex:prop_usesPrimaryLanguage ex:Language_Italian .
+
+ex:City_EGE ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_SNA ex:prop_usesPrimaryLanguage ex:Language_English .
+
+ex:City_TIR ex:prop_usesPrimaryLanguage ex:Language_Telugu .
+
+ex:City_DJE ex:prop_usesPrimaryLanguage ex:Language_Arabic .
+
+ex:City_SXB ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_LIL ex:prop_usesPrimaryLanguage ex:Language_French .
+
+ex:City_DOY ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_YIC ex:prop_usesPrimaryLanguage ex:Language_Mandarin .
+
+ex:City_BCD ex:prop_usesPrimaryLanguage ex:Language_Hiligaynon .
+
+ex:City_DRP ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_GES ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_CGY ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_PPS ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_TAG ex:prop_usesPrimaryLanguage ex:Language_Cebuano .
+
+ex:City_ZAM ex:prop_usesPrimaryLanguage ex:Language_Chavacano .
+
+ex:City_DGT ex:prop_usesPrimaryLanguage ex:Language_Cebuano .
+
+ex:City_NHA ex:prop_usesPrimaryLanguage ex:Language_Vietnamese .
+
+ex:City_IWJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_SYO ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_TAC ex:prop_usesPrimaryLanguage ex:Language_Waray .
+
+ex:City_LAO ex:prop_usesPrimaryLanguage ex:Language_Ilocano .
+
+ex:City_BXU ex:prop_usesPrimaryLanguage ex:Language_Cebuano .
+
+ex:City_USU ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_RXS ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_DPL ex:prop_usesPrimaryLanguage ex:Language_Cebuano .
+
+ex:City_OZC ex:prop_usesPrimaryLanguage ex:Language_Cebuano .
+
+ex:City_IAO ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_CYP ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_CBO ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_BSO ex:prop_usesPrimaryLanguage ex:Language_Ilocano .
+
+ex:City_CRM ex:prop_usesPrimaryLanguage ex:Language_Waray .
+
+ex:City_PAG ex:prop_usesPrimaryLanguage ex:Language_Filipino .
+
+ex:City_EUQ ex:prop_usesPrimaryLanguage ex:Language_Atayal .
+
+ex:City_AKJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_FKS ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_FSZ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_FUJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_HAC ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_KIJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_KUH ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_MBE ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_MMB ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_NTQ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_RIS ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_SHB ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_TSJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_WKJ ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_TJQ ex:prop_usesPrimaryLanguage ex:Language_Indonesian .
+
+ex:City_PNK ex:prop_usesPrimaryLanguage ex:Language_Indonesian .
+
+ex:City_MPH ex:prop_usesPrimaryLanguage ex:Language_Filipino .
 
 ex:City_CNX ex:prop_usesPrimaryLanguage ex:Language_Thai .
 
@@ -16456,6 +18152,10 @@ ex:City_CEI ex:prop_usesPrimaryLanguage ex:Language_Thai .
 
 ex:City_SIN ex:prop_usesPrimaryLanguage ex:Language_English .
 
+ex:City_NRT ex:prop_usesPrimaryLanguage ex:Language_Japanese .
+
+ex:City_LHR ex:prop_usesPrimaryLanguage ex:Language_English .
+
 ex:TransportMode_angkot a ex:TransportMode ;
     rdfs:label "angkot" ;
     ex:prop_transportModeName "angkot" .
@@ -16480,6 +18180,22 @@ ex:TransportMode_metro a ex:TransportMode ;
     rdfs:label "metro" ;
     ex:prop_transportModeName "metro" .
 
+ex:TransportMode_ojek a ex:TransportMode ;
+    rdfs:label "ojek" ;
+    ex:prop_transportModeName "ojek" .
+
+ex:TransportMode_overground a ex:TransportMode ;
+    rdfs:label "overground" ;
+    ex:prop_transportModeName "overground" .
+
+ex:TransportMode_private_driver a ex:TransportMode ;
+    rdfs:label "private_driver" ;
+    ex:prop_transportModeName "private_driver" .
+
+ex:TransportMode_scooter_rental a ex:TransportMode ;
+    rdfs:label "scooter_rental" ;
+    ex:prop_transportModeName "scooter_rental" .
+
 ex:TransportMode_subway a ex:TransportMode ;
     rdfs:label "subway" ;
     ex:prop_transportModeName "subway" .
@@ -16487,6 +18203,10 @@ ex:TransportMode_subway a ex:TransportMode ;
 ex:TransportMode_tram a ex:TransportMode ;
     rdfs:label "tram" ;
     ex:prop_transportModeName "tram" .
+
+ex:TransportMode_tube a ex:TransportMode ;
+    rdfs:label "tube" ;
+    ex:prop_transportModeName "tube" .
 
 ex:City_HKG ex:prop_hasTransportMode ex:TransportMode_metro .
 
@@ -16525,6 +18245,8 @@ ex:City_SYD ex:prop_hasTransportMode ex:TransportMode_commuter_rail .
 ex:City_SYD ex:prop_hasTransportMode ex:TransportMode_bus .
 
 ex:City_SYD ex:prop_hasTransportMode ex:TransportMode_light_rail .
+
+ex:City_SYD ex:prop_hasTransportMode ex:TransportMode_metro .
 
 ex:City_SZG ex:prop_hasTransportMode ex:TransportMode_bus .
 
@@ -16567,6 +18289,12 @@ ex:City_CPT ex:prop_hasTransportMode ex:TransportMode_commuter_rail .
 ex:City_DAC ex:prop_hasTransportMode ex:TransportMode_bus .
 
 ex:City_DPS ex:prop_hasTransportMode ex:TransportMode_bus .
+
+ex:City_DPS ex:prop_hasTransportMode ex:TransportMode_ojek .
+
+ex:City_DPS ex:prop_hasTransportMode ex:TransportMode_private_driver .
+
+ex:City_DPS ex:prop_hasTransportMode ex:TransportMode_scooter_rental .
 
 ex:City_MDC ex:prop_hasTransportMode ex:TransportMode_bus .
 
@@ -17004,6 +18732,24 @@ ex:City_SIN ex:prop_hasTransportMode ex:TransportMode_metro .
 
 ex:City_SIN ex:prop_hasTransportMode ex:TransportMode_bus .
 
+ex:City_NRT ex:prop_hasTransportMode ex:TransportMode_metro .
+
+ex:City_NRT ex:prop_hasTransportMode ex:TransportMode_subway .
+
+ex:City_NRT ex:prop_hasTransportMode ex:TransportMode_bus .
+
+ex:City_NRT ex:prop_hasTransportMode ex:TransportMode_commuter_rail .
+
+ex:City_NRT ex:prop_hasTransportMode ex:TransportMode_high_speed_rail .
+
+ex:City_LHR ex:prop_hasTransportMode ex:TransportMode_tube .
+
+ex:City_LHR ex:prop_hasTransportMode ex:TransportMode_bus .
+
+ex:City_LHR ex:prop_hasTransportMode ex:TransportMode_commuter_rail .
+
+ex:City_LHR ex:prop_hasTransportMode ex:TransportMode_overground .
+
 ex:City_ADL ex:prop_publicTransportWidelyUsedInCountry false .
 
 ex:City_AHO ex:prop_publicTransportWidelyUsedInCountry true .
@@ -17158,6 +18904,8 @@ ex:City_LBU ex:prop_publicTransportWidelyUsedInCountry false .
 
 ex:City_LGK ex:prop_publicTransportWidelyUsedInCountry true .
 
+ex:City_LHR ex:prop_publicTransportWidelyUsedInCountry true .
+
 ex:City_LNZ ex:prop_publicTransportWidelyUsedInCountry true .
 
 ex:City_MAA ex:prop_publicTransportWidelyUsedInCountry true .
@@ -17189,6 +18937,8 @@ ex:City_NGO ex:prop_publicTransportWidelyUsedInCountry true .
 ex:City_NKG ex:prop_publicTransportWidelyUsedInCountry true .
 
 ex:City_NNG ex:prop_publicTransportWidelyUsedInCountry true .
+
+ex:City_NRT ex:prop_publicTransportWidelyUsedInCountry true .
 
 ex:City_OKA ex:prop_publicTransportWidelyUsedInCountry true .
 
@@ -42892,6 +44642,474 @@ ex:CityMonthlyWeather_SIN_12 a ex:CityMonthlyWeather ;
 
 ex:City_SIN ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SIN_12 .
 
+ex:CityMonthlyWeather_NRT_1 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 1" ;
+    ex:prop_monthNum "1"^^xsd:integer ;
+    ex:prop_monthName "January" ;
+    ex:prop_avgTempC "6"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "52"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "cool_winter" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cold and dry" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_1 .
+
+ex:CityMonthlyWeather_NRT_2 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 2" ;
+    ex:prop_monthNum "2"^^xsd:integer ;
+    ex:prop_monthName "February" ;
+    ex:prop_avgTempC "7"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "56"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "cool_winter" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cold with early signs of spring" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_2 .
+
+ex:CityMonthlyWeather_NRT_3 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 3" ;
+    ex:prop_monthNum "3"^^xsd:integer ;
+    ex:prop_monthName "March" ;
+    ex:prop_avgTempC "10"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "117"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "shoulder" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "mild with spring rain" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_3 .
+
+ex:CityMonthlyWeather_NRT_4 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 4" ;
+    ex:prop_monthNum "4"^^xsd:integer ;
+    ex:prop_monthName "April" ;
+    ex:prop_avgTempC "14"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "125"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "spring_peak" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "pleasant cherry blossom season" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_4 .
+
+ex:CityMonthlyWeather_NRT_5 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 5" ;
+    ex:prop_monthNum "5"^^xsd:integer ;
+    ex:prop_monthName "May" ;
+    ex:prop_avgTempC "19"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "138"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "spring_peak" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "warm and pleasant" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_5 .
+
+ex:CityMonthlyWeather_NRT_6 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 6" ;
+    ex:prop_monthNum "6"^^xsd:integer ;
+    ex:prop_monthName "June" ;
+    ex:prop_avgTempC "23"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "168"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "wet_season" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "hot and rainy (rainy season)" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_6 .
+
+ex:CityMonthlyWeather_NRT_7 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 7" ;
+    ex:prop_monthNum "7"^^xsd:integer ;
+    ex:prop_monthName "July" ;
+    ex:prop_avgTempC "27"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "154"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "summer_peak" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "hot humid and very wet" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_7 .
+
+ex:CityMonthlyWeather_NRT_8 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 8" ;
+    ex:prop_monthNum "8"^^xsd:integer ;
+    ex:prop_monthName "August" ;
+    ex:prop_avgTempC "29"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "168"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "summer_peak" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "hottest and very humid" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_8 .
+
+ex:CityMonthlyWeather_NRT_9 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 9" ;
+    ex:prop_monthNum "9"^^xsd:integer ;
+    ex:prop_monthName "September" ;
+    ex:prop_avgTempC "25"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "209"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "shoulder" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "warm with typhoon risk" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_9 .
+
+ex:CityMonthlyWeather_NRT_10 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 10" ;
+    ex:prop_monthNum "10"^^xsd:integer ;
+    ex:prop_monthName "October" ;
+    ex:prop_avgTempC "19"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "197"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "autumn_peak" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "mild and colourful autumn" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_10 .
+
+ex:CityMonthlyWeather_NRT_11 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 11" ;
+    ex:prop_monthNum "11"^^xsd:integer ;
+    ex:prop_monthName "November" ;
+    ex:prop_avgTempC "13"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "93"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "autumn_peak" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "cool and dry" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_11 .
+
+ex:CityMonthlyWeather_NRT_12 a ex:CityMonthlyWeather ;
+    rdfs:label "NRT month 12" ;
+    ex:prop_monthNum "12"^^xsd:integer ;
+    ex:prop_monthName "December" ;
+    ex:prop_avgTempC "8"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "51"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "humid_subtropical" ;
+    ex:prop_seasonCode "cool_winter" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cold and dry" .
+
+ex:City_NRT ex:prop_hasWeatherObservation ex:CityMonthlyWeather_NRT_12 .
+
+ex:CityMonthlyWeather_LHR_1 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 1" ;
+    ex:prop_monthNum "1"^^xsd:integer ;
+    ex:prop_monthName "January" ;
+    ex:prop_avgTempC "5"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "55"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "cool_winter" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cold damp and grey" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_1 .
+
+ex:CityMonthlyWeather_LHR_2 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 2" ;
+    ex:prop_monthNum "2"^^xsd:integer ;
+    ex:prop_monthName "February" ;
+    ex:prop_avgTempC "5"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "40"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "cool_winter" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cold with some early spring days" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_2 .
+
+ex:CityMonthlyWeather_LHR_3 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 3" ;
+    ex:prop_monthNum "3"^^xsd:integer ;
+    ex:prop_monthName "March" ;
+    ex:prop_avgTempC "8"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "40"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "shoulder" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cool with brightening days" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_3 .
+
+ex:CityMonthlyWeather_LHR_4 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 4" ;
+    ex:prop_monthNum "4"^^xsd:integer ;
+    ex:prop_monthName "April" ;
+    ex:prop_avgTempC "11"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "43"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "shoulder" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "mild and fresh spring weather" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_4 .
+
+ex:CityMonthlyWeather_LHR_5 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 5" ;
+    ex:prop_monthNum "5"^^xsd:integer ;
+    ex:prop_monthName "May" ;
+    ex:prop_avgTempC "14"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "45"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "shoulder" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "warm and one of the sunniest months" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_5 .
+
+ex:CityMonthlyWeather_LHR_6 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 6" ;
+    ex:prop_monthNum "6"^^xsd:integer ;
+    ex:prop_monthName "June" ;
+    ex:prop_avgTempC "17"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "46"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "summer_peak" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "warm and pleasant" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_6 .
+
+ex:CityMonthlyWeather_LHR_7 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 7" ;
+    ex:prop_monthNum "7"^^xsd:integer ;
+    ex:prop_monthName "July" ;
+    ex:prop_avgTempC "19"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "46"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "summer_peak" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "warmest and sunniest month" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_7 .
+
+ex:CityMonthlyWeather_LHR_8 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 8" ;
+    ex:prop_monthNum "8"^^xsd:integer ;
+    ex:prop_monthName "August" ;
+    ex:prop_avgTempC "19"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "49"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "summer_peak" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "warm and pleasant" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_8 .
+
+ex:CityMonthlyWeather_LHR_9 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 9" ;
+    ex:prop_monthNum "9"^^xsd:integer ;
+    ex:prop_monthName "September" ;
+    ex:prop_avgTempC "16"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "50"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "autumn_shoulder" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "mild with more rain" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_9 .
+
+ex:CityMonthlyWeather_LHR_10 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 10" ;
+    ex:prop_monthNum "10"^^xsd:integer ;
+    ex:prop_monthName "October" ;
+    ex:prop_avgTempC "12"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "69"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "autumn_shoulder" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cool and wet" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_10 .
+
+ex:CityMonthlyWeather_LHR_11 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 11" ;
+    ex:prop_monthNum "11"^^xsd:integer ;
+    ex:prop_monthName "November" ;
+    ex:prop_avgTempC "8"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "57"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "cool_winter" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cold dark and damp" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_11 .
+
+ex:CityMonthlyWeather_LHR_12 a ex:CityMonthlyWeather ;
+    rdfs:label "LHR month 12" ;
+    ex:prop_monthNum "12"^^xsd:integer ;
+    ex:prop_monthName "December" ;
+    ex:prop_avgTempC "5"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "55"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "marine_west_coast" ;
+    ex:prop_seasonCode "cool_winter" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cold and short days" .
+
+ex:City_LHR ex:prop_hasWeatherObservation ex:CityMonthlyWeather_LHR_12 .
+
+ex:CityMonthlyWeather_SPK_1 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 1" ;
+    ex:prop_monthNum "1"^^xsd:integer ;
+    ex:prop_monthName "January" ;
+    ex:prop_avgTempC "-4.1"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "114"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "cold_snowy" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "very cold and snowy" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_1 .
+
+ex:CityMonthlyWeather_SPK_2 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 2" ;
+    ex:prop_monthNum "2"^^xsd:integer ;
+    ex:prop_monthName "February" ;
+    ex:prop_avgTempC "-3.5"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "88"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "cold_snowy" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cold and snowy" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_2 .
+
+ex:CityMonthlyWeather_SPK_3 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 3" ;
+    ex:prop_monthNum "3"^^xsd:integer ;
+    ex:prop_monthName "March" ;
+    ex:prop_avgTempC "1.5"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "74"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "spring_shoulder" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "snow melting and chilly" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_3 .
+
+ex:CityMonthlyWeather_SPK_4 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 4" ;
+    ex:prop_monthNum "4"^^xsd:integer ;
+    ex:prop_monthName "April" ;
+    ex:prop_avgTempC "8.8"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "60"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "spring_shoulder" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "cherry blossoms and cool" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_4 .
+
+ex:CityMonthlyWeather_SPK_5 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 5" ;
+    ex:prop_monthNum "5"^^xsd:integer ;
+    ex:prop_monthName "May" ;
+    ex:prop_avgTempC "15.1"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "60"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "pleasant_peak" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "warm and pleasant" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_5 .
+
+ex:CityMonthlyWeather_SPK_6 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 6" ;
+    ex:prop_monthNum "6"^^xsd:integer ;
+    ex:prop_monthName "June" ;
+    ex:prop_avgTempC "19.3"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "62"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "summer" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "warm and less humid than Honshu" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_6 .
+
+ex:CityMonthlyWeather_SPK_7 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 7" ;
+    ex:prop_monthNum "7"^^xsd:integer ;
+    ex:prop_monthName "July" ;
+    ex:prop_avgTempC "23.0"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "92"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "summer_warm" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "warm and comfortable" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_7 .
+
+ex:CityMonthlyWeather_SPK_8 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 8" ;
+    ex:prop_monthNum "8"^^xsd:integer ;
+    ex:prop_monthName "August" ;
+    ex:prop_avgTempC "24.0"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "138"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "summer_warm" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "warmest month with mild humidity" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_8 .
+
+ex:CityMonthlyWeather_SPK_9 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 9" ;
+    ex:prop_monthNum "9"^^xsd:integer ;
+    ex:prop_monthName "September" ;
+    ex:prop_avgTempC "18.5"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "140"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "autumn_shoulder" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "cool with beautiful foliage" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_9 .
+
+ex:CityMonthlyWeather_SPK_10 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 10" ;
+    ex:prop_monthNum "10"^^xsd:integer ;
+    ex:prop_monthName "October" ;
+    ex:prop_avgTempC "11.0"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "102"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "autumn_shoulder" ;
+    ex:prop_bestTimeToVisit true ;
+    ex:prop_weatherSummary "golden foliage and crisp air" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_10 .
+
+ex:CityMonthlyWeather_SPK_11 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 11" ;
+    ex:prop_monthNum "11"^^xsd:integer ;
+    ex:prop_monthName "November" ;
+    ex:prop_avgTempC "3.1"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "116"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "cool_shoulder" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cold with first snowfall" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_11 .
+
+ex:CityMonthlyWeather_SPK_12 a ex:CityMonthlyWeather ;
+    rdfs:label "SPK month 12" ;
+    ex:prop_monthNum "12"^^xsd:integer ;
+    ex:prop_monthName "December" ;
+    ex:prop_avgTempC "-2.0"^^xsd:decimal ;
+    ex:prop_avgRainfallMm "130"^^xsd:decimal ;
+    ex:prop_weatherProfileCode "subarctic" ;
+    ex:prop_seasonCode "cold_snowy" ;
+    ex:prop_bestTimeToVisit false ;
+    ex:prop_weatherSummary "cold and snowy ski season starts" .
+
+ex:City_SPK ex:prop_hasWeatherObservation ex:CityMonthlyWeather_SPK_12 .
+
 ex:VisaPolicy_visa_not_required a ex:VisaPolicy ;
     rdfs:label "Visa Not Required" ;
     rdfs:comment "Singapore passport holder can enter for short-stay travel without obtaining a visa in advance." ;
@@ -47935,6 +50153,1666 @@ ex:City_EXT ex:prop_utcOffset "+01:00" .
 
 ex:City_EXT ex:prop_timezoneName "Europe/London" .
 
+ex:City_YMQ ex:prop_utcOffset "-04:00" .
+
+ex:City_YMQ ex:prop_timezoneName "America/Toronto" .
+
+ex:City_XMN ex:prop_utcOffset "+08:00" .
+
+ex:City_XMN ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_YEA ex:prop_utcOffset "-06:00" .
+
+ex:City_YEA ex:prop_timezoneName "America/Edmonton" .
+
+ex:City_SNN ex:prop_utcOffset "+01:00" .
+
+ex:City_SNN ex:prop_timezoneName "Europe/Dublin" .
+
+ex:City_SLC ex:prop_utcOffset "-06:00" .
+
+ex:City_SLC ex:prop_timezoneName "America/Denver" .
+
+ex:City_SAN ex:prop_utcOffset "-07:00" .
+
+ex:City_SAN ex:prop_timezoneName "America/Los_Angeles" .
+
+ex:City_STL ex:prop_utcOffset "-05:00" .
+
+ex:City_STL ex:prop_timezoneName "America/Chicago" .
+
+ex:City_SGD ex:prop_utcOffset "+02:00" .
+
+ex:City_SGD ex:prop_timezoneName "Europe/Copenhagen" .
+
+ex:City_TLS ex:prop_utcOffset "+02:00" .
+
+ex:City_TLS ex:prop_timezoneName "Europe/Paris" .
+
+ex:City_SVG ex:prop_utcOffset "+02:00" .
+
+ex:City_SVG ex:prop_timezoneName "Europe/Oslo" .
+
+ex:City_SYR ex:prop_utcOffset "-04:00" .
+
+ex:City_SYR ex:prop_timezoneName "America/New_York" .
+
+ex:City_SZX ex:prop_utcOffset "+08:00" .
+
+ex:City_SZX ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_PHX ex:prop_utcOffset "-07:00" .
+
+ex:City_PHX ex:prop_timezoneName "America/Phoenix" .
+
+ex:City_PMR ex:prop_utcOffset "+12:00" .
+
+ex:City_PMR ex:prop_timezoneName "Pacific/Auckland" .
+
+ex:City_CHI ex:prop_utcOffset "-05:00" .
+
+ex:City_CHI ex:prop_timezoneName "America/Chicago" .
+
+ex:City_ORK ex:prop_utcOffset "+01:00" .
+
+ex:City_ORK ex:prop_timezoneName "Europe/Dublin" .
+
+ex:City_PDX ex:prop_utcOffset "-07:00" .
+
+ex:City_PDX ex:prop_timezoneName "America/Los_Angeles" .
+
+ex:City_NCE ex:prop_utcOffset "+02:00" .
+
+ex:City_NCE ex:prop_timezoneName "Europe/Paris" .
+
+ex:City_NCL ex:prop_utcOffset "+01:00" .
+
+ex:City_NCL ex:prop_timezoneName "Europe/London" .
+
+ex:City_NPE ex:prop_utcOffset "+12:00" .
+
+ex:City_NPE ex:prop_timezoneName "Pacific/Auckland" .
+
+ex:City_AAL ex:prop_utcOffset "+02:00" .
+
+ex:City_AAL ex:prop_timezoneName "Europe/Copenhagen" .
+
+ex:City_AAR ex:prop_utcOffset "+02:00" .
+
+ex:City_AAR ex:prop_timezoneName "Europe/Copenhagen" .
+
+ex:City_ABJ ex:prop_utcOffset "+00:00" .
+
+ex:City_ABJ ex:prop_timezoneName "Africa/Abidjan" .
+
+ex:City_ABQ ex:prop_utcOffset "-06:00" .
+
+ex:City_ABQ ex:prop_timezoneName "America/Denver" .
+
+ex:City_ABV ex:prop_utcOffset "+01:00" .
+
+ex:City_ABV ex:prop_timezoneName "Africa/Lagos" .
+
+ex:City_ABX ex:prop_utcOffset "+10:00" .
+
+ex:City_ABX ex:prop_timezoneName "Australia/Sydney" .
+
+ex:City_ABZ ex:prop_utcOffset "+01:00" .
+
+ex:City_ABZ ex:prop_timezoneName "Europe/London" .
+
+ex:City_ACC ex:prop_utcOffset "+00:00" .
+
+ex:City_ACC ex:prop_timezoneName "Africa/Accra" .
+
+ex:City_ACE ex:prop_utcOffset "+01:00" .
+
+ex:City_ACE ex:prop_timezoneName "Atlantic/Canary" .
+
+ex:City_ADA ex:prop_utcOffset "+03:00" .
+
+ex:City_ADA ex:prop_timezoneName "Europe/Istanbul" .
+
+ex:City_ADD ex:prop_utcOffset "+03:00" .
+
+ex:City_ADD ex:prop_timezoneName "Africa/Addis_Ababa" .
+
+ex:City_ADZ ex:prop_utcOffset "-05:00" .
+
+ex:City_ADZ ex:prop_timezoneName "America/Bogota" .
+
+ex:City_AER ex:prop_utcOffset "+03:00" .
+
+ex:City_AER ex:prop_timezoneName "Europe/Moscow" .
+
+ex:City_AES ex:prop_utcOffset "+02:00" .
+
+ex:City_AES ex:prop_timezoneName "Europe/Oslo" .
+
+ex:City_AGH ex:prop_utcOffset "+02:00" .
+
+ex:City_AGH ex:prop_timezoneName "Europe/Stockholm" .
+
+ex:City_AGP ex:prop_utcOffset "+02:00" .
+
+ex:City_AGP ex:prop_timezoneName "Europe/Madrid" .
+
+ex:City_AKJ ex:prop_utcOffset "+09:00" .
+
+ex:City_AKJ ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_ALA ex:prop_utcOffset "+05:00" .
+
+ex:City_ALA ex:prop_timezoneName "Asia/Almaty" .
+
+ex:City_ALC ex:prop_utcOffset "+02:00" .
+
+ex:City_ALC ex:prop_timezoneName "Europe/Madrid" .
+
+ex:City_ALG ex:prop_utcOffset "+01:00" .
+
+ex:City_ALG ex:prop_timezoneName "Africa/Algiers" .
+
+ex:City_ALY ex:prop_utcOffset "+02:00" .
+
+ex:City_ALY ex:prop_timezoneName "Africa/Cairo" .
+
+ex:City_AMM ex:prop_utcOffset "+03:00" .
+
+ex:City_AMM ex:prop_timezoneName "Asia/Amman" .
+
+ex:City_ANC ex:prop_utcOffset "-08:00" .
+
+ex:City_ANC ex:prop_timezoneName "America/Anchorage" .
+
+ex:City_ANK ex:prop_utcOffset "+03:00" .
+
+ex:City_ANK ex:prop_timezoneName "Europe/Istanbul" .
+
+ex:City_AOI ex:prop_utcOffset "+02:00" .
+
+ex:City_AOI ex:prop_timezoneName "Europe/Rome" .
+
+ex:City_AOJ ex:prop_utcOffset "+09:00" .
+
+ex:City_AOJ ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_APW ex:prop_utcOffset "+13:00" .
+
+ex:City_APW ex:prop_timezoneName "Pacific/Apia" .
+
+ex:City_ASM ex:prop_utcOffset "+03:00" .
+
+ex:City_ASM ex:prop_timezoneName "Africa/Asmara" .
+
+ex:City_ASP ex:prop_utcOffset "+09:30" .
+
+ex:City_ASP ex:prop_timezoneName "Australia/Darwin" .
+
+ex:City_ASR ex:prop_utcOffset "+03:00" .
+
+ex:City_ASR ex:prop_timezoneName "Europe/Istanbul" .
+
+ex:City_AYQ ex:prop_utcOffset "+09:30" .
+
+ex:City_AYQ ex:prop_timezoneName "Australia/Darwin" .
+
+ex:City_AYT ex:prop_utcOffset "+03:00" .
+
+ex:City_AYT ex:prop_timezoneName "Europe/Istanbul" .
+
+ex:City_BAH ex:prop_utcOffset "+03:00" .
+
+ex:City_BAH ex:prop_timezoneName "Asia/Bahrain" .
+
+ex:City_BAK ex:prop_utcOffset "+04:00" .
+
+ex:City_BAK ex:prop_timezoneName "Asia/Baku" .
+
+ex:City_BAQ ex:prop_utcOffset "-05:00" .
+
+ex:City_BAQ ex:prop_timezoneName "America/Bogota" .
+
+ex:City_BBI ex:prop_utcOffset "+05:30" .
+
+ex:City_BBI ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_BCD ex:prop_utcOffset "+08:00" .
+
+ex:City_BCD ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_BDA ex:prop_utcOffset "-03:00" .
+
+ex:City_BDA ex:prop_timezoneName "Atlantic/Bermuda" .
+
+ex:City_BDB ex:prop_utcOffset "+10:00" .
+
+ex:City_BDB ex:prop_timezoneName "Australia/Brisbane" .
+
+ex:City_BDL ex:prop_utcOffset "-04:00" .
+
+ex:City_BDL ex:prop_timezoneName "America/New_York" .
+
+ex:City_BDQ ex:prop_utcOffset "+05:30" .
+
+ex:City_BDQ ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_BDS ex:prop_utcOffset "+02:00" .
+
+ex:City_BDS ex:prop_timezoneName "Europe/Rome" .
+
+ex:City_BEG ex:prop_utcOffset "+02:00" .
+
+ex:City_BEG ex:prop_timezoneName "Europe/Belgrade" .
+
+ex:City_BEL ex:prop_utcOffset "-03:00" .
+
+ex:City_BEL ex:prop_timezoneName "America/Belem" .
+
+ex:City_BES ex:prop_utcOffset "+02:00" .
+
+ex:City_BES ex:prop_timezoneName "Europe/Paris" .
+
+ex:City_BEY ex:prop_utcOffset "+03:00" .
+
+ex:City_BEY ex:prop_timezoneName "Asia/Beirut" .
+
+ex:City_BFN ex:prop_utcOffset "+02:00" .
+
+ex:City_BFN ex:prop_timezoneName "Africa/Johannesburg" .
+
+ex:City_BFS ex:prop_utcOffset "+01:00" .
+
+ex:City_BFS ex:prop_timezoneName "Europe/London" .
+
+ex:City_BGA ex:prop_utcOffset "-05:00" .
+
+ex:City_BGA ex:prop_timezoneName "America/Bogota" .
+
+ex:City_BGI ex:prop_utcOffset "-04:00" .
+
+ex:City_BGI ex:prop_timezoneName "America/Barbados" .
+
+ex:City_BGO ex:prop_utcOffset "+02:00" .
+
+ex:City_BGO ex:prop_timezoneName "Europe/Oslo" .
+
+ex:City_BGW ex:prop_utcOffset "+03:00" .
+
+ex:City_BGW ex:prop_timezoneName "Asia/Baghdad" .
+
+ex:City_BHE ex:prop_utcOffset "+12:00" .
+
+ex:City_BHE ex:prop_timezoneName "Pacific/Auckland" .
+
+ex:City_BHO ex:prop_utcOffset "+05:30" .
+
+ex:City_BHO ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_BHX ex:prop_utcOffset "+01:00" .
+
+ex:City_BHX ex:prop_timezoneName "Europe/London" .
+
+ex:City_BHZ ex:prop_utcOffset "-03:00" .
+
+ex:City_BHZ ex:prop_timezoneName "America/Sao_Paulo" .
+
+ex:City_BIL ex:prop_utcOffset "-06:00" .
+
+ex:City_BIL ex:prop_timezoneName "America/Denver" .
+
+ex:City_BIO ex:prop_utcOffset "+02:00" .
+
+ex:City_BIO ex:prop_timezoneName "Europe/Madrid" .
+
+ex:City_BIQ ex:prop_utcOffset "+02:00" .
+
+ex:City_BIQ ex:prop_timezoneName "Europe/Paris" .
+
+ex:City_BJR ex:prop_utcOffset "+03:00" .
+
+ex:City_BJR ex:prop_timezoneName "Africa/Addis_Ababa" .
+
+ex:City_BKO ex:prop_utcOffset "+00:00" .
+
+ex:City_BKO ex:prop_timezoneName "Africa/Bamako" .
+
+ex:City_BLL ex:prop_utcOffset "+02:00" .
+
+ex:City_BLL ex:prop_timezoneName "Europe/Copenhagen" .
+
+ex:City_BLZ ex:prop_utcOffset "+02:00" .
+
+ex:City_BLZ ex:prop_timezoneName "Africa/Blantyre" .
+
+ex:City_BME ex:prop_utcOffset "+08:00" .
+
+ex:City_BME ex:prop_timezoneName "Australia/Perth" .
+
+ex:City_BNA ex:prop_utcOffset "-05:00" .
+
+ex:City_BNA ex:prop_timezoneName "America/Chicago" .
+
+ex:City_BNK ex:prop_utcOffset "+10:00" .
+
+ex:City_BNK ex:prop_timezoneName "Australia/Sydney" .
+
+ex:City_BOD ex:prop_utcOffset "+02:00" .
+
+ex:City_BOD ex:prop_timezoneName "Europe/Paris" .
+
+ex:City_BOG ex:prop_utcOffset "-05:00" .
+
+ex:City_BOG ex:prop_timezoneName "America/Bogota" .
+
+ex:City_BOI ex:prop_utcOffset "-06:00" .
+
+ex:City_BOI ex:prop_timezoneName "America/Denver" .
+
+ex:City_BOO ex:prop_utcOffset "+02:00" .
+
+ex:City_BOO ex:prop_timezoneName "Europe/Oslo" .
+
+ex:City_BOS ex:prop_utcOffset "-04:00" .
+
+ex:City_BOS ex:prop_timezoneName "America/New_York" .
+
+ex:City_BRE ex:prop_utcOffset "+02:00" .
+
+ex:City_BRE ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_BRI ex:prop_utcOffset "+02:00" .
+
+ex:City_BRI ex:prop_timezoneName "Europe/Rome" .
+
+ex:City_BSB ex:prop_utcOffset "-03:00" .
+
+ex:City_BSB ex:prop_timezoneName "America/Sao_Paulo" .
+
+ex:City_BSL ex:prop_utcOffset "+02:00" .
+
+ex:City_BSL ex:prop_timezoneName "Europe/Zurich" .
+
+ex:City_BSO ex:prop_utcOffset "+08:00" .
+
+ex:City_BSO ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_BTR ex:prop_utcOffset "-05:00" .
+
+ex:City_BTR ex:prop_timezoneName "America/Chicago" .
+
+ex:City_BTV ex:prop_utcOffset "-04:00" .
+
+ex:City_BTV ex:prop_timezoneName "America/New_York" .
+
+ex:City_BUD ex:prop_utcOffset "+02:00" .
+
+ex:City_BUD ex:prop_timezoneName "Europe/Budapest" .
+
+ex:City_BUE ex:prop_utcOffset "-03:00" .
+
+ex:City_BUE ex:prop_timezoneName "America/Argentina/Buenos_Aires" .
+
+ex:City_BUF ex:prop_utcOffset "-04:00" .
+
+ex:City_BUF ex:prop_timezoneName "America/New_York" .
+
+ex:City_BUH ex:prop_utcOffset "+03:00" .
+
+ex:City_BUH ex:prop_timezoneName "Europe/Bucharest" .
+
+ex:City_BUR ex:prop_utcOffset "-07:00" .
+
+ex:City_BUR ex:prop_timezoneName "America/Los_Angeles" .
+
+ex:City_BUS ex:prop_utcOffset "+04:00" .
+
+ex:City_BUS ex:prop_timezoneName "Asia/Tbilisi" .
+
+ex:City_BWI ex:prop_utcOffset "-04:00" .
+
+ex:City_BWI ex:prop_timezoneName "America/New_York" .
+
+ex:City_BXN ex:prop_utcOffset "+03:00" .
+
+ex:City_BXN ex:prop_timezoneName "Europe/Istanbul" .
+
+ex:City_BXU ex:prop_utcOffset "+08:00" .
+
+ex:City_BXU ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_BZE ex:prop_utcOffset "-06:00" .
+
+ex:City_BZE ex:prop_timezoneName "America/Belize" .
+
+ex:City_BZG ex:prop_utcOffset "+02:00" .
+
+ex:City_BZG ex:prop_timezoneName "Europe/Warsaw" .
+
+ex:City_BZN ex:prop_utcOffset "-06:00" .
+
+ex:City_BZN ex:prop_timezoneName "America/Denver" .
+
+ex:City_CAG ex:prop_utcOffset "+02:00" .
+
+ex:City_CAG ex:prop_timezoneName "Europe/Rome" .
+
+ex:City_CAI ex:prop_utcOffset "+02:00" .
+
+ex:City_CAI ex:prop_timezoneName "Africa/Cairo" .
+
+ex:City_CAS ex:prop_utcOffset "+01:00" .
+
+ex:City_CAS ex:prop_timezoneName "Africa/Casablanca" .
+
+ex:City_CBO ex:prop_utcOffset "+08:00" .
+
+ex:City_CBO ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_CBR ex:prop_utcOffset "+10:00" .
+
+ex:City_CBR ex:prop_timezoneName "Australia/Sydney" .
+
+ex:City_CCJ ex:prop_utcOffset "+05:30" .
+
+ex:City_CCJ ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_CCS ex:prop_utcOffset "-04:00" .
+
+ex:City_CCS ex:prop_timezoneName "America/Caracas" .
+
+ex:City_CEK ex:prop_utcOffset "+05:00" .
+
+ex:City_CEK ex:prop_timezoneName "Asia/Yekaterinburg" .
+
+ex:City_CFE ex:prop_utcOffset "+02:00" .
+
+ex:City_CFE ex:prop_timezoneName "Europe/Paris" .
+
+ex:City_CFS ex:prop_utcOffset "+10:00" .
+
+ex:City_CFS ex:prop_timezoneName "Australia/Sydney" .
+
+ex:City_CGN ex:prop_utcOffset "+02:00" .
+
+ex:City_CGN ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_CGQ ex:prop_utcOffset "+08:00" .
+
+ex:City_CGQ ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_CGY ex:prop_utcOffset "+08:00" .
+
+ex:City_CGY ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_CHS ex:prop_utcOffset "-04:00" .
+
+ex:City_CHS ex:prop_timezoneName "America/New_York" .
+
+ex:City_CID ex:prop_utcOffset "-05:00" .
+
+ex:City_CID ex:prop_timezoneName "America/Chicago" .
+
+ex:City_CLE ex:prop_utcOffset "-04:00" .
+
+ex:City_CLE ex:prop_timezoneName "America/New_York" .
+
+ex:City_CLJ ex:prop_utcOffset "+03:00" .
+
+ex:City_CLJ ex:prop_timezoneName "Europe/Bucharest" .
+
+ex:City_CLO ex:prop_utcOffset "-05:00" .
+
+ex:City_CLO ex:prop_timezoneName "America/Bogota" .
+
+ex:City_CLT ex:prop_utcOffset "-04:00" .
+
+ex:City_CLT ex:prop_timezoneName "America/New_York" .
+
+ex:City_CMH ex:prop_utcOffset "-04:00" .
+
+ex:City_CMH ex:prop_timezoneName "America/New_York" .
+
+ex:City_CND ex:prop_utcOffset "+03:00" .
+
+ex:City_CND ex:prop_timezoneName "Europe/Bucharest" .
+
+ex:City_CNJ ex:prop_utcOffset "+10:00" .
+
+ex:City_CNJ ex:prop_timezoneName "Australia/Brisbane" .
+
+ex:City_COR ex:prop_utcOffset "-03:00" .
+
+ex:City_COR ex:prop_timezoneName "America/Argentina/Cordoba" .
+
+ex:City_COS ex:prop_utcOffset "-06:00" .
+
+ex:City_COS ex:prop_timezoneName "America/Denver" .
+
+ex:City_CRM ex:prop_utcOffset "+08:00" .
+
+ex:City_CRM ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_CRP ex:prop_utcOffset "-05:00" .
+
+ex:City_CRP ex:prop_timezoneName "America/Chicago" .
+
+ex:City_CSX ex:prop_utcOffset "+08:00" .
+
+ex:City_CSX ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_CTA ex:prop_utcOffset "+02:00" .
+
+ex:City_CTA ex:prop_timezoneName "Europe/Rome" .
+
+ex:City_CTG ex:prop_utcOffset "-05:00" .
+
+ex:City_CTG ex:prop_timezoneName "America/Bogota" .
+
+ex:City_CUN ex:prop_utcOffset "-05:00" .
+
+ex:City_CUN ex:prop_timezoneName "America/Cancun" .
+
+ex:City_CUR ex:prop_utcOffset "-04:00" .
+
+ex:City_CUR ex:prop_timezoneName "America/Curacao" .
+
+ex:City_CUZ ex:prop_utcOffset "-05:00" .
+
+ex:City_CUZ ex:prop_timezoneName "America/Lima" .
+
+ex:City_CVG ex:prop_utcOffset "-04:00" .
+
+ex:City_CVG ex:prop_timezoneName "America/New_York" .
+
+ex:City_CWB ex:prop_utcOffset "-03:00" .
+
+ex:City_CWB ex:prop_timezoneName "America/Sao_Paulo" .
+
+ex:City_CYP ex:prop_utcOffset "+08:00" .
+
+ex:City_CYP ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_CZX ex:prop_utcOffset "+08:00" .
+
+ex:City_CZX ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_DAR ex:prop_utcOffset "+03:00" .
+
+ex:City_DAR ex:prop_timezoneName "Africa/Dar_es_Salaam" .
+
+ex:City_DBV ex:prop_utcOffset "+02:00" .
+
+ex:City_DBV ex:prop_timezoneName "Europe/Zagreb" .
+
+ex:City_DCY ex:prop_utcOffset "+08:00" .
+
+ex:City_DCY ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_DEN ex:prop_utcOffset "-06:00" .
+
+ex:City_DEN ex:prop_timezoneName "America/Denver" .
+
+ex:City_DFW ex:prop_utcOffset "-05:00" .
+
+ex:City_DFW ex:prop_timezoneName "America/Chicago" .
+
+ex:City_DGT ex:prop_utcOffset "+08:00" .
+
+ex:City_DGT ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_DJE ex:prop_utcOffset "+01:00" .
+
+ex:City_DJE ex:prop_timezoneName "Africa/Tunis" .
+
+ex:City_DKR ex:prop_utcOffset "+00:00" .
+
+ex:City_DKR ex:prop_timezoneName "Africa/Dakar" .
+
+ex:City_DLA ex:prop_utcOffset "+01:00" .
+
+ex:City_DLA ex:prop_timezoneName "Africa/Douala" .
+
+ex:City_DLC ex:prop_utcOffset "+08:00" .
+
+ex:City_DLC ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_DLM ex:prop_utcOffset "+03:00" .
+
+ex:City_DLM ex:prop_timezoneName "Europe/Istanbul" .
+
+ex:City_DLU ex:prop_utcOffset "+08:00" .
+
+ex:City_DLU ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_DMM ex:prop_utcOffset "+03:00" .
+
+ex:City_DMM ex:prop_timezoneName "Asia/Riyadh" .
+
+ex:City_DNK ex:prop_utcOffset "+03:00" .
+
+ex:City_DNK ex:prop_timezoneName "Europe/Kyiv" .
+
+ex:City_DNZ ex:prop_utcOffset "+03:00" .
+
+ex:City_DNZ ex:prop_timezoneName "Europe/Istanbul" .
+
+ex:City_DOH ex:prop_utcOffset "+03:00" .
+
+ex:City_DOH ex:prop_timezoneName "Asia/Qatar" .
+
+ex:City_DOY ex:prop_utcOffset "+08:00" .
+
+ex:City_DOY ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_DPL ex:prop_utcOffset "+08:00" .
+
+ex:City_DPL ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_DRP ex:prop_utcOffset "+08:00" .
+
+ex:City_DRP ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_DRS ex:prop_utcOffset "+02:00" .
+
+ex:City_DRS ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_DSA ex:prop_utcOffset "+01:00" .
+
+ex:City_DSA ex:prop_timezoneName "Europe/London" .
+
+ex:City_DSM ex:prop_utcOffset "-05:00" .
+
+ex:City_DSM ex:prop_timezoneName "America/Chicago" .
+
+ex:City_DTM ex:prop_utcOffset "+02:00" .
+
+ex:City_DTM ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_DTT ex:prop_utcOffset "-04:00" .
+
+ex:City_DTT ex:prop_timezoneName "America/Detroit" .
+
+ex:City_ASU ex:prop_utcOffset "-03:00" .
+
+ex:City_ASU ex:prop_timezoneName "America/Asuncion" .
+
+ex:City_ASW ex:prop_utcOffset "+02:00" .
+
+ex:City_ASW ex:prop_timezoneName "Africa/Cairo" .
+
+ex:City_ATL ex:prop_utcOffset "-04:00" .
+
+ex:City_ATL ex:prop_timezoneName "America/New_York" .
+
+ex:City_AUA ex:prop_utcOffset "-04:00" .
+
+ex:City_AUA ex:prop_timezoneName "America/Aruba" .
+
+ex:City_AUH ex:prop_utcOffset "+04:00" .
+
+ex:City_AUH ex:prop_timezoneName "Asia/Dubai" .
+
+ex:City_AUS ex:prop_utcOffset "-05:00" .
+
+ex:City_AUS ex:prop_timezoneName "America/Chicago" .
+
+ex:City_AVL ex:prop_utcOffset "-04:00" .
+
+ex:City_AVL ex:prop_timezoneName "America/New_York" .
+
+ex:City_AXM ex:prop_utcOffset "-05:00" .
+
+ex:City_AXM ex:prop_timezoneName "America/Bogota" .
+
+ex:City_AXT ex:prop_utcOffset "+09:00" .
+
+ex:City_AXT ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_AXU ex:prop_utcOffset "+03:00" .
+
+ex:City_AXU ex:prop_timezoneName "Africa/Addis_Ababa" .
+
+ex:City_DUB ex:prop_utcOffset "+01:00" .
+
+ex:City_DUB ex:prop_timezoneName "Europe/Dublin" .
+
+ex:City_DUD ex:prop_utcOffset "+12:00" .
+
+ex:City_DUD ex:prop_timezoneName "Pacific/Auckland" .
+
+ex:City_DUR ex:prop_utcOffset "+02:00" .
+
+ex:City_DUR ex:prop_timezoneName "Africa/Johannesburg" .
+
+ex:City_DUS ex:prop_utcOffset "+02:00" .
+
+ex:City_DUS ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_DYG ex:prop_utcOffset "+08:00" .
+
+ex:City_DYG ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_DYU ex:prop_utcOffset "+05:00" .
+
+ex:City_DYU ex:prop_timezoneName "Asia/Dushanbe" .
+
+ex:City_EAS ex:prop_utcOffset "+02:00" .
+
+ex:City_EAS ex:prop_timezoneName "Europe/Madrid" .
+
+ex:City_EBB ex:prop_utcOffset "+03:00" .
+
+ex:City_EBB ex:prop_timezoneName "Africa/Kampala" .
+
+ex:City_EBL ex:prop_utcOffset "+03:00" .
+
+ex:City_EBL ex:prop_timezoneName "Asia/Baghdad" .
+
+ex:City_ECN ex:prop_utcOffset "+03:00" .
+
+ex:City_ECN ex:prop_timezoneName "Asia/Nicosia" .
+
+ex:City_EDI ex:prop_utcOffset "+01:00" .
+
+ex:City_EDI ex:prop_timezoneName "Europe/London" .
+
+ex:City_EGE ex:prop_utcOffset "-06:00" .
+
+ex:City_EGE ex:prop_timezoneName "America/Denver" .
+
+ex:City_ELS ex:prop_utcOffset "+02:00" .
+
+ex:City_ELS ex:prop_timezoneName "Africa/Johannesburg" .
+
+ex:City_EMD ex:prop_utcOffset "+10:00" .
+
+ex:City_EMD ex:prop_timezoneName "Australia/Brisbane" .
+
+ex:City_EUG ex:prop_utcOffset "-07:00" .
+
+ex:City_EUG ex:prop_timezoneName "America/Los_Angeles" .
+
+ex:City_EUQ ex:prop_utcOffset "+08:00" .
+
+ex:City_EUQ ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_EVN ex:prop_utcOffset "+04:00" .
+
+ex:City_EVN ex:prop_timezoneName "Asia/Yerevan" .
+
+ex:City_FAE ex:prop_utcOffset "+01:00" .
+
+ex:City_FAE ex:prop_timezoneName "Atlantic/Faroe" .
+
+ex:City_FAO ex:prop_utcOffset "+01:00" .
+
+ex:City_FAO ex:prop_timezoneName "Europe/Lisbon" .
+
+ex:City_FAT ex:prop_utcOffset "-07:00" .
+
+ex:City_FAT ex:prop_timezoneName "America/Los_Angeles" .
+
+ex:City_FDH ex:prop_utcOffset "+02:00" .
+
+ex:City_FDH ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_FKB ex:prop_utcOffset "+02:00" .
+
+ex:City_FKB ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_FKS ex:prop_utcOffset "+09:00" .
+
+ex:City_FKS ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_FLL ex:prop_utcOffset "-04:00" .
+
+ex:City_FLL ex:prop_timezoneName "America/New_York" .
+
+ex:City_FLN ex:prop_utcOffset "-03:00" .
+
+ex:City_FLN ex:prop_timezoneName "America/Sao_Paulo" .
+
+ex:City_FMO ex:prop_utcOffset "+02:00" .
+
+ex:City_FMO ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_FMY ex:prop_utcOffset "-04:00" .
+
+ex:City_FMY ex:prop_timezoneName "America/New_York" .
+
+ex:City_FNC ex:prop_utcOffset "+01:00" .
+
+ex:City_FNC ex:prop_timezoneName "Europe/Lisbon" .
+
+ex:City_FOR ex:prop_utcOffset "-03:00" .
+
+ex:City_FOR ex:prop_timezoneName "America/Fortaleza" .
+
+ex:City_FRU ex:prop_utcOffset "+06:00" .
+
+ex:City_FRU ex:prop_timezoneName "Asia/Bishkek" .
+
+ex:City_FSD ex:prop_utcOffset "-05:00" .
+
+ex:City_FSD ex:prop_timezoneName "America/Chicago" .
+
+ex:City_FSZ ex:prop_utcOffset "+09:00" .
+
+ex:City_FSZ ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_FUE ex:prop_utcOffset "+01:00" .
+
+ex:City_FUE ex:prop_timezoneName "Atlantic/Canary" .
+
+ex:City_FUJ ex:prop_utcOffset "+09:00" .
+
+ex:City_FUJ ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_GAU ex:prop_utcOffset "+05:30" .
+
+ex:City_GAU ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_GAY ex:prop_utcOffset "+05:30" .
+
+ex:City_GAY ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_GBE ex:prop_utcOffset "+02:00" .
+
+ex:City_GBE ex:prop_timezoneName "Africa/Gaborone" .
+
+ex:City_GCM ex:prop_utcOffset "-05:00" .
+
+ex:City_GCM ex:prop_timezoneName "America/Cayman" .
+
+ex:City_GDL ex:prop_utcOffset "-06:00" .
+
+ex:City_GDL ex:prop_timezoneName "America/Mexico_City" .
+
+ex:City_GDN ex:prop_utcOffset "+02:00" .
+
+ex:City_GDN ex:prop_timezoneName "Europe/Warsaw" .
+
+ex:City_GDQ ex:prop_utcOffset "+03:00" .
+
+ex:City_GDQ ex:prop_timezoneName "Africa/Addis_Ababa" .
+
+ex:City_GEG ex:prop_utcOffset "-07:00" .
+
+ex:City_GEG ex:prop_timezoneName "America/Los_Angeles" .
+
+ex:City_GES ex:prop_utcOffset "+08:00" .
+
+ex:City_GES ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_GET ex:prop_utcOffset "+08:00" .
+
+ex:City_GET ex:prop_timezoneName "Australia/Perth" .
+
+ex:City_GIS ex:prop_utcOffset "+12:00" .
+
+ex:City_GIS ex:prop_timezoneName "Pacific/Auckland" .
+
+ex:City_GLA ex:prop_utcOffset "+01:00" .
+
+ex:City_GLA ex:prop_timezoneName "Europe/London" .
+
+ex:City_GLT ex:prop_utcOffset "+10:00" .
+
+ex:City_GLT ex:prop_timezoneName "Australia/Brisbane" .
+
+ex:City_GOA ex:prop_utcOffset "+02:00" .
+
+ex:City_GOA ex:prop_timezoneName "Europe/Rome" .
+
+ex:City_GOI ex:prop_utcOffset "+05:30" .
+
+ex:City_GOI ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_GOT ex:prop_utcOffset "+02:00" .
+
+ex:City_GOT ex:prop_timezoneName "Europe/Stockholm" .
+
+ex:City_GPS ex:prop_utcOffset "-06:00" .
+
+ex:City_GPS ex:prop_timezoneName "Pacific/Galapagos" .
+
+ex:City_GPT ex:prop_utcOffset "-05:00" .
+
+ex:City_GPT ex:prop_timezoneName "America/Chicago" .
+
+ex:City_GRJ ex:prop_utcOffset "+02:00" .
+
+ex:City_GRJ ex:prop_timezoneName "Africa/Johannesburg" .
+
+ex:City_GRQ ex:prop_utcOffset "+02:00" .
+
+ex:City_GRQ ex:prop_timezoneName "Europe/Amsterdam" .
+
+ex:City_GRR ex:prop_utcOffset "-04:00" .
+
+ex:City_GRR ex:prop_timezoneName "America/New_York" .
+
+ex:City_GRX ex:prop_utcOffset "+02:00" .
+
+ex:City_GRX ex:prop_timezoneName "Europe/Madrid" .
+
+ex:City_GUA ex:prop_utcOffset "-06:00" .
+
+ex:City_GUA ex:prop_timezoneName "America/Guatemala" .
+
+ex:City_GUM ex:prop_utcOffset "+10:00" .
+
+ex:City_GUM ex:prop_timezoneName "Pacific/Guam" .
+
+ex:City_GWT ex:prop_utcOffset "+02:00" .
+
+ex:City_GWT ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_GYE ex:prop_utcOffset "-05:00" .
+
+ex:City_GYE ex:prop_timezoneName "America/Guayaquil" .
+
+ex:City_GYN ex:prop_utcOffset "-03:00" .
+
+ex:City_GYN ex:prop_timezoneName "America/Sao_Paulo" .
+
+ex:City_GZT ex:prop_utcOffset "+03:00" .
+
+ex:City_GZT ex:prop_timezoneName "Europe/Istanbul" .
+
+ex:City_HAC ex:prop_utcOffset "+09:00" .
+
+ex:City_HAC ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_HAJ ex:prop_utcOffset "+02:00" .
+
+ex:City_HAJ ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_HAM ex:prop_utcOffset "+02:00" .
+
+ex:City_HAM ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_HAU ex:prop_utcOffset "+02:00" .
+
+ex:City_HAU ex:prop_timezoneName "Europe/Oslo" .
+
+ex:City_HAV ex:prop_utcOffset "-04:00" .
+
+ex:City_HAV ex:prop_timezoneName "America/Havana" .
+
+ex:City_HBA ex:prop_utcOffset "+10:00" .
+
+ex:City_HBA ex:prop_timezoneName "Australia/Hobart" .
+
+ex:City_HDF ex:prop_utcOffset "+02:00" .
+
+ex:City_HDF ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_HEL ex:prop_utcOffset "+03:00" .
+
+ex:City_HEL ex:prop_timezoneName "Europe/Helsinki" .
+
+ex:City_HER ex:prop_utcOffset "+03:00" .
+
+ex:City_HER ex:prop_timezoneName "Europe/Athens" .
+
+ex:City_HET ex:prop_utcOffset "+08:00" .
+
+ex:City_HET ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_HFE ex:prop_utcOffset "+08:00" .
+
+ex:City_HFE ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_HIA ex:prop_utcOffset "+08:00" .
+
+ex:City_HIA ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_HIJ ex:prop_utcOffset "+09:00" .
+
+ex:City_HIJ ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_HIR ex:prop_utcOffset "+11:00" .
+
+ex:City_HIR ex:prop_timezoneName "Pacific/Guadalcanal" .
+
+ex:City_HJR ex:prop_utcOffset "+05:30" .
+
+ex:City_HJR ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_HKD ex:prop_utcOffset "+09:00" .
+
+ex:City_HKD ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_HLD ex:prop_utcOffset "+08:00" .
+
+ex:City_HLD ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_HLZ ex:prop_utcOffset "+12:00" .
+
+ex:City_HLZ ex:prop_timezoneName "Pacific/Auckland" .
+
+ex:City_HMO ex:prop_utcOffset "-07:00" .
+
+ex:City_HMO ex:prop_timezoneName "America/Hermosillo" .
+
+ex:City_HNL ex:prop_utcOffset "-10:00" .
+
+ex:City_HNL ex:prop_timezoneName "Pacific/Honolulu" .
+
+ex:City_HOU ex:prop_utcOffset "-05:00" .
+
+ex:City_HOU ex:prop_timezoneName "America/Chicago" .
+
+ex:City_HRB ex:prop_utcOffset "+08:00" .
+
+ex:City_HRB ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_HRE ex:prop_utcOffset "+02:00" .
+
+ex:City_HRE ex:prop_timezoneName "Africa/Harare" .
+
+ex:City_HRG ex:prop_utcOffset "+02:00" .
+
+ex:City_HRG ex:prop_timezoneName "Africa/Cairo" .
+
+ex:City_HRK ex:prop_utcOffset "+03:00" .
+
+ex:City_HRK ex:prop_timezoneName "Europe/Kyiv" .
+
+ex:City_HSG ex:prop_utcOffset "+09:00" .
+
+ex:City_HSG ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_HTI ex:prop_utcOffset "+10:00" .
+
+ex:City_HTI ex:prop_timezoneName "Australia/Brisbane" .
+
+ex:City_HVB ex:prop_utcOffset "+10:00" .
+
+ex:City_HVB ex:prop_timezoneName "Australia/Brisbane" .
+
+ex:City_IAO ex:prop_utcOffset "+08:00" .
+
+ex:City_IAO ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_IBZ ex:prop_utcOffset "+02:00" .
+
+ex:City_IBZ ex:prop_timezoneName "Europe/Madrid" .
+
+ex:City_ICT ex:prop_utcOffset "-05:00" .
+
+ex:City_ICT ex:prop_timezoneName "America/Chicago" .
+
+ex:City_IDR ex:prop_utcOffset "+05:30" .
+
+ex:City_IDR ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_IEV ex:prop_utcOffset "+03:00" .
+
+ex:City_IEV ex:prop_timezoneName "Europe/Kyiv" .
+
+ex:City_IFN ex:prop_utcOffset "+03:30" .
+
+ex:City_IFN ex:prop_timezoneName "Asia/Tehran" .
+
+ex:City_IGU ex:prop_utcOffset "-03:00" .
+
+ex:City_IGU ex:prop_timezoneName "America/Sao_Paulo" .
+
+ex:City_IKA ex:prop_utcOffset "+03:30" .
+
+ex:City_IKA ex:prop_timezoneName "Asia/Tehran" .
+
+ex:City_IMF ex:prop_utcOffset "+05:30" .
+
+ex:City_IMF ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_INC ex:prop_utcOffset "+08:00" .
+
+ex:City_INC ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_IND ex:prop_utcOffset "-04:00" .
+
+ex:City_IND ex:prop_timezoneName "America/Indiana/Indianapolis" .
+
+ex:City_INV ex:prop_utcOffset "+01:00" .
+
+ex:City_INV ex:prop_timezoneName "Europe/London" .
+
+ex:City_IOM ex:prop_utcOffset "+01:00" .
+
+ex:City_IOM ex:prop_timezoneName "Europe/Isle_of_Man" .
+
+ex:City_IOS ex:prop_utcOffset "-03:00" .
+
+ex:City_IOS ex:prop_timezoneName "America/Bahia" .
+
+ex:City_ISA ex:prop_utcOffset "+10:00" .
+
+ex:City_ISA ex:prop_timezoneName "Australia/Brisbane" .
+
+ex:City_ISB ex:prop_utcOffset "+05:00" .
+
+ex:City_ISB ex:prop_timezoneName "Asia/Karachi" .
+
+ex:City_ISG ex:prop_utcOffset "+09:00" .
+
+ex:City_ISG ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_ITO ex:prop_utcOffset "-10:00" .
+
+ex:City_ITO ex:prop_timezoneName "Pacific/Honolulu" .
+
+ex:City_IVC ex:prop_utcOffset "+12:00" .
+
+ex:City_IVC ex:prop_timezoneName "Pacific/Auckland" .
+
+ex:City_IWJ ex:prop_utcOffset "+09:00" .
+
+ex:City_IWJ ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_IWK ex:prop_utcOffset "+09:00" .
+
+ex:City_IWK ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_IXB ex:prop_utcOffset "+05:30" .
+
+ex:City_IXB ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_IXC ex:prop_utcOffset "+05:30" .
+
+ex:City_IXC ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_IXJ ex:prop_utcOffset "+05:30" .
+
+ex:City_IXJ ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_IXL ex:prop_utcOffset "+05:30" .
+
+ex:City_IXL ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_IXM ex:prop_utcOffset "+05:30" .
+
+ex:City_IXM ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_IXR ex:prop_utcOffset "+05:30" .
+
+ex:City_IXR ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_IXU ex:prop_utcOffset "+05:30" .
+
+ex:City_IXU ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_IXZ ex:prop_utcOffset "+05:30" .
+
+ex:City_IXZ ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_IZM ex:prop_utcOffset "+03:00" .
+
+ex:City_IZM ex:prop_timezoneName "Europe/Istanbul" .
+
+ex:City_JAI ex:prop_utcOffset "+05:30" .
+
+ex:City_JAI ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_JAN ex:prop_utcOffset "-05:00" .
+
+ex:City_JAN ex:prop_timezoneName "America/Chicago" .
+
+ex:City_JAX ex:prop_utcOffset "-04:00" .
+
+ex:City_JAX ex:prop_timezoneName "America/New_York" .
+
+ex:City_JDH ex:prop_utcOffset "+05:30" .
+
+ex:City_JDH ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_JER ex:prop_utcOffset "+01:00" .
+
+ex:City_JER ex:prop_timezoneName "Europe/Jersey" .
+
+ex:City_JIB ex:prop_utcOffset "+03:00" .
+
+ex:City_JIB ex:prop_timezoneName "Africa/Djibouti" .
+
+ex:City_JJN ex:prop_utcOffset "+08:00" .
+
+ex:City_JJN ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_JPA ex:prop_utcOffset "-03:00" .
+
+ex:City_JPA ex:prop_timezoneName "America/Fortaleza" .
+
+ex:City_JRO ex:prop_utcOffset "+03:00" .
+
+ex:City_JRO ex:prop_timezoneName "Africa/Dar_es_Salaam" .
+
+ex:City_JTR ex:prop_utcOffset "+03:00" .
+
+ex:City_JTR ex:prop_timezoneName "Europe/Athens" .
+
+ex:City_JUL ex:prop_utcOffset "-05:00" .
+
+ex:City_JUL ex:prop_timezoneName "America/Lima" .
+
+ex:City_JUZ ex:prop_utcOffset "+08:00" .
+
+ex:City_JUZ ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_KAN ex:prop_utcOffset "+01:00" .
+
+ex:City_KAN ex:prop_timezoneName "Africa/Lagos" .
+
+ex:City_KCZ ex:prop_utcOffset "+09:00" .
+
+ex:City_KCZ ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_KEL ex:prop_utcOffset "+02:00" .
+
+ex:City_KEL ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_KGI ex:prop_utcOffset "+08:00" .
+
+ex:City_KGI ex:prop_timezoneName "Australia/Perth" .
+
+ex:City_KGL ex:prop_utcOffset "+02:00" .
+
+ex:City_KGL ex:prop_timezoneName "Africa/Kigali" .
+
+ex:City_KHG ex:prop_utcOffset "+08:00" .
+
+ex:City_KHG ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_KHH ex:prop_utcOffset "+08:00" .
+
+ex:City_KHH ex:prop_timezoneName "Asia/Taipei" .
+
+ex:City_KHI ex:prop_utcOffset "+05:00" .
+
+ex:City_KHI ex:prop_timezoneName "Asia/Karachi" .
+
+ex:City_KHV ex:prop_utcOffset "+10:00" .
+
+ex:City_KHV ex:prop_timezoneName "Asia/Vladivostok" .
+
+ex:City_KIJ ex:prop_utcOffset "+09:00" .
+
+ex:City_KIJ ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_KIN ex:prop_utcOffset "-05:00" .
+
+ex:City_KIN ex:prop_timezoneName "America/Jamaica" .
+
+ex:City_KIV ex:prop_utcOffset "+03:00" .
+
+ex:City_KIV ex:prop_timezoneName "Europe/Chisinau" .
+
+ex:City_KKE ex:prop_utcOffset "+12:00" .
+
+ex:City_KKE ex:prop_timezoneName "Pacific/Auckland" .
+
+ex:City_KKN ex:prop_utcOffset "+02:00" .
+
+ex:City_KKN ex:prop_timezoneName "Europe/Oslo" .
+
+ex:City_KLO ex:prop_utcOffset "+08:00" .
+
+ex:City_KLO ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_KLR ex:prop_utcOffset "+02:00" .
+
+ex:City_KLR ex:prop_timezoneName "Europe/Stockholm" .
+
+ex:City_KMG ex:prop_utcOffset "+08:00" .
+
+ex:City_KMG ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_KMI ex:prop_utcOffset "+09:00" .
+
+ex:City_KMI ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_KMJ ex:prop_utcOffset "+09:00" .
+
+ex:City_KMJ ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_KMQ ex:prop_utcOffset "+09:00" .
+
+ex:City_KMQ ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_KNX ex:prop_utcOffset "+08:00" .
+
+ex:City_KNX ex:prop_timezoneName "Australia/Perth" .
+
+ex:City_KOA ex:prop_utcOffset "-10:00" .
+
+ex:City_KOA ex:prop_timezoneName "Pacific/Honolulu" .
+
+ex:City_KOJ ex:prop_utcOffset "+09:00" .
+
+ex:City_KOJ ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_KRK ex:prop_utcOffset "+02:00" .
+
+ex:City_KRK ex:prop_timezoneName "Europe/Warsaw" .
+
+ex:City_KRN ex:prop_utcOffset "+02:00" .
+
+ex:City_KRN ex:prop_timezoneName "Europe/Stockholm" .
+
+ex:City_KRP ex:prop_utcOffset "+02:00" .
+
+ex:City_KRP ex:prop_timezoneName "Europe/Copenhagen" .
+
+ex:City_KRR ex:prop_utcOffset "+03:00" .
+
+ex:City_KRR ex:prop_timezoneName "Europe/Moscow" .
+
+ex:City_KRS ex:prop_utcOffset "+02:00" .
+
+ex:City_KRS ex:prop_timezoneName "Europe/Oslo" .
+
+ex:City_KRT ex:prop_utcOffset "+02:00" .
+
+ex:City_KRT ex:prop_timezoneName "Africa/Khartoum" .
+
+ex:City_KSA ex:prop_utcOffset "+11:00" .
+
+ex:City_KSA ex:prop_timezoneName "Pacific/Kosrae" .
+
+ex:City_KSC ex:prop_utcOffset "+02:00" .
+
+ex:City_KSC ex:prop_timezoneName "Europe/Bratislava" .
+
+ex:City_KSU ex:prop_utcOffset "+02:00" .
+
+ex:City_KSU ex:prop_timezoneName "Europe/Oslo" .
+
+ex:City_KTA ex:prop_utcOffset "+08:00" .
+
+ex:City_KTA ex:prop_timezoneName "Australia/Perth" .
+
+ex:City_KTW ex:prop_utcOffset "+02:00" .
+
+ex:City_KTW ex:prop_timezoneName "Europe/Warsaw" .
+
+ex:City_KUF ex:prop_utcOffset "+04:00" .
+
+ex:City_KUF ex:prop_timezoneName "Europe/Samara" .
+
+ex:City_KUH ex:prop_utcOffset "+09:00" .
+
+ex:City_KUH ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_KWE ex:prop_utcOffset "+08:00" .
+
+ex:City_KWE ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_KWI ex:prop_utcOffset "+03:00" .
+
+ex:City_KWI ex:prop_timezoneName "Asia/Kuwait" .
+
+ex:City_KWL ex:prop_utcOffset "+08:00" .
+
+ex:City_KWL ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_KYA ex:prop_utcOffset "+03:00" .
+
+ex:City_KYA ex:prop_timezoneName "Europe/Istanbul" .
+
+ex:City_KZN ex:prop_utcOffset "+03:00" .
+
+ex:City_KZN ex:prop_timezoneName "Europe/Moscow" .
+
+ex:City_LAD ex:prop_utcOffset "+01:00" .
+
+ex:City_LAD ex:prop_timezoneName "Africa/Luanda" .
+
+ex:City_LAO ex:prop_utcOffset "+08:00" .
+
+ex:City_LAO ex:prop_timezoneName "Asia/Manila" .
+
+ex:City_LAS ex:prop_utcOffset "-07:00" .
+
+ex:City_LAS ex:prop_timezoneName "America/Los_Angeles" .
+
+ex:City_LBV ex:prop_utcOffset "+01:00" .
+
+ex:City_LBV ex:prop_timezoneName "Africa/Libreville" .
+
+ex:City_LCA ex:prop_utcOffset "+03:00" .
+
+ex:City_LCA ex:prop_timezoneName "Asia/Nicosia" .
+
+ex:City_LCG ex:prop_utcOffset "+02:00" .
+
+ex:City_LCG ex:prop_timezoneName "Europe/Madrid" .
+
+ex:City_LED ex:prop_utcOffset "+03:00" .
+
+ex:City_LED ex:prop_timezoneName "Europe/Moscow" .
+
+ex:City_LEI ex:prop_utcOffset "+02:00" .
+
+ex:City_LEI ex:prop_timezoneName "Europe/Madrid" .
+
+ex:City_LEJ ex:prop_utcOffset "+02:00" .
+
+ex:City_LEJ ex:prop_timezoneName "Europe/Berlin" .
+
+ex:City_LFW ex:prop_utcOffset "+00:00" .
+
+ex:City_LFW ex:prop_timezoneName "Africa/Lome" .
+
+ex:City_LGB ex:prop_utcOffset "-07:00" .
+
+ex:City_LGB ex:prop_timezoneName "America/Los_Angeles" .
+
+ex:City_LHE ex:prop_utcOffset "+05:00" .
+
+ex:City_LHE ex:prop_timezoneName "Asia/Karachi" .
+
+ex:City_LHW ex:prop_utcOffset "+08:00" .
+
+ex:City_LHW ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_LIH ex:prop_utcOffset "-10:00" .
+
+ex:City_LIH ex:prop_timezoneName "Pacific/Honolulu" .
+
+ex:City_LIM ex:prop_utcOffset "-05:00" .
+
+ex:City_LIM ex:prop_timezoneName "America/Lima" .
+
+ex:City_LIR ex:prop_utcOffset "-06:00" .
+
+ex:City_LIR ex:prop_timezoneName "America/Costa_Rica" .
+
+ex:City_LIS ex:prop_utcOffset "+01:00" .
+
+ex:City_LIS ex:prop_timezoneName "Europe/Lisbon" .
+
+ex:City_LJG ex:prop_utcOffset "+08:00" .
+
+ex:City_LJG ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_LJU ex:prop_utcOffset "+02:00" .
+
+ex:City_LJU ex:prop_timezoneName "Europe/Ljubljana" .
+
+ex:City_LKO ex:prop_utcOffset "+05:30" .
+
+ex:City_LKO ex:prop_timezoneName "Asia/Kolkata" .
+
+ex:City_LLA ex:prop_utcOffset "+02:00" .
+
+ex:City_LLA ex:prop_timezoneName "Europe/Stockholm" .
+
+ex:City_LLI ex:prop_utcOffset "+03:00" .
+
+ex:City_LLI ex:prop_timezoneName "Africa/Addis_Ababa" .
+
+ex:City_LOS ex:prop_utcOffset "+01:00" .
+
+ex:City_LOS ex:prop_timezoneName "Africa/Lagos" .
+
+ex:City_LPA ex:prop_utcOffset "+01:00" .
+
+ex:City_LPA ex:prop_timezoneName "Atlantic/Canary" .
+
+ex:City_LPB ex:prop_utcOffset "-04:00" .
+
+ex:City_LPB ex:prop_timezoneName "America/La_Paz" .
+
+ex:City_LPQ ex:prop_utcOffset "+07:00" .
+
+ex:City_LPQ ex:prop_timezoneName "Asia/Vientiane" .
+
+ex:City_LRD ex:prop_utcOffset "-05:00" .
+
+ex:City_LRD ex:prop_timezoneName "America/Chicago" .
+
+ex:City_LRT ex:prop_utcOffset "+02:00" .
+
+ex:City_LRT ex:prop_timezoneName "Europe/Paris" .
+
+ex:City_LST ex:prop_utcOffset "+10:00" .
+
+ex:City_LST ex:prop_timezoneName "Australia/Hobart" .
+
+ex:City_LUG ex:prop_utcOffset "+02:00" .
+
+ex:City_LUG ex:prop_timezoneName "Europe/Zurich" .
+
+ex:City_LUN ex:prop_utcOffset "+02:00" .
+
+ex:City_LUN ex:prop_timezoneName "Africa/Lusaka" .
+
+ex:City_LUX ex:prop_utcOffset "+02:00" .
+
+ex:City_LUX ex:prop_timezoneName "Europe/Luxembourg" .
+
+ex:City_LUZ ex:prop_utcOffset "+02:00" .
+
+ex:City_LUZ ex:prop_timezoneName "Europe/Warsaw" .
+
+ex:City_LVI ex:prop_utcOffset "+02:00" .
+
+ex:City_LVI ex:prop_timezoneName "Africa/Lusaka" .
+
+ex:City_LWO ex:prop_utcOffset "+03:00" .
+
+ex:City_LWO ex:prop_timezoneName "Europe/Kyiv" .
+
+ex:City_LXA ex:prop_utcOffset "+08:00" .
+
+ex:City_LXA ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_LXR ex:prop_utcOffset "+03:00" .
+
+ex:City_LXR ex:prop_timezoneName "Africa/Cairo" .
+
+ex:City_LYI ex:prop_utcOffset "+08:00" .
+
+ex:City_LYI ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_LYR ex:prop_utcOffset "+02:00" .
+
+ex:City_LYR ex:prop_timezoneName "Arctic/Longyearbyen" .
+
+ex:City_MAD ex:prop_utcOffset "+02:00" .
+
+ex:City_MAD ex:prop_timezoneName "Europe/Madrid" .
+
+ex:City_MAF ex:prop_utcOffset "-05:00" .
+
+ex:City_MAF ex:prop_timezoneName "America/Chicago" .
+
+ex:City_MAH ex:prop_utcOffset "+02:00" .
+
+ex:City_MAH ex:prop_timezoneName "Europe/Madrid" .
+
+ex:City_MAO ex:prop_utcOffset "-04:00" .
+
+ex:City_MAO ex:prop_timezoneName "America/Manaus" .
+
+ex:City_MBA ex:prop_utcOffset "+03:00" .
+
+ex:City_MBA ex:prop_timezoneName "Africa/Nairobi" .
+
+ex:City_MBE ex:prop_utcOffset "+09:00" .
+
+ex:City_MBE ex:prop_timezoneName "Asia/Tokyo" .
+
+ex:City_MBJ ex:prop_utcOffset "-05:00" .
+
+ex:City_MBJ ex:prop_timezoneName "America/Jamaica" .
+
+ex:City_MCT ex:prop_utcOffset "+04:00" .
+
+ex:City_MCT ex:prop_timezoneName "Asia/Muscat" .
+
+ex:City_MCY ex:prop_utcOffset "+10:00" .
+
+ex:City_MCY ex:prop_timezoneName "Australia/Brisbane" .
+
+ex:City_MDE ex:prop_utcOffset "-05:00" .
+
+ex:City_MDE ex:prop_timezoneName "America/Bogota" .
+
+ex:City_MDT ex:prop_utcOffset "-04:00" .
+
+ex:City_MDT ex:prop_timezoneName "America/New_York" .
+
+ex:City_MED ex:prop_utcOffset "+03:00" .
+
+ex:City_MED ex:prop_timezoneName "Asia/Riyadh" .
+
+ex:City_MEM ex:prop_utcOffset "-05:00" .
+
+ex:City_MEM ex:prop_timezoneName "America/Chicago" .
+
+ex:City_MEX ex:prop_utcOffset "-06:00" .
+
+ex:City_MEX ex:prop_timezoneName "America/Mexico_City" .
+
+ex:City_MFE ex:prop_utcOffset "-05:00" .
+
+ex:City_MFE ex:prop_timezoneName "America/Chicago" .
+
+ex:City_MFR ex:prop_utcOffset "-07:00" .
+
+ex:City_MFR ex:prop_timezoneName "America/Los_Angeles" .
+
+ex:City_MGA ex:prop_utcOffset "-06:00" .
+
+ex:City_MGA ex:prop_timezoneName "America/Managua" .
+
+ex:City_MIA ex:prop_utcOffset "-04:00" .
+
+ex:City_MIA ex:prop_timezoneName "America/New_York" .
+
+ex:City_MID ex:prop_utcOffset "-06:00" .
+
+ex:City_MID ex:prop_timezoneName "America/Merida" .
+
+ex:City_MIG ex:prop_utcOffset "+08:00" .
+
+ex:City_MIG ex:prop_timezoneName "Asia/Shanghai" .
+
+ex:City_MKC ex:prop_utcOffset "-05:00" .
+
+ex:City_MKC ex:prop_timezoneName "America/Chicago" .
+
+ex:City_MKE ex:prop_utcOffset "-05:00" .
+
+ex:City_MKE ex:prop_timezoneName "America/Chicago" .
+
+ex:City_MKY ex:prop_utcOffset "+10:00" .
+
+ex:City_MKY ex:prop_timezoneName "Australia/Brisbane" .
+
 ex:Cuisine_Abruzzese a ex:Cuisine ;
     rdfs:label "Abruzzese" ;
     ex:prop_cuisineType "Abruzzese" .
@@ -50154,6 +54032,46 @@ ex:Festival_EXT_Exeter_Respect_Festival a ex:Festival ;
     ex:prop_festivalType "cultural" .
 
 ex:City_EXT ex:prop_hasFestival ex:Festival_EXT_Exeter_Respect_Festival .
+
+ex:Festival_NRT_Hanami_Cherry_Blossom_Festival a ex:Festival ;
+    rdfs:label "Hanami Cherry Blossom Festival" ;
+    ex:prop_festivalName "Hanami Cherry Blossom Festival" ;
+    ex:prop_festivalMonthNum "4"^^xsd:integer ;
+    ex:prop_festivalType "cultural" .
+
+ex:City_NRT ex:prop_hasFestival ex:Festival_NRT_Hanami_Cherry_Blossom_Festival .
+
+ex:Festival_SYD_Australia_Day a ex:Festival ;
+    rdfs:label "Australia Day" ;
+    ex:prop_festivalName "Australia Day" ;
+    ex:prop_festivalMonthNum "1"^^xsd:integer ;
+    ex:prop_festivalType "national" .
+
+ex:City_SYD ex:prop_hasFestival ex:Festival_SYD_Australia_Day .
+
+ex:Festival_SYD_Sydney_New_Year_Eve_Fireworks a ex:Festival ;
+    rdfs:label "Sydney New Year Eve Fireworks" ;
+    ex:prop_festivalName "Sydney New Year Eve Fireworks" ;
+    ex:prop_festivalMonthNum "12"^^xsd:integer ;
+    ex:prop_festivalType "national" .
+
+ex:City_SYD ex:prop_hasFestival ex:Festival_SYD_Sydney_New_Year_Eve_Fireworks .
+
+ex:Festival_HKG_Chinese_New_Year a ex:Festival ;
+    rdfs:label "Chinese New Year" ;
+    ex:prop_festivalName "Chinese New Year" ;
+    ex:prop_festivalMonthNum "2"^^xsd:integer ;
+    ex:prop_festivalType "cultural" .
+
+ex:City_HKG ex:prop_hasFestival ex:Festival_HKG_Chinese_New_Year .
+
+ex:Festival_DPS_Galungan a ex:Festival ;
+    rdfs:label "Galungan" ;
+    ex:prop_festivalName "Galungan" ;
+    ex:prop_festivalMonthNum "7"^^xsd:integer ;
+    ex:prop_festivalType "religious" .
+
+ex:City_DPS ex:prop_hasFestival ex:Festival_DPS_Galungan .
 
 ex:Attraction_SIN_Gardens_by_the_Bay a ex:Attraction ;
     rdfs:label "Gardens by the Bay" ;
@@ -53919,8 +57837,9 @@ ex:CountryVisaRequirement_SG_AU a ex:CountryVisaRequirement ;
     rdfs:label "SG to AU" ;
     ex:prop_passportCountry ex:Country_SG ;
     ex:prop_destinationCountry ex:Country_AU ;
-    ex:prop_visaRequired false ;
-    ex:prop_usesVisaPolicy ex:VisaPolicy_visa_not_required ;
+    ex:prop_visaRequired true ;
+    ex:prop_usesVisaPolicy ex:VisaPolicy_eta_required ;
+    ex:prop_onlineApplyUrl "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/electronic-travel-authority-601" ;
     ex:prop_visaDurationDays "90"^^xsd:integer .
 
 ex:CountryVisaRequirement_SG_AT a ex:CountryVisaRequirement ;

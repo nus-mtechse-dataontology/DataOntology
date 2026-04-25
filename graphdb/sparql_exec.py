@@ -34,6 +34,11 @@ def _post(sparql: str, accept: str) -> bytes:
     try:
         with urllib.request.urlopen(req, timeout=GRAPHDB_TIMEOUT) as resp:
             return resp.read()
+    except urllib.error.HTTPError as e:
+        body = e.read().decode(errors="replace")[:400]
+        raise ConnectionError(
+            f"GraphDB HTTP {e.code} from {GRAPHDB_URL}.\nResponse: {body}"
+        )
     except urllib.error.URLError as e:
         raise ConnectionError(
             f"GraphDB unreachable at {GRAPHDB_URL}. Is it running?\nDetails: {e}"

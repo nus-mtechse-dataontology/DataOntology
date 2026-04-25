@@ -19,6 +19,7 @@ Param Schema:
 Parameter resolution rules (apply when extracting parameters):
 - When the user mentions a city or country name instead of an airport code, resolve it to the primary IATA airport code yourself. Do NOT ask the user for the airport code. Examples: Manchester → MAN, Bangkok → BKK, Tokyo → NRT, London → LHR, Kuala Lumpur → KUL, Singapore → SIN, Sydney → SYD, Dubai → DXB, Paris → CDG, New York → JFK, Hong Kong → HKG, Bali → DPS, Seoul → ICN, Colombo → CMB, Melbourne → MEL, Jakarta → CGK, Ho Chi Minh City → SGN, Taipei → TPE, Osaka → KIX, Phuket → HKT.
 - Only add a parameter to `missing_params` if it is truly impossible to infer from the question.
+- For `departure_date`: a month name alone (e.g. "june") is NOT enough — you must ask the user for a specific date. Only resolve departure_date if the user gives a full date like "15 June" or "June 15 2026".
 
 Routing rules (apply before selecting an intent):
 - When the user asks a general question about a destination — what it is like, tell me about, overview, should I visit, is it safe, how is X, good time to go — always select `destination_vacation_plan`. It returns the full picture in one query. Never route these to narrow enrichment intents.
