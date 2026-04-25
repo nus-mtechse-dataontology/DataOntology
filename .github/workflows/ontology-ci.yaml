@@ -180,12 +180,50 @@ jobs:
           path: |
             gitleaks.sarif
             
+  # 2D. SECURITY SCAN: Trivy Container (OS & Layer scanning)
+  container-scan:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Local Image
+        run: |
+          docker build -t data-ontology-app:${{ github.sha }} .
+
+      - name: Run Trivy Vulnerability Scanner (SARIF)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'data-ontology-app:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Results to GitHub Security Tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() # Ensure results upload even if scan fails
+        with:
+          sarif_file: 'trivy-results.sarif'
+          category: 'trivy-container'
+
+      - name: Fail build on High/Critical
+        # This second run ensures the pipeline stops if issues exist 
+        # while the first run ensures the data gets uploaded to the dashboard.
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'data-ontology-app:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
   # 3. DEPLOY: Build & Ship to AWS
   deploy:
     needs:
       - snyk-scan
       - sonarqube-scan
       - gitleaks-scan
+      - container-scan
     # Deploy only after merge/push to release (not as PR checklist item)
     if: github.event_name == 'push' && github.ref_name == 'release'
     runs-on: ubuntu-latest
