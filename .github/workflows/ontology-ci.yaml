@@ -38,7 +38,7 @@ jobs:
       # --- UNIT TESTS ---
       - name: Run Tests
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+          export PYTHONPATH=$(pwd)/src:$PYTHONPATH
           COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
 
       - name: Upload Build Test Reports
@@ -126,7 +126,7 @@ jobs:
 
       - name: Run Tests for Sonar Coverage
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+          export PYTHONPATH=$(pwd)/src:$PYTHONPATH
           COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
 
       # --- SONARQUBE (Python Logic Scan) ---
