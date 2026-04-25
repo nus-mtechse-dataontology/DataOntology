@@ -1,6 +1,6 @@
 from models.common import ErrorResponse, SuccessResponse
 from models.pipeline import QuestionResponse, ResultSet, Row
-from src.orchestrator.response_builder import ResponseBuilder
+from orchestrator.response_builder import ResponseBuilder
 
 
 def test_build_returns_success_response_wrapping_question_response():
