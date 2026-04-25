@@ -5,9 +5,11 @@ import pytest
 from sqlmodel import SQLModel, create_engine
 
 # Keep local src imports deterministic in CI, even if site-packages has similarly named modules.
-SRC_PATH = str(Path(__file__).resolve().parents[1] / "src")
-if SRC_PATH not in sys.path:
-    sys.path.insert(0, SRC_PATH)
+ROOT_PATH = str(Path(__file__).resolve().parents[1])
+SRC_PATH = str(Path(ROOT_PATH) / "src")
+for path in (ROOT_PATH, SRC_PATH):
+    if path not in sys.path:
+        sys.path.insert(0, path)
 
 from dao import *
 from entities import *
