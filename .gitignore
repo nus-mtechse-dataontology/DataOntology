@@ -27,6 +27,10 @@ build/
 
 target/
 vault/postgres.password
+
+# Local working copy — tracked files live at repo root
+DataOntology/
+.claude/
 vault/postgres.user
 
 
