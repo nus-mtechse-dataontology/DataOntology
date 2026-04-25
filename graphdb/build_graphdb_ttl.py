@@ -263,10 +263,6 @@ def build_dml(config: BuildConfig) -> str:
             f'rdfs:label {ttl_literal(row["f_username"])}',
             f'{subject("prop", "accountUsername")} {ttl_literal(row["f_username"])}',
         ]
-        if row.get("f_passport_country_code"):
-            predicates.append(
-                f'{subject("prop", "hasPassportCountry")} {subject("Country", row["f_passport_country_code"])}'
-            )
         emit_block(lines, subject("Account", row["f_username"]), "ex:Account", predicates)
 
     for row in countries:

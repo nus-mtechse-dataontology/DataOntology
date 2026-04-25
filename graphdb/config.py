@@ -13,10 +13,4 @@ GRAPHDB_URL = "http://localhost:7200/repositories/dataontology"
 GRAPHDB_TIMEOUT = 30
 
 DEFAULT_LIMIT = 10
-GEMINI_MODEL = "gemini-2.5-flash"
-
-# ── Dev defaults ───────────────────────────────────────────────
-# Simulates a logged-in user's passport for visa enrichment in dev/testing.
-# IN (India) requires eVisa for Thailand — good for testing visa display.
-# Set to None to disable and test the "no passport provided" fallback.
-DEV_PASSPORT_COUNTRY = "IN"
+GEMINI_MODEL = "gemma-4-31b-it"

@@ -7,7 +7,7 @@ ID,SG,no,visa_not_required,,30
 VN,SG,no,visa_not_required,,30
 IN,SG,yes,evisa_required,https://www.indianvisaonline.gov.in/evisa/tvoa.html,90
 TW,SG,no,visa_not_required,,30
-AU,SG,no,visa_not_required,,90
+AU,SG,yes,eta_required,https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/electronic-travel-authority-601,90
 AT,SG,no,visa_not_required,,90
 MY,SG,no,visa_not_required,,30
 CN,SG,no,visa_not_required,,30
