@@ -1,0 +1,66 @@
+name: "Flight Search"
+description: "Ingestion pipeline for data processing and transformation."
+version: "1.0.0"
+
+dataset:
+  name: "Flights Search"
+  description: "Dataset containing flight search information."
+  source:
+    url: "https://apigw.singaporeair.com/api/uat/v1/commercial/flightavailability/get"
+    method: "POST"
+    body:
+      clientUUID: "client_uuid"
+      request:
+        itineraryDetails:
+          - originAirportCode: "SIN"
+            destinationAirportCode: "BKK"
+            departureDate: "2026-05-01"
+            returnDate: "2026-05-10"
+        cabinClass: "Y"
+        adultCount: 1
+        childCount: 0
+        infantCount: 0
+      options: {}
+    headers:
+      apiKey: "api_key"
+      options:
+        context:
+          apiKey: "search.apiKey"
+
+datasource:
+  driver:
+    package: "drivers.postgres_driver"
+    class: "PostgresDriver"
+    options:
+  database:
+    drivername: "postgresql+psycopg2"
+    name: "data_ontology"
+    host: "localhost"
+    port: 5432
+    options:
+      user: "postgres.user"
+      password: "postgres.password"
+      echo: false
+  table:
+    name: "dim_airline_coverage"
+    columns: []
+    mode: "truncate"
+    batch_size: 1000
+    options:
+
+modules:
+  entry:
+    package: "ingestion.entry.api_entry"
+    class: "ApiEntry"
+  dao:
+    package: "dao.flight_search_dao"
+    class: "FlightSearchDAO"
+  ingestion:
+    package: "ingestion.source.api_source.flight_search_api_ingestion"
+    class: "FlightSearchApiIngestion"
+  api_gateway:
+    package: "ingestion.gateway.api_gateway"
+    class: "ApiGateway"
+  service:
+    package: "ingestion.services.flight_search_service"
+    class: "FlightSearchService"

@@ -6,7 +6,7 @@ from dao.airport_dao import AirportDAO
 
 class AirportService:
 	def __init__(self, airport_dao: AirportDAO):
-		self._log = logging.getLogger("ontology")
+		self._log = logging.getLogger("data_ontology")
 		self._airport_dao = airport_dao
 	
 	def insert_airports(self, airport_payload: dict):

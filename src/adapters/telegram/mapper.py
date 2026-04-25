@@ -10,14 +10,10 @@ class TelegramUpdateMapper(UpdateMapper):
     def __init__(self,) -> None:
         self._log = logging.getLogger("data_ontology")
     
-    def _build_nlq_request_from_update(self, update: Update) -> tuple[int, NLQRequest]:
+    def _build_nlq_request_from_update(self, text: str) -> NLQRequest:
         self._log.info("TelegramUpdateMapper: Building NLQ Request..")
-       
-        chat = update.message.chat
-        text = update.message.text
-        
-        return chat.id, NLQRequest(question=text.strip())
+        return NLQRequest(question=text.strip(), source="telegram")
 
-    def map(self, update: Update) -> tuple[int, NLQRequest]:
+    def map(self, text: str) -> NLQRequest:
         self._log.info("TelegramUpdateMapper: Attempting to map NLQ Request..")
-        return self._build_nlq_request_from_update(update)
+        return self._build_nlq_request_from_update(text)
