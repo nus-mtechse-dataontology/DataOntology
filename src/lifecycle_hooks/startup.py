@@ -14,6 +14,13 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from sqlmodel import SQLModel
 
+# Ensure the project root is on sys.path so that `graphdb` is importable as a package
+# regardless of how the app is launched (python src/main.py, uvicorn, Docker, etc.)
+_project_root = str(Path(__file__).resolve().parents[2])
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
+
+from graphdb.service import GraphDBService  # noqa: E402
 from adapters.telegram import TelegramWebhookHandler, TelegramClient, TelegramUpdateMapper
 from dao.fact_flight_info_dao import FactFlightInfoDAO
 from handlers import *
@@ -199,6 +206,20 @@ async def startup(app: FastAPI):
     )
     logger.info("Orchestrator wired — pipeline ready")
     # ───────────────────────────────────────────────────────────────────
+
+    # ── Wire GraphDB semantic pipeline ────────────────────────────────
+    logger.info("Initialising GraphDBService")
+    try:
+        graphdb_service = GraphDBService()
+        graphdb_reachable = graphdb_service.graphdb_reachable()
+        if graphdb_reachable:
+            logger.info("GraphDBService ready — GraphDB reachable at localhost:7200")
+        else:
+            logger.warning("GraphDBService ready — GraphDB NOT reachable; SPARQL intents will fail")
+    except Exception:
+        logger.exception("GraphDBService failed to initialise — graphdb queries disabled")
+        graphdb_service = None
+    # ──────────────────────────────────────────────────────────────────
     
     
     # ── Wire Telegram components ───────────────────────────────────────
@@ -212,6 +233,7 @@ async def startup(app: FastAPI):
     # ──────────────────────────────────────────────────────────────────────
     
     app.state.orchestrator = orchestrator
+    app.state.graphdb_service = graphdb_service
     app.state.session = session
     app.state.auth = AuthenticationService(account_dao, jwt_handler)
     app.state.jwt_handler = jwt_handler

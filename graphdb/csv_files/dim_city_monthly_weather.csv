@@ -1631,30 +1631,30 @@ SIN,9,September,27.9,166,tropical_rainforest,humid_season,no,humid and showery
 SIN,10,October,27.8,191,tropical_rainforest,humid_season,no,warm with more rain
 SIN,11,November,27.3,252,tropical_rainforest,wet_season,no,very wet and humid
 SIN,12,December,26.9,318,tropical_rainforest,wet_season,no,warm and rainiest period
-NRT,1,January,6,52,humid_subtropical,cool_winter,no,cold and dry
-NRT,2,February,7,56,humid_subtropical,cool_winter,no,cold with early signs of spring
-NRT,3,March,10,117,humid_subtropical,shoulder,no,mild with spring rain
-NRT,4,April,14,125,humid_subtropical,spring_peak,yes,pleasant cherry blossom season
-NRT,5,May,19,138,humid_subtropical,spring_peak,yes,warm and pleasant
-NRT,6,June,23,168,humid_subtropical,wet_season,no,hot and rainy (rainy season)
-NRT,7,July,27,154,humid_subtropical,summer_peak,no,hot humid and very wet
-NRT,8,August,29,168,humid_subtropical,summer_peak,no,hottest and very humid
-NRT,9,September,25,209,humid_subtropical,shoulder,no,warm with typhoon risk
-NRT,10,October,19,197,humid_subtropical,autumn_peak,yes,mild and colourful autumn
-NRT,11,November,13,93,humid_subtropical,autumn_peak,yes,cool and dry
-NRT,12,December,8,51,humid_subtropical,cool_winter,no,cold and dry
-LHR,1,January,5,55,marine_west_coast,cool_winter,no,cold damp and grey
-LHR,2,February,5,40,marine_west_coast,cool_winter,no,cold with some early spring days
-LHR,3,March,8,40,marine_west_coast,shoulder,no,cool with brightening days
-LHR,4,April,11,43,marine_west_coast,shoulder,yes,mild and fresh spring weather
-LHR,5,May,14,45,marine_west_coast,shoulder,yes,warm and one of the sunniest months
-LHR,6,June,17,46,marine_west_coast,summer_peak,yes,warm and pleasant
-LHR,7,July,19,46,marine_west_coast,summer_peak,yes,warmest and sunniest month
-LHR,8,August,19,49,marine_west_coast,summer_peak,yes,warm and pleasant
-LHR,9,September,16,50,marine_west_coast,autumn_shoulder,no,mild with more rain
-LHR,10,October,12,69,marine_west_coast,autumn_shoulder,no,cool and wet
-LHR,11,November,8,57,marine_west_coast,cool_winter,no,cold dark and damp
-LHR,12,December,5,55,marine_west_coast,cool_winter,no,cold and short days
+TYO,1,January,6,52,humid_subtropical,cool_winter,no,cold and dry
+TYO,2,February,7,56,humid_subtropical,cool_winter,no,cold with early signs of spring
+TYO,3,March,10,117,humid_subtropical,shoulder,no,mild with spring rain
+TYO,4,April,14,125,humid_subtropical,spring_peak,yes,pleasant cherry blossom season
+TYO,5,May,19,138,humid_subtropical,spring_peak,yes,warm and pleasant
+TYO,6,June,23,168,humid_subtropical,wet_season,no,hot and rainy (rainy season)
+TYO,7,July,27,154,humid_subtropical,summer_peak,no,hot humid and very wet
+TYO,8,August,29,168,humid_subtropical,summer_peak,no,hottest and very humid
+TYO,9,September,25,209,humid_subtropical,shoulder,no,warm with typhoon risk
+TYO,10,October,19,197,humid_subtropical,autumn_peak,yes,mild and colourful autumn
+TYO,11,November,13,93,humid_subtropical,autumn_peak,yes,cool and dry
+TYO,12,December,8,51,humid_subtropical,cool_winter,no,cold and dry
+LON,1,January,5,55,marine_west_coast,cool_winter,no,cold damp and grey
+LON,2,February,5,40,marine_west_coast,cool_winter,no,cold with some early spring days
+LON,3,March,8,40,marine_west_coast,shoulder,no,cool with brightening days
+LON,4,April,11,43,marine_west_coast,shoulder,yes,mild and fresh spring weather
+LON,5,May,14,45,marine_west_coast,shoulder,yes,warm and one of the sunniest months
+LON,6,June,17,46,marine_west_coast,summer_peak,yes,warm and pleasant
+LON,7,July,19,46,marine_west_coast,summer_peak,yes,warmest and sunniest month
+LON,8,August,19,49,marine_west_coast,summer_peak,yes,warm and pleasant
+LON,9,September,16,50,marine_west_coast,autumn_shoulder,no,mild with more rain
+LON,10,October,12,69,marine_west_coast,autumn_shoulder,no,cool and wet
+LON,11,November,8,57,marine_west_coast,cool_winter,no,cold dark and damp
+LON,12,December,5,55,marine_west_coast,cool_winter,no,cold and short days
 SPK,1,January,-4.1,114,subarctic,cold_snowy,no,very cold and snowy
 SPK,2,February,-3.5,88,subarctic,cold_snowy,no,cold and snowy
 SPK,3,March,1.5,74,subarctic,spring_shoulder,no,snow melting and chilly

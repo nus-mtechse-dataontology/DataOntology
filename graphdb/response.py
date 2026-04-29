@@ -546,8 +546,6 @@ def format_vacation_plan(g: Graph, params: dict, visa_rows: list[dict]) -> str:
         v   = visa_rows[0]
         req = str(v.get("visaRequired", "")).lower()
         url = v.get("onlineApplyUrl", "")
-        if req != "false" and url:
-            lines.append(f'  <a href="{url}">Apply for eVisa →</a>')
 
     city_label = city_name or airport_code
     lines.append("")
@@ -1364,7 +1362,6 @@ def format_visa_check(rows: list[dict], params: dict) -> str:
     required      = str(v.get("visaRequired", "")).lower()
     policy_raw    = v.get("visaPolicyName", "")
     duration_days = v.get("visaDurationDays", "")  # raw integer days from SPARQL
-    url           = v.get("onlineApplyUrl", "")
     passport      = v.get("passportCountryName", "")
     dest          = v.get("destinationCountryName", "")
 
@@ -1382,9 +1379,6 @@ def format_visa_check(rows: list[dict], params: dict) -> str:
             lines.append(f"  Stay up to {int(duration_days)} days")
         except (ValueError, TypeError):
             lines.append(f"  Stay up to {duration_days} days")
-
-    if url:
-        lines.append(f'  <a href="{url}">Apply for eVisa →</a>')
 
     lines.append("")
     return "\n".join(lines)

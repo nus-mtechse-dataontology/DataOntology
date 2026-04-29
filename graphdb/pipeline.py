@@ -23,7 +23,7 @@ import sys
 def _eprint(*args, **kwargs):
     """Print to stderr so debug lines never reach the user-facing output."""
     print(*args, file=sys.stderr, **kwargs)
-from compiler import compile_sparql, compile_sql
+from gcompiler import compile_sparql, compile_sql
 from db import execute_sql, get_connection
 from llm import call_gemini
 from loader import build_prompt_context, load_semantics

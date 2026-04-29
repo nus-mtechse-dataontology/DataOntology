@@ -3,7 +3,7 @@ from pathlib import Path
 HERE = Path(__file__).parent          # graphdb/
 
 # ── API Keys ──────────────────────────────────────────────────
-GEMINI_API_KEY = ""  # paste your Gemini API key here
+GEMINI_API_KEY = "AIzaSyCRawi9t_UqznhJY_ODIZV1kllXqtl3E60"  # paste your Gemini API key here
 
 SEMANTIC_LAYER = HERE.parent / "resources" / "semantics" / "semantic_layer_v3.json"
 PROMPT_TEMPLATE = HERE / "query_plan_prompt.j2"
