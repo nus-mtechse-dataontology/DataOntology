@@ -17,6 +17,7 @@ dependencies = [
   "pytest-cov",
   "authlib>=1.6.9",
   "sqlalchemy>=2.0.48",
+  "rdflib>=7.6.0",
 ]
 
 [project.optional-dependencies]

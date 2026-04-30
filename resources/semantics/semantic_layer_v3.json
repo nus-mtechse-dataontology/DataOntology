@@ -262,6 +262,14 @@
       "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
       "description": "Exact departure date in ISO format YYYY-MM-DD. If user says 'June' or 'June 2026', use the 1st of that month (e.g. 2026-06-01)."
     },
+    "day_type": {
+      "type": "string",
+      "enum": [
+        "weekend",
+        "weekday"
+      ],
+      "description": "Departure day filter. Use weekend when the user says weekend, weekends, Saturday, Sunday, Sat, or Sun. Use weekday when the user says weekday, weekdays, Monday-Friday, or working day."
+    },
     "from_date": {
       "type": "string",
       "format": "date",
@@ -353,6 +361,7 @@
       "optional_params": [
         "trip_type",
         "currency_code",
+        "day_type",
         "limit"
       ],
       "enrichment_triggers": [
@@ -588,7 +597,7 @@
         "destination_travel_styles"
       ],
       "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare, COUNT(DISTINCT f.f_flight_combination) AS flight_count FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit",
-      "note": "Append AND f.f_trip_type = :trip_type if trip_type provided. Append AND f.f_currency_code = :currency_code if currency_code provided. Airport name, city, country resolved via GraphDB destination_overview enrichment per destination code."
+      "note": "Append AND f.f_trip_type = :trip_type if trip_type provided. Append AND f.f_currency_code = :currency_code if currency_code provided. Append day_type filter if day_type provided. Airport name, city, country resolved via GraphDB destination_overview enrichment per destination code."
     },
     "destinations_under_budget": {
       "category": "primary",
@@ -627,7 +636,8 @@
       "examples": [
         "Which airports in Thailand can I fly to from SIN in June 2026?",
         "Show me destinations in Japan from KUL between 2026-08-01 and 2026-08-31.",
-        "Which Malaysian airports are reachable from SIN in July 2026?"
+        "Which Malaysian airports are reachable from SIN in July 2026?",
+        "What flights from Singapore to Australia are available on weekends in June 2026?"
       ],
       "required_params": [
         "origin",
@@ -636,6 +646,7 @@
         "end_date"
       ],
       "optional_params": [
+        "day_type",
         "limit"
       ],
       "enrichment_triggers": [
@@ -647,7 +658,7 @@
       ],
       "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode WHERE { ?airport a ex:Airport ; ex:prop_airportCode ?airportCode ; ex:prop_inCity ?city . ?city ex:prop_belongsToCountry ?country . ?country ex:prop_countryName :country . }",
       "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare, MIN(date(f.f_departure_date)) AS first_departure FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY first_departure ASC LIMIT :limit",
-      "note": "SPARQL runs first to collect :destination_airport_codes for all airports in the named country. SQL uses that list in the IN clause. Airport name, city, country resolved via GraphDB enrichment."
+      "note": "SPARQL runs first to collect :destination_airport_codes for all airports in the named country. SQL uses that list in the IN clause. Append day_type filter if day_type provided. Airport name, city, country resolved via GraphDB enrichment."
     },
     "route_fare_options": {
       "category": "primary",
@@ -1168,6 +1179,25 @@
         "month_num"
       ],
       "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?monthNum ?monthName ?avgTempC ?avgRainfallMm ?weatherProfileCode ?seasonCode ?bestTimeToVisit ?weatherSummary WHERE { ?airport a ex:Airport ; ex:prop_airportCode :destination_airport_code ; ex:prop_inCity ?city . ?city ex:prop_hasWeatherObservation ?obs . ?obs ex:prop_monthNum ?monthNum ; ex:prop_monthName ?monthName ; ex:prop_avgTempC ?avgTempC ; ex:prop_avgRainfallMm ?avgRainfallMm ; ex:prop_weatherProfileCode ?weatherProfileCode ; ex:prop_seasonCode ?seasonCode ; ex:prop_bestTimeToVisit ?bestTimeToVisit ; ex:prop_weatherSummary ?weatherSummary . } ORDER BY ?monthNum"
+    },
+    "country_weather_by_month": {
+      "category": "graphdb_primary",
+      "execution_phase": "sparql_only",
+      "description": "Return monthly weather observations for all destination cities in a country. Use when the user asks about weather for a country plus a month, e.g. Japan in July, instead of a specific city.",
+      "examples": [
+        "What is the weather in Japan in July?",
+        "How is the weather across Thailand in December?",
+        "What temperatures should I expect in Australia in June?"
+      ],
+      "required_params": [
+        "country_name",
+        "month_num"
+      ],
+      "param_notes": {
+        "country_name": "Country name mentioned by the user, e.g. Japan. Do not resolve this to a representative airport.",
+        "month_num": "Integer 1-12 representing the month. January=1, December=12."
+      },
+      "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT ?cityName ?airportCode ?monthNum ?monthName ?avgTempC ?avgRainfallMm ?weatherProfileCode ?seasonCode ?bestTimeToVisit ?weatherSummary WHERE { ?country a ex:Country ; ex:prop_countryName ?countryName . ?city a ex:City ; ex:prop_belongsToCountry ?country ; ex:prop_cityName ?cityName ; ex:prop_hasWeatherObservation ?obs . OPTIONAL { ?airport a ex:Airport ; ex:prop_inCity ?city ; ex:prop_airportCode ?airportCode . } ?obs ex:prop_monthNum ?monthNum ; ex:prop_monthName ?monthName ; ex:prop_avgTempC ?avgTempC ; ex:prop_avgRainfallMm ?avgRainfallMm ; ex:prop_weatherProfileCode ?weatherProfileCode ; ex:prop_seasonCode ?seasonCode ; ex:prop_bestTimeToVisit ?bestTimeToVisit ; ex:prop_weatherSummary ?weatherSummary . FILTER(LCASE(str(?countryName)) = LCASE(:country_name)) FILTER(?monthNum = :month_num) } ORDER BY ?cityName ?airportCode"
     },
     "best_months_to_visit": {
       "category": "enrichment",

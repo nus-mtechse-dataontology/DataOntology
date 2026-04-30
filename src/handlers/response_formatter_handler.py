@@ -15,21 +15,21 @@ class ResponseFormatterHandler(AbstractHandler):
 	def handle(self, request: NLQRequest) -> SuccessResponse | ErrorResponse:
 		if request.request_type != "result":
 			self._log.info(
-				"ResponseBuilderHandler: Unable to process request: %s. Passing to next handler...",
+				"ResponseFormatterHandler: Unable to process request: %s. Passing to next handler...",
 				request.request_type,
 			)
 			return super().handle(request)
 		
-		self._log.info("ResponseBuilderHandler: Building Response...")
+		self._log.info("ResponseFormatterHandler: Building Response...")
 		
 		# Validate result_set
 		if request.result_set is None:
-			self._log.error("ResponseBuilderHandler: ResultSet is None.")
+			self._log.error("ResponseFormatterHandler: ResultSet is None.")
 			return self._build_error(request, "ResultSet is None.")
 		
 		# Retrieve formatter - single lookup, no match/case needed
 		if (formatter := self._formatter_instances.get(request.source)) is None:
-			self._log.error("ResponseBuilderHandler: Unknown source '%s'.", request.source)
+			self._log.error("ResponseFormatterHandler: Unknown source '%s'.", request.source)
 			return self._build_error(request, f"Unknown source: {request.source!r}.")
 		
 		return formatter.format_response(request.result_set)
@@ -38,7 +38,7 @@ class ResponseFormatterHandler(AbstractHandler):
 		return ErrorResponse(
 			request_id=request.request_id,
 			error=ErrorDetails(
-				code="ResponseBuilderHandlerError",
+				code="ResponseFormatterHandlerError",
 				message=f"Requires Response Builder Handler, but {detail}",
 				component=self._component_name,
 				details={"error": f"Handler Error. Requesting for Response Builder Handler, but {detail}"},

@@ -1,7 +1,4 @@
 """GraphDB pipeline service — importable by the FastAPI app."""
-
-from __future__ import annotations
-
 import io
 import logging
 import re
@@ -15,9 +12,8 @@ _GRAPHDB_DIR = str(Path(__file__).parent)
 if _GRAPHDB_DIR not in sys.path:
     sys.path.insert(0, _GRAPHDB_DIR)
 
-from db import get_connection          # noqa: E402
 from loader import build_prompt_context, load_semantics  # noqa: E402
-from pipeline import run_once          # noqa: E402
+from graphdb.pipeline import GraphDbPipeline          # noqa: E402
 from sparql_exec import check_graphdb  # noqa: E402
 
 logger = logging.getLogger(__name__)
@@ -42,11 +38,10 @@ def _strip_debug(text: str) -> str:
 
 
 class GraphDBService:
-    def __init__(self) -> None:
+    def __init__(self, graphdb_pipline: GraphDbPipeline) -> None:
         self._semantics = load_semantics()
         self._intents_str, self._param_schema_str = build_prompt_context(self._semantics)
-        #fact_flight_info_DAO.get_all()  # warm up DAO cache at startup
-        get_connection()  # warm up in-memory SQLite at startup
+        self._graphdb_pipeline = graphdb_pipline
         logger.info(
             "GraphDBService ready — %d intents loaded",
             len(self._semantics["intents"]),
@@ -69,7 +64,7 @@ class GraphDBService:
             old_stdout = sys.stdout
             sys.stdout = buf
             try:
-                plan = run_once(
+                plan = self._graphdb_pipeline.run_once(
                     question,
                     self._semantics,
                     self._intents_str,

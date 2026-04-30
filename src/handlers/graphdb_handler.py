@@ -1,9 +1,6 @@
 from handlers.abstract_handler import AbstractHandler
-from models import SuccessResponse, ErrorResponse, NLQRequest, ErrorDetails, ResultSet
+from models import SuccessResponse, ErrorResponse, NLQRequest, ResultSet
 from graphdb.service import GraphDBService
-
-from pathlib import Path
-import traceback
 
 
 class GraphDBHandler(AbstractHandler):
@@ -23,9 +20,15 @@ class GraphDBHandler(AbstractHandler):
         """
         if request.request_type == "general":
             result = self._graphdb_service.ask(request.question)
+            
             request.request_type = "result"
-            request.result_set = ResultSet(type_="general", request_id = request.request_id ,result_set=[{"answer": result}] if result else [])
+            request.result_set = ResultSet(
+                type="general",
+                request_id=request.request_id,
+                result_set=[{"answer": result or "Ready or not... we couldn't find 'em! 🙈 Maybe your question can be more specific?"}],
+            )
+        else:
+            self._log.info("GraphDBHandler: Unable to process request: %s. Passing to next handler...", request.request_type)
         
-        self._log.info("GraphDBHandler: Unable to process request: %s. Passing to next handler...", request.request_type)
         return super().handle(request)
     

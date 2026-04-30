@@ -77,6 +77,7 @@ mdurl==0.1.2
 mistralai==2.1.2
 more-itertools==10.8.0
 multidict==6.7.1
+networkx==3.6.1
 nexus-rpc==1.2.0
 openai==2.29.0
 openapi-pydantic==0.5.1
@@ -111,6 +112,7 @@ pydantic-graph==1.70.0
 pydantic-settings==2.13.1
 pygments==2.19.2
 pyjwt==2.12.1
+pyparsing==3.3.2
 pyperclip==1.11.0
 pytest==9.0.2
 pytest-cov==7.1.0
@@ -118,6 +120,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
 python-multipart==0.0.22
 pyyaml==6.0.3
+rdflib==7.6.0
 referencing==0.37.0
 regex==2026.2.28
 requests==2.32.5

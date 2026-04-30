@@ -4,7 +4,7 @@ from unittest.mock import Mock
 
 from handlers.sql_executor_handler import SQLExecutorHandler
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
-from models.pipeline import CompiledSQL, NLQRequest, ResultSet, Row
+from models.pipeline import CompiledSQL, NLQRequest, ResultSet
 
 
 def _compiled_sql():
@@ -12,7 +12,7 @@ def _compiled_sql():
 
 
 def _result_set():
-    return ResultSet(request_id="req-1", result_set=[Row(data={"fare": 100})])
+    return ResultSet(request_id="req-1", result_set=[{"fare": 100}])
 
 
 def _make_handler(executor_return):

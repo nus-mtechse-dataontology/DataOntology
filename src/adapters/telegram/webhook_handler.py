@@ -1,9 +1,9 @@
 """Telegram webhook handler orchestration adapter."""
 
 import logging
-import re
 from typing import Any
 from datetime import datetime
+import re
 
 from adapters.telegram import TelegramUpdateMapper
 from adapters.telegram.interfaces import MessageClient
@@ -88,12 +88,13 @@ class TelegramWebhookHandler:
                 
                 if len(question) > 0:
                     nlq_request = self._mapper.map(question)
+                    nlq_request.request_type = "flight"
                     orchestration_response = self._orchestrator.handle_question(nlq_request)
-                    # telegram_text = self._formatter.format(orchestration_response)
                     return self._deliver_message(
                         message.chat.id,
                         nlq_request.request_id,
-                        orchestration_response.data if isinstance(orchestration_response, SuccessResponse) else orchestration_response.error.message
+                        (orchestration_response.data if isinstance(orchestration_response, SuccessResponse) else
+                         self._escape(orchestration_response.error.message))
                     )
                 
                 self._log.info("Webhook Handler: Selected '/flight command, but no question asked...'")
@@ -107,10 +108,20 @@ class TelegramWebhookHandler:
                 nlq_request = self._mapper.map(message.text[offset + length:])
                 nlq_request.request_type = "general"
                 orchestration_response = self._orchestrator.handle_question(nlq_request)
-                #telegram_text = self._formatter.format(orchestration_response)
-                return self._deliver_message(message.chat.id,
-                        nlq_request.request_id,
-                        self._escape(orchestration_response.data['answer']) if isinstance(orchestration_response, SuccessResponse) else self._escape(orchestration_response.error.message))
+                
+                if isinstance(orchestration_response, SuccessResponse):
+                    if isinstance(orchestration_response.data, str):
+                        success_response = orchestration_response.data
+                    else:
+                        success_response = self._escape(orchestration_response.data['answer'])
+                else:
+                    success_response = self._escape(orchestration_response.error.message)
+                
+                return self._deliver_message(
+                    message.chat.id,
+                    nlq_request.request_id,
+                    success_response
+                )
             
             case "/help":
                 help_text = (f"Hello {message.from_user.first_name if message.from_user else ''}\\!\n\n"
@@ -140,7 +151,6 @@ class TelegramWebhookHandler:
                 chat_id,
                 exc,
             )
-            raise exc
 
     def _deliver_message(
         self,
@@ -170,8 +180,7 @@ class TelegramWebhookHandler:
             request_id=request_id,
             data={"chat_id": chat_id, "delivered": True},
         )
-        
+    
     def _escape(self, text: str) -> str:
         escape_chars = r'_*[]()~`>#+-=|{}.!'
-       
         return re.sub(f'([{re.escape(escape_chars)}])', r'\\\1', text)

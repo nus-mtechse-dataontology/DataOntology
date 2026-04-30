@@ -1,92 +1,88 @@
-import asyncio
-from unittest.mock import Mock
-
 import pytest
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+from unittest.mock import Mock, patch
+from datetime import datetime
 
-from adapters.telegram.client import TelegramClient
-from endpoints.routes.telegram.telegram_routes import telegram_webhook
-from models.common import SuccessResponse
-from models.pipeline import QuestionResponse
+from endpoints.routes.telegram.telegram_routes import telegram_router
+from models.common import SuccessResponse, ErrorResponse, ErrorDetails
+from models.pipeline import QuestionResponse, ResultSet
+from models.telegram_model import Update, Message, Chat, User
 
-from models.telegram_model import Update, Message, Chat
+@pytest.fixture
+def app():
+    app = FastAPI()
+    app.include_router(telegram_router)
+    app.state.configured_secret = "correct-secret"
+    
+    # We mock the handler because it's a complex object, 
+    # but for a true integration test we could wire it up.
+    # For now, let's make these tests pass by mocking the handler's behavior.
+    app.state.telegram_handler = Mock()
+    return app
 
-from fastapi import Request
+@pytest.fixture
+def client(app):
+    return TestClient(app)
 
-
-class _FakeApp:
-    def __init__(self):
-        orchestrator = Mock()
-        orchestrator.handle_question.return_value = SuccessResponse(
-            request_id="req-1",
-            data=QuestionResponse(request_id="req-1", response="Test response."),
-        )
-        self.state = Mock()
-        self.state.orchestrator = orchestrator
-
-
-class _FakeRequest:
-    def __init__(self, payload):
-        self._payload = payload
-        self.app = _FakeApp()
-
-    async def json(self):
-        return self._payload
-
-
-@pytest.mark.skip("Update integration test later")
-def test_telegram_webhook_returns_500_when_token_missing():
-    update = Update(
+@pytest.fixture
+def valid_update():
+    return Update(
         update_id=9001,
         message=Message(
             message_id=10,
-            message_thread_id=10,
+            date=int(datetime.now().timestamp()),
+            from_user=User(id=1, is_bot=False, first_name="test"),
             text="What are my top holdings?",
-            chat=Chat(
-                id=123456,
-                type="private",
-            )
+            chat=Chat(id=123456, type="private", first_name="test"),
+        )
+    ).model_dump(by_alias=True)
+
+def test_telegram_webhook_rejects_invalid_secret(client, valid_update):
+    response = client.post(
+        "/telegram/webhook",
+        json=valid_update,
+        headers={"x-telegram-bot-api-secret-token": "wrong-secret"}
+    )
+    
+    assert response.status_code == 401
+    assert response.json()["error"] == "invalid_webhook_secret"
+
+def test_telegram_webhook_returns_200_and_delivery_status(client, app, valid_update):
+    # Mock the handler to return a success response
+    app.state.telegram_handler.handle.return_value = SuccessResponse(
+        request_id="req-1",
+        data={"chat_id": 123456, "delivered": True}
+    )
+    
+    response = client.post(
+        "/telegram/webhook",
+        json=valid_update,
+        headers={"x-telegram-bot-api-secret-token": "correct-secret"}
+    )
+    
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "SUCCESS"
+    assert data["data"]["chat_id"] == 123456
+    assert data["data"]["delivered"] is True
+
+def test_telegram_webhook_returns_400_on_handler_error(client, app, valid_update):
+    # Mock the handler to return an error response
+    app.state.telegram_handler.handle.return_value = ErrorResponse(
+        request_id="req-err",
+        error=ErrorDetails(
+            code="telegram_webhook_failed",
+            message="Unable to handle request",
+            component="telegram_webhook"
         )
     )
     
-    # request.app.state.configured_secret = "a"
-    #
-    # response = asyncio.run(telegram_webhook(request=Requestpayload=update))
-    #
-    # assert response.status_code == 500
-    # payload = response.body.decode("utf-8")
-    # assert "telegram_token_missing" in payload
-
-
-@pytest.mark.skip("Update integration test later")
-def test_telegram_webhook_rejects_invalid_secret(monkeypatch):
-    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "token")
-    monkeypatch.setenv("TELEGRAM_WEBHOOK_SECRET", "expected-secret")
-    request = _FakeRequest({"message": {"chat": {"id": 1}, "text": "hello"}})
-
-    # response = asyncio.run(
-    #     telegram_webhook(
-    #         request=request,
-    #         x_telegram_bot_api_secret_token="wrong-secret",
-    #     )
-    # )
-    #
-    # assert response.status_code == 401
-    # payload = response.body.decode("utf-8")
-    # assert "invalid_webhook_secret" in payload
-
-
-@pytest.mark.skip("Update integration test later")
-def test_telegram_webhook_returns_200_and_delivery_status(monkeypatch):
-    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "token")
-    monkeypatch.delenv("TELEGRAM_WEBHOOK_SECRET", raising=False)
-    monkeypatch.setattr(TelegramClient, "send_message", lambda self, chat_id, text: None)
-    monkeypatch.setattr(TelegramClient, "send_typing", lambda self, chat_id: None)
-    request = _FakeRequest({"message": {"chat": {"id": 123}, "text": "hello"}})
-
-    response = asyncio.run(telegram_webhook(request=request))
-
-    assert response.status_code == 200
-    payload = response.body.decode("utf-8")
-    assert '"status":"SUCCESS"' in payload
-    assert '"chat_id":123' in payload
-    assert '"delivered":true' in payload
+    response = client.post(
+        "/telegram/webhook",
+        json=valid_update,
+        headers={"x-telegram-bot-api-secret-token": "correct-secret"}
+    )
+    
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "telegram_webhook_failed"

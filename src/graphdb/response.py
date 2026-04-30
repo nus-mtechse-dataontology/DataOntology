@@ -9,8 +9,6 @@ All formatters produce plain-text output suitable for narrow mobile screens:
 - Flight/destination lists as bullet lines
 """
 
-from __future__ import annotations
-
 import re
 from collections import defaultdict
 from rdflib import Graph, Namespace
@@ -164,6 +162,24 @@ def _dest_list_header(intent_name: str, params: dict) -> str:
             date_suffix = f" on {int(parts[2])} {MONTH_SHORT[int(parts[1]) - 1]} {parts[0]}"
         except Exception:
             pass
+    elif params.get("start_date") and params.get("end_date"):
+        try:
+            start = str(params["start_date"]).split("T")[0].split("-")
+            end = str(params["end_date"]).split("T")[0].split("-")
+            full_month = start[:2] == end[:2] and start[2] == "01" and int(end[2]) >= 28
+            if full_month:
+                date_suffix = f" in {MONTH_NAMES[int(start[1]) - 1]} {start[0]}"
+            else:
+                date_suffix = (
+                    f" from {int(start[2])} {MONTH_SHORT[int(start[1]) - 1]} {start[0]}"
+                    f" to {int(end[2])} {MONTH_SHORT[int(end[1]) - 1]} {end[0]}"
+                )
+        except Exception:
+            pass
+
+    day_type = params.get("day_type")
+    if day_type:
+        date_suffix = f"{date_suffix} ({_humanize(day_type)}s only)"
 
     templates = {
         "all_destinations_from_origin":      f"No destination specified — showing all destinations from {origin} sorted by price{date_suffix}",
@@ -947,10 +963,12 @@ def format_table(rows: list[dict], intent_name: str = "", params: dict | None = 
             dest     = r.get("destination", "")
             curr     = r.get("currency") or r.get("f_currency_code", "")
             fare_raw = r.get("from") or r.get("min_fare") or r.get("cheapest_fare", "")
+            first_dep = r.get("first_dep") or r.get("first_departure")
+            dep_str = f" — first {_humanize(params.get('day_type'))}: {_fmt_dt(first_dep)}" if first_dep and params and params.get("day_type") else ""
             if fare_raw:
-                lines.append(f"  • {dest} — from {_fmt_fare(fare_raw, curr)}")
+                lines.append(f"  • {dest}{dep_str} — lowest fare {_fmt_fare(fare_raw, curr)}")
             else:
-                lines.append(f"  • {dest}")
+                lines.append(f"  • {dest}{dep_str}")
 
         if cap and total > cap:
             lines.append(f"\n  Showing top {cap} of {total} destinations.")
@@ -1059,6 +1077,47 @@ def format_weather(rows: list[dict], params: dict) -> str:
             lines.append(f"  {summary.capitalize()}")
         lines.append("")
 
+    return "\n".join(lines)
+
+
+def format_country_weather(rows: list[dict], params: dict) -> str:
+    """country_weather_by_month — show one weather row per city in a country."""
+    country_name = params.get("country_name", "that country")
+    month_num = params.get("month_num")
+    month_label = MONTH_NAMES[int(month_num) - 1] if str(month_num).isdigit() else "the selected month"
+
+    if not rows:
+        return f"\n  No weather data found for {country_name} in {month_label}.\n"
+
+    lines = [f"\nWeather in {country_name.title()} in {month_label}\n"]
+    seen: set[str] = set()
+    for r in rows:
+        city = r.get("cityName", "")
+        key = city.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+
+        temp = r.get("avgTempC", "")
+        rain = r.get("avgRainfallMm", "")
+        season = r.get("seasonCode", "")
+        summary = r.get("weatherSummary", "")
+
+        parts = []
+        if temp:
+            parts.append(f"~{temp}°C")
+        if rain:
+            parts.append(f"{rain}mm rainfall")
+        if season:
+            parts.append(_humanize(season))
+
+        lines.append(f"  {city}")
+        if parts:
+            lines.append(f"    {' · '.join(parts)}")
+        if summary:
+            lines.append(f"    {summary.capitalize()}")
+
+    lines.append("")
     return "\n".join(lines)
 
 

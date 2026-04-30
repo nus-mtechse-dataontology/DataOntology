@@ -1,7 +1,4 @@
 """Validate LLM output against semantic_layer_v3.json — mirrors prod SyntacticValidator + SemanticValidator."""
-
-from __future__ import annotations
-
 import re
 
 

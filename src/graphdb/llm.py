@@ -1,7 +1,4 @@
 """Gemini API call — reads query_plan_prompt.j2, returns parsed JSON dict."""
-
-from __future__ import annotations
-
 import json
 import sys
 import time
@@ -15,7 +12,7 @@ def _progress(msg: str) -> None:
 from google import genai
 from google.genai import errors as genai_errors, types
 
-from config import GEMINI_API_KEY, GEMINI_MODEL, PROMPT_TEMPLATE
+from .config import GEMINI_API_KEY, GEMINI_MODEL, PROMPT_TEMPLATE
 
 # If primary model is overloaded, try these in order
 FALLBACK_MODELS = ["gemini-2.0-flash", "gemini-2.0-flash-lite"]

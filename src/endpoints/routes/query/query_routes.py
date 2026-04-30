@@ -1,7 +1,7 @@
 import asyncio
 
 from fastapi import APIRouter, status
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 from fastapi.requests import Request
 
 from models.common import ErrorResponse
@@ -20,19 +20,6 @@ query_router = APIRouter(prefix="/query", tags=["query"])
     },
 )
 async def query(nlq_request: NLQRequest, request: Request):
-    graphdb_service = request.app.state.graphdb_service
-
-    # ── Try graphdb pipeline first ────────────────────────────────
-    if graphdb_service is not None:
-        graphdb_result = await asyncio.to_thread(
-            graphdb_service.ask, nlq_request.question
-        )
-        if graphdb_result is not None:
-            return StreamingResponse(
-                message_streamer([graphdb_result]), media_type="text/plain"
-            )
-
-    # ── Fall back to existing orchestrator chain ──────────────────
     orchestrator = request.app.state.orchestrator
 
     task = await asyncio.gather(
@@ -46,11 +33,8 @@ async def query(nlq_request: NLQRequest, request: Request):
     result = task[0]
 
     if isinstance(result, ErrorResponse):
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content=result.model_dump(),
-        )
-
+        return StreamingResponse(message_streamer([result.error.message]), media_type="text/plain")
+    
     return StreamingResponse(message_streamer(result.data), media_type="text/plain")
 
 

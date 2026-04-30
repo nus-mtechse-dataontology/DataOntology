@@ -16,7 +16,6 @@ class TelegramFormatter(BaseFormatter):
         :param response: The response from DB.
         :return: The formatted response.
         """
-        self._log.info("%s", )
         self._log.info("Telegram Formatter: Formatting result for Telegram Message..")
         if isinstance(response, ResultSet):
             return self._build_telegram_text_from_response(response)

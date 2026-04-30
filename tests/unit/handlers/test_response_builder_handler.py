@@ -1,24 +1,29 @@
-"""Unit tests for ResponseBuilderHandler."""
+"""Unit tests for ResponseFormatterHandler."""
 
 from unittest.mock import Mock
+from typing import Dict, Type
 
 from handlers.response_formatter_handler import ResponseFormatterHandler
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
-from models.pipeline import NLQRequest, QuestionResponse, ResultSet, Row
-
+from models.pipeline import NLQRequest, ResultSet
 
 def _result_set():
-    return ResultSet(request_id="req-1", result_set=[Row(data={"fare": 100})])
+    return ResultSet(request_id="req-1", result_set=[{"fare": 100}])
 
 
-def _question_response():
-    return QuestionResponse(request_id="req-1", response="I found 1 matching record:\n1. {'fare': 100}")
+def _make_handler(formatters: Dict[str, Type] = None):
+    if formatters is None:
+        mock_formatter = Mock()
+        mock_formatter.format_response.return_value = SuccessResponse(request_id="req-1", data="formatted")
+        formatters = {"web": type("MockFormatter", (), {"format_response": Mock(return_value=SuccessResponse(request_id="req-1", data="formatted"))})()}
+        # Actually, ResponseFormatterHandler expects a dict of CLASSES, not instances.
+        # Let's fix this.
+        class MockFormatter:
+            def format_response(self, response):
+                return SuccessResponse(request_id="req-1", data="formatted")
+        formatters = {"web": MockFormatter}
 
-
-def _make_handler(builder_return):
-    builder = Mock()
-    builder.build.return_value = builder_return
-    return ResponseFormatterHandler(response_builder=builder), builder
+    return ResponseFormatterHandler(formatters)
 
 
 def _make_next():
@@ -27,57 +32,51 @@ def _make_next():
     return nxt
 
 
-# ── happy path ────────────────────────────────────────────────────────────
-
-
-def test_response_builder_handler_builds_and_returns_response():
-    rs = _result_set()
-    expected = SuccessResponse(request_id="req-1", data=_question_response())
-    handler, builder = _make_handler(builder_return=expected)
-
-    request = NLQRequest(request_id="req-1", request_type="result", result_set=rs)
+def test_response_formatter_handler_builds_and_returns_response():
+    class MockFormatter:
+        def format_response(self, response):
+            return SuccessResponse(request_id="req-1", data="formatted")
+    
+    handler = ResponseFormatterHandler({"web": MockFormatter})
+    
+    request = NLQRequest(
+        request_id="req-1", 
+        request_type="result", 
+        result_set=_result_set(),
+        source="web"
+    )
     result = handler.handle(request)
 
-    builder.build.assert_called_once_with(rs)
-    assert result is expected
+    assert result.data == "formatted"
     assert isinstance(result, SuccessResponse)
 
 
-def test_response_builder_handler_passes_through_non_result_type():
-    handler, builder = _make_handler(builder_return=None)
+def test_response_formatter_handler_passes_through_non_result_type():
+    handler = ResponseFormatterHandler({"web": Mock})
     nxt = _make_next()
     handler.set_next(nxt)
 
     request = NLQRequest(request_id="req-1", request_type="sql_executor")
     handler.handle(request)
 
-    builder.build.assert_not_called()
     nxt.handle.assert_called_once_with(request)
 
 
-# ── error cases ───────────────────────────────────────────────────────────
+def test_response_formatter_handler_returns_error_when_result_set_is_none():
+    handler = ResponseFormatterHandler({"web": Mock})
 
-
-def test_response_builder_handler_returns_error_when_result_set_is_none():
-    handler, builder = _make_handler(builder_return=None)
-
-    request = NLQRequest(request_id="req-1", request_type="result", result_set=None)
+    request = NLQRequest(request_id="req-1", request_type="result", result_set=None, source="web")
     result = handler.handle(request)
 
     assert isinstance(result, ErrorResponse)
     assert result.request_id == "req-1"
-    builder.build.assert_not_called()
 
 
-def test_response_builder_handler_propagates_error_from_builder():
-    error = ErrorResponse(
-        request_id="req-1",
-        error=ErrorDetails(code="build_failed", message="build error", component="response_builder"),
-    )
-    handler, _ = _make_handler(builder_return=error)
+def test_response_formatter_handler_returns_error_when_source_unknown():
+    handler = ResponseFormatterHandler({"web": Mock})
 
-    request = NLQRequest(request_id="req-1", request_type="result", result_set=_result_set())
+    request = NLQRequest(request_id="req-1", request_type="result", result_set=_result_set(), source="unknown")
     result = handler.handle(request)
 
     assert isinstance(result, ErrorResponse)
-    assert result.error.code == "build_failed"
+    assert "Unknown source" in result.error.message

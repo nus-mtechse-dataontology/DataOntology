@@ -3,7 +3,7 @@
 from unittest.mock import Mock
 
 from models.common import ErrorDetails, ErrorResponse, SuccessResponse
-from models.pipeline import NLQRequest, QuestionResponse
+from models.pipeline import NLQRequest, ResultSet
 from orchestrator.orchestrator import Orchestrator
 
 REQUEST_ID = "req-123"
@@ -30,13 +30,14 @@ def _build_orchestrator(request_handler=None, handle_return=None):
         sql_compiler_handler=_make_handler(),
         sql_executor_handler=_make_handler(),
         response_builder_handler=_make_handler(),
+        graphdb_handler=_make_handler()
     ), rh
 
 
 def _success(data=None):
     return SuccessResponse(
         request_id=REQUEST_ID,
-        data=data or QuestionResponse(request_id=REQUEST_ID, response="ok"),
+        data=data or ResultSet(request_id=REQUEST_ID, type_="flights", result_set=[]),
     )
 
 
@@ -86,6 +87,7 @@ def test_chain_wired_in_correct_order():
     """Verify set_next is called on each handler in pipeline order."""
     handlers = {
         "request": _make_handler(),
+        "graphdb": _make_handler(),
         "prompt": _make_handler(),
         "llm": _make_handler(),
         "syntactic": _make_handler(),
@@ -105,9 +107,11 @@ def test_chain_wired_in_correct_order():
         sql_compiler_handler=handlers["sql_compiler"],
         sql_executor_handler=handlers["sql_executor"],
         response_builder_handler=handlers["response_builder"],
+        graphdb_handler=handlers["graphdb"],
     )
 
-    handlers["request"].set_next.assert_called_once_with(handlers["prompt"])
+    handlers["request"].set_next.assert_called_once_with(handlers["graphdb"])
+    handlers["graphdb"].set_next.assert_called_once_with(handlers["prompt"])
     handlers["prompt"].set_next.assert_called_once_with(handlers["llm"])
     handlers["llm"].set_next.assert_called_once_with(handlers["syntactic"])
     handlers["syntactic"].set_next.assert_called_once_with(handlers["semantics"])

@@ -14,9 +14,6 @@ Steps:
     6. POST data_ontology_dml.ttl  (instance data — ~68k triples, may take 30s)
     7. Verify triple count
 """
-
-from __future__ import annotations
-
 import json
 import subprocess
 import sys
