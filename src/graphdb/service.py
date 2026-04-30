@@ -45,11 +45,16 @@ class GraphDBService:
     def __init__(self) -> None:
         self._semantics = load_semantics()
         self._intents_str, self._param_schema_str = build_prompt_context(self._semantics)
-        get_connection()  # warm up in-memory SQLite at startup, not on first request
+        #fact_flight_info_DAO.get_all()  # warm up DAO cache at startup
+        get_connection()  # warm up in-memory SQLite at startup
         logger.info(
             "GraphDBService ready — %d intents loaded",
             len(self._semantics["intents"]),
         )
+
+    def graphdb_reachable(self) -> bool:
+        """Return True if the GraphDB SPARQL endpoint is reachable."""
+        return check_graphdb()
 
     def ask(self, question: str, history: list | None = None) -> str | None:
         """

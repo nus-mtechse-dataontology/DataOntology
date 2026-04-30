@@ -14,7 +14,8 @@ class Orchestrator:
         semantics_validation_handler: SemanticsValidationHandler,
         sql_compiler_handler: SQLCompilerHandler,
         sql_executor_handler: SQLExecutorHandler,
-        response_builder_handler: ResponseFormatterHandler
+        response_builder_handler: ResponseFormatterHandler,
+        graphdb_handler: GraphDBHandler
     ) -> None:
         self._request_handler = request_handler
         self._prompt_handler = prompt_handler
@@ -27,6 +28,7 @@ class Orchestrator:
         
         (
             self._request_handler
+            .set_next(graphdb_handler)
             .set_next(self._prompt_handler)
             .set_next(self._llm_handler)
             .set_next(self._syntactic_validation_handler)

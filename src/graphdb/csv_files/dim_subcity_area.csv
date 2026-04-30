@@ -549,3 +549,34 @@ NTE,NTE_ile_de_nantes,Ile de Nantes,Ile de Nantes works well for design culture 
 MRS,MRS_vieux_port,Vieux Port,Vieux Port is the best first-time Marseille base for harbour views ferries dining and central movement.,researched_first_pass
 MRS,MRS_le_panier,Le Panier,Le Panier suits heritage streets local character and a more atmospheric old-city stay.,researched_first_pass
 MRS,MRS_castellane_and_prado,Castellane and Prado,Castellane and Prado balance modern hotels beach access and easier movement across the southern city.,researched_first_pass
+CEI,CEI_city_center_and_clock_tower,City Center and Clock Tower,The city center around the Clock Tower is the most practical Chiang Rai base for first-time stays food and simple local movement.,researched_scraped_pass
+CEI,CEI_night_bazaar_area,Night Bazaar area,The Night Bazaar area works well for evening food handicrafts and walkable access near the central bus station.,researched_scraped_pass
+CEI,CEI_riverside_and_blue_temple,Riverside and Blue Temple side,The riverside and Blue Temple side suit quieter stays with easier access to scenic temple visits than the densest center.,researched_scraped_pass
+DAD,DAD_hai_chau_and_han_river,Hai Chau and Han River,Hai Chau and the Han River side are the strongest Da Nang base for city-center dining bridges markets and urban convenience.,researched_scraped_pass
+DAD,DAD_my_khe_and_an_thuong,My Khe and An Thuong,My Khe and An Thuong suit beach-focused stays cafes casual dining and a more international visitor-friendly rhythm.,researched_scraped_pass
+DAD,DAD_son_tra_side,Son Tra side,The Son Tra side works for quieter coastal stays and easier access to peninsula scenery while staying close to the city.,researched_scraped_pass
+ILO,ILO_city_proper,City Proper,City Proper is the most practical Iloilo base for civic landmarks heritage streets transport and old commercial access.,researched_scraped_pass
+ILO,ILO_jaro,Jaro,Jaro suits heritage interest cathedral access and a more established residential district feel.,researched_scraped_pass
+ILO,ILO_molo,Molo,Molo is best for visitors interested in Molo Church heritage houses and local food context.,researched_scraped_pass
+ILO,ILO_mandurriao,Mandurriao,Mandurriao works best for newer hotels malls nightlife and business-oriented stays around Iloilo's modern commercial side.,researched_scraped_pass
+KBR,KBR_city_center_and_siti_khadijah,City Center and Siti Khadijah Market,The city center around Siti Khadijah Market is the strongest Kota Bharu base for food markets culture and practical movement.,researched_scraped_pass
+KBR,KBR_wakaf_che_yeh,Wakaf Che Yeh,Wakaf Che Yeh suits market-focused stays and travellers who want a more local southern suburb atmosphere.,researched_scraped_pass
+KBR,KBR_pantai_cahaya_bulan,Pantai Cahaya Bulan,Pantai Cahaya Bulan is better for beach-side local leisure than for city-center efficiency.,researched_scraped_pass
+KJT,KJT_kertajati_airport_area,Kertajati Airport area,Kertajati Airport area is the most practical Majalengka base for flight-linked stays and road access.,researched_scraped_pass
+KJT,KJT_majalengka_town,Majalengka Town,Majalengka Town works for local food services and a straightforward town-center stay.,researched_scraped_pass
+KJT,KJT_panyaweuyan_and_ciremai_foothills,Panyaweuyan and Ciremai Foothills,The Panyaweuyan and Ciremai foothills side is best for scenery terraces outdoor trips and car-based exploration.,researched_scraped_pass
+LBJ,LBJ_town_center_and_harbour,Town Center and Harbour,The town center and harbour are the best Labuan Bajo base for boat trips dive operators restaurants and Komodo departures.,researched_scraped_pass
+LBJ,LBJ_waecicu_beach,Waecicu Beach,Waecicu Beach suits quieter resort stays calm bay swimming sunsets and easier beach relaxation near town.,researched_scraped_pass
+LBJ,LBJ_pede_beach,Pede Beach,Pede Beach balances coastal stays and town access with a more relaxed beach-side feel than the harbour core.,researched_scraped_pass
+PDG,PDG_city_center_and_old_town,City Center and Old Town,The city center and old-town side are the most practical Padang base for markets heritage food and urban movement.,researched_scraped_pass
+PDG,PDG_padang_beach_and_muaro,Padang Beach and Muaro,Padang Beach and Muaro suit waterfront walks sunset views and access to the river-mouth heritage area.,researched_scraped_pass
+PDG,PDG_air_manis_beach,Air Manis Beach,Air Manis Beach works for beach-focused short stays and Malin Kundang sightseeing rather than central-city convenience.,researched_scraped_pass
+PQC,PQC_duong_dong,Duong Dong,Duong Dong is the strongest Phu Quoc base for first-time stays night market access restaurants and practical services.,researched_scraped_pass
+PQC,PQC_long_beach_and_duong_to,Long Beach and Duong To,Long Beach and Duong To suit beach resort stays sunset access and the island's densest visitor infrastructure.,researched_scraped_pass
+PQC,PQC_an_thoi,An Thoi,An Thoi is best for southern island hopping cable-car access and a newer resort-oriented stay.,researched_scraped_pass
+PQC,PQC_ong_lang,Ong Lang,Ong Lang suits quieter boutique beach stays and slower trips away from the main town center.,researched_scraped_pass
+SIN,SIN_marina_bay_and_cbd,Marina Bay and CBD,Marina Bay and the CBD are strongest for skyline hotels business stays waterfront sights and efficient MRT access.,researched_scraped_pass
+SIN,SIN_orchard,Orchard,Orchard works best for shopping hotels and central movement with broad transport and dining options.,researched_scraped_pass
+SIN,SIN_chinatown_and_tanjong_pagar,Chinatown and Tanjong Pagar,Chinatown and Tanjong Pagar balance heritage streets hawker food nightlife and central access.,researched_scraped_pass
+SIN,SIN_kampong_glam_and_bugis,Kampong Glam and Bugis,Kampong Glam and Bugis suit culture cafes boutique shopping and a lively walkable district feel.,researched_scraped_pass
+SIN,SIN_sentosa_and_harbourfront,Sentosa and HarbourFront,Sentosa and HarbourFront are better for resort family attractions beaches and cruise or ferry access than city-center efficiency.,researched_scraped_pass

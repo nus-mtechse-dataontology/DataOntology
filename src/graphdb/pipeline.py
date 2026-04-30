@@ -603,8 +603,8 @@ def main() -> None:
     intents_str, param_schema_str = build_prompt_context(semantics)
     print(f"  {len(semantics['intents'])} intents loaded from semantic_layer_v3.json")
 
-    print("[Startup] Initialising SQLite...")
-    get_connection()  # triggers CSV load
+    print("[Startup] Connecting to PostgreSQL...")
+    get_connection()
 
     graphdb_ok = check_graphdb()
     if graphdb_ok:

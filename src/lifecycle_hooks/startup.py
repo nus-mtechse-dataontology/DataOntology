@@ -183,6 +183,7 @@ async def startup(app: FastAPI):
         "web": WebFormatter,
     }
     
+    graphdb_handler = GraphDBHandler(GraphDBService())
     request_handler = RequestHandler()
     prompt_handler = PromptHandler(prompt_builder)
     llm_handler = LLMHandler(llm_gateway)
@@ -202,7 +203,8 @@ async def startup(app: FastAPI):
         semantics_validation_handler,
         sql_compiler_handler,
         sql_executor_handler,
-        response_builder_handler
+        response_builder_handler,
+        graphdb_handler
     )
     logger.info("Orchestrator wired — pipeline ready")
     # ───────────────────────────────────────────────────────────────────

@@ -1667,3 +1667,183 @@ SPK,9,September,18.5,140,subarctic,autumn_shoulder,yes,cool with beautiful folia
 SPK,10,October,11.0,102,subarctic,autumn_shoulder,yes,golden foliage and crisp air
 SPK,11,November,3.1,116,subarctic,cool_shoulder,no,cold with first snowfall
 SPK,12,December,-2.0,130,subarctic,cold_snowy,no,cold and snowy ski season starts
+AMI,1,January,27.0,256,tropical_monsoon,wet_season,no,warm and very wet
+AMI,2,February,27.0,232,tropical_monsoon,wet_season,no,warm with heavy rain
+AMI,3,March,27.1,213,tropical_monsoon,wet_season,no,humid with frequent showers
+AMI,4,April,27.2,132,tropical_monsoon,pleasant_peak,yes,warm with easing rain
+AMI,5,May,27.0,84,tropical_monsoon,pleasant_peak,yes,warm and drier
+AMI,6,June,26.3,54,tropical_monsoon,dry_season,yes,pleasant dry-season weather
+AMI,7,July,25.7,38,tropical_monsoon,dry_season,yes,cooler and dry
+AMI,8,August,25.5,28,tropical_monsoon,dry_season,yes,driest month and beach-friendly
+AMI,9,September,26.0,36,tropical_monsoon,dry_season,yes,dry and sunny
+AMI,10,October,26.8,76,tropical_monsoon,pleasant_peak,yes,warm with showers returning
+AMI,11,November,27.1,154,tropical_monsoon,wet_season,no,humid with rain increasing
+AMI,12,December,27.0,235,tropical_monsoon,wet_season,no,warm and rainy
+BJS,1,January,-3.1,3,continental_monsoon,winter,no,cold and very dry
+BJS,2,February,0.2,5,continental_monsoon,winter,no,cold dry late winter
+BJS,3,March,7.0,8,continental_monsoon,spring,no,windy and warming
+BJS,4,April,14.8,21,continental_monsoon,spring,yes,mild and dry
+BJS,5,May,20.8,34,continental_monsoon,pleasant_peak,yes,warm and generally clear
+BJS,6,June,25.0,78,continental_monsoon,summer_peak,yes,hot with early summer storms
+BJS,7,July,26.7,185,continental_monsoon,wet_season,no,hot and wettest month
+BJS,8,August,25.5,160,continental_monsoon,wet_season,no,hot humid and rainy
+BJS,9,September,20.8,46,continental_monsoon,autumn_peak,yes,mild and comfortable
+BJS,10,October,13.7,22,continental_monsoon,autumn_peak,yes,crisp and dry
+BJS,11,November,5.1,7,continental_monsoon,winter,no,cold and dry
+BJS,12,December,-1.2,3,continental_monsoon,winter,no,coldest dry-season weather
+CTU,1,January,6.2,8,humid_subtropical,cool_winter,no,cool and cloudy
+CTU,2,February,8.4,12,humid_subtropical,cool_winter,no,cool with light rain
+CTU,3,March,12.4,21,humid_subtropical,spring,no,milder and damp
+CTU,4,April,17.2,47,humid_subtropical,spring,yes,warm spring weather
+CTU,5,May,21.3,85,humid_subtropical,pleasant_peak,yes,warm and green
+CTU,6,June,23.9,110,humid_subtropical,wet_season,no,humid with summer rain
+CTU,7,July,25.8,225,humid_subtropical,wet_season,no,hot and wettest month
+CTU,8,August,25.6,210,humid_subtropical,wet_season,no,hot humid and rainy
+CTU,9,September,21.9,126,humid_subtropical,autumn_shoulder,yes,mild with easing rain
+CTU,10,October,17.5,45,humid_subtropical,autumn_shoulder,yes,cooler and comfortable
+CTU,11,November,12.2,18,humid_subtropical,cool_winter,no,cool and grey
+CTU,12,December,7.5,7,humid_subtropical,cool_winter,no,cool and relatively dry
+JKT,1,January,27.0,300,tropical_rainforest,wet_season,no,warm and very wet
+JKT,2,February,27.1,280,tropical_rainforest,wet_season,no,humid with heavy rain
+JKT,3,March,27.4,210,tropical_rainforest,wet_season,no,warm and showery
+JKT,4,April,27.8,155,tropical_rainforest,humid_season,no,hot with regular showers
+JKT,5,May,28.0,120,tropical_rainforest,pleasant_peak,yes,warm with easing rain
+JKT,6,June,27.8,90,tropical_rainforest,dry_season,yes,warm and relatively dry
+JKT,7,July,27.6,65,tropical_rainforest,dry_season,yes,drier and warm
+JKT,8,August,27.8,55,tropical_rainforest,dry_season,yes,driest month
+JKT,9,September,28.1,70,tropical_rainforest,dry_season,yes,warm and mostly dry
+JKT,10,October,28.2,115,tropical_rainforest,humid_season,no,hot with showers returning
+JKT,11,November,27.9,180,tropical_rainforest,wet_season,no,humid and rainy
+JKT,12,December,27.4,255,tropical_rainforest,wet_season,no,warm and very wet
+JOG,1,January,26.0,340,tropical_monsoon,wet_season,no,warm and very wet
+JOG,2,February,26.0,305,tropical_monsoon,wet_season,no,warm with heavy rain
+JOG,3,March,26.2,275,tropical_monsoon,wet_season,no,humid and rainy
+JOG,4,April,26.4,165,tropical_monsoon,wet_season,no,warm with easing rain
+JOG,5,May,26.2,95,tropical_monsoon,pleasant_peak,yes,warm and drier
+JOG,6,June,25.5,55,tropical_monsoon,dry_season,yes,pleasant dry-season weather
+JOG,7,July,24.9,30,tropical_monsoon,dry_season,yes,cooler and dry
+JOG,8,August,25.0,20,tropical_monsoon,dry_season,yes,driest month
+JOG,9,September,25.8,35,tropical_monsoon,dry_season,yes,dry and warm
+JOG,10,October,26.7,85,tropical_monsoon,pleasant_peak,yes,warm with showers returning
+JOG,11,November,26.6,190,tropical_monsoon,wet_season,no,humid with rain increasing
+JOG,12,December,26.2,295,tropical_monsoon,wet_season,no,warm and very wet
+MES,1,January,26.4,180,tropical_rainforest,humid_season,no,warm and humid
+MES,2,February,26.7,130,tropical_rainforest,pleasant_peak,yes,warm with less rain
+MES,3,March,27.0,155,tropical_rainforest,humid_season,no,warm and showery
+MES,4,April,27.4,190,tropical_rainforest,wet_season,no,hot with frequent rain
+MES,5,May,27.6,210,tropical_rainforest,wet_season,no,hot and humid
+MES,6,June,27.5,155,tropical_rainforest,humid_season,no,warm with regular showers
+MES,7,July,27.3,165,tropical_rainforest,humid_season,no,warm and humid
+MES,8,August,27.2,185,tropical_rainforest,wet_season,no,warm with rain building
+MES,9,September,27.0,245,tropical_rainforest,wet_season,no,humid and very wet
+MES,10,October,26.8,285,tropical_rainforest,wet_season,no,wettest period
+MES,11,November,26.5,250,tropical_rainforest,wet_season,no,warm and rainy
+MES,12,December,26.3,210,tropical_rainforest,humid_season,no,warm with frequent showers
+MIL,1,January,2.5,64,humid_subtropical,winter,no,cold and damp
+MIL,2,February,4.6,63,humid_subtropical,winter,no,cool late winter weather
+MIL,3,March,9.0,82,humid_subtropical,spring,no,milder with spring rain
+MIL,4,April,13.2,95,humid_subtropical,spring,yes,pleasant but showery
+MIL,5,May,17.7,97,humid_subtropical,pleasant_peak,yes,warm and green
+MIL,6,June,22.0,67,humid_subtropical,summer_peak,yes,warm early summer
+MIL,7,July,24.8,68,humid_subtropical,summer_peak,yes,hot and mostly sunny
+MIL,8,August,24.2,88,humid_subtropical,summer_peak,yes,warm with thunderstorms
+MIL,9,September,19.7,76,humid_subtropical,autumn_shoulder,yes,mild and comfortable
+MIL,10,October,14.0,101,humid_subtropical,autumn_shoulder,no,cool and showery
+MIL,11,November,8.0,101,humid_subtropical,winter,no,chilly and damp
+MIL,12,December,3.7,60,humid_subtropical,winter,no,cold winter weather
+MOW,1,January,-6.5,52,humid_continental,winter,no,very cold and snowy
+MOW,2,February,-6.0,41,humid_continental,winter,no,cold and snowy
+MOW,3,March,-1.2,35,humid_continental,winter,no,late winter thaw
+MOW,4,April,6.3,37,humid_continental,spring,no,chilly spring weather
+MOW,5,May,13.2,49,humid_continental,spring,yes,mild and greener
+MOW,6,June,17.0,80,humid_continental,summer_peak,yes,warm early summer
+MOW,7,July,19.2,85,humid_continental,summer_peak,yes,warmest month
+MOW,8,August,17.0,77,humid_continental,summer_peak,yes,warm with showers
+MOW,9,September,11.3,65,humid_continental,autumn_shoulder,no,cool autumn weather
+MOW,10,October,5.6,70,humid_continental,autumn_shoulder,no,cold and damp
+MOW,11,November,-1.2,58,humid_continental,winter,no,early snow and grey skies
+MOW,12,December,-5.2,53,humid_continental,winter,no,cold snowy winter
+NYC,1,January,0.6,84,humid_subtropical,winter,no,cold with winter storms
+NYC,2,February,1.7,78,humid_subtropical,winter,no,cold late winter
+NYC,3,March,5.8,108,humid_subtropical,spring,no,chilly and wet
+NYC,4,April,11.6,100,humid_subtropical,spring,yes,mild spring weather
+NYC,5,May,17.1,97,humid_subtropical,pleasant_peak,yes,warm and pleasant
+NYC,6,June,22.4,98,humid_subtropical,summer_peak,yes,warm early summer
+NYC,7,July,25.6,116,humid_subtropical,summer_peak,no,hot and humid
+NYC,8,August,24.8,107,humid_subtropical,summer_peak,no,hot humid and stormy
+NYC,9,September,20.8,95,humid_subtropical,autumn_peak,yes,mild and comfortable
+NYC,10,October,14.8,94,humid_subtropical,autumn_peak,yes,crisp autumn weather
+NYC,11,November,9.2,87,humid_subtropical,winter,no,cool and damp
+NYC,12,December,3.5,96,humid_subtropical,winter,no,cold holiday season
+OSA,1,January,6.0,45,humid_subtropical,cool_winter,no,cool and dry
+OSA,2,February,6.6,62,humid_subtropical,cool_winter,no,cool late winter weather
+OSA,3,March,9.9,104,humid_subtropical,spring,no,milder early spring
+OSA,4,April,15.2,103,humid_subtropical,spring_peak,yes,pleasant spring weather
+OSA,5,May,20.1,146,humid_subtropical,spring_peak,yes,warm and green
+OSA,6,June,23.8,184,humid_subtropical,rainy_season,no,warm rainy season
+OSA,7,July,27.6,157,humid_subtropical,summer_peak,no,hot and humid
+OSA,8,August,29.0,91,humid_subtropical,summer_peak,no,hottest month
+OSA,9,September,25.0,161,humid_subtropical,typhoon_risk,no,warm with storm risk
+OSA,10,October,19.0,112,humid_subtropical,autumn_peak,yes,mild and comfortable
+OSA,11,November,13.2,70,humid_subtropical,autumn_peak,yes,cool and pleasant
+OSA,12,December,8.1,47,humid_subtropical,cool_winter,no,cool and dry
+PAR,1,January,5.2,53,temperate_oceanic,winter,no,cold and grey
+PAR,2,February,6.0,45,temperate_oceanic,winter,no,cool late winter weather
+PAR,3,March,9.0,52,temperate_oceanic,spring,no,milder with showers
+PAR,4,April,11.8,50,temperate_oceanic,spring,yes,pleasant spring weather
+PAR,5,May,15.8,65,temperate_oceanic,pleasant_peak,yes,warm and green
+PAR,6,June,19.0,54,temperate_oceanic,summer_peak,yes,warm early summer
+PAR,7,July,21.5,59,temperate_oceanic,summer_peak,yes,warmest month
+PAR,8,August,21.2,58,temperate_oceanic,summer_peak,yes,warm and pleasant
+PAR,9,September,17.9,51,temperate_oceanic,autumn_shoulder,yes,mild and comfortable
+PAR,10,October,13.0,62,temperate_oceanic,autumn_shoulder,no,cool autumn weather
+PAR,11,November,8.3,52,temperate_oceanic,winter,no,chilly and grey
+PAR,12,December,5.5,59,temperate_oceanic,winter,no,cold and damp
+ROM,1,January,8.1,81,mediterranean,winter,no,cool and damp
+ROM,2,February,8.9,76,mediterranean,winter,no,cool late winter weather
+ROM,3,March,11.3,66,mediterranean,spring,no,milder spring weather
+ROM,4,April,14.1,63,mediterranean,spring,yes,pleasant and fresh
+ROM,5,May,18.2,48,mediterranean,pleasant_peak,yes,warm and mostly dry
+ROM,6,June,22.2,34,mediterranean,summer_peak,yes,warm and sunny
+ROM,7,July,25.2,19,mediterranean,summer_peak,no,hot and very dry
+ROM,8,August,25.5,36,mediterranean,summer_peak,no,hottest month
+ROM,9,September,21.7,75,mediterranean,autumn_shoulder,yes,warm with rain returning
+ROM,10,October,17.2,104,mediterranean,autumn_shoulder,yes,mild autumn weather
+ROM,11,November,12.5,114,mediterranean,winter,no,cool and wet
+ROM,12,December,9.2,96,mediterranean,winter,no,cool damp winter
+SEL,1,January,-2.4,21,humid_continental,winter,no,cold and dry
+SEL,2,February,0.4,25,humid_continental,winter,no,cold late winter
+SEL,3,March,5.7,47,humid_continental,spring,no,chilly and dry
+SEL,4,April,12.5,64,humid_continental,spring,yes,mild spring weather
+SEL,5,May,18.0,105,humid_continental,pleasant_peak,yes,warm and clear
+SEL,6,June,22.2,133,humid_continental,summer_peak,yes,warm before monsoon peak
+SEL,7,July,25.0,395,humid_continental,wet_season,no,hot humid and very wet
+SEL,8,August,25.9,364,humid_continental,wet_season,no,hottest and rainy
+SEL,9,September,21.4,169,humid_continental,autumn_peak,yes,mild with easing rain
+SEL,10,October,14.8,52,humid_continental,autumn_peak,yes,crisp and comfortable
+SEL,11,November,7.6,52,humid_continental,winter,no,cold and dry
+SEL,12,December,0.4,22,humid_continental,winter,no,cold winter weather
+SHA,1,January,4.8,74,humid_subtropical,cool_winter,no,cold and damp
+SHA,2,February,6.4,60,humid_subtropical,cool_winter,no,cool late winter weather
+SHA,3,March,10.0,94,humid_subtropical,spring,no,milder and showery
+SHA,4,April,15.4,74,humid_subtropical,spring,yes,pleasant spring weather
+SHA,5,May,20.7,84,humid_subtropical,pleasant_peak,yes,warm and comfortable
+SHA,6,June,24.5,182,humid_subtropical,rainy_season,no,warm plum-rain season
+SHA,7,July,28.8,145,humid_subtropical,summer_peak,no,hot and humid
+SHA,8,August,28.6,214,humid_subtropical,typhoon_risk,no,hot humid and storm-prone
+SHA,9,September,24.8,87,humid_subtropical,autumn_peak,yes,warm with easing humidity
+SHA,10,October,19.3,56,humid_subtropical,autumn_peak,yes,mild and pleasant
+SHA,11,November,13.6,52,humid_subtropical,cool_winter,no,cool and dry
+SHA,12,December,7.4,44,humid_subtropical,cool_winter,no,cold and relatively dry
+SIA,1,January,-0.5,7,continental_monsoon,winter,no,cold and dry
+SIA,2,February,3.3,10,continental_monsoon,winter,no,cool late winter
+SIA,3,March,9.0,25,continental_monsoon,spring,no,windy and warming
+SIA,4,April,15.7,44,continental_monsoon,spring,yes,mild spring weather
+SIA,5,May,20.6,60,continental_monsoon,pleasant_peak,yes,warm and comfortable
+SIA,6,June,25.2,54,continental_monsoon,summer_peak,yes,hot and mostly dry
+SIA,7,July,27.0,99,continental_monsoon,wet_season,no,hot with summer rain
+SIA,8,August,25.5,72,continental_monsoon,wet_season,no,hot and humid
+SIA,9,September,20.2,92,continental_monsoon,autumn_peak,yes,mild with autumn rain
+SIA,10,October,14.1,60,continental_monsoon,autumn_peak,yes,cool and comfortable
+SIA,11,November,7.2,24,continental_monsoon,winter,no,cool and dry
+SIA,12,December,1.2,6,continental_monsoon,winter,no,cold and dry
