@@ -1,0 +1,167 @@
+f_city_code,f_country_code,f_continent,f_region,f_capital_city_code,f_cost_of_living_index
+SIN,SG,Asia,Southeast Asia,SIN,88.7
+HKG,HK,Asia,East Asia,HKG,73.8
+LON,GB,Europe,Northern Europe,LON,89.5
+YVR,CA,North America,North America,YOW,68.2
+SUB,ID,Asia,Southeast Asia,JKT,26.7
+SGN,VN,Asia,Southeast Asia,HAN,28.3
+TRV,IN,Asia,South Asia,DEL,18.7
+TPE,TW,Asia,East Asia,TPE,54.2
+SYD,AU,Oceania,Australia and New Zealand,CBR,80.1
+SZG,AT,Europe,Western Europe,VIE,79.3
+PEN,MY,Asia,Southeast Asia,KUL,34.3
+BJS,CN,Asia,East Asia,BJS,37.6
+NGO,JP,Asia,East Asia,TYO,47.5
+TYO,JP,Asia,East Asia,TYO,57.8
+RUH,SA,Asia,Western Asia,RUH,48.4
+SHA,CN,Asia,East Asia,BJS,39.1
+BKK,TH,Asia,Southeast Asia,BKK,42.4
+BNE,AU,Oceania,Australia and New Zealand,CBR,70.6
+BOM,IN,Asia,South Asia,DEL,25.7
+BWN,BN,Asia,Southeast Asia,BWN,48.2
+JKT,ID,Asia,Southeast Asia,JKT,29.3
+CPT,ZA,Africa,Southern Africa,CPT,41.8
+DAC,BD,Asia,South Asia,DAC,25.5
+DPS,ID,Asia,Southeast Asia,JKT,35.1
+MDC,ID,Asia,Southeast Asia,JKT,26.1
+PLM,ID,Asia,Southeast Asia,JKT,26.1
+PNH,KH,Asia,Southeast Asia,PNH,37.3
+KLU,AT,Europe,Western Europe,VIE,71.3
+SEA,US,North America,North America,WAS,90.7
+VIE,AT,Europe,Western Europe,VIE,75.9
+KUL,MY,Asia,Southeast Asia,KUL,38.9
+MLE,MV,Asia,South Asia,MLE,48.9
+MNL,PH,Asia,Southeast Asia,MNL,34.5
+MAN,GB,Europe,Northern Europe,LON,67.8
+LNZ,AT,Europe,Western Europe,VIE,69.9
+CNX,TH,Asia,Southeast Asia,BKK,34.0
+COK,IN,Asia,South Asia,DEL,18.7
+LAX,US,North America,North America,WAS,82.0
+GRZ,AT,Europe,Western Europe,VIE,71.7
+HYD,IN,Asia,South Asia,DEL,21.2
+SEL,KR,Asia,East Asia,SEL,65.4
+GVA,CH,Europe,Western Europe,BRN,118.6
+HAN,VN,Asia,Southeast Asia,HAN,28.6
+KCH,MY,Asia,Southeast Asia,KUL,35.7
+FRA,DE,Europe,Western Europe,BER,75.3
+FUK,JP,Asia,East Asia,TYO,47.5
+ROM,IT,Europe,Southern Europe,ROM,61.6
+SPK,JP,Asia,East Asia,TYO,47.5
+DVO,PH,Asia,Southeast Asia,MNL,31.3
+DXB,AE,Asia,Western Asia,AUH,62.2
+NYC,US,North America,North America,WAS,100.0
+KTM,NP,Asia,South Asia,KTM,23.1
+LGK,MY,Asia,Southeast Asia,KUL,34.0
+IST,TR,Asia,Western Asia,ANK,45.5
+DEL,IN,Asia,South Asia,DEL,22.6
+BLR,IN,Asia,South Asia,DEL,21.5
+BCN,ES,Europe,Southern Europe,MAD,59.8
+PKU,ID,Asia,Southeast Asia,JKT,26.1
+CMB,LK,Asia,South Asia,CMB,34.3
+CAN,CN,Asia,East Asia,BJS,36.1
+CCU,IN,Asia,South Asia,DEL,18.9
+BRU,BE,Europe,Western Europe,BRU,71.5
+CKG,CN,Asia,East Asia,BJS,28.0
+CEB,PH,Asia,Southeast Asia,MNL,32.7
+AMD,IN,Asia,South Asia,DEL,20.8
+AMI,ID,Asia,Southeast Asia,JKT,26.1
+ATH,GR,Europe,Southern Europe,ATH,57.2
+ADL,AU,Oceania,Australia and New Zealand,CBR,73.4
+AKL,NZ,Oceania,Australia and New Zealand,WLG,65.3
+MOW,RU,Europe,Eastern Europe,MOW,53.1
+CHC,NZ,Oceania,Australia and New Zealand,WLG,60.2
+RGN,MM,Asia,Southeast Asia,NYT,38.0
+CPH,DK,Europe,Northern Europe,CPH,86.1
+JNB,ZA,Africa,Southern Africa,CPT,41.3
+BKI,MY,Asia,Southeast Asia,KUL,34.0
+REP,KH,Asia,Southeast Asia,PNH,30.4
+JED,SA,Asia,Western Asia,RUH,44.1
+HAK,CN,Asia,East Asia,BJS,30.5
+HDY,TH,Asia,Southeast Asia,BKK,38.0
+CNS,AU,Oceania,Australia and New Zealand,CBR,67.9
+ATQ,IN,Asia,South Asia,DEL,18.9
+IPH,MY,Asia,Southeast Asia,KUL,34.0
+KBV,TH,Asia,Southeast Asia,BKK,38.0
+KUA,MY,Asia,Southeast Asia,KUL,34.0
+NKG,CN,Asia,East Asia,BJS,30.9
+OOL,AU,Oceania,Australia and New Zealand,CBR,74.4
+MFM,MO,Asia,East Asia,MFM,60.5
+SHE,CN,Asia,East Asia,BJS,30.5
+SRG,ID,Asia,Southeast Asia,JKT,26.1
+PUS,KR,Asia,East Asia,SEL,61.6
+TSN,CN,Asia,East Asia,BJS,30.5
+CRK,PH,Asia,Southeast Asia,MNL,30.1
+SIA,CN,Asia,East Asia,BJS,26.4
+WUH,CN,Asia,East Asia,BJS,30.7
+BER,DE,Europe,Western Europe,BER,71.2
+MAA,IN,Asia,South Asia,DEL,20.0
+MES,ID,Asia,Southeast Asia,JKT,26.1
+TRZ,IN,Asia,South Asia,DEL,18.9
+BDO,ID,Asia,Southeast Asia,JKT,24.0
+VTE,LA,Asia,Southeast Asia,VTE,63.7
+CJU,KR,Asia,East Asia,SEL,61.6
+OSA,JP,Asia,East Asia,TYO,43.1
+MUC,DE,Europe,Western Europe,BER,77.6
+INN,AT,Europe,Western Europe,VIE,77.2
+ZRH,CH,Europe,Western Europe,BRN,123.7
+MDL,MM,Asia,Southeast Asia,NYT,38.0
+PAR,FR,Europe,Western Europe,PAR,79.5
+AMS,NL,Europe,Western Europe,AMS,82.1
+PER,AU,Oceania,Australia and New Zealand,CBR,72.6
+MEL,AU,Oceania,Australia and New Zealand,CBR,77.0
+MIL,IT,Europe,Southern Europe,ROM,76.3
+CGO,CN,Asia,East Asia,BJS,30.5
+KHN,CN,Asia,East Asia,BJS,30.5
+NNG,CN,Asia,East Asia,BJS,30.5
+TNA,CN,Asia,East Asia,BJS,30.5
+TAO,CN,Asia,East Asia,BJS,29.9
+DRW,AU,Oceania,Australia and New Zealand,CBR,67.9
+BPN,ID,Asia,Southeast Asia,JKT,26.1
+UPG,ID,Asia,Southeast Asia,JKT,26.1
+HKT,TH,Asia,Southeast Asia,BKK,42.6
+SFO,US,North America,North America,WAS,96.2
+FOC,CN,Asia,East Asia,BJS,30.5
+NGB,CN,Asia,East Asia,BJS,30.5
+BRS,GB,Europe,Northern Europe,LON,71.9
+CWL,GB,Europe,Northern Europe,LON,66.9
+OXF,GB,Europe,Northern Europe,LON,76.1
+OKA,JP,Asia,East Asia,TYO,47.5
+SWA,CN,Asia,East Asia,BJS,30.5
+HGH,CN,Asia,East Asia,BJS,35.9
+PSR,IT,Europe,Southern Europe,ROM,61.4
+TPS,IT,Europe,Southern Europe,ROM,61.4
+JOG,ID,Asia,Southeast Asia,JKT,26.1
+OLB,IT,Europe,Southern Europe,ROM,61.4
+AHO,IT,Europe,Southern Europe,ROM,61.4
+CJB,IN,Asia,South Asia,DEL,16.7
+VTZ,IN,Asia,South Asia,DEL,18.9
+MYY,MY,Asia,Southeast Asia,KUL,34.0
+CTU,CN,Asia,East Asia,BJS,28.3
+AOR,MY,Asia,Southeast Asia,KUL,34.0
+JHB,MY,Asia,Southeast Asia,KUL,34.0
+TGG,MY,Asia,Southeast Asia,KUL,34.0
+BTU,MY,Asia,Southeast Asia,KUL,34.0
+SBW,MY,Asia,Southeast Asia,KUL,34.0
+LBU,MY,Asia,Southeast Asia,KUL,34.0
+SDK,MY,Asia,Southeast Asia,KUL,34.0
+TWU,MY,Asia,Southeast Asia,KUL,34.0
+MKZ,MY,Asia,Southeast Asia,KUL,34.0
+LYS,FR,Europe,Western Europe,PAR,73.0
+SXB,FR,Europe,Western Europe,PAR,73.4
+LIL,FR,Europe,Western Europe,PAR,66.4
+NTE,FR,Europe,Western Europe,PAR,67.7
+MRS,FR,Europe,Western Europe,PAR,74.6
+KJT,ID,Asia,Southeast Asia,JKT,26.1
+BLQ,IT,Europe,Southern Europe,ROM,68.8
+FLR,IT,Europe,Southern Europe,ROM,71.4
+NAP,IT,Europe,Southern Europe,ROM,60.6
+PSA,IT,Europe,Southern Europe,ROM,86.5
+VRN,IT,Europe,Southern Europe,ROM,67.1
+PDG,ID,Asia,Southeast Asia,JKT,26.1
+PQC,VN,Asia,Southeast Asia,HAN,26.4
+ILO,PH,Asia,Southeast Asia,MNL,30.1
+LBJ,ID,Asia,Southeast Asia,JKT,26.1
+KBR,MY,Asia,Southeast Asia,KUL,34.0
+DAD,VN,Asia,Southeast Asia,HAN,26.5
+CEI,TH,Asia,Southeast Asia,BKK,38.0
+EXT,GB,Europe,Northern Europe,LON,67.8

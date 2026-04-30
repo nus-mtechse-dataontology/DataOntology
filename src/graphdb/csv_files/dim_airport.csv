@@ -1,0 +1,910 @@
+f_airport_code,f_airport_name,f_city_code
+SIN,Changi,SIN
+HKG,Hong Kong Intl,HKG
+LHR,Heathrow,LON
+YUL,Pierre Elliott Trudeau Intl,YMQ
+YVR,Vancouver Intl,YVR
+XMN,Xiamen Gaoqi Intl,XMN
+YEG,Edmonton Intl,YEA
+SUB,Juanda Intl,SUB
+SNN,Shannon,SNN
+SLC,Salt Lake City intl,SLC
+SAN,San Diego Intl,SAN
+STL,Lambert Intl,STL
+SGD,Sonderborg,SGD
+SGN,Tan Son Nhat,SGN
+TRV,Trivandrum International Airport,TRV
+TLS,Blagnac,TLS
+TPE,Taoyuan Intl Airport,TPE
+SVG,Sola,SVG
+SYD,Kingsford Smith,SYD
+SYR,Hancock Intl,SYR
+SZG,Wolfgang A Mozart,SZG
+SZX,Shenzhen,SZX
+PHX,Sky Harbor Intl,PHX
+PMR,Palmerston North Intl,PMR
+PEN,Penang Intl,PEN
+ORD,Ohare Intl,CHI
+ORK,Cork,ORK
+PDX,Portland Intl,PDX
+PEK,Capital Intl,BJS
+NCE,Cote D'Azur,NCE
+NCL,Newcastle Intl,NCL
+NGO,Chubu Centrair Intl,NGO
+NPE,Hawke's Bay,NPE
+NPL,New Plymouth,NPL
+NRT,Narita,TYO
+SAT,San Antonio Intl,SAT
+RUH,King Khaled Intl,RUH
+RNN,Bornholm,RNN
+ROT,Rotorua Regional ,ROT
+PVG,Pu Dong,SHA
+BKK,Suvarnabhumi Airport,BKK
+BNE,Brisbane Intl,BNE
+BOI,Boise Airport,BOI
+BOM,Chhatrapati Shivaji Intl,BOM
+BWN,Brunei Intl,BWN
+CAI,Cairo Intl,CAI
+CGK,Soekarno Intl,JKT
+COS,Peterson Field,COS
+MSP,Saint Paul Intl,MSP
+CPT,Cape Town Intl,CPT
+CVG,Northern Kentucky Intl,CVG
+DAC,Hazrat Shahjalal Intl,DAC
+DAL,Love Field,DFW
+DPS,Ngurah Rai Intl,DPS
+MIA,Miami Intl,MIA
+GOT,Landvetter,GOT
+IAD,Dulles Intl,WAS
+MDC,Sam Ratulangi,MDC
+PLM,Sultan Badaruddin II,PLM
+PNH,Pochentong,PNH
+IAH,Intercontinental,HOU
+DUS,Dusseldorf Intl,DUS
+PIT,Pittsburgh Intl,PIT
+PLZ,Port Elizabeth,PLZ
+KLU,Woerthersee,KLU
+SEA,Tacoma International Airport,SEA
+ELS,East London,ELS
+VIE,Schwechat,VIE
+TRF,Oslo Sandefjord,OSL
+TRG,Tauranga,TRG
+KUL,Kuala Lumpur Intl,KUL
+BIO,Sondica,BIO
+MLE,Velana International Airport,MLE
+MNL,Ninoy Aquino Intl,MNL
+BWI,Washington Intl,BWI
+MAN,Manchester Ringway  Intl,MAN
+LNZ,Hoersching,LNZ
+CNX,Chiang Mai Intl,CNX
+COK,Kochi International Airport,COK
+LAS,McCarran Intl,LAS
+LAX,Los Angeles Intl,LAX
+CTU,Chengdu,CTU
+GRZ,Thalerhof,GRZ
+HND,Haneda Intl,TYO
+HYD,Rajiv Gandhi International Airport,HYD
+IBZ,Ibiza,IBZ
+ICN,Incheon Intl,SEL
+GVA,Cointrin,GVA
+HAN,Noi Bai Intl,HAN
+FMO,Greven,FMO
+KCH,Kuching International Airport,KCH
+FRA,Rhein Main,FRA
+FUK,Fukuoka Intl,FUK
+KEL,Holtenau,KEL
+FCO,Leonardo da Vinci/Fiumicino,ROM
+DUB,Dublin,DUB
+CTS,Chitose ,SPK
+DUR,Durban Intl,DUR
+DVO,Francisco Bangoy Intl,DVO
+DXB,Dubai Intl,DXB
+EWR,Newark Intl,NYC
+KTM,Tribhuvan Intl,KTM
+DEN,Denver Intl ,DEN
+KWI,Kuwait Intl,KWI
+LGK,Langkawi International Airport,LGK
+IST,Istanbul Airport,IST
+ARN,Arlanda,STO
+PMI,Son Sant Joan,PMI
+VLC,Manises,VLC
+AES,Vigra,AES
+DEL,Indira Gandhi Intl,DEL
+BLR,Kempegowda Intl,BLR
+BCN,Barcelona El Prat Airport,BCN
+BFS,Belfast Intl,BFS
+BGO,Flesland,BGO
+PKU,Sultan Syarif Kasim II,PKU
+CLE,Hopkins Intl,CLE
+CLT,Charlotte Douglas Intl,CLT
+CMB,Bandaranaike Intl,CMB
+CAN,Baiyun Intl,CAN
+CCU,NSC Bose Intl,CCU
+BOS,Logan Intl,BOS
+BRU,Brussels Airport,BRU
+BSL,EuroAirport,BSL
+CKG,Jiangbei Intl,CKG
+HAM,Fuhlsbuettel,HAM
+YYC,Calgary Intl,YYC
+YYZ,Lester B. Pearson Intl,YTO
+CEB,Mactan Cebu Intl,CEB
+FDH,Loewental,FDH
+HAJ,Langenhagen,HAJ
+AMD,Sardar Vallabhbhai Patel Intl,AMD
+LOP,Bandara International Lombok,AMI
+ATH,Eleftherios Venizelos,ATH
+ATL,Atlanta,ATL
+AUS,Austin Bergstrom,AUS
+ABQ,Albuquerque,ABQ
+ABZ,Dyce,ABZ
+ADL,Adelaide Intl,ADL
+AKL,Auckland Intl,AKL
+AAL,Aalborg,AAL
+AAR,Tirstrup,AAR
+LEJ,Flughafen Leipzig/Halle,LEJ
+NUE,Airport Nuremberg,NUE
+PAD,Paderborn/Lipstadt,PAD
+STR,Echterdingen,STR
+BHD,George Best Belfast City ,BFS
+DME,Domodedovo Intl,MOW
+DUD,Dunedin Intl,DUD
+ZQN,Queenstown,ZQN
+GRU,Guarulhos Int'l,SAO
+CHC,Christchurch Intl,CHC
+IVC,Invercargill,IVC
+YOW,Macdonald Cartier Intl,YOW
+TYO,Tokyo (ALL),TYO
+RGN,Yangon Intl,RGN
+CPH,Copenhagen,CPH
+KRS,Kjevik,KRS
+JNB,O.R Tambo Intl,JNB
+BKI,Kota Kinabalu Intl,BKI
+REP,Siem Reap,REP
+AYT,Antalya,AYT
+RIX,Riga Intl,RIX
+KHV,Novyy,KHV
+FLL,Fort Lauderdale Intl,FLL
+JED,King Abdul Aziz Intl,JED
+IDR,Devi Ahilya Bai Holkar,IDR
+BLQ,Guglielmo Marconi,BLQ
+BME,Broome,BME
+ADA,Adana,ADA
+AGP,Malaga,AGP
+HAK,Meilan Intl,HAK
+HBA,Hobart,HBA
+HDY,Hat Yai Intl,HDY
+HIJ,Hiroshima,HIJ
+BUH,Bucharest,BUH
+CBR,Canberra,CBR
+CFE,Auvergne,CFE
+CFS,Coffs Harbour,CFS
+CGN,Konrad Adenauer,CGN
+CNS,Cairns,CNS
+CUN,Cancun Intl,CUN
+DCA,Ronald Reagan National,WAS
+DMM,King Fahd Intl,DMM
+DTW,Detroit Metro,DTT
+BNA,Nashville Intl,BNA
+BOD,Merignac,BOD
+BDQ,Vadodara Airport,BDQ
+BEG,Nikola Tesla,BEG
+ASP,Alice Springs,ASP
+ATQ,Sri Guru Ram DassJee,ATQ
+AYQ,Ayers Rock,AYQ
+BRI,Palese,BRI
+IPH,Sultan Azlan Shah,IPH
+ISA,Mount Isa,ISA
+JAI,Jaipur International,JAI
+JAX,Jacksonville Intl,JAX
+JOG,Adisucipto Intl Airport,JOG
+KBV,Krabi Intl,KBV
+KHH,Kaohsiung Intl,KHH
+KUA,Sultan Haji Ahmad Shah,KUA
+MPL,Mediterranee,MPL
+MPM,Maputo  Intl,MPM
+MRU,Sir S Ramgoolam International,MRU
+NAN,Nadi International,NAN
+NKG,Lukou Intl,NKG
+NOU,La Tontouta,NOU
+NTL,Newcastle,NTL
+OOL,Coolangatta,OOL
+ORF,Norfolk Intl,ORF
+LST,Launceston,LST
+MCT,Muscat Intl,MCT
+MFM,Macau Intl,MFM
+MKY,Mackay,MKY
+MLA,Luqa Intl,MLA
+RDU,Durham Intl,RDU
+ROC,Rochester,ROC
+ROK,Rockhampton,ROK
+SEZ,Seychelles Intl,SEZ
+SHE,Taoxian Intl,SHE
+SHV,Shreveport Regional Airport,SHV
+SRG,Achmad Yani Intl,SRG
+TPA,Tampa Intl,TPA
+PNQ,Lohegaon,PNQ
+PSP,Palm Springs Intl,PSP
+PUS,Gimhae Intl,PUS
+ZAG,Pleso,ZAG
+PLQ,Palanga Intl,PLQ
+TRS,Ronchi dei Legionari,TRS
+TSN,Binhai Intl,TSN
+TSV,Townsville,TSV
+USM,Koh Samui,USM
+VNS,Lal Bahadur Shastri,VNS
+VRN,Villafranca,VRN
+WAW,Frederic Chopin,WAW
+RAR,Rarotonga Island,RAR
+ABX,Albury,ABX
+BNK,Ballina,BNK
+HVB,Hervey Bay,HVB
+MCY,Maroochydore,MCY
+PQQ,Port Macquarie,PQQ
+MQL,Mildura,MQL
+PPP,Proserpine,PPP
+PHE,Port Hedland,PHE
+ZNE,Newman,ZNE
+ADD,Bole Intl,ADD
+ANC,Ted Stevens Anchorage International Airport,ANC
+CRK,Clark Intl,CRK
+GYD,Heydar Aliyew Intl,BAK
+APW,Faleolo lntl,APW
+OPO,Francisco Sa Carneiro,OPO
+SCL,Arturo Merino Benitez Intl,SCL
+ASU,Silvio Pettirossi Intl,ASU
+CWB,Afonso Pena Intl,CWB
+GYN,Santa Genoveva,GYN
+IGU,Cataratas Intl,IGU
+TFN,Tenerife Norte,TFN
+GZT,Gaziantep,GZT
+KYA,Konya,KYA
+DLM,Dalaman,DLM
+ASR,Kayseri,ASR
+SZF,Carsamba,SZF
+TZX,Trabzon,TZX
+DNZ,Cardak,DNZ
+BJV,Milas Intl,BXN
+HNL,Honolulu Intl,HNL
+XIY,Xianyang Intl,SIA
+BBI,Biju Patnaik,BBI
+WUH,Wuhan,WUH
+BER,Brandenburg Int'l   Willy Brandt,BER
+GIG,Galeao - Antonio Carlos Jobim Intl,RIO
+SDU,Santos Dumont,RIO
+BSB,J.Kubitschek Intl,BSB
+BHO,Raja Bhoj,BHO
+MAA,Chennai International Airport,MAA
+KNO,Kuala Namu Intl,MES
+TRZ,Tiruchirappalli Intl,TRZ
+AUA,Reina Beatrix,AUA
+MSY,Louis Armstrong Intl,MSY
+PWM,Portland Intl,PWM
+BHE,Woodbourne,BHE
+GIS,Gisbourne,GIS
+KKE,Bay of Islands,KKE
+PPQ,Kapiti Coast,PPQ
+TUO,Taupo,TUO
+WAG,Whanganui,WAG
+EXT,Exeter,EXT
+ABJ,F Houphouet Boigny,ABJ
+ACC,Kotoka Intl,ACC
+AEP,Jorge Newbery,BUE
+BDO,Bandung,BDO
+CSX,Changsha,CSX
+KMQ,Komatsu,KMQ
+TOY,Toyama,TOY
+LUX,Luxembourg,LUX
+GDN,Lech Walesa,GDN
+POZ,Lawica,POZ
+WRO,Nicolaus Copernicus,WRO
+ESB,Esenboga,ANK
+BDS,Casele,BDS
+CEK,Balandino,CEK
+CND,Mihail Kogalniceanu,CND
+ADB,Adnan Menderes,IZM
+KGI,Kalgoorlie-Boulder,KGI
+KEF,Keflavik Intl,REK
+OAK,Oakland Intl,OAK
+KUF,Kurumoch Intl,KUF
+SJJ,Sarajevo Intl,SJJ
+TBU,Fua'amotu Intl,TBU
+TKU,Turku,TKU
+VTE,Wattay Intl,VTE
+GOI,Dabolim,GOI
+CJU,Jeju Intl,CJU
+KTA,Karratha,KTA
+SJC,San Jose Intl,SJC
+HIR,Henderson Intl,HIR
+GLT,Gladstone,GLT
+GOA,Cristoforo Colombo,GOA
+GRJ,George Airport,GRJ
+FLR,Peretola,FLR
+KMG,Kunming ChangShui International Airport,KMG
+SXM,Princess Juliana Intl,SXM
+UFA,Ufa,UFA
+VVO,Knevichi,VVO
+UUS,Yuzhno Sakhalinsk,UUS
+BDB,Bundaberg,BDB
+GET,Geraldton,GET
+KNX,East Kimberley Regional,KNX
+TMW,Tamworth,TMW
+KIX,Kansai Intl,OSA
+MUC,Franz Josef Strauss,MUC
+KRP,Karup,KRP
+GLA,Glasgow Intl,GLA
+MAD,Barajas Intl,MAD
+TRD,Vaernes,TRD
+MRS,Provence Intl,MRS
+LYS,St Exupery,LYS
+INN,Kranebitten,INN
+ZRH,Zurich Kloten,ZRH
+NSN,Nelson,NSN
+MDL,Mandalay Intl,MDL
+KLO,Kalibo Intl,KLO
+BFN,Braam Fischer International Airport,BFN
+VCE,Marco Polo,VCE
+NAP,Capodichino,NAP
+CDG,Charles De Gaulle,PAR
+NYC,New York (ALL),NYC
+AMS,Schiphol Intl,AMS
+PER,Perth Intl,PER
+MEL,Melbourne Intl,MEL
+MXP,Malpensa,MIL
+ALG,Houari Boumediene,ALG
+DAR,Julius Nyerere Intl,DAR
+DBV,Dubrovnik,DBV
+BTR,Baton Rouge Metropolitan Airport,BTR
+BTV,Burlington Intl,BTV
+BZG,Ignacy Jan Paderewski,BZG
+CGO,Xinzheng Intl,CGO
+CNJ,Cloncurry,CNJ
+COR,A.L.V. Taravella,COR
+CRP,Corpus Christi International Airport,CRP
+GAU,Gopinath Bordoloi Intl,GAU
+GWT,Sylt,GWT
+HDF,Heringsdorf,HDF
+HOU,William P Hobby,HOU
+GPT,Gulfport/Biloxi International Airport,GPT
+GRQ,Groningen Airport Eelde,GRQ
+EBB,Entebbe Intl,EBB
+EMD,Emerald,EMD
+EZE,Ministro Pistarini,BUE
+FKB,Baden Airpark,FKB
+KLR,Kalmar,KLR
+KRK,John Paul ll Balice,KRK
+KRN,Kiruna,KRN
+KRR,Pashkovsky,KRR
+KWE,Longdongbao Intl,KWE
+KZN,Kazan Intl,KZN
+INV,Inverness,INV
+IOM,Ronaldsway,IOM
+IXB,Bagdogra,IXB
+IXZ,Veer Savarkar Intl,IXZ
+JAN,Jackson/Medgar Wiley Evers International Airport,JAN
+JER,Jersey,JER
+JJN,Jinjiang,JJN
+JRO,Kilimanjaro Intl,JRO
+KGL,Kigali Intl,KGL
+KHN,Changbei Intl,KHN
+MMH,Mammoth Yosemite Airport,MMH
+MOB,Mobile Regional Airport,MOB
+MOV,Moranbah,MOV
+NDJ,Hassan Djamous Intl,NDJ
+NNG,Wuxu Intl,NNG
+NQY,Cornwall,NQY
+MVD,Carrasco,MVD
+LGB,Daugherty Field,LGB
+LJU,Joze Pucnik,LJU
+LLA,Kallax,LLA
+LPQ,Luang Prabang Intl,LPQ
+LRD,Laredo International Airport,LRD
+LUZ,Lublin Airport,LUZ
+MAF,Midland International Air and Space Port,MAF
+MBA,Moi Intl,MBA
+MBJ,Sangster Intl,MBJ
+MFE,McAllen Miller International Airport,MFE
+PVR,G.Diaz Ordaz Intl,PVR
+RAJ,Rajkot Airport,RAJ
+RNB,Kallinge,RNB
+NWI,Norwich Intl,NWI
+OSD,Are Ostersund,OSD
+OTP,Henri Coanda,BUH
+OUA,Ouagadougou,OUA
+PBO,Paraburdoo,PBO
+PEE,Bolshoye Savino,PEE
+PLS,Providenciales,PLS
+PNR,Pointe-Noire,PNR
+PUJ,Punta Cana Intl,PUJ
+SUN,Friedman Memorial Airport,SUN
+SVX,Koltsovo,SVX
+SXR,Sheikh Ul Alam,SXR
+TNA,Yaoqiang Intl,TNA
+ROV,Rostov,ROV
+RSW,Southwest Florida Intl,FMY
+RZE,Jasionka,RZE
+SDL,Sundsvall-Timra,SDL
+SDQ,Las Americas Intl,SDQ
+SFT,Skelleftea,SFT
+SJD,Los Cabos Intl,SJD
+SJU,Luis Munoz Marin Intl,SJU
+SOU,Southampton,SOU
+SPU,Split,SPU
+STI,Cibao Intl,STI
+STS,Charles M. Schulz-Sonoma County Airport,STS
+STV,Surat Airport,STV
+UME,Umea,UME
+URC,Diwopu Intl,URC
+VBY,Visby,VBY
+VLI,Bauerfield Intl,VLI
+WNZ,Yongqiang Intl,WNZ
+WUX,Sunan Shoufang Intl,WUX
+TAO,Jiaodong International,TAO
+DRW,Darwin,DRW
+BPN,Sepingan,BPN
+UPG,Sultan Hasanuddin Intl,UPG
+BLL,Billund,BLL
+BRE,Neuenland,BRE
+WRE,Whangarei District,WRE
+HKT,Phuket Intl,HKT
+EDI,Turnhouse,EDI
+DTM,Dortmund,DTM
+OSL,Oslo Lufthavn,OSL
+IXC,Chandigarh,IXC
+OGG,Kahului,OGG
+LUG,Agno,LUG
+WLG,Wellington Intl,WLG
+SFO,San Francisco Intl,SFO
+DRS,Klotzsche,DRS
+JFK,John F Kennedy Intl,NYC
+HLZ,Hamilton,HLZ
+BES,Bretagne,BES
+DLC,Zhoushuizi Intl,DLC
+AOI,Falconara,AOI
+CAG,Elmas,CAG
+TRN,Caselle,TRN
+FOC,Changle Intl,FOC
+IXL,Kushok Bakula Rimpoche,IXL
+NGB,Lishe Intl,NGB
+REG,Calabria,REG
+BRS,Marlborough Street [Bristol Coach & Bus Station],BRS
+CWL,"Wood Street [Cardiff Bus Station, Central Square]",CWL
+PHL,Philadelphia Intl,PHL
+OKA,Naha,OKA
+BUF,Niagara Intl,BUF
+MCO,Orlando Intl,ORL
+USN,Ulsan,USN
+PVD,Theodore Francis Green State,PVD
+IXJ,Satwari,IXJ
+LKO,Chaudhary Charan Singh,LKO
+BHX,Birmingham,BHX
+DSA,Robin Hood,DSA
+LED,Pulkovo,LED
+SWA,Jieyang Chaoshan Intl,SWA
+VNO,Vilnius Intl,VNO
+SKG,Makedonia,SKG
+LIS,Portela,LIS
+KTW,Pyrzowice,KTW
+HTI,Great Barrier Reef,HTI
+NBO,Jomo Kenyatta Intl,NBO
+VFA,Victoria Falls Intl,VFA
+PMO,Punta Raisi,PMO
+TLV,Ben Gurion International,TLV
+ULN,Buyant-Ukhaa Intl,ULN
+IND,Indianapolis,IND
+SUF,Lamezia Terme,SUF
+POM,"Port Moresby, Jacksons International",POM
+HGH,Xiaoshan Intl,HGH
+HRB,Taiping Intl,HRB
+PBI,Palm Beach Intl,PBI
+TUL,Tulsa International Airport,TUL
+DFW,Dallas Fort Worth Intl,DFW
+SRQ,Sarasota Bradenton Intl,SRQ
+FAT,Fresno Air Terminal ,FAT
+AUH,Abu Dhabi,AUH
+YHZ,Halifax Intl,YHZ
+MKE,General Mitchell,MKE
+BZE,Belize,BZE
+TUS,Tucson,TUS
+ALC,Alicante,ALC
+HAU,Haugesund,HAU
+HER,Heraklion,HER
+CMH,Columbus,CMH
+DOH,Doha,DOH
+DSM,Des Moines,DSM
+ICT,Wichita,ICT
+LGW,London Gatwick Airport,LON
+LHE,Lahore,LHE
+IXM,Madurai,IXM
+JTR,Thira,JTR
+KHI,Karachi,KHI
+KKN,Kirkenes,KKN
+KOJ,Kagoshima,KOJ
+KRT,Khartoum,KRT
+LAD,Luanda,LAD
+HRE,Harare,HRE
+MSN,Madison,MSN
+MYJ,Matsuyama,MYJ
+NLA,Indola,NLA
+ORY,Paris,PAR
+LIN,Milan,MIL
+LPA,Gran Canaria,LPA
+LUN,Lusaka,LUN
+LXR,Luxor,LXR
+MCI,Kansas City,MKC
+MED,Madinah,MED
+MEM,Memphis,MEM
+RHO,Rhodes Diagoras,RHO
+RIC,Richmond Intl,RIC
+RNO,Reno-Tahoe Intl,RNO
+SBA,Santa Barbara,SBA
+SJO,San Jose,SJO
+SVQ,Sevilla,SVQ
+TNR,Antananarivo,TNR
+PPT,Papeete,PPT
+YWG,Winnipeg,YWG
+YYT,St Johns,YYT
+WDH,Hosea Kutako Intl,WDH
+YQR,Regina,YQR
+GMP,Gimpo,SEL
+FAO,Faro,FAO
+YIH,Yichang Sanxia Airport,YIH
+CCJ,Calicut International Airport,CCJ
+TSA,Taipei Songshan Airport,TPE
+ASM,ASMARA,ASM
+BDA,Kindley Field,BDA
+BEL,Belem,BEL
+BEY,Beirut Intl,BEY
+BGA,Bucaramanga,BGA
+BGI,Grantley Adams,BGI
+BIL,Billings (Logan),BIL
+BJR,Bahar Dar,BJR
+BKO,Bamako (Senou) / Mali,BKO
+ASW,Aswan,ASW
+AVL,Asheville Municipal,AVL
+AXM,Armenia,AXM
+AXT,Akita,AXT
+AXU,Axum,AXU
+BAQ,Barranquilla,BAQ
+ABV,Abuja,ABV
+ADZ,San Andres Island,ADZ
+AER,Adler/Sochi,AER
+ALA,Borolday,ALA
+AMM,Marka Intl,AMM
+BGW,Ashgabat,BGW
+CGQ,Longjia Intl,CGQ
+IFN,Shadid Beheshti Intl,IFN
+SYX,Phoenix Intl,SYX
+HKD,Hakodate,HKD
+SAW,Sabiha Gokcen,SAW
+KMJ,Kumamoto,KMJ
+KBP,Boryspil Intl,IEV
+LIH,Lihue,LIH
+MSQ,Minsk 2 Intl,MSQ
+MMY,Miyako,MMY
+SVO,Sheremetyevo,MOW
+ONT,LA/Ontario Intl,ONT
+SMF,Sacramento Intl,SAC
+SPN,Francisco C Ada Intl,SPN
+SYZ,Shahid Dastghaib Intl,SYZ
+SKP,Alexander The Great,SKP
+ISB,Islamabad,ISB
+IXU,Aurangabad,IXU
+NTE,"Nantes, Atlantique",NTE
+YNT,Yantai,YNT
+GRR,Grand Rapids,GRR
+GUA,Guatemala City,GUA
+GUM,Guam,GUM
+GBE,Gaborone,GBE
+EUG,Eugene,EUG
+CUR,Hato International Airport,CUR
+TYN,Wusu Intl,TYN
+TAS,Tashkent Intl,TAS
+TBS,Tbilisi Intl,TBS
+EVN,Zvartnots Intl,EVN
+LGA,New York,NYC
+CTG,Cartagena,CTG
+CUZ,Cuzco,CUZ
+CZX,Changzhou,CZX
+DCY,Daocheng Yading,DCY
+DKR,Dakar/Yoff,DKR
+DLA,Douala,DLA
+DLU,Dali City,DLU
+BLZ,Blantyre,BLZ
+BUR,Burbank,BUR
+BUS,Batumi,BUS
+BZN,Bozeman (Gallatin Field),BZN
+CCS,Simon Bolivar,CCS
+CGH,Sao Paulo Congonhas Apt,SAO
+CHS,Charleston A.F.B Internationa,CHS
+CID,Cedar Rapids Municipal,CID
+CLJ,Cluj,CLJ
+CLO,Cali,CLO
+CMN,Casablanca Mohamed V,CAS
+CNF,Belo Horizonte Tancredo Neves,BHZ
+GAY,Gaya,GAY
+GCM,Grand Cayman (Owen Roberts),GCM
+GDQ,Gondar,GDQ
+GEG,Spokane,GEG
+GYE,Guayaquil,GYE
+HAH,Moroni Prince Said Ibrahim Apt,YVA
+HBE,Borg El Arab,ALY
+HET,Hohhot Baita Intl,HET
+HFE,Hefei Xinqiao Intl,HFE
+HJR,Khajuraho,HJR
+HLD,Hailar,HLD
+HRG,Hurghada,HRG
+HRK,Kharkov,HRK
+GPS,Galapagos Islands,GPS
+DYG,Dayong,DYG
+DYU,Dushanbe,DYU
+EBL,ERBIL,EBL
+ECN,Ercan,ECN
+FAE,Faroe Islands,FAE
+FLN,Florianopolis,FLN
+FOR,Fortaleza,FOR
+FRU,Bishkek,FRU
+FSD,Sioux Falls (Joe Foss Field),FSD
+KOA,Kona,KOA
+KSC,Kosice(Barca>/Slovakia,KSC
+KSU,Kristiansund,KSU
+KWL,Guilin,KWL
+LBV,Libreville,LBV
+HSG,Saga,HSG
+IKA,Imam Khomeini,IKA
+IMF,Imphal,IMF
+INC,Yinchuan,INC
+IOS,Ilheus,IOS
+ISG,New Ishigaki,ISG
+ITM,Osaka,OSA
+ITO,Hilo,ITO
+IWK,Iwakuni Kintaikyo,IWK
+IXR,Ranchi,IXR
+JIB,Ambouli Airport,JIB
+JPA,Joao Pessoa,JPA
+JUL,Juliaca,JUL
+JUZ,Juzhou,JUZ
+KAN,Kano,KAN
+KCZ,Kochi Ryoma,KCZ
+KHG,Kashi,KHG
+KIN,Norman Manley,KIN
+KIV,Chisinau,KIV
+MOL,Molde,MOL
+MQX,Makale,MQX
+NAS,Nassau-International,NAS
+NAT,Natal,NAT
+NAV,Nevsehir,NAV
+NIM,Niamey,NIM
+NSI,Nsimalen,YAO
+NTG,Nantong,NTG
+MTR,Monteria,MTR
+LFW,Lome(Tokoin)/Togo,LFW
+LHW,Lanzhou Apt,LHW
+LIM,LIMA,LIM
+LIR,Liberia,LIR
+LJG,Lijiang City,LJG
+LLI,Lalibela,LLI
+LOS,Lagos/Murtala Muhammed,LOS
+LPB,La Paz,LPB
+LVI,Livingstone,LVI
+LWO,Lvov,LWO
+LXA,Lhasa,LXA
+LYI,Linyi,LYI
+LYR,Longyearbyen,LYR
+MAO,Manaus,MAO
+MDE,Medellin Jose Maria Cordova In,MDE
+MDT,Harrisburg (Olmsted Field),MDT
+MFR,Medford,MFR
+MID,Merida,MID
+MIG,Mian Yang,MIG
+PUY,Pula,PUY
+RAI,Praia,RAI
+RAK,Marrakech (Menara),RAK
+REC,Recife,REC
+ROR,Koror,ROR
+ODS,Odessa (Central),ODS
+OIT,Oita,OIT
+OKJ,Okayama,OKJ
+ONJ,Odate-Noshiro,ONJ
+OZH,Zaporozhye,OZH
+PAP,Port au Prince,PAP
+PAT,Patna,PAT
+PDL,Ponta Delgada,PDL
+PEM,Puerto Maldonado,PEM
+PNI,Pohnpei,PNI
+POA,Porto Alegre,POA
+POP,Puerto Plata,POP
+POS,Piarco,POS
+PPN,Popayan,PPN
+PRN,Pristina,PRN
+PTY,Tocumen Int'l,PTY
+TAK,Takamatsu,TAK
+TKK,Truk,TKK
+TKS,Tokushima,TKS
+NQZ,Astana,NQZ
+TTJ,Tottori,TTJ
+TUN,Tunis/Carthage,TUN
+TXN,Tunxi,TXN
+TYS,Knoxville (Mcghee Tyson),TYS
+UBJ,Yamaguchi-Ube,UBJ
+TGD,Podgorica,TGD
+TIA,Rinas,TIA
+TIU,Timaru,TIU
+RPR,Raipur,RPR
+RTB,Roatan,RTB
+SAP,San Pedro Sula,SAP
+SAV,Savannah International,SAV
+SBZ,Sibiu Intl,SBZ
+SCY,San Cristobal,SCY
+SID,Sal,SID
+SMR,Santa Marta,SMR
+SSA,Salvador,SSA
+SSG,Malabo,SSG
+SSH,Sharm El Sheikh,SSH
+YGJ,Yonago,YGJ
+YIN,Yining,YIN
+YIW,Yiwu,YIW
+YNJ,Yanji,YNJ
+UIO,Quito,UIO
+UKB,Kobe,OSA
+UVF,St Lucia (Hewanorra),SLU
+VAR,Varna,VAR
+VKO,Moscow/Vnukovo,MOW
+VVI,Santa Cruz Viru Viru Internati,SRZ
+WXN,Wanxian,WXN
+XAP,Chapeco,XAP
+XFN,Xiangfan,XFN
+XNN,Xining,XNN
+YAP,Yap,YAP
+YBP,Yibin,YBP
+YCU,Yun Cheng,YCU
+HAV,Havana,HAV
+YTY,Yangzhou,YTY
+YYG,Charlottetown,YYG
+ZAD,Zadar,ZAD
+ZHA,Zhanjiang,ZHA
+ZNZ,Zanzibar,ZNZ
+ZUH,Zhuhai,ZUH
+DNK,Dnipropetrovsk International,DNK
+KSA,Kosrae,KSA
+NJF,Al-Ashraf International Airport,NJF
+NAG,Nagpur,NAG
+MGA,Managua,MGA
+SAL,San Salvador,SAL
+YXE,Saskatoon,YXE
+BDL,Hartford,BDL
+JDH,Jodhpur,JDH
+KMI,Miyazaki,KMI
+FNC,Funchal,FNC
+LCA,Larnaca,LCA
+OMA,Omaha,OMA
+UDR,Udaipur,UDR
+BAH,Bahrain,BAH
+IEV,Kiev,IEV
+BOG,El Dorado International,BOG
+PRG,Ruzyne,PRG
+BUD,Liszt Ferenc Intl,BUD
+ISL,Ataturk Airport,IST
+LRT,Lorient Lann-Bihoue,LRT
+PUF,Pau Pyrénées,PUF
+BIQ,Biarritz Pays Basque,BIQ
+PSR,Abruzzo,PSR
+TPS,"Trapani, Birgi",TPS
+BOO,Bodo,BOO
+TOS,Tromso,TOS
+AGH,Angelholm-Helsingborg,AGH
+MMX,Malmo,MMA
+HIA,Lianshui,HIA
+SDR,Santander,SDR
+SPC,Santa Cruz de la Palma,SPC
+VGO,Vigo,VGO
+VLL,Villadolid,VLL
+ACE,Lanzarote,ACE
+EAS,San Sebastian,EAS
+FUE,Fuerteventura,FUE
+GRX,Federico Garcia Lorca,GRX
+LCG,A Coruna,LCG
+LEI,Almeria,LEI
+OVD,Oviedo Asturias,OVD
+SCQ,Santiago de Compostela,SCQ
+XRY,Jerez,XRY
+MAH,Menorca,MAH
+TFS,Tenerife South,TFS
+QDU,Dusseldorf/Train Main Station,DUS
+QKL,Cologne/Train Main Station,CGN
+GDL,Guadalajara,GDL
+HEL,Helsinki-Vantaa,HEL
+HMO,Hermosillo,HMO
+MEX,Benito Juarez Intl,MEX
+MTY,Monterrey (General Escobedo),MTY
+SOF,Sofia,SOF
+TLL,Lennart Meri,TLL
+YIA,Yogyakarta Intl.,JOG
+OLB,Olbia Costa Smeralda,OLB
+AHO,Fertilia,AHO
+AOJ,Aomori,AOJ
+NGS,Nagasaki,NGS
+SDJ,Sendai,SDJ
+PSA,Galileo Galilei,PSA
+CTA,Fontanarossa,CTA
+EGE,Eagle County Regional,EGE
+SNA,John Wayne,SNA
+CJB,Coimbatore International Airport,CJB
+VTZ,Visakhapatnam International Airport,VTZ
+TIR,Tirupati,TIR
+SHA,Shanghai,SHA
+DMK,Don Muang,BKK
+SPK,Sapporo,SPK
+UBN,Chinggis Khaan intl,ULN
+MYY,Miri,MYY
+TFU,Tianfu International,CTU
+SAI,Siem Reap Angkor International,REP
+DJE,Zarzis,DJE
+AOR,Sultan Abdul Halim,AOR
+JHB,Senai Intl,JHB
+TGG,Sultan Mahmud,TGG
+BTU,Bintulu,BTU
+SBW,Sibu,SBW
+LBU,Labuan,LBU
+SDK,Sandakan,SDK
+TWU,Tawau,TWU
+LON,London (ALL),LON
+GOX,Mopa Airport,GOI
+PKX,Daxing Intl,BJS
+BJS,Beijing (ALL),BJS
+SZB,Sultan Abdul Aziz Shah,KUL
+MKZ,Malacca Intl,MKZ
+KJT,Kertajati Intl,KJT
+PDG,Minangkabau Intl,PDG
+PQC,Phu Quoc Intl,PQC
+ILO,Iloilo Intl,ILO
+DOY,Dongying Shengli,DOY
+PAE,Seattle Paine Field Intl,SEA
+YIC,Yichun Mingyueshan,YIC
+KTI,Techo Intl,PNH
+BCD,Silay Intl,BCD
+LBJ,Komodo Intl,LBJ
+DRP,Bicol Intl,DRP
+GES,General Santos Intl,GES
+CGY,Laguindingan Intl,CGY
+PPS,Puerto Princesa Intl,PPS
+TAG,Bohol Intl,TAG
+ZAM,Zamboanga Intl,ZAM
+DGT,Sibulan,DGT
+KBR,Sultan Ismail Petra,KBR
+DAD,Da Nang,DAD
+CXR,Cam Ranh Intl,NHA
+IWJ,Iwami,IWJ
+SYO,Shonai,SYO
+CEI,Chiang Rai Intl,CEI
+TAC,D.Z. Romualdez,TAC
+LAO,Laoag Intl,LAO
+BXU,Bancasi,BXU
+USU,Francisco B. Reyes,USU
+RXS,Roxas,RXS
+DPL,Dipolog,DPL
+OZC,Labo,OZC
+IAO,Sayak,IAO
+CYP,Calbayog,CYP
+CBO,Awang,CBO
+BSO,Basco,BSO
+CRM,Catarman National,CRM
+PAG,Pagadian,PAG
+EUQ,Evelio Javier,EUQ
+AKJ,Asahikawa,AKJ
+FKS,Fukushima,FKS
+FSZ,Mount Fuji Shizuoka,FSZ
+FUJ,Fukue,FUJ
+HAC,Hachijojima,HAC
+KIJ,Niigata,KIJ
+KUH,Kushiro,KUH
+MBE,Monbetsu,MBE
+MMB,Memanbetsu,MMB
+NTQ,Noto,NTQ
+RIS,Rishiri,RIS
+SHB,Nakashibetsu,SHB
+TSJ,Tsushima,TSJ
+WKJ,Wakkanai,WKJ
+WSI,Western Sydney International,SYD
+TJQ,H.A.S. Hanandjoeddin,TJQ
+PNK,Supadio Intl,PNK
+MPH,Godofredo P. Ramos,MPH

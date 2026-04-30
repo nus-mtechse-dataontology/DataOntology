@@ -1,6 +1,6 @@
 from logging.config import dictConfig
 from typing import Any
-
+import os
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -85,4 +85,7 @@ class DataOntology:
 
 
 if __name__ == "__main__":
+    os.environ['TELEGRAM_WEBHOOK_SECRET'] = ''
+    os.environ['TELEGRAM_BOT_TOKEN'] = ''
+    os.environ['GEMINI_API_KEY'] = ''
     DataOntology().start()

@@ -6,6 +6,7 @@ from handlers.semantic_validation_handler import SemanticsValidationHandler
 from handlers.sql_compiler_handler import SQLCompilerHandler
 from handlers.sql_executor_handler import SQLExecutorHandler
 from handlers.syntactic_validation_handler import SyntacticValidationHandler
+from handlers.graphdb_handler import GraphDBHandler
 
 
 __all__ = [
@@ -16,5 +17,6 @@ __all__ = [
 	"SemanticsValidationHandler",
 	"SQLCompilerHandler",
 	"SQLExecutorHandler",
-	"SyntacticValidationHandler"
+	"SyntacticValidationHandler",
+	"GraphDBHandler"
 ]

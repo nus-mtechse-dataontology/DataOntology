@@ -18,6 +18,7 @@ COPY --from=builder /install /var/lang/lib/python3.14/site-packages
 
 # 3. Copy app code
 COPY src/ ./src/
+COPY graphdb/ ./graphdb/
 COPY resources/ ./resources/
 COPY datasets/ ./datasets/
 COPY vault/ ./vault/

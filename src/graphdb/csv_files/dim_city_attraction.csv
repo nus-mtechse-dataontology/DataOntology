@@ -1,0 +1,463 @@
+f_city_code,f_attraction_name,f_attraction_type,f_attraction_tier
+SIN,Gardens by the Bay,nature,must_see
+SIN,Marina Bay Sands,landmark,must_see
+SIN,Merlion Park,landmark,popular
+HKG,Victoria Peak,landmark,must_see
+HKG,Star Ferry,landmark,must_see
+HKG,Temple Street Night Market,nightlife,popular
+LON,British Museum,museum,must_see
+LON,Tower of London,landmark,must_see
+LON,Buckingham Palace,landmark,popular
+YVR,Stanley Park,nature,must_see
+YVR,Granville Island,food,must_see
+YVR,Capilano Suspension Bridge,nature,popular
+SUB,House of Sampoerna,museum,must_see
+SUB,Heroes Monument,landmark,popular
+SUB,Tunjungan Plaza,shopping,popular
+SGN,Ben Thanh Market,shopping,must_see
+SGN,War Remnants Museum,museum,must_see
+SGN,Notre-Dame Cathedral Basilica of Saigon,religious,popular
+TRV,Sree Padmanabhaswamy Temple,religious,must_see
+TRV,Kovalam Beach,beach,must_see
+TRV,Napier Museum,museum,popular
+TPE,Taipei 101,landmark,must_see
+TPE,National Palace Museum,museum,must_see
+TPE,Shilin Night Market,food,popular
+SYD,Sydney Opera House,landmark,must_see
+SYD,Bondi Beach,beach,must_see
+SYD,The Rocks,landmark,popular
+SZG,Hohensalzburg Fortress,landmark,must_see
+SZG,Mozart's Birthplace,museum,must_see
+SZG,Mirabell Palace and Gardens,landmark,popular
+PEN,George Town UNESCO Historic Site,landmark,must_see
+PEN,Kek Lok Si,religious,must_see
+PEN,Penang Hill,nature,popular
+BJS,Forbidden City,landmark,must_see
+BJS,Great Wall at Mutianyu,landmark,must_see
+BJS,Temple of Heaven,religious,popular
+NGO,Nagoya Castle,landmark,must_see
+NGO,Atsuta Shrine,religious,must_see
+NGO,Osu Shopping District,shopping,popular
+TYO,Senso-ji,religious,must_see
+TYO,Tokyo Skytree,landmark,must_see
+TYO,Shibuya Crossing,nightlife,popular
+RUH,Kingdom Centre,landmark,must_see
+RUH,National Museum of Saudi Arabia,museum,must_see
+RUH,At-Turaif District in Diriyah,landmark,popular
+SHA,The Bund,landmark,must_see
+SHA,Yu Garden,landmark,must_see
+SHA,Shanghai Museum,museum,popular
+BKK,Grand Palace,landmark,must_see
+BKK,Wat Arun,religious,must_see
+BKK,Chatuchak Weekend Market,shopping,popular
+BNE,South Bank Parklands,nature,must_see
+BNE,Lone Pine Koala Sanctuary,nature,popular
+BNE,Queen Street Mall,shopping,popular
+BOM,Gateway of India,landmark,must_see
+BOM,Chhatrapati Shivaji Maharaj Vastu Sangrahalaya,museum,must_see
+BOM,Marine Drive,landmark,popular
+BWN,Sultan Omar Ali Saifuddien Mosque,religious,must_see
+BWN,Kampong Ayer,landmark,must_see
+BWN,Gadong Night Market,food,popular
+JKT,National Monument,landmark,must_see
+JKT,Istiqlal Mosque,religious,popular
+JKT,Grand Indonesia,shopping,popular
+CPT,Table Mountain,nature,must_see
+CPT,V&A Waterfront,shopping,must_see
+CPT,Bo-Kaap,landmark,popular
+DAC,Lalbagh Fort,landmark,must_see
+DAC,Ahsan Manzil,landmark,popular
+DAC,National Museum of Bangladesh,museum,popular
+DPS,Tanah Lot,landmark,must_see
+DPS,Seminyak Beach,beach,must_see
+DPS,Waterbom Bali,theme_park,popular
+MDC,Bunaken National Park,nature,must_see
+MDC,Christ Blessing,landmark,popular
+MDC,Soekarno Bridge,landmark,hidden_gem
+PLM,Ampera Bridge,landmark,must_see
+PLM,Sultan Mahmud Badaruddin II Museum,museum,popular
+PLM,Kemaro Island,religious,popular
+PNH,Royal Palace,landmark,must_see
+PNH,National Museum of Cambodia,museum,must_see
+PNH,Wat Phnom,religious,popular
+KLU,Minimundus,theme_park,must_see
+KLU,Lindwurm Fountain,landmark,must_see
+KLU,Worthersee,nature,popular
+SEA,Pike Place Market,food,must_see
+SEA,Space Needle,landmark,must_see
+SEA,Chihuly Garden and Glass,museum,popular
+VIE,Schonbrunn Palace,landmark,must_see
+VIE,St. Stephen's Cathedral,religious,must_see
+VIE,Kunsthistorisches Museum,museum,popular
+KUL,Petronas Twin Towers,landmark,must_see
+KUL,Batu Caves,religious,must_see
+KUL,Jalan Alor,food,popular
+MLE,Grand Friday Mosque,religious,must_see
+MLE,National Museum Maldives,museum,popular
+MLE,Artificial Beach,beach,popular
+MNL,Intramuros,landmark,must_see
+MNL,Rizal Park,nature,popular
+MNL,National Museum of Fine Arts,museum,popular
+MAN,Manchester Museum,museum,must_see
+MAN,Old Trafford,landmark,popular
+MAN,Northern Quarter,nightlife,popular
+LNZ,Ars Electronica Center,museum,must_see
+LNZ,Lentos Art Museum,museum,popular
+LNZ,Postlingberg,landmark,popular
+CNX,Doi Suthep,religious,must_see
+CNX,Chiang Mai Night Bazaar,shopping,must_see
+CNX,Elephant Nature Park,nature,popular
+COK,Fort Kochi,landmark,must_see
+COK,Mattancherry Palace,museum,popular
+COK,Cherai Beach,beach,popular
+LAX,Griffith Observatory,landmark,must_see
+LAX,The Getty Center,museum,must_see
+LAX,Santa Monica Pier,beach,popular
+GRZ,Schlossberg,landmark,must_see
+GRZ,Kunsthaus Graz,museum,popular
+GRZ,Eggenberg Palace,landmark,popular
+HYD,Charminar,landmark,must_see
+HYD,Golconda Fort,landmark,must_see
+HYD,Ramoji Film City,theme_park,popular
+SEL,Gyeongbokgung,landmark,must_see
+SEL,N Seoul Tower,landmark,popular
+SEL,Myeongdong,shopping,popular
+GVA,Lake Geneva,nature,must_see
+GVA,St. Pierre Cathedral,religious,popular
+GVA,Patek Philippe Museum,museum,popular
+HAN,Hoan Kiem Lake,landmark,must_see
+HAN,Temple of Literature,religious,must_see
+HAN,Old Quarter,food,popular
+KCH,Semenggoh Nature Reserve,nature,must_see
+KCH,Sarawak Cultural Village,museum,popular
+KCH,Kuching Waterfront,landmark,popular
+FRA,Romer,landmark,must_see
+FRA,Stadel Museum,museum,must_see
+FRA,Palmengarten,nature,popular
+FUK,Ohori Park,nature,must_see
+FUK,Kushida Shrine,religious,popular
+FUK,Canal City Hakata,shopping,popular
+ROM,Colosseum,landmark,must_see
+ROM,Vatican Museums,museum,must_see
+ROM,Trevi Fountain,landmark,popular
+SPK,Odori Park,nature,must_see
+SPK,Sapporo Clock Tower,landmark,popular
+SPK,Susukino,nightlife,popular
+DVO,Philippine Eagle Center,nature,must_see
+DVO,People's Park,nature,popular
+DVO,Roxas Night Market,food,popular
+DXB,Burj Khalifa,landmark,must_see
+DXB,Dubai Mall,shopping,must_see
+DXB,Jumeirah Mosque,religious,popular
+NYC,Statue of Liberty,landmark,must_see
+NYC,Metropolitan Museum of Art,museum,must_see
+NYC,Times Square,nightlife,popular
+KTM,Swayambhunath,religious,must_see
+KTM,Pashupatinath Temple,religious,must_see
+KTM,Durbar Square,landmark,popular
+LGK,Sky Bridge,landmark,must_see
+LGK,Pantai Cenang,beach,must_see
+LGK,Kilim Geoforest Park,nature,popular
+IST,Hagia Sophia,landmark,must_see
+IST,Blue Mosque,religious,must_see
+IST,Grand Bazaar,shopping,popular
+DEL,Qutub Minar,landmark,must_see
+DEL,India Gate,landmark,popular
+DEL,Humayun's Tomb,landmark,popular
+BLR,Lalbagh Botanical Garden,nature,must_see
+BLR,Bangalore Palace,landmark,popular
+BLR,Cubbon Park,nature,popular
+BCN,Sagrada Familia,religious,must_see
+BCN,Park Guell,landmark,must_see
+BCN,La Boqueria,food,popular
+PKU,An-Nur Great Mosque,religious,must_see
+PKU,Siak Bridge,landmark,popular
+PKU,Sang Nila Utama Museum,museum,popular
+CMB,Gangaramaya Temple,religious,must_see
+CMB,Galle Face Green,landmark,popular
+CMB,National Museum of Colombo,museum,popular
+CAN,Canton Tower,landmark,must_see
+CAN,Chen Clan Ancestral Hall,museum,popular
+CAN,Shamian Island,landmark,popular
+CCU,Victoria Memorial,museum,must_see
+CCU,Howrah Bridge,landmark,must_see
+CCU,Dakshineswar Kali Temple,religious,popular
+BRU,Grand Place,landmark,must_see
+BRU,Atomium,landmark,must_see
+BRU,Magritte Museum,museum,popular
+CKG,Hongya Cave,landmark,must_see
+CKG,Ciqikou Ancient Town,landmark,popular
+CKG,Three Gorges Museum,museum,popular
+CEB,Magellan's Cross,landmark,must_see
+CEB,Basilica Minore del Santo Nino,religious,must_see
+CEB,Temple of Leah,landmark,popular
+AMD,Sabarmati Ashram,museum,must_see
+AMD,Adalaj Stepwell,landmark,popular
+AMD,Akshardham,religious,popular
+AMI,Mount Rinjani,nature,must_see
+AMI,Senggigi Beach,beach,popular
+AMI,Islamic Center NTB,religious,popular
+ATH,Acropolis of Athens,landmark,must_see
+ATH,Acropolis Museum,museum,must_see
+ATH,Plaka,food,popular
+ADL,Adelaide Central Market,food,must_see
+ADL,Glenelg Beach,beach,popular
+ADL,Adelaide Botanic Garden,nature,popular
+AKL,Sky Tower,landmark,must_see
+AKL,Auckland War Memorial Museum,museum,popular
+AKL,Waiheke Island,nature,popular
+MOW,Red Square,landmark,must_see
+MOW,The Kremlin,landmark,must_see
+MOW,Tretyakov Gallery,museum,popular
+CHC,Botanic Gardens,nature,must_see
+CHC,Canterbury Museum,museum,popular
+CHC,International Antarctic Centre,museum,popular
+RGN,Shwedagon Pagoda,religious,must_see
+RGN,Sule Pagoda,religious,popular
+RGN,Bogyoke Aung San Market,shopping,popular
+CPH,Tivoli Gardens,theme_park,must_see
+CPH,Nyhavn,landmark,must_see
+CPH,Rosenborg Castle,landmark,popular
+JNB,Apartheid Museum,museum,must_see
+JNB,Constitution Hill,museum,popular
+JNB,Maboneng Precinct,nightlife,popular
+BKI,Mount Kinabalu,nature,must_see
+BKI,Tanjung Aru Beach,beach,popular
+BKI,Gaya Street Sunday Market,food,popular
+JED,Al-Balad,landmark,must_see
+JED,Floating Mosque,religious,popular
+JED,Jeddah Corniche,landmark,popular
+HAK,Holiday Beach,beach,must_see
+HAK,Qilou Old Street,landmark,popular
+HAK,Hainan Museum,museum,popular
+HDY,Kim Yong Market,shopping,must_see
+HDY,Hat Yai Municipal Park,nature,popular
+HDY,Wat Hat Yai Nai,religious,popular
+CNS,Great Barrier Reef,nature,must_see
+CNS,Esplanade Lagoon,nature,popular
+CNS,Kuranda Scenic Railway,landmark,popular
+ATQ,Golden Temple,religious,must_see
+ATQ,Jallianwala Bagh,landmark,must_see
+ATQ,Partition Museum,museum,popular
+IPH,Kellie's Castle,landmark,must_see
+IPH,Concubine Lane,food,popular
+IPH,Sam Poh Tong Temple,religious,popular
+KBV,Railay Beach,beach,must_see
+KBV,Tiger Cave Temple,religious,must_see
+KBV,Hong Islands,nature,popular
+KUA,Teluk Cempedak,beach,must_see
+KUA,Sultan Ahmad Shah State Mosque,religious,popular
+KUA,East Coast Mall,shopping,popular
+NKG,Sun Yat-sen Mausoleum,landmark,must_see
+NKG,Confucius Temple,religious,popular
+NKG,Nanjing Museum,museum,popular
+OOL,Surfers Paradise Beach,beach,must_see
+OOL,Warner Bros. Movie World,theme_park,must_see
+OOL,Currumbin Wildlife Sanctuary,nature,popular
+MFM,Ruins of Saint Paul's,landmark,must_see
+MFM,Senado Square,landmark,must_see
+MFM,A-Ma Temple,religious,popular
+SHE,Mukden Palace,museum,must_see
+SHE,Zhaoling Tomb,nature,popular
+SHE,Liaoning Provincial Museum,museum,popular
+SRG,Lawang Sewu,landmark,must_see
+SRG,Sam Poo Kong,religious,popular
+SRG,Kota Lama,landmark,popular
+PUS,Haeundae Beach,beach,must_see
+PUS,Haedong Yonggungsa,religious,must_see
+PUS,Gamcheon Culture Village,landmark,popular
+TSN,Ancient Culture Street,landmark,must_see
+TSN,Tianjin Eye,landmark,popular
+TSN,Tianjin Museum,museum,popular
+CRK,Mount Pinatubo,nature,must_see
+CRK,Nayong Pilipino Clark,museum,popular
+CRK,Aqua Planet,theme_park,popular
+SIA,Terracotta Army,museum,must_see
+SIA,Giant Wild Goose Pagoda,religious,must_see
+SIA,Muslim Quarter,food,popular
+WUH,Yellow Crane Tower,landmark,must_see
+WUH,East Lake,nature,popular
+WUH,Hubei Provincial Museum,museum,popular
+BER,Brandenburg Gate,landmark,must_see
+BER,Museum Island,museum,must_see
+BER,East Side Gallery,landmark,popular
+MAA,Marina Beach,beach,must_see
+MAA,Kapaleeshwarar Temple,religious,popular
+MAA,Government Museum,museum,popular
+MES,Maimun Palace,landmark,must_see
+MES,Tjong A Fie Mansion,museum,popular
+MES,Masjid Raya Al-Mashun,religious,popular
+TRZ,Sri Ranganathaswamy Temple,religious,must_see
+TRZ,Rockfort Temple,landmark,popular
+TRZ,Kallanai Dam,landmark,popular
+BDO,Kawah Putih,nature,must_see
+BDO,Braga Street,food,popular
+BDO,Saung Angklung Udjo,museum,popular
+VTE,Pha That Luang,religious,must_see
+VTE,Patuxai,landmark,must_see
+VTE,Buddha Park,religious,popular
+CJU,Seongsan Ilchulbong,nature,must_see
+CJU,Hallasan,nature,must_see
+CJU,Manjanggul Cave,nature,popular
+OSA,Osaka Castle,landmark,must_see
+OSA,Dotonbori,food,must_see
+OSA,Universal Studios Japan,theme_park,popular
+MUC,Marienplatz,landmark,must_see
+MUC,Nymphenburg Palace,landmark,popular
+MUC,Deutsches Museum,museum,popular
+INN,Golden Roof,landmark,must_see
+INN,Nordkette,nature,must_see
+INN,Ambras Castle,landmark,popular
+ZRH,Lindenhof,landmark,must_see
+ZRH,Kunsthaus Zurich,museum,popular
+ZRH,Uetliberg,nature,popular
+MDL,Mandalay Palace,landmark,must_see
+MDL,Mahamuni Buddha Temple,religious,must_see
+MDL,U Bein Bridge,landmark,popular
+PAR,Eiffel Tower,landmark,must_see
+PAR,Louvre Museum,museum,must_see
+PAR,Notre-Dame Cathedral,religious,popular
+AMS,Rijksmuseum,museum,must_see
+AMS,Anne Frank House,museum,must_see
+AMS,Jordaan,food,popular
+PER,Kings Park,nature,must_see
+PER,Cottesloe Beach,beach,popular
+PER,Elizabeth Quay,landmark,popular
+MEL,Federation Square,landmark,must_see
+MEL,Queen Victoria Market,food,must_see
+MEL,St Kilda Beach,beach,popular
+MIL,Duomo di Milano,religious,must_see
+MIL,Galleria Vittorio Emanuele II,shopping,must_see
+MIL,Sforza Castle,landmark,popular
+CGO,Shaolin Temple,religious,must_see
+CGO,Henan Museum,museum,popular
+CGO,Erqi Memorial Tower,landmark,popular
+KHN,Pavilion of Prince Teng,landmark,must_see
+KHN,Jiangxi Provincial Museum,museum,popular
+KHN,Qingshan Lake,nature,popular
+NNG,Qingxiu Mountain,nature,must_see
+NNG,Nanning Museum,museum,popular
+NNG,Three Streets and Two Alleys,landmark,popular
+TNA,Baotu Spring,nature,must_see
+TNA,Daming Lake,nature,popular
+TNA,Shandong Museum,museum,popular
+TAO,Zhanqiao Pier,landmark,must_see
+TAO,Laoshan,nature,must_see
+TAO,Qingdao Beer Museum,museum,popular
+DRW,Mindil Beach,beach,must_see
+DRW,Waterfront Precinct,landmark,popular
+DRW,Museum and Art Gallery of the Northern Territory,museum,popular
+BPN,Melawai Beach,beach,must_see
+BPN,Manggar Segarasari Beach,beach,popular
+BPN,Bekapai Park,nature,popular
+UPG,Fort Rotterdam,landmark,must_see
+UPG,Losari Beach,beach,must_see
+UPG,Trans Studio Makassar,theme_park,popular
+HKT,Big Buddha,religious,must_see
+HKT,Patong Beach,beach,must_see
+HKT,Old Phuket Town,landmark,popular
+SFO,Golden Gate Bridge,landmark,must_see
+SFO,Alcatraz Island,museum,must_see
+SFO,Fisherman's Wharf,food,popular
+FOC,Sanfang Qixiang,landmark,must_see
+FOC,Gushan,nature,popular
+FOC,Fujian Museum,museum,popular
+NGB,Tianyi Pavilion,museum,must_see
+NGB,Dongqian Lake,nature,popular
+NGB,Ningbo Old Bund,landmark,popular
+BRS,Clifton Suspension Bridge,landmark,must_see
+BRS,SS Great Britain,museum,popular
+BRS,Bristol Museum and Art Gallery,museum,popular
+CWL,Cardiff Castle,landmark,must_see
+CWL,St Fagans National Museum of History,museum,popular
+CWL,Cardiff Bay,landmark,popular
+OKA,Shurijo Castle,landmark,must_see
+OKA,Kokusai Dori,shopping,popular
+OKA,Okinawa Churaumi Aquarium,museum,popular
+SWA,Shantou Small Park,landmark,must_see
+SWA,Nan'ao Island,nature,popular
+SWA,Chaoshan History and Culture Expo Center,museum,popular
+HGH,West Lake,nature,must_see
+HGH,Lingyin Temple,religious,must_see
+HGH,Leifeng Pagoda,landmark,popular
+PSR,Ponte del Mare,landmark,must_see
+PSR,Aurum Museum,museum,popular
+PSR,Pescara Vecchia,food,popular
+TPS,Trapani Old Town,landmark,must_see
+TPS,San Lorenzo Cathedral,religious,popular
+TPS,Museo Regionale Agostino Pepoli,museum,popular
+JOG,Borobudur,landmark,must_see
+JOG,Prambanan,religious,must_see
+JOG,Malioboro Street,shopping,popular
+OLB,Costa Smeralda,beach,must_see
+OLB,Tavolara,nature,popular
+OLB,Basilica of San Simplicio,religious,popular
+AHO,Neptune's Grotto,nature,must_see
+AHO,Alghero Old Town,landmark,popular
+AHO,Maria Pia Beach,beach,popular
+CJB,Marudhamalai Temple,religious,must_see
+CJB,Perur Pateeswarar Temple,religious,popular
+CJB,GD Car Museum,museum,popular
+VTZ,Kailasagiri,nature,must_see
+VTZ,Ramakrishna Beach,beach,popular
+VTZ,INS Kurusura Submarine Museum,museum,popular
+MYY,Canada Hill,landmark,must_see
+MYY,Tusan Beach,beach,popular
+MYY,Coco Cabana,food,popular
+CTU,Chengdu Research Base of Giant Panda Breeding,nature,must_see
+CTU,Wuhou Shrine,religious,popular
+CTU,Jinli Ancient Street,food,popular
+REP,Angkor Wat,landmark,must_see
+REP,Ta Prohm,landmark,must_see
+REP,Pub Street,nightlife,popular
+AOR,Paddy Museum,museum,must_see
+AOR,Zahir Mosque,religious,popular
+AOR,Alor Setar Tower,landmark,popular
+JHB,Legoland Malaysia,theme_park,must_see
+JHB,Sultan Abu Bakar State Mosque,religious,popular
+JHB,Johor Bahru City Square,shopping,popular
+TGG,Crystal Mosque,religious,must_see
+TGG,Pasar Payang,shopping,popular
+TGG,Batu Buruk Beach,beach,popular
+BTU,Tanjung Batu Beach,beach,must_see
+BTU,Similajau National Park,nature,popular
+BTU,Wisma Bintulu,landmark,popular
+SBW,Sibu Central Market,food,must_see
+SBW,Tua Pek Kong Temple,religious,popular
+SBW,Sibu Heritage Centre,museum,popular
+LBU,Labuan Marine Museum,museum,must_see
+LBU,Peace Park,landmark,popular
+LBU,Papan Island,nature,popular
+SDK,Sepilok Orangutan Rehabilitation Centre,nature,must_see
+SDK,Agnes Keith House,museum,popular
+SDK,Labuk Bay Proboscis Monkey Sanctuary,nature,popular
+TWU,Tawau Hills Park,nature,must_see
+TWU,Al-Kauthar Mosque,religious,popular
+TWU,Tawau Tanjung Market,food,popular
+MKZ,A Famosa,landmark,must_see
+MKZ,Jonker Street,food,must_see
+MKZ,Stadthuys,museum,popular
+KJT,Kertajati Aerocity View Point,landmark,popular
+KJT,Talaga Herang,nature,popular
+KJT,Nyi Rambut Kasih Park,nature,hidden_gem
+PDG,Siti Nurbaya Bridge,landmark,must_see
+PDG,Air Manis Beach,beach,popular
+PDG,Adityawarman Museum,museum,popular
+PQC,Sao Beach,beach,must_see
+PQC,Phu Quoc Night Market,food,must_see
+PQC,Phu Quoc Prison Museum,museum,popular
+ILO,Molo Church,religious,must_see
+ILO,Camina Balay nga Bato,museum,popular
+ILO,Esplanade Iloilo,landmark,popular
+LBJ,Komodo National Park,nature,must_see
+LBJ,Padar Island,nature,must_see
+LBJ,Batu Cermin Cave,nature,popular
+KBR,Siti Khadijah Market,food,must_see
+KBR,Istana Jahar,museum,popular
+KBR,Muhammadi Mosque,religious,popular
+DAD,My Khe Beach,beach,must_see
+DAD,Marble Mountains,nature,must_see
+DAD,Dragon Bridge,landmark,popular
+CEI,White Temple,religious,must_see
+CEI,Blue Temple,religious,popular
+CEI,Singha Park,nature,popular

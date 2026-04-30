@@ -1,6 +1,7 @@
 """Telegram webhook handler orchestration adapter."""
 
 import logging
+import re
 from typing import Any
 from datetime import datetime
 
@@ -104,9 +105,12 @@ class TelegramWebhookHandler:
             
             case "/general":
                 nlq_request = self._mapper.map(message.text[offset + length:])
-                # orchestration_response = self._orchestrator.handle_question(nlq_request)
-                # telegram_text = self._formatter.format(orchestration_response)
-                return self._deliver_message(message.chat.id, nlq_request.request_id, "Oops, work is in progress to get this command up\\!")
+                nlq_request.request_type = "general"
+                orchestration_response = self._orchestrator.handle_question(nlq_request)
+                #telegram_text = self._formatter.format(orchestration_response)
+                return self._deliver_message(message.chat.id,
+                        nlq_request.request_id,
+                        self._escape(orchestration_response.data['answer']) if isinstance(orchestration_response, SuccessResponse) else self._escape(orchestration_response.error.message))
             
             case "/help":
                 help_text = (f"Hello {message.from_user.first_name if message.from_user else ''}\\!\n\n"
@@ -166,3 +170,8 @@ class TelegramWebhookHandler:
             request_id=request_id,
             data={"chat_id": chat_id, "delivered": True},
         )
+        
+    def _escape(self, text: str) -> str:
+        escape_chars = r'_*[]()~`>#+-=|{}.!'
+       
+        return re.sub(f'([{re.escape(escape_chars)}])', r'\\\1', text)
