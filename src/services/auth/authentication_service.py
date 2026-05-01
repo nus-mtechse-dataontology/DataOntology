@@ -18,7 +18,7 @@ class AuthenticationService:
 		self._jwt_handler = jwt_handler
 		self._log = logging.getLogger("data_ontology")
 	
-	def authenticate_user(self, username: str, password: str) -> dict[str, str | int]:
+	def authenticate_user(self, username: str, password: str) -> dict[str, bool | str] | dict[str, bool | str | None]:
 		"""
 		Authenticates User and return JWT token if username and password is valid
 

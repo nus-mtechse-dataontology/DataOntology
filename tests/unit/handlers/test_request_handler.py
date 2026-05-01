@@ -23,7 +23,7 @@ def test_request_handler_processes_request_type():
     nxt = _make_next()
     handler.set_next(nxt)
 
-    request = NLQRequest(request_id="req-1", question="cheapest flight?", request_type="request")
+    request = NLQRequest(request_id="req-1", question="cheapest flight?", request_type="flight")
     handler.handle(request)
 
     assert request.request_type == "prompt"
@@ -34,7 +34,7 @@ def test_request_handler_assigns_request_id():
     nxt = _make_next()
     handler.set_next(nxt)
 
-    request = NLQRequest(request_id="unknown", question="q", request_type="request")
+    request = NLQRequest(request_id="unknown", question="q", request_type="general")
     handler.handle(request)
 
     assert request.request_id != "unknown"
@@ -46,7 +46,7 @@ def test_request_handler_delegates_to_next_handler():
     nxt = _make_next()
     handler.set_next(nxt)
 
-    request = NLQRequest(request_id="req-1", question="q", request_type="request")
+    request = NLQRequest(request_id="req-1", question="q", request_type="general")
     handler.handle(request)
 
     nxt.handle.assert_called_once_with(request)
@@ -71,6 +71,6 @@ def test_request_handler_returns_next_handler_result():
     nxt = _make_next(return_value=expected)
     handler.set_next(nxt)
 
-    result = handler.handle(NLQRequest(request_id="req-1", question="q", request_type="request"))
+    result = handler.handle(NLQRequest(request_id="req-1", question="q", request_type="general"))
 
     assert result is expected

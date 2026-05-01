@@ -1,0 +1,873 @@
+f_city_code,f_city_name,f_country_code
+SIN,Singapore,SG
+HKG,Hong Kong,HK
+LON,London,GB
+YMQ,Montreal,CA
+YVR,Vancouver,CA
+XMN,Xiamen,CN
+YEA,Edmonton,CA
+SUB,Surabaya,ID
+SNN,Shannon,IE
+SLC,Salt Lake City,US
+SAN,San Diego,US
+STL,St Louis,US
+SGD,Sonderborg,DK
+SGN,Ho Chi Minh City,VN
+TRV,Thiruvananthapuram,IN
+TLS,Toulouse,FR
+TPE,Taipei,TW
+SVG,Stavanger,NO
+SYD,Sydney,AU
+SYR,Syracuse,US
+SZG,Salzburg,AT
+SZX,Shenzhen,CN
+PHX,Phoenix,US
+PMR,Palmerston North,NZ
+PEN,Penang,MY
+CHI,Chicago,US
+ORK,Cork,IE
+PDX,Portland,US
+BJS,Beijing,CN
+NCE,Nice,FR
+NCL,Newcastle,GB
+NGO,Nagoya,JP
+NPE,Napier,NZ
+NPL,New Plymouth,NZ
+TYO,Tokyo,JP
+SAT,San Antonio,US
+RUH,Riyadh,SA
+RNN,Bornholm,DK
+ROT,Rotorua,NZ
+SHA,Shanghai,CN
+BKK,Bangkok,TH
+BNE,Brisbane,AU
+BOI,Boise,US
+BOM,Mumbai,IN
+BWN,Bandar Seri Begawan,BN
+CAI,Cairo,EG
+JKT,Jakarta,ID
+COS,Colorado Springs,US
+MSP,Minneapolis,US
+CPT,Cape Town,ZA
+CVG,Cincinnati,US
+DAC,Dhaka,BD
+DFW,Dallas,US
+DPS,Denpasar Bali,ID
+MIA,Miami,US
+GOT,Gothenburg,SE
+WAS,Washington,US
+MDC,Manado,ID
+PLM,Palembang,ID
+PNH,Phnom Penh,KH
+HOU,Houston,US
+DUS,Dusseldorf,DE
+PIT,Pittsburgh,US
+PLZ,Port Elizabeth,ZA
+KLU,Klagenfurt,AT
+SEA,Seattle,US
+ELS,East London,ZA
+VIE,Vienna,AT
+OSL,Oslo,NO
+TRG,Tauranga,NZ
+KUL,Kuala Lumpur,MY
+BIO,Bilbao,ES
+MLE,Male,MV
+MNL,Manila,PH
+BWI,Baltimore,US
+MAN,Manchester,GB
+LNZ,Linz,AT
+CNX,Chiang Mai,TH
+COK,Kochi,IN
+LAS,Las Vegas,US
+LAX,Los Angeles,US
+CTU,Chengdu,CN
+GRZ,Graz,AT
+HYD,Hyderabad,IN
+IBZ,Ibiza,ES
+SEL,Seoul,KR
+GVA,Geneva,CH
+BRN,Bern,CH
+HAN,Hanoi,VN
+FMO,Muenster,DE
+KCH,Kuching,MY
+FRA,Frankfurt,DE
+FUK,Fukuoka,JP
+KEL,Holtenau,DE
+ROM,Rome,IT
+DUB,Dublin,IE
+SPK,Sapporo,JP
+DUR,Durban,ZA
+DVO,Davao,PH
+DXB,Dubai,AE
+NYC,New York,US
+KTM,Kathmandu,NP
+DEN,Denver,US
+KWI,Kuwait,KW
+LGK,Langkawi,MY
+IST,Istanbul,TR
+STO,Stockholm,SE
+PMI,Palma de Mallorca,ES
+VLC,Valencia,ES
+AES,Aalesund,NO
+DEL,Delhi,IN
+BLR,Bengaluru,IN
+BCN,Barcelona,ES
+BFS,Belfast,GB
+BGO,Bergen,NO
+PKU,Pekanbaru,ID
+CLE,Cleveland,US
+CLT,Charlotte,US
+CMB,Colombo,LK
+CAN,Guangzhou,CN
+CCU,Kolkata,IN
+BOS,Boston,US
+BRU,Brussels,BE
+BSL,Basel,CH
+CKG,Chongqing,CN
+HAM,Hamburg,DE
+YYC,Calgary,CA
+YTO,Toronto,CA
+CEB,Cebu,PH
+FDH,Friedrichshafen,DE
+HAJ,Hanover,DE
+AMD,Ahmedabad,IN
+AMI,Lombok,ID
+ATH,Athens,GR
+ATL,Atlanta,US
+AUS,Austin,US
+ABQ,Albuquerque,US
+ABZ,Aberdeen,GB
+ADL,Adelaide,AU
+AKL,Auckland,NZ
+AAL,Aalborg,DK
+AAR,Aarhus,DK
+LEJ,Leipzig,DE
+NUE,Nuremberg,DE
+PAD,Paderborn,DE
+STR,Stuttgart,DE
+MOW,Moscow,RU
+DUD,Dunedin,NZ
+ZQN,Queenstown,NZ
+SAO,Sao Paulo,BR
+CHC,Christchurch,NZ
+IVC,Invercargill,NZ
+YOW,Ottawa,CA
+RGN,Yangon,MM
+NYT,Naypyidaw,MM
+CPH,Copenhagen,DK
+KRS,Kristiansand,NO
+JNB,Johannesburg,ZA
+BKI,Kota Kinabalu,MY
+REP,Siem Reap,KH
+AYT,Antalya,TR
+RIX,Riga,LV
+KHV,Khabarovsk,RU
+FLL,Fort Lauderdale,US
+JED,Jeddah,SA
+IDR,Indore,IN
+BLQ,Bologna,IT
+BME,Broome,AU
+ADA,Adana,TR
+AGP,Malaga,ES
+HAK,Haikou,CN
+HBA,Hobart,AU
+HDY,Hat Yai,TH
+HIJ,Hiroshima,JP
+BUH,Bucharest,RO
+CBR,Canberra,AU
+CFE,Clermont Ferrand,FR
+CFS,Coffs Harbour,AU
+CGN,Cologne,DE
+CNS,Cairns,AU
+CUN,Cancun,MX
+DMM,Dammam ,SA
+DTT,Detroit,US
+BNA,Nashville,US
+BOD,Bordeaux,FR
+BDQ,Vadodara,IN
+BEG,Belgrade,RS
+ASP,Alice Springs,AU
+ATQ,Amritsar,IN
+AYQ,Ayers Rock,AU
+BRI,Bari,IT
+IPH,Ipoh,MY
+ISA,Mount Isa,AU
+JAI,Jaipur,IN
+JAX,Jacksonville,US
+JOG,Yogyakarta,ID
+KBV,Krabi,TH
+KHH,Kaohsiung,TW
+KUA,Kuantan,MY
+MPL,Montpellier,FR
+MPM,Maputo,MZ
+MRU,Mauritius,MU
+NAN,Nadi,FJ
+NKG,Nanjing,CN
+NOU,Noumea,NC
+NTL,Newcastle,AU
+OOL,Gold Coast,AU
+ORF,Norfolk,US
+LST,Launceston,AU
+MCT,Muscat,OM
+MFM,Macau,MO
+MKY,Mackay,AU
+MLA,MALTA,MT
+RDU,Raleigh,US
+ROC,Rochester,US
+ROK,Rockhampton,AU
+SEZ,Mahe Island,SC
+SHE,Shenyang,CN
+SHV,Shreveport,US
+SRG,Semarang,ID
+TPA,Tampa,US
+PNQ,Pune,IN
+PSP,Palm Springs,US
+PUS,Busan,KR
+ZAG,Zagreb,HR
+PLQ,Palanga,LT
+TRS,Trieste,IT
+TSN,Tianjin,CN
+TSV,Townsville,AU
+USM,Koh Samui,TH
+VNS,Varanasi,IN
+VRN,Verona,IT
+WAW,Warsaw,PL
+RAR,Rarotonga Island,CK
+ABX,Albury ,AU
+BNK,Ballina ,AU
+HVB,Hervey Bay,AU
+MCY,Sunshine Coast,AU
+PQQ,Port Macquarie,AU
+MQL,Mildura,AU
+PPP,Proserpine,AU
+PHE,Port Hedland,AU
+ZNE,Newman,AU
+ADD,Addis Ababa,ET
+ANC,Anchorage,US
+CRK,Angeles,PH
+BAK,Baku,AZ
+APW,Apia,WS
+OPO,Porto,PT
+SCL,Santiago,CL
+ASU,Asuncion,PY
+CWB,Curitiba,BR
+GYN,Goiania,BR
+IGU,Foz Do Iguacu,BR
+TFN,Tenerife,ES
+GZT,Gaziantep,TR
+KYA,Konya,TR
+DLM,Dalaman,TR
+ASR,Kayseri,TR
+SZF,Samsun,TR
+TZX,Trabzon,TR
+DNZ,Denizli,TR
+BXN,Bodrum,TR
+HNL,Honolulu,US
+SIA,Xi'an,CN
+BBI,Bhubaneshwar,IN
+WUH,Wuhan,CN
+BER,Berlin,DE
+RIO,Rio De Janeiro,BR
+BSB,Brasilia,BR
+BHO,Bhopal,IN
+MAA,Chennai,IN
+MES,Medan,ID
+TRZ,Tiruchirappalli,IN
+AUA,Oranjestad,AW
+MSY,New Orleans,US
+PWM,Portland,US
+BHE,Blenheim,NZ
+GIS,Gisborne,NZ
+KKE,Kerikeri,NZ
+PPQ,Paraparaumu,NZ
+TUO,Taupo,NZ
+WAG,Wanganui,NZ
+EXT,Exeter,GB
+ABJ,Abidjan,CI
+ACC,Accra,GH
+BUE,Buenos Aires,AR
+BDO,Bandung,ID
+CSX,Changsha,CN
+KMQ,Komatsu,JP
+TOY,Toyama,JP
+LUX,Luxembourg,LU
+GDN,Gdansk,PL
+POZ,Poznan,PL
+WRO,Wroclaw,PL
+ANK,Ankara,TR
+BDS,Brindisi,IT
+CEK,Chelyabinsk,RU
+CND,Constanta,RO
+IZM,Izmir,TR
+KGI,Kalgoorlie,AU
+REK,Reykjavik,IS
+OAK,Oakland,US
+KUF,Samara,RU
+SJJ,Sarajevo,BA
+TBU,Nuku'alofa,TO
+TKU,Turku,FI
+VTE,Vientiane,LA
+GOI,Goa,IN
+CJU,Jeju,KR
+KTA,Karratha,AU
+SJC,San Jose,US
+HIR,Honiara,SB
+GLT,Gladstone,AU
+GOA,Genoa,IT
+GRJ,George,ZA
+FLR,Florence,IT
+KMG,Kunming,CN
+SXM,Saint Maarten,SX
+UFA,Ufa,RU
+VVO,Vladivostok,RU
+UUS,Yuzhno Sakhalinsk,RU
+BDB,Bundaberg,AU
+GET,Geraldton,AU
+KNX,Kununurra,AU
+TMW,Tamworth,AU
+OSA,Osaka,JP
+MUC,Munich,DE
+KRP,Karup,DK
+GLA,Glasgow,GB
+MAD,Madrid,ES
+TRD,Trondheim,NO
+MRS,Marseille,FR
+LYS,Lyon,FR
+INN,Innsbruck,AT
+ZRH,Zurich,CH
+NSN,Nelson,NZ
+MDL,Mandalay City,MM
+KLO,Kalibo Boracay,PH
+BFN,Bloemfontein,ZA
+VCE,Venice,IT
+NAP,Naples,IT
+PAR,Paris,FR
+AMS,Amsterdam,NL
+PER,Perth,AU
+MEL,Melbourne,AU
+MIL,Milan,IT
+ALG,Algiers,DZ
+DAR,Dar Es Salaam,TZ
+DBV,Dubrovnik,HR
+BTR,Baton Rouge,US
+BTV,Burlington,US
+BZG,Bydgoszcz,PL
+CGO,Zhengzhou,CN
+CNJ,Cloncurry,AU
+COR,Cordoba,AR
+CRP,Corpus Christi,US
+GAU,Guwahati,IN
+GWT,Westerland,DE
+HDF,Heringsdorf,DE
+GPT,Gulfport,US
+GRQ,Groningen,NL
+EBB,Entebbe,UG
+EMD,Emerald,AU
+FKB,Karlsruhe,DE
+KLR,Kalmar,SE
+KRK,Krakow,PL
+KRN,Kiruna,SE
+KRR,Krasnodar,RU
+KWE,Guiyang,CN
+KZN,Kazan,RU
+INV,Inverness,GB
+IOM,Isle Of Man,GB
+IXB,Bagdogra,IN
+IXZ,Port Blair,IN
+JAN,JACKSON,US
+JER,Jersey,GB
+JJN,Quanzhou,CN
+JRO,Kilimanjaro,TZ
+KGL,Kigali,RW
+KHN,Nanchang,CN
+MMH,Mammoth Lakes,US
+MOB,Mobile,US
+MOV,Moranbah,AU
+NDJ,Ndjamena,TD
+NNG,Nanning,CN
+NQY,Newquay,GB
+MVD,Montevideo,UY
+LGB,Long Beach,US
+LJU,Ljubljana,SI
+LLA,Lulea,SE
+LPQ,Luang Prabang,LA
+LRD,Laredo,US
+LUZ,Lublin,PL
+MAF,Midland,US
+MBA,Mombasa,KE
+MBJ,Montego Bay,JM
+MFE,McAllen,US
+PVR,Puerto Vallarta,MX
+RAJ,Rajkot,IN
+RNB,Ronneby/Karlskrona,SE
+NWI,Norwich,GB
+OSD,Are Ostersund,SE
+OUA,Ouagadougou,BF
+PBO,Paraburdoo,AU
+PEE,Perm,RU
+PLS,Providenciales Island,TC
+PNR,Pointe-Noire,CG
+PUJ,Punta Cana,DO
+SUN,Hailey,US
+SVX,Ekaterinburg,RU
+SXR,Srinagar,IN
+TNA,Jinan,CN
+ROV,Rostov,RU
+FMY,Fort Myers,US
+RZE,Rzeszow,PL
+SDL,Sundsvall-Harnosand,SE
+SDQ,Santo Domingo,DO
+SFT,Skelleftea,SE
+SJD,San Jose Del Cabo,MX
+SJU,San Juan,PR
+SOU,Southampton,GB
+SPU,Split,HR
+STI,Santiago,DO
+STS,Santa Rosa,US
+STV,Surat,IN
+UME,Umea,SE
+URC,Urumqi,CN
+VBY,Visby,SE
+VLI,Port Vila,VU
+WNZ,Wenzhou,CN
+WUX,Wuxi,CN
+TAO,Qingdao,CN
+DRW,Darwin,AU
+BPN,Balikpapan,ID
+UPG,Makassar,ID
+BLL,Billund,DK
+BRE,Bremen,DE
+WRE,Whangarei,NZ
+HKT,Phuket,TH
+EDI,Edinburgh,GB
+DTM,Dortmund,DE
+IXC,Chandigarh,IN
+OGG,Kahului,US
+LUG,Lugano,CH
+WLG,Wellington,NZ
+SFO,San Francisco,US
+DRS,Dresden,DE
+HLZ,Hamilton,NZ
+BES,Brest,FR
+DLC,Dalian,CN
+AOI,Ancona,IT
+CAG,Cagliari,IT
+TRN,Turin,IT
+FOC,Fuzhou,CN
+IXL,Leh,IN
+NGB,Ningbo,CN
+REG,Reggio,IT
+BRS,Bristol,GB
+CWL,Cardiff,GB
+OXF,Oxford,GB
+PHL,Philadelphia,US
+OKA,Okinawa,JP
+BUF,Buffalo,US
+ORL,Orlando,US
+USN,Ulsan,KR
+PVD,Providence,US
+IXJ,Jammu,IN
+LKO,Lucknow,IN
+BHX,Birmingham,GB
+DSA,Doncaster/Sheffield,GB
+LED,St Petersburg,RU
+SWA,Shantou,CN
+VNO,Vilnius,LT
+SKG,Thessaloniki,GR
+LIS,Lisbon,PT
+KTW,Katowice,PL
+HTI,Hamilton Island,AU
+NBO,Nairobi,KE
+VFA,Victoria Falls,ZW
+PMO,Palermo,IT
+TLV,Tel Aviv,IL
+ULN,Ulaanbaatar,MN
+IND,Indianapolis,US
+SUF,Lamezia Terme,IT
+POM,Port Moresby,PG
+HGH,Hangzhou,CN
+HRB,Harbin,CN
+PBI,West Palm Beach,US
+TUL,Tulsa,US
+SRQ,Sarasota/Bradenton,US
+FAT,Fresno,US
+AUH,Abu Dhabi,AE
+YHZ,Halifax,CA
+MKE,Milwaukee,US
+BZE,Belize,BZ
+TUS,Tucson Az,US
+ALC,Alicante,ES
+HAU,Haugesund,NO
+HER,Heraklion,GR
+CMH,Columbus,US
+DOH,Doha,QA
+DSM,Des Moines,US
+ICT,Wichita,US
+LHE,Lahore,PK
+IXM,Madurai,IN
+JTR,Thira,GR
+KHI,Karachi,PK
+KKN,Kirkenes,NO
+KOJ,Kagoshima,JP
+KRT,Khartoum,SD
+LAD,Luanda,AO
+HRE,Harare,ZW
+MSN,Madison,US
+MYJ,Matsuyama,JP
+NLA,Ndola ,ZM
+LPA,Gran Canaria,ES
+LUN,Lusaka,ZM
+LXR,Luxor,EG
+MKC,Kansas City,US
+MED,Madinah,SA
+MEM,Memphis,US
+RHO,Rhodes,GR
+RIC,Richmond,US
+RNO,Reno,US
+SBA,Santa Barbara,US
+SJO,San Jose,CR
+SVQ,Sevilla,ES
+TNR,Antananrivo,MG
+PPT,Papeete,PF
+YWG,Winnipeg,CA
+YYT,St Johns,CA
+WDH,Windhoek,NA
+YQR,Regina,CA
+FAO,Faro,PT
+YIH,Yichang,CN
+CCJ,Calicut,IN
+ASM,Asmara,ET
+BDA,Bermuda,BM
+BEL,Belem,BR
+BEY,Beirut,LB
+BGA,Bucaramanga,CO
+BGI,Barbados,BB
+BIL,Billings,US
+BJR,Bahar Dar,ET
+BKO,Bamako,VC
+ASW,Aswan,EG
+AVL,Asheville Nc,US
+AXM,Armenia,CO
+AXT,Akita,JP
+AXU,Axum,ET
+BAQ,Barranquilla,CO
+ABV,Abuja,NG
+ADZ,San Andres Island,CO
+AER,Adler/Sochi,RU
+ALA,Almaty,KZ
+AMM,Amman,JO
+BGW,Baghdad,IQ
+CGQ,Changchun,CN
+IFN,Esfahan,IR
+SYX,Sanya,CN
+HKD,Hakodate,JP
+SAW,Sabiha Gokcen,TR
+KMJ,Kumamoto,JP
+IEV,Kiev,UA
+LIH,Kauai Island,US
+MSQ,Minsk,BY
+MMY,Miyako Jima,JP
+ONT,Ontario,US
+SAC,Sacramento,US
+SPN,Saipan,MP
+SYZ,Shiraz,IR
+SKP,Skopje,MK
+ISB,Islamabad,PK
+IXU,Aurangabad,IN
+NTE,Nantes,FR
+YNT,Yantai,CN
+GRR,Grand Rapids,US
+GUA,Guatemala City,GT
+GUM,Guam,GU
+GBE,Gaborone,BW
+EUG,Eugene,US
+CUR,Curacao,CW
+TYN,Taiyuan,CN
+TAS,Tashkent,UZ
+TBS,Tbilisi,GE
+EVN,Yerevan,AM
+CTG,Cartagena,CO
+CUZ,Cuzco,PE
+CZX,Changzhou,CN
+DCY,Daocheng,CN
+DKR,Dakar,SN
+DLA,Douala,CM
+DLU,Dali City,CN
+BLZ,BLANTYRE,MW
+BUR,Burbank Ca,US
+BUS,Batumi,GE
+BZN,Bozeman,US
+CCS,Caracas,VE
+CHS,Charleston,US
+CID,Cedar Rapids,US
+CLJ,Cluj,RO
+CLO,Cali,CO
+CAS,Casablanca,MA
+BHZ,Belo Horizonte,BR
+GAY,Gaya,IN
+GCM,Grand Cayman Island,KY
+GDQ,Gondar,ET
+GEG,Spokane,US
+GYE,Guayaquil,EC
+YVA,Moroni,KM
+ALY,Alexandria,EG
+HET,Hohhot,CN
+HFE,Hefei,CN
+HJR,Khajuraho,IN
+HLD,Hailar,CN
+HRG,Hurghada,EG
+HRK,Kharkov,UA
+GPS,Galapagos Islands,EC
+DYG,Dayong,CN
+DYU,Dushanbe,TJ
+EBL,ERBIL,IQ
+ECN,Ercan,CY
+FAE,Faroe Islands,FO
+FLN,Florianopolis,BR
+FOR,Fortaleza,BR
+FRU,Bishkek,KG
+FSD,Sioux Falls,US
+KOA,Kona,US
+KSC,Kosice,SK
+KSU,Kristiansund,NO
+KWL,Guilin,CN
+LBV,Libreville,GA
+HSG,Saga,JP
+IKA,Imam Khomeini,IR
+IMF,Imphal,IN
+INC,Yinchuan,CN
+IOS,Ilheus,BR
+ISG,Ishigaki,JP
+ITO,Hilo,US
+IWK,Iwakuni,JP
+IXR,Ranchi,IN
+JIB,Djibouti,DJ
+JPA,Joao Pessoa,BR
+JUL,Juliaca,PE
+JUZ,Juzhou,CN
+KAN,kano,NG
+KCZ,Kochi,JP
+KHG,Kashi,CN
+KIN,Kingston,JM
+KIV,Chisinau,MD
+MOL,Molde,NO
+MQX,Mekele,ET
+NAS,Nassau,BS
+NAT,Natal,BR
+NAV,Nevsehir ,TR
+NIM,Niamey,NE
+YAO,Yaounde,CM
+NTG,Nantong,CN
+MTR,Monteria,CO
+LFW,Lome,TG
+LHW,Lanzhou,CN
+LIM,Lima,PE
+LIR,liberia City,CR
+LJG,LiJiang City,CN
+LLI,Lalibela,ET
+LOS,Lagos,NG
+LPB,La Paz,BO
+LVI,Livingstone,ZM
+LWO,Lvov,UA
+LXA,Lhasa,CN
+LYI,Linyi,CN
+LYR,Longyearbyen,NO
+MAO,Manaus,BR
+MDE,Medellin,CO
+MDT,OLMSTEAD STATE,US
+MFR,Medford,US
+MID,Merida,MX
+MIG,Mian Yang,CN
+PUY,Pula,HR
+RAI,Praia,CV
+RAK,Marrakech,MA
+REC,Recife,BR
+ROR,Koror,PW
+ODS,Odessa,UA
+OIT,Oita City,JP
+OKJ,Okayama City,JP
+ONJ,Odate,JP
+OZH,Zaporozhye,UA
+PAP,Port au Prince,HT
+PAT,Patna,IN
+PDL,Ponta Delgada,PT
+PEM,Puerto Maldonado,PE
+PNI,Pohnpei,FM
+POA,Porto Alegre,BR
+POP,Puerto Plata,DO
+POS,Port of Spain,TT
+PPN,Popayan,CO
+PRN,Pristina,RS
+PTY,Panama City,PA
+TAK,Takamatsu,JP
+TKK,Truk,TC
+TKS,Tokushima,JP
+NQZ,Astana,KZ
+TTJ,Tottori,JP
+TUN,Tunis,TN
+TXN,Tunxi,CN
+TYS,Knoxville,US
+UBJ,Yamaguchi-Ube,JP
+TGD,Podgorica,ME
+TIA,TIRANA,AL
+TIU,Timaru,NZ
+RPR,Raipur,IN
+RTB,Roatan,HN
+SAP,San Pedro Sula,HN
+SAV,Savannah,US
+SBZ,Sibiu,RO
+SCY,San Cristobal,EC
+SID,Sal,CV
+SMR,Santa Marta,CO
+SSA,Salvador,BR
+SSG,Malabo,GQ
+SSH,Sharm El Sheikh,EG
+YGJ,Yonago,JP
+YIN,Yining,CN
+YIW,Yiwu,CN
+YNJ,Yanji,CN
+UIO,Quito,EC
+SLU,St Lucia,LC
+VAR,Varna,BG
+SRZ,Santa Cruz,BO
+WXN,Wanxian,CN
+XAP,Chapeco,BR
+XFN,Xiangfan,CN
+XNN,Xining,CN
+YAP,Caroline Islands,FM
+YBP,Yibin,CN
+YCU,Yun Cheng,CN
+HAV,Havana,CU
+YTY,Yang Zhou,CN
+YYG,Charlottetown,CA
+ZAD,Zadar,HR
+ZHA,Zhanjiang,CN
+ZNZ,Zanzibar,TZ
+ZUH,Zhuhai,CN
+DNK,Dnipropetrovsk,UA
+KSA,Kosrae,FM
+NJF,Al Najaf,IQ
+NAG,Nagpur,IN
+MGA,Managua,NI
+SAL,San Salvador,SV
+YXE,Saskatoon,CA
+BDL,Windsor Locks,US
+JDH,Jodhpur,IN
+KMI,Miyazaki,JP
+FNC,Funchal,PT
+LCA,Larnaca,CY
+OMA,Omaha,US
+UDR,Udaipur,IN
+BAH,Bahrain,BH
+BOG,Bogota,CO
+PRG,Prague,CZ
+BUD,Budapest,HU
+LRT,Lorient,FR
+PUF,Pau,FR
+BIQ,Biarritz,FR
+PSR,Pescara,IT
+TPS,Trapani,IT
+BOO,Bodo,NO
+TOS,Tromso,NO
+AGH,Angelholm-Helsingborg,SE
+MMA,Malmo,SE
+HIA,Huai'an,CN
+SDR,Santander,ES
+SPC,Santa Cruz de la Palma,ES
+VGO,Vigo,ES
+VLL,Villadolid,ES
+ACE,Lanzarote,ES
+EAS,San Sebastian,ES
+FUE,Fuerteventura,ES
+GRX,Granada,ES
+LCG,A Coruna,ES
+LEI,Almeria,ES
+OVD,Oviedo Asturias,ES
+SCQ,Santiago de Compostela,ES
+XRY,Jerez,ES
+MAH,Menorca,ES
+TFS,Tenerife South,ES
+GDL,Guadalajara,MX
+HEL,Helsinki,FI
+HMO,Hermosillo,MX
+MEX,Mexico City,MX
+MTY,Monterrey,MX
+SOF,Sofia,BG
+TLL,Tallinn,EE
+OLB,Olbia,IT
+AHO,Alghero,IT
+AOJ,Aomori,JP
+NGS,Nagasaki,JP
+SDJ,Sendai,JP
+PSA,Pisa,IT
+CTA,Catania,IT
+EGE,Vail Eagle,US
+SNA,Orange County,US
+CJB,Coimbatore,IN
+VTZ,Visakhapatnam,IN
+TIR,Tirupati,IN
+MYY,Miri,MY
+DJE,Djerba,TN
+AOR,Alor Setar,MY
+JHB,Johor Bahru,MY
+TGG,Kuala Terengganu,MY
+BTU,Bintulu,MY
+SBW,Sibu,MY
+LBU,Labuan,MY
+SDK,Sandakan,MY
+TWU,Tawau,MY
+MKZ,Malacca,MY
+SXB,Strasbourg,FR
+LIL,Lille,FR
+KJT,Majalengka,ID
+PDG,Padang,ID
+PQC,Phu Quoc,VN
+ILO,Iloilo,PH
+DOY,Dongying,CN
+YIC,Yichun,CN
+BCD,Bacolod,PH
+LBJ,Labuan Bajo,ID
+DRP,Legazpi,PH
+GES,General Santos,PH
+CGY,Cagayan de Oro,PH
+PPS,Puerto Princesa,PH
+TAG,Panglao,PH
+ZAM,Zamboanga,PH
+DGT,Dumaguete,PH
+KBR,Kota Bahru,MY
+DAD,Da Nang,VN
+NHA,Nha Trang (Cam Ranh),VN
+IWJ,Masuda,JP
+SYO,Sakata,JP
+CEI,Chiang Rai,TH
+TAC,Tacloban,PH
+LAO,Laoag,PH
+BXU,Butuan,PH
+USU,Busuanga,PH
+RXS,Roxas,PH
+DPL,Dipolog,PH
+OZC,Ozamiz,PH
+IAO,Del Carmen (Siargao),PH
+CYP,Calbayog,PH
+CBO,Cotabato,PH
+BSO,Basco,PH
+CRM,Catarman,PH
+PAG,Pagadian,PH
+EUQ,Antique,PH
+AKJ,Asahikawa,JP
+FKS,Fukushima,JP
+FSZ,Mount Fuji Shizuoka,JP
+FUJ,Fukue,JP
+HAC,Hachijojima,JP
+KIJ,Niigata,JP
+KUH,Kushiro,JP
+MBE,Monbetsu,JP
+MMB,Memanbetsu,JP
+NTQ,Noto Satoyama,JP
+RIS,Rishiri,JP
+SHB,Nakashibetsu,JP
+TSJ,Tsushima,JP
+WKJ,Wakkanai,JP
+TJQ,Tanjung Pandan,ID
+PNK,Pontianak,ID
+MPH,Caticlan,PH

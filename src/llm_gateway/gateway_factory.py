@@ -1,148 +1,65 @@
-"""Factory for creating LLM gateway instances.
+"""Factory for creating LLM gateway instances."""
 
-This module provides a factory pattern for instantiating the correct LLM gateway
-based on provider name. It uses the GatewayRegistry to discover available providers
-and handles provider-specific configuration.
-
-Typical usage:
-    from llm_gateway.gateway_factory import LLMGatewayFactory
-    
-    # Create with explicit provider
-    gateway = LLMGatewayFactory.create(
-        provider="openai",
-        api_key="sk-...",
-        model="gpt-4",
-        timeout_seconds=30
-    )
-    
-    # Create from environment variables
-    gateway = LLMGatewayFactory.create_from_config()
-"""
-
-import os
 from typing import Any
+import logging
 
-from llm_gateway.gateway_registry import GatewayRegistry
 from llm_gateway.llm_gateway import LLMGateway
-from models.common import ErrorDetails, ErrorResponse
+from llm_gateway.providers.gemini_gateway import GeminiGateway
+from llm_gateway.providers.openai_gateway import OpenAIGateway
 
 
 class LLMGatewayFactory:
-    """Factory for creating LLM gateway instances.
+    """Simple factory for creating Gemini or OpenAI gateway instances."""
+
+    _PROVIDERS: dict[str, type[LLMGateway]] = {
+        "gemini": GeminiGateway,
+        "openai": OpenAIGateway,
+    }
     
-    Provides methods to instantiate gateway implementations based on provider name.
-    Supports both explicit configuration and environment variable-based configuration.
-    """
+    _LOGGER = logging.getLogger("data_ontology")
     
     @classmethod
     def create(
         cls,
-        provider: str,
-        api_key: str | None = None,
-        model: str | None = None,
-        timeout_seconds: int = 30,
-        **kwargs: Any,
+        config: dict[str, Any],
+        **_: Any,
     ) -> LLMGateway:
-        """Create an LLM gateway instance.
+        provider_name = (config.get("provider") or "gemini").lower()
+        providers_config = config.get("providers", {})
+        selected_provider_config = providers_config.get(provider_name, {})
+        llm_api_key = selected_provider_config.get("api_key")
+        llm_model = selected_provider_config.get("model")
         
-        Instantiates the gateway class registered for the given provider name
-        and passes the configuration parameters to its constructor.
-        
-        Args:
-            provider: Provider name (e.g., 'gemini', 'openai', 'claude')
-            api_key: API key for the provider (optional, can use env vars)
-            model: Model name/ID for the provider (optional)
-            timeout_seconds: Request timeout in seconds (default: 30)
-            **kwargs: Additional provider-specific configuration
-            
-        Returns:
-            Instantiated gateway ready to use
-            
-        Raises:
-            ValueError: If provider is not registered
-            
-        Example:
-            gateway = LLMGatewayFactory.create(
-                provider="openai",
-                api_key="sk-...",
-                model="gpt-4"
+        llm_timeout_raw = str(
+            selected_provider_config.get(
+                "timeout_seconds",
+                config.get("timeout_seconds", 30),
             )
-        """
-        gateway_class = GatewayRegistry.get(provider)
-        
-        if gateway_class is None:
-            available = ", ".join(GatewayRegistry.get_all().keys())
-            raise ValueError(
-                f"Unknown LLM provider: '{provider}'. "
-                f"Available providers: {available or 'none registered'}"
-            )
-        
-        return gateway_class(
-            api_key=api_key,
-            model=model,
-            timeout_seconds=timeout_seconds,
-            **kwargs,
         )
-    
-    @classmethod
-    def create_from_config(self, **overrides: Any) -> LLMGateway:
-        """Create an LLM gateway from environment variables.
-        
-        Reads provider configuration from environment variables:
-        - LLM_PROVIDER: Provider name (required, default: 'gemini')
-        - LLM_API_KEY: API key for the provider (optional)
-        - LLM_MODEL: Model name/ID (optional)
-        - LLM_TIMEOUT: Request timeout in seconds (optional, default: 30)
-        
-        Additional provider-specific env vars are passed as kwargs.
-        
-        Args:
-            **overrides: Override specific configuration values programmatically
-                        (takes precedence over environment variables)
-        
-        Returns:
-            Instantiated gateway configured from environment
-            
-        Raises:
-            ValueError: If required environment variables are missing or invalid
-            
-        Example:
-            # With environment: export LLM_PROVIDER=openai
-            gateway = LLMGatewayFactory.create_from_config()
-            
-            # With overrides
-            gateway = LLMGatewayFactory.create_from_config(
-                api_key="custom-key"
-            )
-        """
-        provider = overrides.get("provider") or os.getenv("LLM_PROVIDER", "gemini")
-        api_key = overrides.get("api_key") or os.getenv("LLM_API_KEY")
-        model = overrides.get("model") or os.getenv("LLM_MODEL")
-        timeout_str = overrides.get("timeout_seconds") or os.getenv("LLM_TIMEOUT", "30")
         
         try:
-            timeout_seconds = int(timeout_str)
-        except (ValueError, TypeError):
+            llm_timeout_seconds = int(llm_timeout_raw)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"Invalid LLM timeout value: {llm_timeout_raw}") from exc
+        
+        gateway_class = cls._PROVIDERS.get(provider_name)
+
+        if gateway_class is None:
+            available = ", ".join(cls._PROVIDERS.keys())
             raise ValueError(
-                f"Invalid LLM_TIMEOUT value: '{timeout_str}'. Must be an integer."
+                f"Unknown LLM provider: '{provider_name}'. "
+                f"Available providers: {available}"
             )
         
-        return self.create(
-            provider=provider,
-            api_key=api_key,
-            model=model,
-            timeout_seconds=timeout_seconds,
+        cls._LOGGER.info(
+            "Created LLM gateway: provider=%s, model=%s, timeout_seconds=%s",
+            provider_name,
+            llm_model or "default",
+            llm_timeout_seconds,
         )
-    
-    @classmethod
-    def get_available_providers(cls) -> dict[str, type]:
-        """Get all registered provider names and classes.
-        
-        Returns:
-            Dictionary mapping provider names to gateway classes
-            
-        Example:
-            providers = LLMGatewayFactory.get_available_providers()
-            # Returns: {'gemini': GeminiGateway, 'openai': OpenAIGateway}
-        """
-        return GatewayRegistry.get_all()
+
+        return gateway_class(
+            api_key=llm_api_key,
+            model=llm_model,
+            timeout_seconds=llm_timeout_seconds,
+        )

@@ -3,13 +3,10 @@ import os
 import traceback
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
 
-try:
-    from pydantic_ai import Agent as _PydanticAIAgent
-except Exception:
-    _PydanticAIAgent = None
+from pydantic_ai import Agent as PydanticAIAgent
 
 from llm_gateway.llm_gateway import LLMGateway
-from models.common import ErrorDetails, ErrorResponse, SuccessResponse
+from models.common import ErrorDetails, ErrorResponse
 from models.pipeline import LLMRawResponse, NLQRequest
 
 
@@ -20,9 +17,13 @@ class OpenAIGateway(LLMGateway):
         model: str | None = None,
         timeout_seconds: int = 30,
     ) -> None:
-        self._api_key = api_key
-        self._model = model or os.getenv("OPENAI_MODEL", "gpt-5.4-nano")
-        self._timeout_seconds = timeout_seconds
+        super().__init__(
+            api_key=api_key,
+            model=model or os.getenv("OPENAI_MODEL", "gpt-5.4-nano"),
+            timeout_seconds=timeout_seconds,
+        )
+        if self._api_key:
+            os.environ.setdefault("OPENAI_API_KEY", self._api_key)
 
     def submit_prompt(
         self, bundle: NLQRequest
@@ -39,23 +40,11 @@ class OpenAIGateway(LLMGateway):
                     ),
                 )
 
-            if _PydanticAIAgent is None:
-                return ErrorResponse(
-                    request_id=bundle.request_id,
-                    error=ErrorDetails(
-                        code="missing_dependency",
-                        message="pydantic-ai is required for OpenAIGateway.",
-                        component="llm_gateway",
-                    ),
-                )
-
-            os.environ.setdefault("OPENAI_API_KEY", api_key)
-
             model_name = self._model
             if ":" not in model_name:
                 model_name = f"openai:{model_name}"
 
-            agent = _PydanticAIAgent(model_name, system_prompt=bundle.system_message)
+            agent = PydanticAIAgent(model_name, system_prompt=bundle.system_message)
             with ThreadPoolExecutor(max_workers=1) as executor:
                 future = executor.submit(agent.run_sync, bundle.user_message)
                 result = future.result(timeout=self._timeout_seconds)
@@ -73,7 +62,7 @@ class OpenAIGateway(LLMGateway):
                 request_id=bundle.request_id,
                 error=ErrorDetails(
                     code="llm_timeout",
-                    message=f"OpenAI request exceeded timeout of {self._timeout_seconds} seconds.",
+                    message=self._timeout_message("OpenAI"),
                     component="llm_gateway",
                 ),
             )
