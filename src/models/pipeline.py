@@ -6,7 +6,8 @@ from pydantic import BaseModel, Field
 class NLQRequest(BaseModel):
     request_id: str = "unknown"
     request_type: Literal[
-        "request",
+        "general",
+        "flight",
         "prompt",
         "llm",
         "syntactic",
@@ -14,7 +15,7 @@ class NLQRequest(BaseModel):
         "sql_compile",
         "sql_executor",
         "result"
-    ] = "request"
+    ] = "general"
     question: str = ""
     system_message: str = ""
     user_message: str = ""
@@ -23,6 +24,7 @@ class NLQRequest(BaseModel):
     compiled_sql: CompiledSQL | None = None
     result_set: ResultSet | None = None
     source: str = "web"
+
 
 class PromptRequest(BaseModel):
     request_id: str

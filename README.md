@@ -55,7 +55,7 @@ The server starts at http://127.0.0.1:8000
 
 ### Querying the API
 
-**POST** `/query/query` — Submit a natural language question:
+**POST** `/query/query` — Submit a natural language question (returns a plain text stream):
 
 ```bash
 curl -X POST http://localhost:8000/query/query \
@@ -75,7 +75,7 @@ curl http://localhost:8000/query/get_query
 uv run pytest
 ```
 
-All tests should pass on a clean checkout (168 tests).
+All tests should pass on a clean checkout (223 tests).
 
 ### Environment Variables
 
@@ -97,7 +97,8 @@ src/
 │   └── telegram/telegram_routes.py  # Telegram webhook endpoint
 ├── orchestrator/
 │   ├── orchestrator.py              # 7-stage NLQ pipeline runner
-│   ├── response_builder.py          # Formats results for users
+│   └── handlers/                    # Pipeline handlers (Request, Prompt, LLM, Validators, Compiler, Executor)
+│   └── response_formatter_handler.py # Formats results for users
 │   └── error_response_builder.py    # Standardised error responses
 ├── prompt_builder/                  # Builds LLM prompts from templates
 ├── llm_gateway/providers/           # LLM integrations (Gemini, OpenAI)
@@ -118,9 +119,9 @@ tests/
 ### Pipeline Flow
 
 ```
-User Question → PromptBuilder → LLM Gateway (Gemini)
+User Question → RequestHandler → PromptBuilder → LLM Gateway (Gemini)
   → SyntacticValidator → SemanticValidator
-  → SQLCompiler → SQLExecutor → ResponseBuilder → Answer
+  → SQLCompiler → SQLExecutor → ResponseFormatterHandler → Answer
 ```
 
 ### Development Workflow
@@ -201,6 +202,15 @@ Send these to your bot in Telegram to verify each intent, or run them automatica
 | All fare options | `Show me all fare options from SIN to BKK between 1 June and 30 June 2025` |
 | Airlines on route | `Which airlines fly from SIN to BKK in June 2025?` |
 | Last seat urgency | `Are there any almost-full flights from SIN to BKK in June 2025?` |
+
+### Additional intent examples
+
+These require the broader 2026 flight facts and GraphDB ontology data:
+
+| Intent | Question |
+|---|---|
+| Destinations by country and date range | `What flights from Singapore to Australia are available from 2 June 2026 to 8 June 2026?` |
+| Destinations by country on weekends | `What flights from Singapore to Australia are available on weekends in June 2026?` |
 
 ### Expected results
 

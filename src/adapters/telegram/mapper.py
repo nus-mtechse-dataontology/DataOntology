@@ -3,7 +3,6 @@ import logging
 
 from adapters.telegram.interfaces import UpdateMapper
 from models.pipeline import NLQRequest
-from models.telegram_model import Update
 
 
 class TelegramUpdateMapper(UpdateMapper):

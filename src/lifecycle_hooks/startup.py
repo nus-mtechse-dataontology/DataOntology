@@ -14,6 +14,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from sqlmodel import SQLModel
 
+from graphdb.pipeline import GraphDbPipeline
+
 # Ensure the project root is on sys.path so that `graphdb` is importable as a package
 # regardless of how the app is launched (python src/main.py, uvicorn, Docker, etc.)
 _project_root = str(Path(__file__).resolve().parents[2])
@@ -70,48 +72,6 @@ def get_key() -> str:
     return secrets.token_urlsafe(32)
 
 
-def init_llm_gateway():
-    config = load_config()
-    llm_config = config.get("llm", {})
-    providers_config = llm_config.get("providers", {})
-    llm_provider = (llm_config.get("provider") or "gemini").lower()
-    selected_provider_config = providers_config.get(llm_provider, {})
-
-    llm_api_key = selected_provider_config.get("api_key")
-    llm_model = selected_provider_config.get("model")
-    llm_timeout_raw = str(
-        selected_provider_config.get(
-            "timeout_seconds",
-            llm_config.get("timeout_seconds", 30),
-        )
-    )
-
-    try:
-        llm_timeout_seconds = int(llm_timeout_raw)
-    except (TypeError, ValueError) as exc:
-        raise ValueError(f"Invalid LLM timeout value: {llm_timeout_raw}") from exc
-
-    try:
-        llm_gateway = LLMGatewayFactory.create(
-            provider=llm_provider,
-            api_key=llm_api_key,
-            model=llm_model,
-            timeout_seconds=llm_timeout_seconds,
-        )
-        logger.info(
-            "Created LLM gateway: provider=%s, model=%s, timeout_seconds=%s",
-            llm_provider,
-            llm_model or "default",
-            llm_timeout_seconds,
-        )
-        
-        return llm_gateway
-    
-    except ValueError as e:
-        logger.error("Failed to create LLM gateway: %s", e)
-        raise
-
-
 def setup_telegram_handler(orchestrator):
     # ── Set Up telegram bot ────────────────────────────────────────────
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -132,27 +92,7 @@ def setup_telegram_handler(orchestrator):
 async def startup(app: FastAPI):
     """
     Initialise all dependencies for the Application.
-
-    config.toml LLM section:
-        [llm]
-        provider = "gemini"
-        timeout_seconds = 30
-
-        [llm.providers.gemini]
-        model = "gemini-3-flash-preview"
-        # timeout_seconds = 30
-        # api_key = "..."
-
-        [llm.providers.openai]
-        model = "gpt-5-nano"
-        # timeout_seconds = 30
-        # api_key = "..."
-
-    Provider resolution order:
-        1) config.toml [llm].provider
-        2) default 'gemini'
     """
-    
     project_root = Path(__file__).resolve().parents[2]
     os.environ.setdefault("PROJECT_PATH", str(project_root))
     load_env(project_root)
@@ -171,7 +111,7 @@ async def startup(app: FastAPI):
         config["jwt"]["algo"]
     )
     
-    llm_gateway = init_llm_gateway()
+    llm_gateway = LLMGatewayFactory.create(config.get("llm", {}))
     prompt_builder = PromptBuilder()
     syntactic_validator = SyntacticValidator()
     semantic_validator = SemanticValidator()
@@ -183,7 +123,28 @@ async def startup(app: FastAPI):
         "web": WebFormatter,
     }
     
-    graphdb_handler = GraphDBHandler(GraphDBService())
+    # ── Wire GraphDB semantic pipeline ────────────────────────────────
+    logger.info("Initialising GraphDBService")
+    try:
+        graph_db_pipeline = GraphDbPipeline(fact_flight_info_dao)
+        graphdb_service = GraphDBService(graph_db_pipeline)
+        graphdb_reachable = graphdb_service.graphdb_reachable()
+        if graphdb_reachable:
+            logger.info(
+                "GraphDBService ready — GraphDB reachable at %s",
+                os.getenv("GRAPHDB_URL", "http://localhost:7200/repositories/dataontology")
+            )
+        else:
+            logger.warning(
+                "GraphDBService ready — GraphDB NOT reachable @ %s; SPARQL intents will fail",
+                os.getenv("GRAPHDB_URL", "http://localhost:7200/repositories/dataontology")
+            )
+    except Exception as e:
+        logger.exception("GraphDBService failed to initialise — graphdb queries disabled")
+        raise e
+    # ──────────────────────────────────────────────────────────────────
+    
+    graphdb_handler = GraphDBHandler(graphdb_service)
     request_handler = RequestHandler()
     prompt_handler = PromptHandler(prompt_builder)
     llm_handler = LLMHandler(llm_gateway)
@@ -208,21 +169,6 @@ async def startup(app: FastAPI):
     )
     logger.info("Orchestrator wired — pipeline ready")
     # ───────────────────────────────────────────────────────────────────
-
-    # ── Wire GraphDB semantic pipeline ────────────────────────────────
-    logger.info("Initialising GraphDBService")
-    try:
-        graphdb_service = GraphDBService()
-        graphdb_reachable = graphdb_service.graphdb_reachable()
-        if graphdb_reachable:
-            logger.info("GraphDBService ready — GraphDB reachable at localhost:7200")
-        else:
-            logger.warning("GraphDBService ready — GraphDB NOT reachable; SPARQL intents will fail")
-    except Exception:
-        logger.exception("GraphDBService failed to initialise — graphdb queries disabled")
-        graphdb_service = None
-    # ──────────────────────────────────────────────────────────────────
-    
     
     # ── Wire Telegram components ───────────────────────────────────────
     logger.info("Wiring Telegram WebHook")

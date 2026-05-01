@@ -1,9 +1,6 @@
 """Load semantic_layer_v3.json and build the prompt context strings."""
-
-from __future__ import annotations
-
 import json
-from config import SEMANTIC_LAYER
+from graphdb.config import SEMANTIC_LAYER
 
 
 def load_semantics() -> dict:

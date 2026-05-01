@@ -24,29 +24,56 @@ def fake_provider_map(monkeypatch):
 
 
 def test_create_returns_instance_of_registered_class(fake_provider_map):
-    gateway = LLMGatewayFactory.create(provider="fake")
+    gateway = LLMGatewayFactory.create({
+        "provider": "fake",
+        "providers": {
+            "fake": {
+                "api_key": "key-123",
+                "model": "test-model",
+                "timeout_seconds": 30,
+            }
+        }
+    })
 
     assert isinstance(gateway, _FakeGateway)
 
 
 def test_create_passes_config_to_gateway(fake_provider_map):
-    gateway = LLMGatewayFactory.create(
-        provider="fake",
-        api_key="key-123",
-        model="test-model",
-        timeout_seconds=60,
-    )
+    gateway = LLMGatewayFactory.create({
+        "provider": "fake",
+        "providers": {
+            "fake": {
+                "api_key": "key-123",
+                "model": "test-model",
+                "timeout_seconds": 60,
+            }
+        }
+    })
 
     assert gateway._api_key == "key-123"
     assert gateway._model == "test-model"
     assert gateway._timeout_seconds == 60
 
 
-def test_create_raises_for_unknown_provider(fake_provider_map):
+def test_create_raises_for_unknown_provider():
     with pytest.raises(ValueError, match="Unknown LLM provider"):
-        LLMGatewayFactory.create(provider="does_not_exist")
+        LLMGatewayFactory.create({
+        "provider": "fake",
+        "providers": {
+            "fake": {}
+        }
+    })
 
 
 def test_create_error_message_lists_available_providers(fake_provider_map):
     with pytest.raises(ValueError, match="fake"):
-        LLMGatewayFactory.create(provider="unknown")
+        LLMGatewayFactory.create({
+        "provider": "unknown",
+        "providers": {
+            "fake": {
+                "api_key": "key-123",
+                "model": "test-model",
+                "timeout_seconds": 30,
+            }
+        }
+    })

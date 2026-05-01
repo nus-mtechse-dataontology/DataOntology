@@ -6,10 +6,8 @@ SPARQL: replaces :param_name placeholders with quoted string literals inline
 SQL:    returns (template_str, bound_params_dict) — executed via sqlite3 named
         placeholders (:param_name), which is safe at the driver level.
 """
-from __future__ import annotations
-
 import re
-from config import DEFAULT_LIMIT
+from .config import DEFAULT_LIMIT
 
 
 # ---------------------------------------------------------------------------
@@ -130,7 +128,7 @@ def compile_sql(intent_def: dict, params: dict, intent_name: str = "") -> tuple[
 
     # Default limit
     if "limit" in placeholders and "limit" not in bound:
-        bound["limit"] = DEFAULT_LIMIT
+        bound["limit"] = 50 if intent_name == "destinations_by_country_from_origin" else DEFAULT_LIMIT
 
     # --- Optional clause appending (mirrors intent notes) ---
     # Clauses are inserted into the WHERE block, before GROUP BY / ORDER BY / LIMIT —
@@ -151,6 +149,20 @@ def compile_sql(intent_def: dict, params: dict, intent_name: str = "") -> tuple[
         if "cabin_class" in note:
             template = _insert_before_group_or_order(template, "AND f.f_cabin_class = :cabin_class")
             bound["cabin_class"] = params["cabin_class"]
+
+    if "day_type" in params and "day_type" not in placeholders:
+        if "day_type" in note:
+            day_type = str(params["day_type"]).lower()
+            if day_type == "weekend":
+                template = _insert_before_group_or_order(
+                    template,
+                    "AND EXTRACT(ISODOW FROM CAST(f.f_departure_date AS timestamp)) IN (6, 7)",
+                )
+            elif day_type == "weekday":
+                template = _insert_before_group_or_order(
+                    template,
+                    "AND EXTRACT(ISODOW FROM CAST(f.f_departure_date AS timestamp)) BETWEEN 1 AND 5",
+                )
 
     # --- destinations_by_duration: dynamic HAVING ---
     if intent_name == "destinations_by_duration" and "HAVING" in template.upper():

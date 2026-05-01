@@ -5,7 +5,7 @@ This test suite validates that the SQLExecutor correctly executes compiled SQL
 against a database and returns structured results. Tests are organized by acceptance criteria:
 1. SQL Executor establishes connection with database
 2. SQL Executor executes SQL query against database
-3. SQL Executor returns result set with Row objects
+3. SQL Executor returns result set with dict objects
 4. SQL Executor returns meaningful response when connection fails
 5. SQL Executor returns meaningful response when querying fails
 """
@@ -14,8 +14,7 @@ import pytest
 
 from execution.sql_executor import SQLExecutor
 from models.common import ErrorResponse, SuccessResponse
-from models.pipeline import CompiledSQL, ResultSet, Row
-
+from models.pipeline import CompiledSQL, ResultSet
 
 # ==============================================================================
 # DATABASE CONNECTION TESTS
@@ -77,8 +76,6 @@ class TestDatabaseConnection:
         assert isinstance(result, ErrorResponse)
         assert result.status == "ERROR"
         assert result.request_id == "test-conn-002"
-        # assert result.error.code == "connection_error"
-        # assert "connection" in result.error.message.lower() or "database" in result.error.message.lower()
         assert result.error.component == "sql_executor"
 
 
@@ -117,7 +114,7 @@ class TestSQLExecution:
         assert result.request_id == "test-exec-001"
         assert result.status == "SUCCESS"
         assert len(result.data.result_set) == 1
-        assert result.data.result_set[0].data["value"] == 1
+        assert result.data.result_set[0]["value"] == 1
 
     def test_execute_query_with_bound_parameters(self, sql_executor, populate_db):
         """
@@ -141,7 +138,7 @@ class TestSQLExecution:
         # ASSERT: Verify parameter binding worked correctly
         assert isinstance(result, SuccessResponse)
         assert len(result.data.result_set) == 1
-        assert result.data.result_set[0].data["f_flight_combination"] == 70
+        assert result.data.result_set[0]["f_flight_combination"] == 70
 
     def test_execute_query_with_multiple_parameters(self, sql_executor, populate_db):
         """
@@ -174,8 +171,8 @@ class TestSQLExecution:
         assert len(result.data.result_set) >= 1
         # Verify the results match the parameters
         for row in result.data.result_set:
-            assert row.data["f_departure_airport_code"] == "SIN"
-            assert row.data["f_destination_airport_code"] == "BKK"
+            assert row["f_departure_airport_code"] == "SIN"
+            assert row["f_destination_airport_code"] == "BKK"
 
     def test_execute_query_with_aggregation(self, sql_executor, populate_db):
         """
@@ -203,40 +200,7 @@ class TestSQLExecution:
         assert isinstance(result, SuccessResponse)
         assert len(result.data.result_set) == 1
         # Should return the minimum price from our test data
-        assert result.data.result_set[0].data["min_price"] == 80
-
-    # def test_execute_query_with_joins(self, sql_executor):
-    #     """
-    #     Test execution of query with table JOINs.
-    #
-    #     Scenario: Execute a query that joins multiple tables, which is
-    #     common in the flight pricing queries.
-    #
-    #     Expected: JOIN operations work correctly and return combined data.
-    #     """
-    #     # SETUP: Query with JOIN
-    #     compiled_sql = CompiledSQL(
-    #         request_id="test-exec-005",
-    #         sql="""
-    #             SELECT sr.session_id, r.fare_total_amount, sr.currency_code
-    #             FROM search_response sr
-    #             JOIN recommendation r ON r.payload_id = sr.payload_id
-    #             WHERE sr.session_id = :session_id
-    #         """,
-    #         bound_params={"session_id": "session-001"}
-    #     )
-    #
-    #     # ACT: Execute the query
-    #     result = sql_executor.execute(compiled_sql)
-    #
-    #     # ASSERT: JOIN executed successfully
-    #     assert isinstance(result, SuccessResponse)
-    #     assert len(result.data.result_set) >= 1
-    #     # Verify joined data is present
-    #     row = result.data.result_set[0]
-    #     assert "session_id" in row.data
-    #     assert "fare_total_amount" in row.data
-    #     assert "currency_code" in row.data
+        assert result.data.result_set[0]["min_price"] == 80
 
     def test_execute_query_with_limit(self, sql_executor, populate_db):
         """
@@ -279,8 +243,8 @@ class TestResultSet:
         
         Expected Structure:
         - SuccessResponse contains ResultSet
-        - ResultSet contains request_id and list of Row objects
-        - Each Row contains data dictionary with column name -> value mappings
+        - ResultSet contains request_id and list of dict objects
+        - Each dict contains column name -> value mappings
         """
         # SETUP: Execute a query
         compiled_sql = CompiledSQL(
@@ -298,8 +262,7 @@ class TestResultSet:
         assert result.data.request_id == "test-result-001"
         assert isinstance(result.data.result_set, list)
         assert len(result.data.result_set) >= 2
-        assert isinstance(result.data.result_set[0], Row)
-        assert isinstance(result.data.result_set[0].data, dict)
+        assert isinstance(result.data.result_set[0], dict)
     
     def test_row_data_types_preserved(self, sql_executor, populate_db):
         """
@@ -330,12 +293,12 @@ class TestResultSet:
         
         # ASSERT: Data types are correct
         row = result.data.result_set[0]
-        assert isinstance(row.data["text_value"], str)
-        assert isinstance(row.data["real_value"], float)
-        assert isinstance(row.data["integer_value"], int)
-        assert row.data["text_value"] == "test_string"
-        assert row.data["real_value"] == 123.45
-        assert row.data["integer_value"] == 42
+        assert isinstance(row["text_value"], str)
+        assert isinstance(row["real_value"], float)
+        assert isinstance(row["integer_value"], int)
+        assert row["text_value"] == "test_string"
+        assert row["real_value"] == 123.45
+        assert row["integer_value"] == 42
 
     def test_empty_result_set(self, sql_executor, populate_db):
         """
@@ -366,7 +329,7 @@ class TestResultSet:
         
         Scenario: Query returns multiple rows (multiple flights/recommendations).
         
-        Expected: All rows are present in result_set as separate Row objects.
+        Expected: All rows are present in result_set as separate dict objects.
         """
         # SETUP: Query that returns multiple rows
         compiled_sql = CompiledSQL(
@@ -381,10 +344,9 @@ class TestResultSet:
         # ASSERT: Multiple rows returned
         assert isinstance(result, SuccessResponse)
         assert len(result.data.result_set) >= 2  # We inserted 2 rows in fixture
-        # Each should be a separate Row object
+        # Each should be a separate dict object
         for row in result.data.result_set:
-            assert isinstance(row, Row)
-            assert isinstance(row.data, dict)
+            assert isinstance(row, dict)
 
     def test_request_id_preserved_in_result_set(self, sql_executor, populate_db):
         """
@@ -589,4 +551,4 @@ class TestIntegration:
         assert isinstance(result, SuccessResponse)
         # Verify results match the country filter
         for row in result.data.result_set:
-            assert row.data["f_destination_airport_code"] == "BKK"
+            assert row["f_destination_airport_code"] == "BKK"

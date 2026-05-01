@@ -31,9 +31,6 @@ Validation columns (left blank, filled manually):
 Safety: results are written row-by-row via temp file + atomic rename.
 The original CSV is never truncated mid-run.
 """
-
-from __future__ import annotations
-
 import csv
 import io
 import json
@@ -53,10 +50,18 @@ LOG_FILE = HERE / "csv_files" / "test_run.log"
 # ── Bootstrap pipeline ─────────────────────────────────────────────────────────
 sys.path.insert(0, str(HERE))
 
-from db import get_connection
-from loader import build_prompt_context, load_semantics
-from sparql_exec import check_graphdb
-from pipeline import run_once
+# from db import get_connection
+import os
+import tomllib
+import logging
+
+from graphdb.loader import build_prompt_context, load_semantics
+from graphdb.sparql_exec import check_graphdb
+from graphdb.pipeline import GraphDbPipeline
+
+
+from dao.fact_flight_info_dao import FactFlightInfoDAO
+from session.db_session import DBSession
 
 DELIMITER = "|"
 
@@ -136,7 +141,7 @@ def _capture_run(
     plan = None
     with redirect_stdout(buf):
         try:
-            plan = run_once(
+            plan = GraphDbPipeline().run_once(
                 question, semantics, intents_str, param_schema_str,
                 history=[], prefilled_plan=prefilled_plan,
             )
@@ -194,7 +199,7 @@ def main() -> None:
     print(f"  {len(semantics['intents'])} intents loaded")
 
     print("[Setup] Initialising SQLite...")
-    get_connection()
+    # get_connection()
 
     graphdb_ok = check_graphdb()
     if graphdb_ok:
@@ -349,5 +354,24 @@ def main() -> None:
         print(f"\n{response}\n")
 
 
+def load_config() -> dict:
+    """
+    Loads the config for the named ingestion.
+    """
+    with open(Path(os.getenv("PROJECT_PATH", ""), "resources", "config.toml")) as cf:
+        try:
+            return tomllib.loads(cf.read())
+        
+        except tomllib.TOMLDecodeError as exc:
+            logger.error("Startup: error while loading config, %s", exc)
+            logger.error(traceback.format_exc())
+            raise exc
+
+
 if __name__ == "__main__":
+    os.environ["PROJECT_PATH"] = str(Path(__file__).resolve().parents[3])
+    logger = logging.getLogger("data_ontology")
+    config = load_config()
+    session = DBSession(config)
+    fact_flight_info_dao = FactFlightInfoDAO(session.engine)
     main()

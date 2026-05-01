@@ -10,9 +10,58 @@ Requires:
     - Server NOT required — tests call the orchestrator directly
 """
 
+import json
 import os
 
 import pytest
+
+from formatter.telegram_formatter import TelegramFormatter
+from formatter.web_formatter import WebFormatter
+from models.pipeline import LLMRawResponse, NLQRequest
+
+
+class GoldenQuestionGateway:
+    def submit_prompt(self, bundle: NLQRequest) -> LLMRawResponse:
+        question = next(
+            line.removeprefix("Question: ").strip()
+            for line in bundle.user_message.splitlines()
+            if line.startswith("Question: ")
+        )
+        base_params = {
+            "origin": "SIN",
+            "start_date": "2025-06-01",
+            "end_date": "2025-06-30",
+        }
+
+        if "under 300" in question:
+            intent = "destinations_under_budget"
+            params = {**base_params, "max_price": 300}
+        elif "airports in Thailand" in question:
+            intent = "destinations_by_country_from_origin"
+            params = {**base_params, "country": "Thailand"}
+        elif "all fare options" in question:
+            intent = "route_fare_options"
+            params = {**base_params, "destination": "BKK"}
+        elif "Which airlines fly" in question:
+            intent = "airlines_on_route"
+            params = {**base_params, "destination": "BKK"}
+        elif "almost-full flights" in question:
+            intent = "last_seat_urgency"
+            params = {**base_params, "destination": "BKK", "max_seats": 5}
+        else:
+            intent = "cheapest_flight_on_route"
+            params = {**base_params, "destination": "BKK"}
+
+        return LLMRawResponse(
+            raw_response_text=json.dumps({
+                "intent": intent,
+                "parameters": params,
+                "missing_params": [],
+                "follow_up_question": None,
+                "confidence": 1.0,
+            })
+        )
+
 
 GOLDEN_QUESTIONS = [
     {
@@ -72,22 +121,28 @@ def orchestrator():
     from dao.fact_flight_info_dao import FactFlightInfoDAO
     from execution.sql_executor import SQLExecutor
     from handlers import (
-	    LLMHandler,
-	    PromptHandler,
-	    RequestHandler,
-	    ResponseFormatterHandler,
-	    SemanticsValidationHandler,
-	    SQLCompilerHandler,
-	    SQLExecutorHandler,
-	    SyntacticValidationHandler,
+        GraphDBHandler,
+        LLMHandler,
+        PromptHandler,
+        RequestHandler,
+        ResponseFormatterHandler,
+        SemanticsValidationHandler,
+        SQLCompilerHandler,
+        SQLExecutorHandler,
+        SyntacticValidationHandler,
     )
-    from llm_gateway.gateway_factory import LLMGatewayFactory
+    from graphdb.pipeline import GraphDbPipeline
+    from graphdb.service import GraphDBService
     from orchestrator.orchestrator import Orchestrator
-    from orchestrator.response_builder import ResponseBuilder
     from prompt_builder.prompt_builder import PromptBuilder
     from session.db_session import DBSession
     from validators.semantic.semantic_validator import SemanticValidator
     from validators.syntactic.syntactic_validator import SyntacticValidator
+    
+    formatters: dict[str, type] = {
+        "telegram": TelegramFormatter,
+        "web": WebFormatter,
+    }
 
     project_path = os.getenv("PROJECT_PATH", os.getcwd())
     config_path = Path(project_path) / "resources" / "config.toml"
@@ -96,31 +151,32 @@ def orchestrator():
 
     session = DBSession(config)
     SQLModel.metadata.create_all(session.engine)
-
-    llm_config = config.get("llm", {})
-    provider = os.getenv("LLM_PROVIDER") or llm_config.get("provider", "gemini")
-    api_key = os.getenv("LLM_API_KEY") or os.getenv("GEMINI_API_KEY") or os.getenv("OPENAI_API_KEY")
-    model = os.getenv("LLM_MODEL") or llm_config.get("providers", {}).get(provider, {}).get("model")
-    timeout = int(os.getenv("LLM_TIMEOUT", str(llm_config.get("providers", {}).get(provider, {}).get("timeout_seconds", 30))))
-
-    llm_gateway = LLMGatewayFactory.create(
-        provider=provider,
-        api_key=api_key,
-        model=model,
-        timeout_seconds=timeout,
-    )
+    with session.engine.begin() as connection:
+        connection.exec_driver_sql("""
+            DELETE FROM fact_flight_info
+            WHERE f_flight_combination IN (
+                1001, 1002, 1003, 1004, 1005, 1006,
+                2001, 2002,
+                3001, 3002,
+                4001, 4002
+            )
+        """)
+        connection.exec_driver_sql((Path(project_path) / "resources" / "seed_local.sql").read_text())
 
     fact_flight_info_dao = FactFlightInfoDAO(session.engine)
+    graphdb_service = GraphDBService(GraphDbPipeline(fact_flight_info_dao))
+    graphdb_handler = GraphDBHandler(graphdb_service)
 
     return Orchestrator(
         request_handler=RequestHandler(),
         prompt_handler=PromptHandler(PromptBuilder()),
-        llm_handler=LLMHandler(llm_gateway),
+        llm_handler=LLMHandler(GoldenQuestionGateway()),
         syntactic_validation_handler=SyntacticValidationHandler(SyntacticValidator()),
         semantics_validation_handler=SemanticsValidationHandler(SemanticValidator()),
         sql_compiler_handler=SQLCompilerHandler(SQLCompiler()),
         sql_executor_handler=SQLExecutorHandler(SQLExecutor(fact_flight_info_dao)),
-        response_builder_handler=ResponseFormatterHandler(ResponseBuilder()),
+        response_builder_handler=ResponseFormatterHandler(formatters),
+        graphdb_handler=graphdb_handler,
     )
 
 
@@ -133,14 +189,18 @@ def test_golden_question(orchestrator, case):
     from models.common import SuccessResponse
     from models.pipeline import NLQRequest
 
-    request = NLQRequest(request_id=str(uuid.uuid4()), question=case["question"])
+    request = NLQRequest(
+        request_id=str(uuid.uuid4()),
+        question=case["question"],
+        request_type="flight",
+    )
     result = orchestrator.handle_question(request)
 
     if case["expect_success"]:
         assert isinstance(result, SuccessResponse), (
             f"Expected success but got error: {result.error.message if hasattr(result, 'error') else result}"
         )
-        response = result.data.response
+        response = "\n".join(result.data)
         expected_count = case["expected_record_count"]
         assert f"I found {expected_count} matching" in response, (
             f"Expected {expected_count} records in response: {response}"

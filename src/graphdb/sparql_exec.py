@@ -7,17 +7,18 @@ Supports:
 
 Uses only urllib (no third-party HTTP client needed).
 """
-
-from __future__ import annotations
-
 import json
+import os
 import urllib.error
 import urllib.parse
 import urllib.request
 
 from rdflib import Graph
 
-from config import GRAPHDB_URL, GRAPHDB_TIMEOUT
+from graphdb.config import GRAPHDB_TIMEOUT
+
+
+GRAPHDB_URL = os.getenv("GRAPHDB_URL", "http://localhost:7200/repositories/dataontology")
 
 
 def _post(sparql: str, accept: str) -> bytes:
@@ -70,7 +71,6 @@ def execute_construct(sparql: str) -> Graph:
 
 def check_graphdb() -> bool:
     """Ping GraphDB — return True if reachable and repository exists."""
-    from config import GRAPHDB_URL
     # Use the repository size endpoint — returns 200 + triple count as plain text
     size_url = GRAPHDB_URL.rstrip("/") + "/size"
     try:
