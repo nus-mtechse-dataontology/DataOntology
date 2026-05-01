@@ -35,7 +35,7 @@ ENV PROJECT_PATH=/var/task \
     AWS_LWA_PORT=8000 \
     AWS_LWA_ASYNC_INIT=true \
     AWS_LAMBDA_FUNCTION_NAME="local-testing" \
-    AWS_LWA_READINESS_CHECK_PATH="/actuator/health/liveness"
+    AWS_LWA_READINESS_CHECK_PATH="/actuator/health/liveness"\
     GRAPHDB_URL="http://13.212.192.139:7200/repositories/data-ontology"
 ENTRYPOINT []
 
