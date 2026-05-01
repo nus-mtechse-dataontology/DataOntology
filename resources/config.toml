@@ -65,7 +65,7 @@ propagate = false
 title = "Data Ontology"
 root_path = "/ontology"
 port = 8000
-host = "127.0.0.1"
+host = "0.0.0.0"
 credentials = true
 allow_origins = ["*"]
 methods = ["*"]
@@ -77,11 +77,11 @@ scheme = "http"
 
 [llm]
 provider = "gemini"
-timeout_seconds = 30
+timeout_seconds = 100
 [llm.providers.gemini]
-model = "gemini-2.5-flash"
+model = "gemma-4-31b-it"
 [llm.providers.openai]
-model = "gpt-5.4-nano"
+model = "gpt-5-nano"
 
 [jwt]
 expire_mins = 15
@@ -100,6 +100,7 @@ class = "PostgresDriver"
 options = {}
 
 [datasource.database]
+connection_url = "sqlite:///database.db"
 drivername = "postgresql+psycopg2"
 name = "data_ontology"
 host = "localhost"

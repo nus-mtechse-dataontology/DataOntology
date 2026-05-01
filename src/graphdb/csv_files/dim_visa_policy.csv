@@ -1,0 +1,8 @@
+f_visa_policy_code,f_visa_policy_name,f_visa_policy_description
+visa_not_required,Visa Not Required,Singapore passport holder can enter for short-stay travel without obtaining a visa in advance.
+eta_required,ETA Required,"Travel authorization is required before travel, but not a full consular visa."
+evisa_required,eVisa Required,An electronic visa application is generally required before travel.
+visa_on_arrival,Visa On Arrival,A visa can generally be obtained at the port of entry.
+evisa_or_visa_on_arrival,eVisa or Visa On Arrival,Destination generally supports either pre-arranged eVisa or visa on arrival.
+visa_required,Visa Required,A visa is generally required before travel.
+unverified,Unverified,No curated visa policy has been assigned yet for this passport-country combination.

@@ -60,6 +60,8 @@ class SyntacticValidator:
 
         # Step 4: Validate schema using Pydantic
         try:
+            # validate response from LLM
+            QueryPlan.model_validate(parsed)
             query_plan = QueryPlan(**parsed)
         except ValidationError as e:
             self._log.error("[%s] Syntactic validation failed - schema error: %s", request_id, e.errors())
@@ -67,7 +69,9 @@ class SyntacticValidator:
                 request_id=request_id,
                 error=ErrorDetails(
                     code="schema_validation_error",
-                    message="LLM output does not match QueryPlan schema.",
+                    message="I am an AI query planner for flight analytics. "
+                            "I can help you find the cheapest flights, destinations under a certain budget, or "
+                            "airlines operating on a specific route. How can I help you with your flight search today?",
                     component="syntactic_validator",
                     details={"validation_errors": e.errors()},
                 ),

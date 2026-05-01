@@ -1,0 +1,5 @@
+"f_username","f_full_name","f_email","f_hashed_password","f_disabled"
+testuser1,Test User 1,,"$argon2id$v=19$m=32768,t=1,p=1$MDlkMjVlMDk0ZmFhNmNhMjU1NmM4MTgxNjZiN2E5NTYzM2Y3MDk5ZjZmMGY0Y2FhNmNmNjNiODhlOGQzZTc$XPAP7bMEiVNrEzxUdwjiZQFZ2iNgbBvjr+6n4Uwn9eI",false
+testuser2,Test User 1,"","$argon2id$v=19$m=65536,t=3,p=4$q3gokV6jcsJpKN6DD0e1zQ$7SX0bVaVsm1kggahhSxpQ0q2MM3q+a2n5Hmcj0g3olo",false
+yulnicorn,Yul Nicorn,yulnicorn@cool.com,"$argon2id$v=19$m=65536,t=3,p=4$8MvAtjxvsy/jnYpXmmwM9A$GV9UEJXGPxLEmVSQOHButRzN7+M2RNWFSTQPq6xbmB0",false
+testuser3,Test User 2,string,"$argon2id$v=19$m=65536,t=3,p=4$BjgtejwEfSGvpm8ux+45nA$T1DwZ5e2+/FeF0wQuBWKjHyNA9qVzPxzZWnAfiwa20U",false

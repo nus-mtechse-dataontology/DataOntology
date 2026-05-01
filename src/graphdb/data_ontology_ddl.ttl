@@ -1,0 +1,104 @@
+@prefix ex: <http://dataontology.example/graph/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:travel-graph-ddl a owl:Ontology ;
+    rdfs:label "DataOntology travel graph schema" ;
+    rdfs:comment "Schema generated from current tmp dimensions. fact_flight_info is intentionally excluded. Account nodes store only username + passport country link — all auth/PII fields (password, email, full_name, disabled) remain in the relational database only." .
+
+ex:Account a owl:Class .
+ex:Aircraft a owl:Class .
+ex:Airline a owl:Class .
+ex:Airport a owl:Class .
+ex:Attraction a owl:Class .
+ex:City a owl:Class .
+ex:CityMonthlyWeather a owl:Class .
+ex:Country a owl:Class .
+ex:CountryVisaRequirement a owl:Class .
+ex:Cuisine a owl:Class .
+ex:Currency a owl:Class .
+ex:Festival a owl:Class .
+ex:Language a owl:Class .
+ex:Route a owl:Class .
+ex:SubcityArea a owl:Class .
+ex:TransportMode a owl:Class .
+ex:TravelStyle a owl:Class .
+ex:VisaPolicy a owl:Class .
+
+ex:prop_belongsToCountry a owl:ObjectProperty ; rdfs:domain ex:City ; rdfs:range ex:Country .
+ex:prop_inCity a owl:ObjectProperty ; rdfs:domain ex:Airport ; rdfs:range ex:City .
+ex:prop_operatedBy a owl:ObjectProperty ; rdfs:domain ex:Route ; rdfs:range ex:Airline .
+ex:prop_hasOriginAirport a owl:ObjectProperty ; rdfs:domain ex:Route ; rdfs:range ex:Airport .
+ex:prop_hasDestinationAirport a owl:ObjectProperty ; rdfs:domain ex:Route ; rdfs:range ex:Airport .
+ex:prop_hasTravelStyle a owl:ObjectProperty ; rdfs:domain ex:City ; rdfs:range ex:TravelStyle .
+ex:prop_hasWeatherObservation a owl:ObjectProperty ; rdfs:domain ex:City ; rdfs:range ex:CityMonthlyWeather .
+ex:prop_hasSubcityArea a owl:ObjectProperty ; rdfs:domain ex:City ; rdfs:range ex:SubcityArea .
+ex:prop_hasTransportMode a owl:ObjectProperty ; rdfs:domain ex:City ; rdfs:range ex:TransportMode .
+ex:prop_usesPrimaryLanguage a owl:ObjectProperty ; rdfs:domain ex:City ; rdfs:range ex:Language .
+ex:prop_passportCountry a owl:ObjectProperty ; rdfs:domain ex:CountryVisaRequirement ; rdfs:range ex:Country .
+ex:prop_destinationCountry a owl:ObjectProperty ; rdfs:domain ex:CountryVisaRequirement ; rdfs:range ex:Country .
+ex:prop_usesVisaPolicy a owl:ObjectProperty ; rdfs:domain ex:CountryVisaRequirement ; rdfs:range ex:VisaPolicy .
+ex:prop_hasPassportCountry a owl:ObjectProperty ; rdfs:domain ex:Account ; rdfs:range ex:Country .
+ex:prop_hasCurrency a owl:ObjectProperty ; rdfs:domain ex:Country ; rdfs:range ex:Currency .
+ex:prop_capitalCity a owl:ObjectProperty ; rdfs:domain ex:Country ; rdfs:range ex:City .
+ex:prop_hasFestival a owl:ObjectProperty ; rdfs:domain ex:City ; rdfs:range ex:Festival .
+ex:prop_hasCuisine a owl:ObjectProperty ; rdfs:domain ex:City ; rdfs:range ex:Cuisine .
+ex:prop_hasAttraction a owl:ObjectProperty ; rdfs:domain ex:City ; rdfs:range ex:Attraction .
+
+ex:prop_accountUsername a owl:DatatypeProperty ; rdfs:domain ex:Account ; rdfs:range xsd:string .
+ex:prop_aircraftCode a owl:DatatypeProperty ; rdfs:domain ex:Aircraft ; rdfs:range xsd:string .
+ex:prop_aircraftModel a owl:DatatypeProperty ; rdfs:domain ex:Aircraft ; rdfs:range xsd:string .
+ex:prop_aircraftSummary a owl:DatatypeProperty ; rdfs:domain ex:Aircraft ; rdfs:range xsd:string .
+ex:prop_airlineCode a owl:DatatypeProperty ; rdfs:domain ex:Airline ; rdfs:range xsd:string .
+ex:prop_airlineName a owl:DatatypeProperty ; rdfs:domain ex:Airline ; rdfs:range xsd:string .
+ex:prop_airportCode a owl:DatatypeProperty ; rdfs:domain ex:Airport ; rdfs:range xsd:string .
+ex:prop_airportName a owl:DatatypeProperty ; rdfs:domain ex:Airport ; rdfs:range xsd:string .
+ex:prop_cityCode a owl:DatatypeProperty ; rdfs:domain ex:City ; rdfs:range xsd:string .
+ex:prop_cityName a owl:DatatypeProperty ; rdfs:domain ex:City ; rdfs:range xsd:string .
+ex:prop_countryCode a owl:DatatypeProperty ; rdfs:domain ex:Country ; rdfs:range xsd:string .
+ex:prop_countryName a owl:DatatypeProperty ; rdfs:domain ex:Country ; rdfs:range xsd:string .
+ex:prop_currencyCode a owl:DatatypeProperty ; rdfs:domain ex:Currency ; rdfs:range xsd:string .
+ex:prop_exchangeRate a owl:DatatypeProperty ; rdfs:domain ex:Currency ; rdfs:range xsd:decimal .
+ex:prop_monthNum a owl:DatatypeProperty ; rdfs:domain ex:CityMonthlyWeather ; rdfs:range xsd:integer .
+ex:prop_monthName a owl:DatatypeProperty ; rdfs:domain ex:CityMonthlyWeather ; rdfs:range xsd:string .
+ex:prop_avgTempC a owl:DatatypeProperty ; rdfs:domain ex:CityMonthlyWeather ; rdfs:range xsd:decimal .
+ex:prop_avgRainfallMm a owl:DatatypeProperty ; rdfs:domain ex:CityMonthlyWeather ; rdfs:range xsd:decimal .
+ex:prop_weatherProfileCode a owl:DatatypeProperty ; rdfs:domain ex:CityMonthlyWeather ; rdfs:range xsd:string .
+ex:prop_seasonCode a owl:DatatypeProperty ; rdfs:domain ex:CityMonthlyWeather ; rdfs:range xsd:string .
+ex:prop_bestTimeToVisit a owl:DatatypeProperty ; rdfs:domain ex:CityMonthlyWeather ; rdfs:range xsd:boolean .
+ex:prop_weatherSummary a owl:DatatypeProperty ; rdfs:domain ex:CityMonthlyWeather ; rdfs:range xsd:string .
+ex:prop_researchStatus a owl:DatatypeProperty ; rdfs:domain ex:SubcityArea ; rdfs:range xsd:string .
+ex:prop_areaSummary a owl:DatatypeProperty ; rdfs:domain ex:SubcityArea ; rdfs:range xsd:string .
+ex:prop_subcityAreaName a owl:DatatypeProperty ; rdfs:domain ex:SubcityArea ; rdfs:range xsd:string .
+ex:prop_languageName a owl:DatatypeProperty ; rdfs:domain ex:Language ; rdfs:range xsd:string .
+ex:prop_travelStyleName a owl:DatatypeProperty ; rdfs:domain ex:TravelStyle ; rdfs:range xsd:string .
+ex:prop_transportModeName a owl:DatatypeProperty ; rdfs:domain ex:TransportMode ; rdfs:range xsd:string .
+ex:prop_visaPolicyName a owl:DatatypeProperty ; rdfs:domain ex:VisaPolicy ; rdfs:range xsd:string .
+ex:prop_visaPolicyDescription a owl:DatatypeProperty ; rdfs:domain ex:VisaPolicy ; rdfs:range xsd:string .
+ex:prop_publicTransportWidelyUsedInCountry a owl:DatatypeProperty ; rdfs:domain ex:City ; rdfs:range xsd:boolean .
+ex:prop_visaRequired a owl:DatatypeProperty ; rdfs:domain ex:CountryVisaRequirement ; rdfs:range xsd:boolean .
+ex:prop_onlineApplyUrl a owl:DatatypeProperty ; rdfs:domain ex:CountryVisaRequirement ; rdfs:range xsd:string .
+ex:prop_visaDurationDays a owl:DatatypeProperty ; rdfs:domain ex:CountryVisaRequirement ; rdfs:range xsd:integer .
+ex:prop_routeKey a owl:DatatypeProperty ; rdfs:domain ex:Route ; rdfs:range xsd:string .
+ex:prop_continent a owl:DatatypeProperty ; rdfs:domain ex:Country ; rdfs:range xsd:string .
+ex:prop_region a owl:DatatypeProperty ; rdfs:domain ex:Country ; rdfs:range xsd:string .
+ex:prop_costOfLivingIndex a owl:DatatypeProperty ; rdfs:domain ex:City ; rdfs:range xsd:decimal .
+ex:prop_safetyTier a owl:DatatypeProperty ; rdfs:domain ex:City ; rdfs:range xsd:string .
+ex:prop_soloFemaleSafe a owl:DatatypeProperty ; rdfs:domain ex:City ; rdfs:range xsd:boolean .
+ex:prop_utcOffset a owl:DatatypeProperty ; rdfs:domain ex:City ; rdfs:range xsd:string .
+ex:prop_timezoneName a owl:DatatypeProperty ; rdfs:domain ex:City ; rdfs:range xsd:string .
+ex:prop_airportType a owl:DatatypeProperty ; rdfs:domain ex:Airport ; rdfs:range xsd:string .
+ex:prop_terminalCount a owl:DatatypeProperty ; rdfs:domain ex:Airport ; rdfs:range xsd:integer .
+ex:prop_isInternational a owl:DatatypeProperty ; rdfs:domain ex:Airport ; rdfs:range xsd:boolean .
+ex:prop_hasTransitHotel a owl:DatatypeProperty ; rdfs:domain ex:Airport ; rdfs:range xsd:boolean .
+ex:prop_hasLounge a owl:DatatypeProperty ; rdfs:domain ex:Airport ; rdfs:range xsd:boolean .
+ex:prop_currencyName a owl:DatatypeProperty ; rdfs:domain ex:Currency ; rdfs:range xsd:string .
+ex:prop_festivalName a owl:DatatypeProperty ; rdfs:domain ex:Festival ; rdfs:range xsd:string .
+ex:prop_festivalMonthNum a owl:DatatypeProperty ; rdfs:domain ex:Festival ; rdfs:range xsd:integer .
+ex:prop_festivalType a owl:DatatypeProperty ; rdfs:domain ex:Festival ; rdfs:range xsd:string .
+ex:prop_cuisineType a owl:DatatypeProperty ; rdfs:domain ex:Cuisine ; rdfs:range xsd:string .
+ex:prop_attractionName a owl:DatatypeProperty ; rdfs:domain ex:Attraction ; rdfs:range xsd:string .
+ex:prop_attractionType a owl:DatatypeProperty ; rdfs:domain ex:Attraction ; rdfs:range xsd:string .
+ex:prop_attractionTier a owl:DatatypeProperty ; rdfs:domain ex:Attraction ; rdfs:range xsd:string .

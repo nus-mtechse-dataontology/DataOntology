@@ -18,6 +18,7 @@ COPY --from=builder /install /var/lang/lib/python3.14/site-packages
 
 # 3. Copy app code
 COPY src/ ./src/
+COPY graphdb/ ./graphdb/
 COPY resources/ ./resources/
 COPY datasets/ ./datasets/
 COPY vault/ ./vault/
@@ -35,7 +36,7 @@ ENV PROJECT_PATH=/var/task \
     AWS_LWA_ASYNC_INIT=true \
     AWS_LAMBDA_FUNCTION_NAME="local-testing" \
     AWS_LWA_READINESS_CHECK_PATH="/actuator/health/liveness"
-
+    GRAPHDB_URL="http://13.212.192.139:7200/repositories/data-ontology"
 ENTRYPOINT []
 
 # Lambda Web Adapter runs as extension automatically; run web app process directly.
