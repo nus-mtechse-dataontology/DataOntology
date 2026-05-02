@@ -157,7 +157,7 @@ jobs:
 
   # 2C. SECURITY SCAN: Gitleaks (secret scanning)
   gitleaks-scan:
-    continue-on-error: true
+    #continue-on-error: true
     needs: build
     runs-on: ubuntu-latest
     permissions:
