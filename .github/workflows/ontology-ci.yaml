@@ -230,6 +230,7 @@ jobs:
       - snyk-scan
       - sonarqube-scan
       - gitleaks-scan
+      - container-scan
     # Deploy only after merge/push to release (not as PR checklist item)
     if: github.event_name == 'push' && github.ref_name == 'release'
     runs-on: ubuntu-latest
