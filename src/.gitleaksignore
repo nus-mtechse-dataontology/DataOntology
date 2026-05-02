@@ -1,2 +1,2 @@
 # Ignore GCP API Key in historical commit e1241dd, the key has been revoked and is no longer valid.
-e1241dd07ee327897cfdd70b084ae821da20bce8:graphdb/config.py:gcp-api-key
+graphdb/config.py:gcp-api-key:6
