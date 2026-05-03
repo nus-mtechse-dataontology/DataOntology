@@ -1,0 +1,4 @@
+# CVE-2026-4046: glibc iconv DoS. 
+# Attempted update on 2026-05-03; AL2023 mirrors not yet providing v0.4.
+# Severity: HIGH. Impact: Minimal (internal Lambda processing).
+CVE-2026-4046
