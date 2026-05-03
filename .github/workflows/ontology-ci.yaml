@@ -157,9 +157,11 @@ jobs:
 
   # 2C. SECURITY SCAN: Gitleaks (secret scanning)
   gitleaks-scan:
-    continue-on-error: true
+    #continue-on-error: true
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -183,9 +185,12 @@ jobs:
             
   # 2D. SECURITY SCAN: Trivy Container (OS & Layer scanning)
   container-scan:
-    continue-on-error: true
+    #continue-on-error: true
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -203,7 +208,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Upload Results to GitHub Security Tab
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: always() # Ensure results upload even if scan fails
         with:
           sarif_file: 'trivy-results.sarif'
@@ -225,6 +230,7 @@ jobs:
       - snyk-scan
       - sonarqube-scan
       - gitleaks-scan
+      - container-scan
     # Deploy only after merge/push to release (not as PR checklist item)
     if: github.event_name == 'push' && github.ref_name == 'release'
     runs-on: ubuntu-latest
