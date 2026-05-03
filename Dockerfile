@@ -11,8 +11,7 @@ FROM public.ecr.aws/lambda/python:3.14
 # SECURITY PATCH: Resolve glibc vulnerabilities (CVE-2026-4046)
 # Amazon Linux 2023 requires dnf to pull the latest security updates.
 RUN dnf clean all && \
-    dnf makecache && \
-    dnf update -y glibc glibc-common glibc-langpack-en glibc-minimal-langpack && \
+    dnf update -y --advisory ALAS2023-2026-1622 && \
     dnf clean all
 
 RUN rpm -q glibc
