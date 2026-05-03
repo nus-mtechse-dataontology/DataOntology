@@ -9,3 +9,10 @@ targetRules = ["curl-auth-user"]
 paths = [
   '''\.github/workflows/ontology-ci\.yaml$''',
 ]
+
+[[allowlists]]
+description = "Ignore historical GCP key(invoked) in DataOntology config"
+commits = ["e1241dd07ee327897cfdd70b084ae821da20bce8"]
+paths = [
+    '''graphdb/config\.py'''
+]
