@@ -1,0 +1,171 @@
+f_country_code,f_currency_code,f_currency_name
+SG,SGD,Singapore Dollar
+HK,HKD,Hong Kong Dollar
+GB,GBP,British Pound
+CA,CAD,Canadian Dollar
+CN,CNY,Chinese Yuan
+ID,IDR,Indonesian Rupiah
+IE,EUR,Euro
+US,USD,US Dollar
+DK,DKK,Danish Krone
+VN,VND,Vietnamese Dong
+IN,INR,Indian Rupee
+FR,EUR,Euro
+TW,TWD,New Taiwan Dollar
+NO,NOK,Norwegian Krone
+AU,AUD,Australian Dollar
+AT,EUR,Euro
+NZ,NZD,New Zealand Dollar
+MY,MYR,Malaysian Ringgit
+JP,JPY,Japanese Yen
+SA,SAR,Saudi Riyal
+TH,THB,Thai Baht
+BN,BND,Brunei Dollar
+EG,EGP,Egyptian Pound
+ZA,ZAR,South African Rand
+BD,BDT,Bangladeshi Taka
+SE,SEK,Swedish Krona
+KH,KHR,Cambodian Riel
+DE,EUR,Euro
+ES,EUR,Euro
+MV,MVR,Maldivian Rufiyaa
+PH,PHP,Philippine Peso
+KR,KRW,South Korean Won
+CH,CHF,Swiss Franc
+IT,EUR,Euro
+AE,AED,United Arab Emirates Dirham
+NP,NPR,Nepalese Rupee
+KW,KWD,Kuwaiti Dinar
+TR,TRY,Turkish Lira
+LK,LKR,Sri Lankan Rupee
+BE,EUR,Euro
+GR,EUR,Euro
+RU,RUB,Russian Ruble
+BR,BRL,Brazilian Real
+MM,MMK,Myanmar Kyat
+LV,EUR,Euro
+RO,RON,Romanian Leu
+MX,MXN,Mexican Peso
+RS,RSD,Serbian Dinar
+MZ,MZN,Mozambican Metical
+MU,MUR,Mauritian Rupee
+FJ,FJD,Fijian Dollar
+NC,XPF,CFP Franc
+OM,OMR,Omani Rial
+MO,MOP,Macanese Pataca
+MT,EUR,Euro
+SC,SCR,Seychellois Rupee
+HR,HRK,Croatian Kuna
+LT,EUR,Euro
+PL,PLN,Polish Zloty
+CK,NZD,New Zealand Dollar
+ET,ETB,Ethiopian Birr
+AZ,AZN,Azerbaijani Manat
+WS,WST,Samoan Tala
+PT,EUR,Euro
+CL,CLP,Chilean Peso
+PY,PYG,Paraguayan Guarani
+AW,AWG,Aruban Florin
+CI,XOF,West African CFA Franc
+GH,GHS,Ghanaian Cedi
+AR,ARS,Argentine Peso
+LU,EUR,Euro
+IS,ISK,Icelandic Krona
+BA,BAM,Bosnia-Herzegovina Convertible Mark
+TO,TOP,Tongan Paanga
+FI,EUR,Euro
+LA,LAK,Laotian Kip
+SB,SBD,Solomon Islands Dollar
+SX,XCG,Caribbean Guilder
+NL,EUR,Euro
+DZ,DZD,Algerian Dinar
+TZ,TZS,Tanzanian Shilling
+UG,UGX,Ugandan Shilling
+RW,RWF,Rwandan Franc
+TD,XAF,Central African CFA Franc
+UY,UYU,Uruguayan Peso
+SI,EUR,Euro
+KE,KES,Kenyan Shilling
+JM,JMD,Jamaican Dollar
+BF,XOF,West African CFA Franc
+TC,USD,US Dollar
+CG,XAF,Central African CFA Franc
+DO,DOP,Dominican Peso
+PR,USD,US Dollar
+VU,VUV,Vanuatu Vatu
+ZW,ZWG,Zimbabwe Gold
+IL,ILS,Israeli New Shekel
+MN,MNT,Mongolian Tugrik
+PG,PGK,Papua New Guinean Kina
+BZ,BZD,Belize Dollar
+QA,QAR,Qatari Rial
+PK,PKR,Pakistani Rupee
+SD,SDG,Sudanese Pound
+AO,AOA,Angolan Kwanza
+ZM,ZMW,Zambian Kwacha
+CR,CRC,Costa Rican Colon
+MG,MGA,Malagasy Ariary
+PF,XPF,CFP Franc
+NA,ZAR,South African Rand
+BM,BMD,Bermudan Dollar
+LB,LBP,Lebanese Pound
+CO,COP,Colombian Peso
+BB,BBD,Barbadian Dollar
+VC,XCD,East Caribbean Dollar
+NG,NGN,Nigerian Naira
+KZ,KZT,Kazakhstani Tenge
+JO,JOD,Jordanian Dinar
+IQ,IQD,Iraqi Dinar
+IR,IRR,Iranian Rial
+UA,UAH,Ukrainian Hryvnia
+BY,BYN,Belarusian Ruble
+MP,USD,US Dollar
+MK,MKD,Macedonian Denar
+GT,GTQ,Guatemalan Quetzal
+GU,USD,US Dollar
+BW,BWP,Botswanan Pula
+CW,XCG,Caribbean Guilder
+UZ,UZS,Uzbekistani Som
+GE,GEL,Georgian Lari
+AM,AMD,Armenian Dram
+PE,PEN,Peruvian Sol
+SN,XOF,West African CFA Franc
+CM,XAF,Central African CFA Franc
+MW,MWK,Malawian Kwacha
+VE,VES,Venezuelan Bolivar
+MA,MAD,Moroccan Dirham
+KY,KYD,Cayman Islands Dollar
+EC,USD,US Dollar
+KM,KMF,Comorian Franc
+TJ,TJS,Tajikistani Somoni
+CY,EUR,Euro
+FO,DKK,Danish Krone
+KG,KGS,Kyrgystani Som
+SK,EUR,Euro
+GA,XAF,Central African CFA Franc
+DJ,DJF,Djiboutian Franc
+MD,MDL,Moldovan Leu
+BS,BSD,Bahamian Dollar
+NE,XOF,West African CFA Franc
+TG,XOF,West African CFA Franc
+BO,BOB,Bolivian Boliviano
+CV,CVE,Cape Verdean Escudo
+PW,USD,US Dollar
+HT,HTG,Haitian Gourde
+FM,USD,US Dollar
+TT,TTD,Trinidad & Tobago Dollar
+PA,PAB,Panamanian Balboa
+TN,TND,Tunisian Dinar
+ME,EUR,Euro
+AL,ALL,Albanian Lek
+HN,HNL,Honduran Lempira
+GQ,XAF,Central African CFA Franc
+LC,XCD,East Caribbean Dollar
+BG,BGN,Bulgarian Lev
+CU,CUP,Cuban Peso
+NI,NIO,Nicaraguan Cordoba
+SV,USD,US Dollar
+BH,BHD,Bahraini Dinar
+CZ,CZK,Czech Koruna
+HU,HUF,Hungarian Forint
+EE,EUR,Euro

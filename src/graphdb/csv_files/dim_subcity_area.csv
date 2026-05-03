@@ -1,0 +1,582 @@
+f_city_code,f_subcity_area_code,f_subcity_area_name,f_subcity_area_summary,f_research_status
+HKG,HKG_central,Central,Central is the strongest premium base for Hong Kong with direct airport-train access strong office connectivity upscale hotels and fast access to Mid-Levels Soho the Peak tram and harbourfront business districts.,researched_first_pass
+HKG,HKG_admiralty_and_pacific_place,Admiralty and Pacific Place,Admiralty and Pacific Place suit polished high-end stays for visitors who want luxury hotels efficient MTR interchange embassy and office access and a quieter feel than Central nightlife streets.,researched_first_pass
+HKG,HKG_wan_chai,Wan Chai,Wan Chai balances transport nightlife convention access and easier pricing than Central making it a good all-round choice for mixed business and leisure trips.,researched_first_pass
+HKG,HKG_causeway_bay,Causeway Bay,Causeway Bay is best for shopping dining and dense city energy with strong MTR access and many mid-range to upscale hotel options near Victoria Park and the harbour side.,researched_first_pass
+HKG,HKG_tsim_sha_tsui,Tsim Sha Tsui,Tsim Sha Tsui is one of the best first-time visitor bases thanks to harbour views ferries museums shopping and broad public transport connections on the Kowloon side.,researched_first_pass
+HKG,HKG_mong_kok_and_yau_ma_tei,Mong Kok and Yau Ma Tei,Mong Kok and Yau Ma Tei suit travelers who want markets street food local intensity and more budget to mid-range options while staying well connected to the rest of the city.,researched_first_pass
+LON,LON_covent_garden,Covent Garden,Covent Garden is an excellent first-time London base because it places visitors close to the West End walkable sightseeing restaurants theatres and multiple Underground lines.,researched_first_pass
+LON,LON_soho_and_piccadilly,Soho and Piccadilly,Soho and Piccadilly work best for travelers who want nightlife food theatre and dense central energy without sacrificing access to major sights.,researched_first_pass
+LON,LON_south_bank,South Bank,South Bank is a strong scenic base near the Thames with quick access to Westminster the London Eye Tate Modern and useful transport while feeling slightly less hectic than Soho.,researched_first_pass
+LON,LON_kensington,Kensington,Kensington suits calmer upscale stays near major museums parks elegant residential streets and higher-end hotels with good Tube connectivity.,researched_first_pass
+LON,LON_marylebone_and_fitzrovia,Marylebone and Fitzrovia,Marylebone and Fitzrovia balance centrality dining and a more polished neighborhood atmosphere with easy access to shopping and rail links.,researched_first_pass
+LON,LON_shoreditch_and_spitalfields,Shoreditch and Spitalfields,Shoreditch and Spitalfields are better for creative neighborhoods nightlife coffee shops and a more trend-driven East London stay than a classic first-time sightseeing base.,researched_first_pass
+YVR,YVR_downtown,Downtown,Downtown Vancouver is the easiest all-round base for first-time visits with strong transit waterfront access restaurants shopping and simple movement to most major neighborhoods.,researched_first_pass
+YVR,YVR_coal_harbour,Coal Harbour,Coal Harbour suits premium waterfront stays with excellent views easy access to Stanley Park and a quieter polished feel than the busier entertainment blocks downtown.,researched_first_pass
+YVR,YVR_yaletown,Yaletown,Yaletown is ideal for visitors who want modern hotels good dining marina views and easy walking to False Creek and the city center.,researched_first_pass
+YVR,YVR_west_end,West End,The West End gives a more residential local feel with easy beach and park access while still remaining close to downtown attractions and transit.,researched_first_pass
+YVR,YVR_gastown_and_chinatown,Gastown and Chinatown,Gastown and Chinatown suit travelers who want heritage streets design shops and nightlife but some visitors may prefer staying here only if they are comfortable with more mixed downtown street conditions nearby.,researched_first_pass
+SUB,SUB_tunjungan_and_city_center,Tunjungan and City Center,Tunjungan and the city center are the most practical base for first-time Surabaya stays because they combine malls offices hotels and straightforward movement around the city.,researched_first_pass
+SUB,SUB_gubeng,Gubeng,Gubeng works well for rail access business trips and visitors who want a central location without relying entirely on the Tunjungan corridor.,researched_first_pass
+SUB,SUB_darmo_and_citraland_side,Darmo and Citraland side,Darmo and the western residential corridors suit calmer more upscale stays with wider roads dining options and easier access to suburban business districts.,researched_first_pass
+SUB,SUB_old_arab_quarter_and_ampel,Old Arab Quarter and Ampel,A stay near Ampel is more appropriate for visitors specifically focused on heritage religious sites and old Surabaya atmosphere than for general hotel convenience.,researched_first_pass
+SGN,SGN_district_1,District 1,District 1 is the default first-time base in Ho Chi Minh City thanks to major sights nightlife rooftop bars broad hotel choice and easy movement to other central districts.,researched_first_pass
+SGN,SGN_district_3,District 3,District 3 is quieter and more local than District 1 while still remaining very central making it a strong choice for travelers who want easier coffee shop and residential neighborhood access.,researched_first_pass
+SGN,SGN_thao_dien,Thao Dien,Thao Dien suits longer lifestyle-oriented stays with international dining modern apartments and a calmer riverside atmosphere than the historic core.,researched_first_pass
+SGN,SGN_phu_nhuan,Phu Nhuan,Phu Nhuan is useful for travelers who want a practical balance between the airport and central districts with more local pricing and food options.,researched_first_pass
+SGN,SGN_binh_thanh,Binh Thanh,Binh Thanh works for visitors who want a modern mixed-use base close to central Saigon but with broader residential and local dining context than District 1.,researched_first_pass
+TRV,TRV_kovalam,Kovalam,Kovalam is the strongest leisure base near Thiruvananthapuram for beach access resort stays and a slower coastal atmosphere rather than urban convenience.,researched_first_pass
+TRV,TRV_city_center_and_east_fort,City Center and East Fort,The city center and East Fort are best for temple access rail and bus connectivity and practical movement around Thiruvananthapuram.,researched_first_pass
+TRV,TRV_vazhuthacaud_and_museum_area,Vazhuthacaud and Museum Area,Vazhuthacaud and the museum side suit quieter urban stays with easier access to government institutions cultural sites and broad city roads.,researched_first_pass
+TRV,TRV_kazhakkoottam_and_tech_corridor,Kazhakkoottam and Tech Corridor,The northern tech corridor is more suitable for business and work trips tied to the IT zone than for classic city sightseeing stays.,researched_first_pass
+TPE,TPE_ximending,Ximending,Ximending is one of the best first-time Taipei bases for nightlife youth culture shopping and strong MRT access while staying very central.,researched_first_pass
+TPE,TPE_zhongshan,Zhongshan,Zhongshan balances shopping food boutique hotels and transit convenience making it one of Taipei most versatile areas to stay.,researched_first_pass
+TPE,TPE_xinyi,Xinyi,Xinyi works best for modern premium stays around Taipei 101 luxury malls polished hotels and a more contemporary city feel.,researched_first_pass
+TPE,TPE_da_an_and_east_district,Da An and East District,Da An and the East District suit travelers who want cafes shopping tree-lined streets and a slightly more lifestyle-led central base.,researched_first_pass
+TPE,TPE_beimen_and_main_station,Beimen and Main Station,The Main Station area is especially practical for short stays rail transfers day trips and budget to mid-range hotel options.,researched_first_pass
+SYD,SYD_cbd,CBD,The Sydney CBD is the most efficient first-time base with rail access ferry links shopping and easy movement toward the harbour major sights and business districts.,researched_first_pass
+SYD,SYD_the_rocks_and_circular_quay,The Rocks and Circular Quay,The Rocks and Circular Quay are best for iconic harbour views easy ferry access and a classic sightseeing-first Sydney stay.,researched_first_pass
+SYD,SYD_surry_hills,Surry Hills,Surry Hills suits dining nightlife design-forward hotels and a more local urban feel while remaining close to the city center.,researched_first_pass
+SYD,SYD_darling_harbour,Darling Harbour,Darling Harbour works well for family trips conventions entertainment venues and easy pedestrian access to the CBD.,researched_first_pass
+SYD,SYD_bondi_and_eastern_beaches,Bondi and Eastern Beaches,Bondi and the eastern beaches are better for beach-led stays and coastal lifestyle travel than for purely efficient city sightseeing.,researched_first_pass
+SZG,SZG_altstadt,Altstadt,Salzburg Altstadt is the best first-time base for historic atmosphere Mozart-era sights and walkable access to the city's main landmarks.,researched_first_pass
+SZG,SZG_neustadt,Neustadt,Neustadt gives a slightly broader more local urban base across the river with easier shopping and transit while staying close to the old town.,researched_first_pass
+SZG,SZG_linzergasse_and_kapuzinerberg_side,Linzergasse and Kapuzinerberg side,Linzergasse and the hill side suit travelers who want charm and centrality without staying in the busiest old-town lanes.,researched_first_pass
+SZG,SZG_station_area,Station Area,The station area is the practical choice for rail-heavy itineraries or short stays with onward travel into Austria or Bavaria.,researched_first_pass
+PEN,PEN_george_town,George Town,George Town is the strongest base in Penang for culture food heritage hotels and walkable access to the island most famous urban attractions.,researched_first_pass
+PEN,PEN_gurney_drive,Gurney Drive,Gurney Drive balances seafront hotels food courts malls and easier modern comfort than the heritage core.,researched_first_pass
+PEN,PEN_tanjung_tokong,Tanjung Tokong,Tanjung Tokong is a quieter modern coastal base with condo-style stays and easier access to both George Town and the northern beaches.,researched_first_pass
+PEN,PEN_batu_ferringhi,Batu Ferringhi,Batu Ferringhi is best for resort and beach-focused stays but is less convenient than George Town for culture-first urban exploration.,researched_first_pass
+BJS,BJS_wangfujing_and_dongcheng,Wangfujing and Dongcheng,Wangfujing and Dongcheng are ideal for first-time Beijing stays because they keep visitors close to the Forbidden City major transit lines and classic central sights.,researched_first_pass
+BJS,BJS_qianmen_and_chongwenmen,Qianmen and Chongwenmen,Qianmen and the southern historic core suit travelers who want more traditional Beijing atmosphere and easier access to pedestrian old-city zones.,researched_first_pass
+BJS,BJS_sanlitun,Sanlitun,Sanlitun is the strongest choice for nightlife international dining and a more modern social scene than the imperial-center districts.,researched_first_pass
+BJS,BJS_chaoyang_cbd,Chaoyang CBD,The Chaoyang CBD works best for business-led trips and premium modern hotels rather than heritage-focused first-time sightseeing.,researched_first_pass
+BJS,BJS_houhai_and_gulou,Houhai and Gulou,Houhai and Gulou offer hutong atmosphere bars and old Beijing character for travelers who prioritize neighborhood feel over large international hotels.,researched_first_pass
+NGO,NGO_meieki_and_station,Meieki and Station,The station area is the most practical Nagoya base for transport convenience shopping and easy day-trip connections.,researched_first_pass
+NGO,NGO_sakae,Sakae,Sakae is best for nightlife shopping and a livelier city-center atmosphere than the station district.,researched_first_pass
+NGO,NGO_osu,Osu,Osu suits visitors who want street food shopping arcades temples and a more local neighborhood stay.,researched_first_pass
+NGO,NGO_kanayama,Kanayama,Kanayama is a good secondary transport hub with easier hotel pricing and strong rail connectivity across the region.,researched_first_pass
+TYO,TYO_shinjuku,Shinjuku,Shinjuku is one of the best all-round Tokyo bases thanks to huge rail connectivity shopping dining and a wide hotel range from business to luxury.,researched_first_pass
+TYO,TYO_shibuya,Shibuya,Shibuya suits younger nightlife-focused trips and travelers who want Tokyo energy fashion and easy access to western-central neighborhoods.,researched_first_pass
+TYO,TYO_ginza_and_tokyo_station,Ginza and Tokyo Station,Ginza and Tokyo Station are stronger for premium stays polished dining and rail-heavy itineraries including airport and shinkansen connections.,researched_first_pass
+TYO,TYO_ueno,Ueno,Ueno works well for value-conscious travelers who still want strong transit museums parks and easier access to the northeast side of Tokyo.,researched_first_pass
+TYO,TYO_asakusa,Asakusa,Asakusa is best for visitors who want more traditional Tokyo atmosphere temples and a slightly slower old-city feel than the western entertainment hubs.,researched_first_pass
+TYO,TYO_roppongi_and_akasaka,Roppongi and Akasaka,Roppongi and Akasaka suit upscale nightlife business stays and international dining with a more polished embassy-district feel.,researched_first_pass
+RUH,RUH_olaya,Olaya,Olaya is the clearest all-round Riyadh base for business travel upscale hotels malls and straightforward movement across the modern city.,researched_first_pass
+RUH,RUH_al_murabba,Al Murabba,Al Murabba is better for visitors who want easier access to museums government sites and older central landmarks.,researched_first_pass
+RUH,RUH_diplomatic_quarter,Diplomatic Quarter,The Diplomatic Quarter suits quieter premium stays with greener streets and a more insulated atmosphere.,researched_first_pass
+RUH,RUH_king_abdullah_financial_district,KAFD,KAFD works best for modern business-focused stays tied to the new financial district and north Riyadh offices.,researched_first_pass
+SHA,SHA_peoples_square_and_jing_an,Peoples Square and Jing An,Peoples Square and Jing An are the best first-time Shanghai base thanks to centrality shopping strong metro access and easy movement across the city.,researched_first_pass
+SHA,SHA_the_bund_and_east_nanjing,The Bund and East Nanjing,The Bund area suits classic skyline stays and immediate access to famous riverfront views though it can be busier and more tourist-oriented.,researched_first_pass
+SHA,SHA_french_concession,French Concession,The French Concession is strongest for tree-lined streets boutique hotels cafes nightlife and a more lived-in Shanghai feel.,researched_first_pass
+SHA,SHA_lujiazui,Lujiazui,Lujiazui works best for premium skyline hotels business stays and dramatic Pudong views rather than a neighborhood-heavy local atmosphere.,researched_first_pass
+SHA,SHA_xintiandi_and_huangpu,Xintiandi and Huangpu,Xintiandi and Huangpu balance nightlife restaurants and polished central access with an upscale urban feel.,researched_first_pass
+BKK,BKK_sukhumvit,Sukhumvit,Sukhumvit is the most practical all-round Bangkok base for hotels BTS transit dining nightlife and easy movement across the city.,researched_first_pass
+BKK,BKK_siam,Siam,Siam is best for shopping malls central transit and visitors who want a very connected modern city core.,researched_first_pass
+BKK,BKK_silom_and_sathorn,Silom and Sathorn,Silom and Sathorn balance business access nightlife and easier movement to the river and central business zones.,researched_first_pass
+BKK,BKK_riverside,Riverside,The Riverside is strongest for scenic hotels temples and a more atmospheric sightseeing-led stay than Sukhumvit nightlife convenience.,researched_first_pass
+BKK,BKK_old_city_and_khao_san,Old City and Khao San,The Old City and Khao San area suit budget travelers and temple-focused trips but feel less connected to the business and shopping corridors.,researched_first_pass
+BNE,BNE_cbd,CBD,The Brisbane CBD is the easiest first-time base for transit shopping and short city stays.,researched_first_pass
+BNE,BNE_south_bank,South Bank,South Bank suits leisure trips museums river walks and convention-linked stays while remaining close to the city center.,researched_first_pass
+BNE,BNE_fortitude_valley,Fortitude Valley,Fortitude Valley is strongest for nightlife music venues and a more energetic dining scene.,researched_first_pass
+BNE,BNE_new_farm_and_teneriffe,New Farm and Teneriffe,New Farm and Teneriffe give a more residential and upscale riverside base with cafes and easier neighborhood character.,researched_first_pass
+BOM,BOM_colaba,Colaba,Colaba is one of the best first-time Mumbai bases for heritage sights sea views and convenient access to South Mumbai landmarks.,researched_first_pass
+BOM,BOM_fort_and_churchgate,Fort and Churchgate,Fort and Churchgate suit business and heritage-oriented stays with excellent rail and administrative-core access.,researched_first_pass
+BOM,BOM_bandra,Bandra,Bandra is strongest for dining lifestyle stays and a more contemporary west-side urban feel than South Mumbai.,researched_first_pass
+BOM,BOM_juhu,Juhu,Juhu is better for beach-adjacent premium hotels and airport-side convenience than for classic first-time sightseeing.,researched_first_pass
+BOM,BOM_lower_parel,Lower Parel,Lower Parel works for luxury hotels business access and upscale dining in redeveloped mill districts.,researched_first_pass
+BWN,BWN_city_center,City Center,The city center is the most practical Bandar Seri Begawan base for mosque visits museums and straightforward urban movement.,researched_first_pass
+BWN,BWN_gadong,Gadong,Gadong is stronger for shopping dining and modern hotel convenience than the ceremonial center.,researched_first_pass
+BWN,BWN_kampong_ayer_side,Kampong Ayer side,The Kampong Ayer side is useful for travelers who want stronger cultural context and river-based old Brunei atmosphere.,researched_first_pass
+JKT,JKT_menteng_and_central_jakarta,Menteng and Central Jakarta,Menteng and Central Jakarta are the strongest all-round base for first-time visits government institutions and easier movement across the core city.,researched_first_pass
+JKT,JKT_sudirman_and_scbd,Sudirman and SCBD,Sudirman and SCBD work best for business stays premium hotels and modern office-district access.,researched_first_pass
+JKT,JKT_kemang,Kemang,Kemang suits dining nightlife and a more expatriate residential atmosphere than the formal business core.,researched_first_pass
+JKT,JKT_kota_tua,Kota Tua,Kota Tua is better for short heritage-oriented stays and old-city exploration than for general hotel convenience.,researched_first_pass
+JKT,JKT_kelapa_gading,Kelapa Gading,Kelapa Gading offers malls food and a more suburban local stay for return visitors or business trips to the north side.,researched_first_pass
+CPT,CPT_city_bowl,City Bowl,City Bowl is the best first-time Cape Town base because it combines centrality mountain views dining and fast access to most major city attractions.,researched_first_pass
+CPT,CPT_v_and_a_waterfront,V and A Waterfront,The V and A Waterfront is strongest for premium stays easy family travel retail and organized activity access.,researched_first_pass
+CPT,CPT_sea_point_and_green_point,Sea Point and Green Point,Sea Point and Green Point balance coast and city access with a more lived-in feel than the Waterfront resort zone.,researched_first_pass
+CPT,CPT_camps_bay,Camps Bay,Camps Bay is best for scenic beach-led stays and sunset views but is less practical for pure city-center movement.,researched_first_pass
+CPT,CPT_gardens_and_tamboerskloof,Gardens and Tamboerskloof,Gardens and Tamboerskloof suit design hotels cafes and a more neighborhood-like base close to Kloof Street and the mountain slopes.,researched_first_pass
+DAC,DAC_gulshan_and_banani,Gulshan and Banani,Gulshan and Banani are the strongest choice for business stays embassies security-conscious visitors and broad modern hotel selection in Dhaka.,researched_first_pass
+DAC,DAC_dhanmondi,Dhanmondi,Dhanmondi suits travelers who want a more residential cafe-oriented base with good food and less corporate feel than Gulshan.,researched_first_pass
+DAC,DAC_old_dhaka,Old Dhaka,Old Dhaka is best for heritage and market visits but is more suitable for day exploration than for most hotel-led stays.,researched_first_pass
+DAC,DAC_motijheel_and_ramna,Motijheel and Ramna,Motijheel and Ramna are useful for administrative and central business access though they are less visitor-oriented than Gulshan.,researched_first_pass
+DPS,DPS_seminyak,Seminyak,Seminyak is one of the strongest Bali bases for upscale villas restaurants shopping and convenient access to south-coast beaches.,researched_first_pass
+DPS,DPS_canggu,Canggu,Canggu suits cafe culture surf-oriented trips and a trendier lifestyle stay with many villas and coworking-friendly options.,researched_first_pass
+DPS,DPS_ubud,Ubud,Ubud is best for culture wellness rice-terrace access and inland boutique stays rather than beach travel.,researched_first_pass
+DPS,DPS_jimbaran,Jimbaran,Jimbaran works well for quieter resort stays seafood dining and easier access to the southern peninsula.,researched_first_pass
+DPS,DPS_nusa_dua,Nusa Dua,Nusa Dua is the strongest luxury resort zone for cleaner beaches family trips and self-contained upscale stays.,researched_first_pass
+DPS,DPS_sanur,Sanur,Sanur suits slower family-friendly beach stays and easier east-coast access with a calmer atmosphere than Seminyak or Canggu.,researched_first_pass
+MDC,MDC_city_center,City Center,The city center is the most practical base in Manado for first-time stays local services and straightforward movement around the urban core.,researched_first_pass
+MDC,MDC_megamas,Megamas,Megamas suits modern hotel stays mall access and seafront convenience with a more contemporary feel than the older central grid.,researched_first_pass
+MDC,MDC_bunaken_access_area,Bunaken access area,The Bunaken access side is best for dive-oriented stays and easier transfers to marine activities rather than pure city exploration.,researched_first_pass
+PLM,PLM_city_center,City Center,The city center is the most practical Palembang base for business travel malls and easy urban access.,researched_first_pass
+PLM,PLM_ampera_riverfront,Ampera Riverfront,The Ampera riverfront is best for landmark access river views and a more recognizable city identity than generic central hotel strips.,researched_first_pass
+PLM,PLM_jakabaring,Jakabaring,Jakabaring works well for sports-complex access and a quieter southern base with broader roads and newer development.,researched_first_pass
+PNH,PNH_riverside_and_daun_penh,Riverside and Daun Penh,Riverside and Daun Penh are the best first-time Phnom Penh base for royal sites dining bars and straightforward city sightseeing.,researched_first_pass
+PNH,PNH_bkk1,BKK1,BKK1 is stronger for polished cafes restaurants and a more expatriate-friendly hotel environment than the riverside tourist core.,researched_first_pass
+PNH,PNH_tonle_bassac,Tonle Bassac,Tonle Bassac suits nightlife and newer dining-led stays while staying close to central Phnom Penh.,researched_first_pass
+PNH,PNH_russian_market,Russian Market,Russian Market gives a more local neighborhood feel with easier mid-range stays and strong everyday food access.,researched_first_pass
+KLU,KLU_altstadt,Altstadt,Altstadt is the best base in Klagenfurt for walkability old-town atmosphere and immediate access to the compact central city.,researched_first_pass
+KLU,KLU_lakeside_and_worthersee,Lakeside and Worthersee,Lakeside areas by Worthersee are stronger for summer leisure stays scenic relaxation and resort-like atmosphere.,researched_first_pass
+KLU,KLU_viktring,Viktring,Viktring suits quieter stays with greener surroundings and a less tourist-heavy rhythm than the core center.,researched_first_pass
+SEA,SEA_downtown,Downtown,Downtown Seattle is the most practical first-time base for waterfront attractions shopping major transit and straightforward movement.,researched_first_pass
+SEA,SEA_belltown_and_pike_place,Belltown and Pike Place,Belltown and Pike Place are strongest for food nightlife and iconic urban access near the waterfront market area.,researched_first_pass
+SEA,SEA_capitol_hill,Capitol Hill,Capitol Hill suits nightlife coffee shops and a more local Seattle neighborhood atmosphere.,researched_first_pass
+SEA,SEA_south_lake_union,South Lake Union,South Lake Union works well for modern hotels business access and easy links toward Queen Anne and downtown.,researched_first_pass
+SEA,SEA_queen_anne,Queen Anne,Queen Anne is a calmer base near Seattle Center with easier family access to museums and major event venues.,researched_first_pass
+VIE,VIE_innere_stadt,Innere Stadt,Innere Stadt is the classic first-time Vienna base with the strongest concentration of imperial sights luxury hotels and walkable old-city atmosphere.,researched_first_pass
+VIE,VIE_leopoldstadt,Leopoldstadt,Leopoldstadt gives easier value and quick access to the historic center while staying near Prater and Danube Canal corridors.,researched_first_pass
+VIE,VIE_mariahilf_and_neubau,Mariahilf and Neubau,Mariahilf and Neubau suit shopping museums cafes and a more local creative central stay.,researched_first_pass
+VIE,VIE_landstrasse,Landstrasse,Landstrasse balances central access airport-train convenience and a slightly quieter business-friendly feel.,researched_first_pass
+KUL,KUL_bukit_bintang,Bukit Bintang,Bukit Bintang is the easiest all-round Kuala Lumpur base for shopping dining nightlife and broad hotel choice.,researched_first_pass
+KUL,KUL_klcc,KLCC,KLCC suits premium stays skyline views and direct access to landmark towers and polished malls.,researched_first_pass
+KUL,KUL_chinatown_and_pasar_seni,Chinatown and Pasar Seni,Chinatown and Pasar Seni are strongest for culture food and budget to mid-range urban stays.,researched_first_pass
+KUL,KUL_bangsar,Bangsar,Bangsar works for dining lifestyle stays and visitors who prefer a neighborhood feel over classic tourist centrality.,researched_first_pass
+MLE,MLE_male_city,Male City,Male City is the practical base for short urban overnights ferry connections and travelers who need to stay close to the capital's transport links.,researched_first_pass
+MLE,MLE_hulhumale,Hulhumale,Hulhumale is generally the strongest choice for airport convenience beachside hotels and easier modern accommodations than Male proper.,researched_first_pass
+MLE,MLE_hulhule_airport_side,Hulhule airport side,The airport side works best for transit-heavy overnights rather than destination-focused island stays.,researched_first_pass
+MNL,MNL_makati,Makati,Makati is the strongest all-round Manila base for hotels dining business travel and relatively straightforward movement around the metro.,researched_first_pass
+MNL,MNL_bgc,Bonifacio Global City,Bonifacio Global City suits modern polished stays with cleaner streets walkability and strong food and office access.,researched_first_pass
+MNL,MNL_ermita_and_intramuros,Ermita and Intramuros,Ermita and Intramuros are better for museums heritage sightseeing and Baywalk access than for purely modern city comfort.,researched_first_pass
+MNL,MNL_ortigas,Ortigas,Ortigas works well for business travel and mid-range city stays outside the main tourist and nightlife cores.,researched_first_pass
+MAN,MAN_city_centre_and_northern_quarter,City Centre and Northern Quarter,City Centre and the Northern Quarter are best for first-time Manchester stays dining and easy movement across the core.,researched_first_pass
+MAN,MAN_deansgate_and_spinningfields,Deansgate and Spinningfields,Deansgate and Spinningfields suit polished hotels nightlife and business-friendly city-center stays.,researched_first_pass
+MAN,MAN_salford_quays,Salford Quays,Salford Quays works for media and event access with a quieter waterside setting than the city-center entertainment blocks.,researched_first_pass
+MAN,MAN_didsbury,Didsbury,Didsbury offers a calmer residential base with strong local dining and easier access for repeat visitors or car-based stays.,researched_first_pass
+LNZ,LNZ_altstadt_and_landstrasse,Altstadt and Landstrasse,Altstadt and Landstrasse are the easiest Linz base for central sightseeing shopping and river access.,researched_first_pass
+LNZ,LNZ_urfahr,Urfahr,Urfahr gives a slightly quieter stay across the Danube with easy tram connections back into the center.,researched_first_pass
+LNZ,LNZ_danube_riverside,Danube riverside,The Danube riverside suits scenic walks and event-linked stays with a more open urban feel.,researched_first_pass
+CNX,CNX_old_city,Old City,The Old City is the most practical first-time Chiang Mai base for temples cafes food and walkability.,researched_first_pass
+CNX,CNX_nimmanhaemin,Nimmanhaemin,Nimmanhaemin suits cafes coworking modern dining and a more contemporary lifestyle stay than the walled core.,researched_first_pass
+CNX,CNX_riverside_and_wat_ket,Riverside and Wat Ket,Riverside and Wat Ket are better for calmer boutique stays and evening dining near the Ping River.,researched_first_pass
+CNX,CNX_night_bazaar_and_chang_klan,Night Bazaar and Chang Klan,Night Bazaar and Chang Klan work well for hotel concentration markets and easy evening activity.,researched_first_pass
+COK,COK_fort_kochi,Fort Kochi,Fort Kochi is the strongest base for heritage atmosphere slower travel and classic waterfront cultural context.,researched_first_pass
+COK,COK_ernakulam_and_mg_road,Ernakulam and MG Road,Ernakulam and MG Road are better for transport business and broad hotel convenience than the heritage quarter.,researched_first_pass
+COK,COK_mattancherry,Mattancherry,Mattancherry suits market visits history and a more old-port feel though accommodations are more limited than in Ernakulam.,researched_first_pass
+LAX,LAX_santa_monica,Santa Monica,Santa Monica is one of the best Los Angeles bases for beach access walkability and a polished first-time visitor experience.,researched_first_pass
+LAX,LAX_hollywood_and_west_hollywood,Hollywood and West Hollywood,Hollywood and West Hollywood suit nightlife entertainment and visitors who want more evening activity than beach districts offer.,researched_first_pass
+LAX,LAX_downtown_la,Downtown LA,Downtown LA works for museums sports and a more urban hotel stay but is less intuitive for beach-focused travelers.,researched_first_pass
+LAX,LAX_beverly_hills_and_century_city,Beverly Hills and Century City,Beverly Hills and Century City are stronger for premium stays and central westside movement between major LA districts.,researched_first_pass
+GRZ,GRZ_altstadt,Altstadt,Altstadt is the best Graz base for first-time walking access and strong historic atmosphere.,researched_first_pass
+GRZ,GRZ_lend,Lend,Lend suits a more local creative stay with markets cafes and easier access to a younger neighborhood scene.,researched_first_pass
+GRZ,GRZ_geidorf,Geidorf,Geidorf works for quieter stays with university-side access and a more residential rhythm than the center.,researched_first_pass
+HYD,HYD_banjara_hills,Banjara Hills,Banjara Hills is the strongest all-round Hyderabad base for hotels dining and shopping.,researched_first_pass
+HYD,HYD_jubilee_hills,Jubilee Hills,Jubilee Hills suits upscale stays dining and a more polished residential-commercial mix than older parts of the city.,researched_first_pass
+HYD,HYD_hitec_city_and_gachibowli,HITEC City and Gachibowli,HITEC City and Gachibowli are best for tech-corridor business stays and modern office-linked travel.,researched_first_pass
+HYD,HYD_charminar_and_old_city,Charminar and Old City,Charminar and the Old City are better for heritage visits and markets than for hotel comfort and ease of movement.,researched_first_pass
+SEL,SEL_myeongdong,Myeongdong,Myeongdong is the easiest first-time Seoul base for shopping sightseeing and central transit connections.,researched_first_pass
+SEL,SEL_jongno_and_insadong,Jongno and Insadong,Jongno and Insadong are strongest for palace access traditional streets and classic Seoul cultural context.,researched_first_pass
+SEL,SEL_hongdae,Hongdae,Hongdae suits youth culture cafes and nightlife with a more creative west-side energy.,researched_first_pass
+SEL,SEL_gangnam,Gangnam,Gangnam works best for modern upscale stays shopping and business-heavy travel on the south side of the river.,researched_first_pass
+SEL,SEL_itaewon,Itaewon,Itaewon suits nightlife international dining and visitors who want a cosmopolitan base different from the mainstream shopping districts.,researched_first_pass
+GVA,GVA_old_town,Old Town,The Old Town is strongest for classic Geneva atmosphere and walkable access to central landmarks.,researched_first_pass
+GVA,GVA_paquis_and_lakeside,Paquis and lakeside,Paquis and the lakeside work well for station access waterfront walks and a broad mix of hotels.,researched_first_pass
+GVA,GVA_eaux_vives,Eaux-Vives,Eaux-Vives suits a more local dining-led stay with easy lake access and a calmer feel than the station side.,researched_first_pass
+GVA,GVA_plainpalais,Plainpalais,Plainpalais gives a livelier neighborhood atmosphere with easier access to cafes markets and university life.,researched_first_pass
+HAN,HAN_old_quarter,Old Quarter,The Old Quarter is the best first-time Hanoi base for atmosphere street food and dense walkable sightseeing.,researched_first_pass
+HAN,HAN_hoan_kiem_and_french_quarter,Hoan Kiem and French Quarter,Hoan Kiem and the French Quarter suit polished central stays with easier walking access and more refined hotel options.,researched_first_pass
+HAN,HAN_west_lake,West Lake,West Lake is calmer and stronger for boutique and lifestyle stays than the busy old-city core.,researched_first_pass
+HAN,HAN_ba_dinh,Ba Dinh,Ba Dinh works well for museums government sites and a quieter central stay than the Old Quarter.,researched_first_pass
+KCH,KCH_waterfront_and_city_centre,Waterfront and City Centre,The waterfront and city centre are the best first-time Kuching base for walkability food and heritage access.,researched_first_pass
+KCH,KCH_padungan_and_chinatown,Padungan and Chinatown,Padungan and Chinatown suit food-focused and more local stays with easy evening movement.,researched_first_pass
+KCH,KCH_santubong_and_damai,Santubong and Damai,Santubong and Damai are better for beach and resort-style stays outside the city core.,researched_first_pass
+FRA,FRA_innenstadt_and_altstadt,Innenstadt and Altstadt,Innenstadt and Altstadt are the best first-time Frankfurt base for central sights shopping and station access.,researched_first_pass
+FRA,FRA_bahnhofsviertel,Bahnhofsviertel,Bahnhofsviertel is very practical for transit and nightlife but suits travelers comfortable with a rougher station-district edge.,researched_first_pass
+FRA,FRA_sachsenhausen,Sachsenhausen,Sachsenhausen balances museums nightlife and a more local feel south of the river.,researched_first_pass
+FRA,FRA_westend,Westend,Westend is calmer and more upscale for business stays and longer visits.,researched_first_pass
+FUK,FUK_hakata,Hakata,Hakata is the strongest base for transport convenience food access and straightforward movement around Fukuoka.,researched_first_pass
+FUK,FUK_tenjin,Tenjin,Tenjin suits shopping nightlife and a more central city feel with strong dining and retail.,researched_first_pass
+FUK,FUK_nakasu_and_canal_city,Nakasu and Canal City,Nakasu and Canal City work for nightlife entertainment and easy access to central attractions.,researched_first_pass
+FUK,FUK_ohori,Ohori,Ohori is calmer and better for park access and slower boutique-style stays.,researched_first_pass
+ROM,ROM_centro_storico,Centro Storico,Centro Storico is the strongest first-time Rome base for classic sightseeing and historic atmosphere.,researched_first_pass
+ROM,ROM_monti,Monti,Monti suits travelers who want central access with more neighborhood character dining and boutique hotels.,researched_first_pass
+ROM,ROM_termini,Termini,Termini is highly practical for transport and value but feels more functional than atmospheric.,researched_first_pass
+ROM,ROM_trastevere,Trastevere,Trastevere is best for nightlife dining and an atmospheric neighborhood stay across the river.,researched_first_pass
+ROM,ROM_prati_and_vatican,Prati and Vatican,Prati and the Vatican side are calmer and work well for polished stays with easier access to Vatican City.,researched_first_pass
+SPK,SPK_odori_and_susukino,Odori and Susukino,Odori and Susukino are the best first-time Sapporo base for food shopping nightlife and winter convenience.,researched_first_pass
+SPK,SPK_sapporo_station,Sapporo Station,Sapporo Station is strongest for transport-heavy trips and easy movement during colder months.,researched_first_pass
+SPK,SPK_nakajima_park,Nakajima Park,Nakajima Park is calmer and better for a quieter hotel stay while staying close to the center.,researched_first_pass
+DVO,DVO_poblacion_and_downtown,Poblacion and Downtown,Poblacion and Downtown are the most practical Davao base for first-time access city services and central movement.,researched_first_pass
+DVO,DVO_lanang,Lanang,Lanang suits more modern hotel stays airport convenience and easier mall access.,researched_first_pass
+DVO,DVO_matina_and_ecoland,Matina and Ecoland,Matina and Ecoland work well for bus-terminal access malls and practical day-to-day movement.,researched_first_pass
+DXB,DXB_downtown_dubai,Downtown Dubai,Downtown Dubai is the strongest first-time base for skyline access premium hotels and major landmark convenience.,researched_first_pass
+DXB,DXB_dubai_marina_and_jbr,Dubai Marina and JBR,Dubai Marina and JBR suit beach-city stays nightlife and modern resort-style towers.,researched_first_pass
+DXB,DXB_deira_and_al_seef,Deira and Al Seef,Deira and Al Seef are better for older-city context creek access and easier value than the main luxury districts.,researched_first_pass
+DXB,DXB_business_bay,Business Bay,Business Bay balances modern hotels central access and a slightly less tourist-saturated environment than Downtown itself.,researched_first_pass
+DXB,DXB_palm_jumeirah,Palm Jumeirah,Palm Jumeirah works best for resort-led luxury stays and beachfront relaxation rather than practical city movement.,researched_first_pass
+NYC,NYC_midtown,Midtown,Midtown is the most practical first-time New York base for subway access major sights and broad hotel stock.,researched_first_pass
+NYC,NYC_lower_manhattan,Lower Manhattan,Lower Manhattan suits downtown sightseeing ferries skyline access and a calmer business-led base on weekends.,researched_first_pass
+NYC,NYC_union_square_and_flatiron,Union Square and Flatiron,Union Square and Flatiron balance central movement dining and easier access to multiple Manhattan neighborhoods.,researched_first_pass
+NYC,NYC_upper_west_side,Upper West Side,The Upper West Side is calmer and well placed for museums Central Park and more residential evenings.,researched_first_pass
+NYC,NYC_williamsburg_and_dumbo,Williamsburg and DUMBO,Williamsburg and DUMBO are stronger for trendier Brooklyn stays dining and iconic skyline views than for classic Manhattan centrality.,researched_first_pass
+KTM,KTM_thamel,Thamel,Thamel is the default first-time Kathmandu base for trekking logistics restaurants gear shops and easy traveler services.,researched_first_pass
+KTM,KTM_lazimpat,Lazimpat,Lazimpat suits quieter upscale stays with embassies boutique hotels and easier access to northern central Kathmandu.,researched_first_pass
+KTM,KTM_boudha,Boudha,Boudha works best for travelers who want a calmer spiritual setting near the stupa and airport side access.,researched_first_pass
+KTM,KTM_patan,Patan,Patan is better for heritage-focused stays with a more local historic-city atmosphere than the busy Thamel core.,researched_first_pass
+LGK,LGK_pantai_cenang,Pantai Cenang,Pantai Cenang is the strongest Langkawi base for beach access dining nightlife and broad resort choice.,researched_first_pass
+LGK,LGK_kuah,Kuah,Kuah is practical for ferries shopping and administrative access but is less beach-oriented than Pantai Cenang.,researched_first_pass
+LGK,LGK_tanjung_rhu,Tanjung Rhu,Tanjung Rhu suits quieter scenic luxury stays focused on beach and retreat rather than nightlife.,researched_first_pass
+LGK,LGK_pantai_tengah,Pantai Tengah,Pantai Tengah gives a more relaxed beach base close to Cenang but slightly less hectic.,researched_first_pass
+IST,IST_sultanahmet,Sultanahmet,Sultanahmet is the best first-time Istanbul base for major historic sights and walkable old-city access.,researched_first_pass
+IST,IST_beyoglu_and_galata,Beyoglu and Galata,Beyoglu and Galata suit nightlife cafes and a more vibrant European-side atmosphere with strong city energy.,researched_first_pass
+IST,IST_taksim,Taksim,Taksim works for central transport nightlife and visitors who want a busy urban base rather than a historic one.,researched_first_pass
+IST,IST_karakoy,Karakoy,Karakoy balances ferry access dining and a trendy waterfront feel between the old city and Beyoglu.,researched_first_pass
+IST,IST_kadikoy,Kadikoy,Kadikoy is stronger for a more local residential Asian-side stay with great food and ferry links.,researched_first_pass
+DEL,DEL_connaught_place,Connaught Place,Connaught Place is the most practical central Delhi base for first-time visitors thanks to metro access shopping and broad hotel options.,researched_first_pass
+DEL,DEL_aerocity,Aerocity,Aerocity is best for airport convenience polished hotels and short business or transit-heavy stays.,researched_first_pass
+DEL,DEL_south_delhi_and_hauz_khas,South Delhi and Hauz Khas,South Delhi and Hauz Khas suit dining lifestyle stays and easier access to a more modern local social scene.,researched_first_pass
+DEL,DEL_karol_bagh,Karol Bagh,Karol Bagh works for value-oriented stays with strong market access and central transport links.,researched_first_pass
+BLR,BLR_central_bangalore_and_mg_road,Central Bangalore and MG Road,Central Bangalore and MG Road are the strongest all-round base for first-time stays shopping and easy movement.,researched_first_pass
+BLR,BLR_indiranagar,Indiranagar,Indiranagar suits cafes bars dining and a more lifestyle-led local neighborhood feel.,researched_first_pass
+BLR,BLR_koramangala,Koramangala,Koramangala works for food startups and younger city energy with many serviced-apartment style options.,researched_first_pass
+BLR,BLR_whitefield_and_orr,Whitefield and ORR,Whitefield and the Outer Ring Road corridor are best for tech-business stays rather than classic city sightseeing.,researched_first_pass
+BCN,BCN_gothic_quarter_and_el_born,Gothic Quarter and El Born,Gothic Quarter and El Born are ideal for first-time Barcelona stays with walkable history nightlife and central food access.,researched_first_pass
+BCN,BCN_eixample,Eixample,Eixample is one of the best all-round Barcelona bases for elegant streets shopping dining and efficient movement.,researched_first_pass
+BCN,BCN_gracia,Gracia,Gracia suits travelers who want a more neighborhood-like atmosphere with plazas cafes and a local pace.,researched_first_pass
+BCN,BCN_barceloneta,Barceloneta,Barceloneta works best for beach access seafood and a casual coastal stay near the center.,researched_first_pass
+PKU,PKU_city_center,City Center,The city center is the most practical Pekanbaru base for business hotels malls and daily urban movement.,researched_first_pass
+PKU,PKU_sudirman_corridor,Sudirman Corridor,The Sudirman corridor suits newer hotels offices and a more modern commercial base than older central blocks.,researched_first_pass
+PKU,PKU_riau_business_area,Riau Business Area,The main business area is strongest for work-led trips and straightforward city access rather than leisure atmosphere.,researched_first_pass
+CMB,CMB_fort_and_pettah,Fort and Pettah,Fort and Pettah are practical for business rail and market access but feel busier and less relaxed than southern residential districts.,researched_first_pass
+CMB,CMB_kollupitiya_and_bambalapitiya,Kollupitiya and Bambalapitiya,Kollupitiya and Bambalapitiya balance city convenience dining and easier seafront access.,researched_first_pass
+CMB,CMB_cinnamon_gardens,Cinnamon Gardens,Cinnamon Gardens suits calmer upscale stays with broad roads institutions and a more polished residential feel.,researched_first_pass
+CMB,CMB_mount_lavinia,Mount Lavinia,Mount Lavinia is better for beach-led stays and a slower coastal rhythm outside the tight city core.,researched_first_pass
+CAN,CAN_tianhe,Tianhe,Tianhe is the strongest all-round Guangzhou base for modern hotels shopping business and metro convenience.,researched_first_pass
+CAN,CAN_yuexiu_and_beijing_road,Yuexiu and Beijing Road,Yuexiu and Beijing Road are best for classic central sightseeing food and a more old-core urban feel.,researched_first_pass
+CAN,CAN_haizhu_and_pazhou,Haizhu and Pazhou,Haizhu and Pazhou work best for fairgrounds convention stays and newer riverside development.,researched_first_pass
+CAN,CAN_shamian_and_liwan,Shamian and Liwan,Shamian and Liwan are stronger for heritage atmosphere and old Guangzhou character than for big-business hotel density.,researched_first_pass
+CCU,CCU_park_street_and_chowringhee,Park Street and Chowringhee,Park Street and Chowringhee are the easiest first-time Kolkata base for hotels dining and central movement.,researched_first_pass
+CCU,CCU_sudder_street,Sudder Street,Sudder Street works for budget travelers and central access near classic colonial core attractions.,researched_first_pass
+CCU,CCU_salt_lake_and_new_town,Salt Lake and New Town,Salt Lake and New Town suit business tech trips and visitors who prefer wider roads and newer hotels.,researched_first_pass
+CCU,CCU_ballygunge_and_south_city,Ballygunge and South City,Ballygunge and the south side give a more residential upscale base than the old central districts.,researched_first_pass
+BRU,BRU_grand_place_and_city_center,Grand Place and City Center,The Grand Place and city center are the best first-time Brussels base for historic sights dining and walkability.,researched_first_pass
+BRU,BRU_ixelles,Ixelles,Ixelles suits cafes nightlife and a more local cosmopolitan stay than the tourist core.,researched_first_pass
+BRU,BRU_eu_quarter,EU Quarter,The EU Quarter works for business and weekday convenience but feels less atmospheric than the old center.,researched_first_pass
+BRU,BRU_saint_gilles,Saint Gilles,Saint Gilles offers a more neighborhood-like stay with strong food and design-forward local life.,researched_first_pass
+CKG,CKG_jiefangbei_and_yuzhong,Jiefangbei and Yuzhong,Jiefangbei and Yuzhong are the strongest first-time Chongqing base for skyline views food and central movement.,researched_first_pass
+CKG,CKG_jiangbei_bei_cheng_tian_jie,Jiangbei and Guanyinqiao,Jiangbei and Guanyinqiao suit shopping nightlife and newer commercial hotels north of the river.,researched_first_pass
+CKG,CKG_nanbin_road,Nanbin Road,Nanbin Road is better for river views and a scenic stay than for the most practical transport hub positioning.,researched_first_pass
+CEB,CEB_cebu_city_center,Cebu City Center,Cebu City Center is the most practical first-time base for urban movement shopping and everyday food access.,researched_first_pass
+CEB,CEB_it_park,IT Park,IT Park suits modern dining work-friendly stays and a more polished business-residential environment.,researched_first_pass
+CEB,CEB_mactan,Mactan,Mactan works best for resort stays beach access and airport convenience rather than city-first exploration.,researched_first_pass
+CEB,CEB_lahug,Lahug,Lahug balances city convenience upland access and mid-range to upscale hotel choice.,researched_first_pass
+AMD,AMD_cg_road_and_asharaam_road,CG Road and Ashram Road,CG Road and Ashram Road are the strongest Ahmedabad base for central business shopping and practical movement.,researched_first_pass
+AMD,AMD_navrangpura,Navrangpura,Navrangpura suits food and a more local urban stay with good access to west-side neighborhoods.,researched_first_pass
+AMD,AMD_sg_highway,SG Highway,SG Highway works best for business-led stays in newer hotel corridors and car-based movement.,researched_first_pass
+AMD,AMD_old_city,Old City,The Old City is better for heritage and market visits than for classic hotel comfort.,researched_first_pass
+AMI,AMI_senggigi,Senggigi,Senggigi is the strongest all-round Lombok base for beach hotels dining and easy first-time leisure stays.,researched_first_pass
+AMI,AMI_kuta_lombok,Kuta Lombok,Kuta Lombok suits surf trips south-coast exploration and a more laid-back lifestyle stay.,researched_first_pass
+AMI,AMI_gili_access_area,Gili access area,The northwest access area works for travelers mainly connecting onward to the Gili Islands and nearby beach resorts.,researched_first_pass
+ATH,ATH_syntagma_and_plaka,Syntagma and Plaka,Syntagma and Plaka are the best first-time Athens base for landmark access central transit and walkable old-city atmosphere.,researched_first_pass
+ATH,ATH_monastiraki,Monastiraki,Monastiraki suits lively market streets nightlife and very central sightseeing convenience.,researched_first_pass
+ATH,ATH_koukaki,Koukaki,Koukaki is slightly calmer and excellent for museum access local dining and a more residential feel near the Acropolis.,researched_first_pass
+ATH,ATH_kolonaki,Kolonaki,Kolonaki is stronger for upscale stays shopping and a more polished neighborhood atmosphere.,researched_first_pass
+ADL,ADL_cbd,CBD,The Adelaide CBD is the easiest first-time base for festivals dining and straightforward movement around the compact city grid.,researched_first_pass
+ADL,ADL_north_adelaide,North Adelaide,North Adelaide suits calmer leafy stays with heritage houses and easier premium hotel positioning.,researched_first_pass
+ADL,ADL_glenelg,Glenelg,Glenelg is better for beach-led stays and leisure rather than city-center efficiency.,researched_first_pass
+AKL,AKL_cbd,CBD,The Auckland CBD is the most practical first-time base for ferries shopping dining and city transport.,researched_first_pass
+AKL,AKL_viaduct_and_wynyard,Viaduct and Wynyard,Viaduct and Wynyard are strongest for waterfront dining polished hotels and easy harbor access.,researched_first_pass
+AKL,AKL_ponsonby,Ponsonby,Ponsonby suits food nightlife and a more local stylish neighborhood stay.,researched_first_pass
+AKL,AKL_parnell,Parnell,Parnell gives a quieter village-like base with galleries and easier access to the Domain.,researched_first_pass
+MOW,MOW_tverskaya_and_red_square,Tverskaya and Red Square,Tverskaya and the Red Square area are best for first-time central Moscow access and landmark proximity.,researched_first_pass
+MOW,MOW_arbat,Arbat,Arbat suits classic central walks cafes and a more historic-tourist urban atmosphere.,researched_first_pass
+MOW,MOW_patriarch_ponds_and_tverskoy,Patriarch Ponds and Tverskoy,Patriarch Ponds and Tverskoy are stronger for dining style and a more polished local central stay.,researched_first_pass
+MOW,MOW_khamovniki,Khamovniki,Khamovniki works well for a calmer upscale base with museums and river-side access.,researched_first_pass
+CHC,CHC_central_city,Central City,The Central City is the most practical Christchurch base for first-time stays dining and easy urban exploration.,researched_first_pass
+CHC,CHC_riccarton,Riccarton,Riccarton suits shopping and practical car-based stays with easier motel and apartment options.,researched_first_pass
+CHC,CHC_cashmere_and_hillside,Cashmere and hillside,Cashmere and the hillside areas are better for quieter scenic stays than for central city convenience.,researched_first_pass
+RGN,RGN_downtown_and_sule,Downtown and Sule,Downtown and Sule are the strongest Yangon base for colonial heritage daily movement and classic first-time city access.,researched_first_pass
+RGN,RGN_kandawgyi_and_bahan,Kandawgyi and Bahan,Kandawgyi and Bahan work well for lake access Shwedagon proximity and calmer hotel settings.,researched_first_pass
+RGN,RGN_inya_lake_and_yankin,Inya Lake and Yankin,The lake side and northern districts are more suitable for business and quieter modern stays than the downtown core.,researched_first_pass
+CPH,CPH_indre_by,Indre By,Indre By is the best first-time Copenhagen base for historic sights canals dining and walkable centrality.,researched_first_pass
+CPH,CPH_vesterbro,Vesterbro,Vesterbro suits nightlife food and a more creative central stay near the station.,researched_first_pass
+CPH,CPH_norrebro,Norrebro,Norrebro is better for a more local neighborhood feel cafes and independent dining.,researched_first_pass
+CPH,CPH_nyhavn_and_waterfront,Nyhavn and Waterfront,Nyhavn and the waterfront are strong for scenic premium stays though often busier and pricier than inland districts.,researched_first_pass
+JNB,JNB_sandton,Sandton,Sandton is the strongest all-round Johannesburg base for business premium hotels and a more controlled modern environment.,researched_first_pass
+JNB,JNB_rosebank,Rosebank,Rosebank balances shopping dining and easier cultural access with a slightly more local feel than Sandton.,researched_first_pass
+JNB,JNB_melrose_and_melrose_arch,Melrose and Melrose Arch,Melrose works for polished mixed-use stays and easier movement between northern business districts.,researched_first_pass
+JNB,JNB_maboneng,Maboneng,Maboneng suits visitors who prioritize art design and nightlife but it is a more specific urban experience than mainstream business zones.,researched_first_pass
+BKI,BKI_city_center,City Center,The city center is the easiest first-time Kota Kinabalu base for food markets ferry access and urban convenience.,researched_first_pass
+BKI,BKI_tanjung_aru,Tanjung Aru,Tanjung Aru is better for sunset views beaches and a calmer resort-style stay near the airport.,researched_first_pass
+BKI,BKI_jesselton_and_waterfront,Jesselton and Waterfront,Jesselton and the waterfront work well for island-transfer convenience and seafront hotel access.,researched_first_pass
+REP,REP_old_market_and_city_center,Old Market and City Center,The Old Market and city center are the best first-time Siem Reap base for restaurants bars and proximity to core town services.,researched_first_pass
+REP,REP_wat_bo,Wat Bo,Wat Bo gives a quieter boutique-hotel base still close to the center.,researched_first_pass
+REP,REP_charles_de_gaulle_and_angkor_side,Charles de Gaulle and Angkor side,The Angkor-side corridor is useful for easier temple access and resort-style hotels outside the downtown bar scene.,researched_first_pass
+JED,JED_al_hamra,Al Hamra,Al Hamra is one of the best Jeddah bases for central Corniche access and upscale hotel choice.,researched_first_pass
+JED,JED_corniche,Corniche,The Corniche suits seaside leisure and premium stays with easier access to restaurants and waterfront walks.,researched_first_pass
+JED,JED_al_balad,Al Balad,Al Balad is stronger for heritage visits and old Jeddah atmosphere than for modern hotel comfort.,researched_first_pass
+JED,JED_al_salamah_and_north_jeddah,Al Salamah and North Jeddah,The northern districts work well for business modern malls and easier airport-side positioning.,researched_first_pass
+HAK,HAK_city_center,City Center,The city center is the practical Haikou base for urban access food and easier movement around the island capital.,researched_first_pass
+HAK,HAK_xiuying_and_west_coast,Xiuying and West Coast,The west-coast side suits more resort-style stays and a looser beach-city rhythm.,researched_first_pass
+HAK,HAK_qilou_old_street_area,Qilou Old Street area,The old-street area is stronger for heritage atmosphere local walking and food than for resort facilities.,researched_first_pass
+HDY,HDY_city_center,City Center,The city center is the most practical Hat Yai base for markets shopping and transport connections.,researched_first_pass
+HDY,HDY_kim_yong_market_area,Kim Yong Market area,The market area suits food-focused visitors who want to stay close to Hat Yai's busy trading core.,researched_first_pass
+HDY,HDY_hatyai_central_and_modern_strip,Hatyai Central and modern strip,The modern strip works for malls newer hotels and a slightly more comfortable city stay than older market blocks.,researched_first_pass
+CNS,CNS_esplanade_and_cbd,Esplanade and CBD,The Esplanade and CBD are the easiest Cairns base for ferries reef tours and central dining.,researched_first_pass
+CNS,CNS_cairns_north,Cairns North,Cairns North gives slightly calmer resort-style accommodation still within reach of the center.,researched_first_pass
+CNS,CNS_palm_cove,Palm Cove,Palm Cove is stronger for beach and resort stays but sits farther from central Cairns activity.,researched_first_pass
+ATQ,ATQ_old_city_and_golden_temple,Old City and Golden Temple,The old city is the best Amritsar base for visitors focused on the Golden Temple and heritage lanes.,researched_first_pass
+ATQ,ATQ_ranjit_avenue,Ranjit Avenue,Ranjit Avenue suits more modern hotels dining and broader roads than the old core.,researched_first_pass
+ATQ,ATQ_lawrence_road,Lawrence Road,Lawrence Road works as a practical mid-city base with food access and easier movement.,researched_first_pass
+IPH,IPH_old_town,Old Town,The old town is the best Ipoh base for heritage streets food and walkable first-time exploration.,researched_first_pass
+IPH,IPH_new_town,New Town,The new town suits hotels shopping and a more practical urban stay than the heritage core.,researched_first_pass
+IPH,IPH_greentown,Greentown,Greentown works well for a quieter modern base with easier parking and business convenience.,researched_first_pass
+KBV,KBV_ao_nang,Ao Nang,Ao Nang is the strongest all-round Krabi base for island tours dining beach access and broad hotel choice.,researched_first_pass
+KBV,KBV_krabi_town,Krabi Town,Krabi Town is more practical and local with easier transport and lower prices than the beach resort strip.,researched_first_pass
+KBV,KBV_railay,Railay,Railay is best for scenery climbing and beach-led stays but is less practical for everyday movement.,researched_first_pass
+KBV,KBV_klong_muang,Klong Muang,Klong Muang suits quieter upscale resort stays away from the busier Ao Nang scene.,researched_first_pass
+KUA,KUA_city_center,City Center,The city center is the most practical Kuantan base for business food and day-to-day convenience.,researched_first_pass
+KUA,KUA_teluk_cempedak,Teluk Cempedak,Teluk Cempedak is better for beach access and a more leisure-led coastal stay.,researched_first_pass
+KUA,KUA_tanjung_lumpur,Tanjung Lumpur,Tanjung Lumpur suits seafood-focused stays and a more local waterfront atmosphere.,researched_first_pass
+NKG,NKG_xinjiekou,Xinjiekou,Xinjiekou is the strongest first-time Nanjing base for shopping metro access and central city convenience.,researched_first_pass
+NKG,NKG_confucius_temple_area,Confucius Temple area,The Confucius Temple area is better for heritage atmosphere and evening leisure than pure business convenience.,researched_first_pass
+NKG,NKG_gulou,Gulou,Gulou balances universities local dining and easier movement through central Nanjing.,researched_first_pass
+OOL,OOL_surfers_paradise,Surfers Paradise,Surfers Paradise is the default Gold Coast base for beach nightlife and broad accommodation choice.,researched_first_pass
+OOL,OOL_broadbeach,Broadbeach,Broadbeach suits a slightly more polished beach stay with dining and casino access.,researched_first_pass
+OOL,OOL_burleigh_heads,Burleigh Heads,Burleigh Heads is better for a more relaxed local beach atmosphere than the main tower districts.,researched_first_pass
+MFM,MFM_senado_and_historic_center,Senado and Historic Center,The historic center is the best first-time Macau base for walkable heritage and food access.,researched_first_pass
+MFM,MFM_cotai,Cotai,Cotai works best for resort complexes large hotels and entertainment-heavy stays.,researched_first_pass
+MFM,MFM_taipa_village,Taipa Village,Taipa Village balances resort access with a more human-scale local food and heritage atmosphere.,researched_first_pass
+SHE,SHE_zhongjie_and_shenhe,Zhongjie and Shenhe,Zhongjie and Shenhe are the strongest Shenyang base for central movement shopping and city access.,researched_first_pass
+SHE,SHE_tiexi,Tiexi,Tiexi suits business and a more modern urban stay than the historic commercial core.,researched_first_pass
+SHE,SHE_hunnan,Hunnan,Hunnan works for newer development convention access and a broader contemporary city layout.,researched_first_pass
+SRG,SRG_simpang_lima,Simpang Lima,Simpang Lima is the strongest Semarang base for hotels dining and straightforward city movement.,researched_first_pass
+SRG,SRG_kota_lama,Kota Lama,Kota Lama is better for heritage atmosphere and slow urban exploration than broad hotel choice.,researched_first_pass
+SRG,SRG_candisari,Candisari,Candisari gives a slightly calmer elevated base away from the densest central traffic.,researched_first_pass
+PUS,PUS_seomyeon,Seomyeon,Seomyeon is the best all-round Busan base for nightlife shopping transport and central convenience.,researched_first_pass
+PUS,PUS_haeundae,Haeundae,Haeundae is strongest for beach-led stays skyscraper hotels and a more resort-style Busan experience.,researched_first_pass
+PUS,PUS_nampo_and_jagalchi,Nampo and Jagalchi,Nampo and Jagalchi are better for markets harbour access and old-core city atmosphere.,researched_first_pass
+PUS,PUS_gwangalli,Gwangalli,Gwangalli suits beach views cafes and a slightly more relaxed waterfront stay than Haeundae.,researched_first_pass
+TSN,TSN_heping_and_binjiang,Heping and Binjiang,Heping and Binjiang are the strongest Tianjin base for first-time access shopping and river-side central movement.,researched_first_pass
+TSN,TSN_italian_style_town,Italian Style Town,The Italian Style Town area suits visitors who want a more atmospheric central stay with heritage facades.,researched_first_pass
+TSN,TSN_nankai,Nankai,Nankai works for a more local educational-district feel with easier access to inner-city daily life.,researched_first_pass
+CRK,CRK_clark,Clark,Clark is the strongest all-round Angeles base for newer hotels airport access and easier modern movement.,researched_first_pass
+CRK,CRK_fields_and_balibago,Fields and Balibago,Fields and Balibago suit nightlife and entertainment-led stays more than quiet family travel.,researched_first_pass
+CRK,CRK_downtown_angeles,Downtown Angeles,Downtown Angeles gives a more local city feel with practical food and service access.,researched_first_pass
+SIA,SIA_bell_tower_and_city_center,Bell Tower and City Center,The city center is the strongest first-time Xi'an base for walls markets and broad sightseeing convenience.,researched_first_pass
+SIA,SIA_south_gate_and_wall_area,South Gate and Wall area,The wall area suits scenic historic stays and easy old-city movement.,researched_first_pass
+SIA,SIA_high_tech_zone,High Tech Zone,The High Tech Zone works for business and newer hotels rather than classic heritage travel.,researched_first_pass
+WUH,WUH_hankou_riverfront,Hankou riverfront,Hankou riverfront is the strongest first-time Wuhan base for city views dining and central movement.,researched_first_pass
+WUH,WUH_wuchang,Wuchang,Wuchang suits history university-side visits and easier access to East Lake and older cultural districts.,researched_first_pass
+WUH,WUH_optics_valley,Optics Valley,Optics Valley works best for tech-business stays and newer modern hotel stock.,researched_first_pass
+BER,BER_mitte,Mitte,Mitte is the best first-time Berlin base for museums landmarks transit and broad hotel choice.,researched_first_pass
+BER,BER_prenzlauer_berg,Prenzlauer Berg,Prenzlauer Berg suits cafes neighborhood life and a calmer polished local atmosphere.,researched_first_pass
+BER,BER_kreuzberg_and_neukolln,Kreuzberg and Neukolln,Kreuzberg and Neukolln are stronger for nightlife food and a more alternative urban stay.,researched_first_pass
+BER,BER_charlottenburg,Charlottenburg,Charlottenburg works for shopping business and a more classic western Berlin feel.,researched_first_pass
+MAA,MAA_t_nagar,T Nagar,T Nagar is the strongest central Chennai base for shopping hotels and practical movement.,researched_first_pass
+MAA,MAA_nungambakkam_and_egmore,Nungambakkam and Egmore,Nungambakkam and Egmore balance business access heritage institutions and a central city stay.,researched_first_pass
+MAA,MAA_mylapore,Mylapore,Mylapore suits temple visits culture and a more traditional Chennai atmosphere.,researched_first_pass
+MAA,MAA_omr_and_south_business_corridor,OMR and South business corridor,The southern corridor works best for IT-business stays and newer hotel stock.,researched_first_pass
+MES,MES_city_center,City Center,The city center is the most practical Medan base for food movement and urban convenience.,researched_first_pass
+MES,MES_polonia,Polonia,Polonia suits a more residential and slightly calmer stay than the densest commercial center.,researched_first_pass
+MES,MES_kesawan_and_old_area,Kesawan and old area,Kesawan is better for heritage interest and food than for polished modern hotel concentration.,researched_first_pass
+TRZ,TRZ_railway_and_central_area,Railway and Central Area,The central area is the most practical Tiruchirappalli base for temples transit and city movement.,researched_first_pass
+TRZ,TRZ_srirangam,Srirangam,Srirangam is the better choice for temple-focused stays and spiritual travel atmosphere.,researched_first_pass
+TRZ,TRZ_cantonment,Cantonment,Cantonment gives a quieter broader-road hotel base than the denser old core.,researched_first_pass
+BDO,BDO_braga_and_city_center,Braga and City Center,Braga and the city center are the strongest Bandung base for heritage streets shopping and first-time access.,researched_first_pass
+BDO,BDO_dago,Dago,Dago suits cafes cooler hillside air and a more lifestyle-led stay than the dense core.,researched_first_pass
+BDO,BDO_setiabudi,Setiabudi,Setiabudi works well for factory-outlet shopping family stays and northern city access.,researched_first_pass
+VTE,VTE_riverside,Riverside,The Riverside is the easiest first-time Vientiane base for food walking and Mekong-side atmosphere.,researched_first_pass
+VTE,VTE_wat_sisaket_and_city_center,Wat Sisaket and City Center,The city center is strongest for temples central movement and practical short stays.,researched_first_pass
+VTE,VTE_that_luang_side,That Luang side,The That Luang side suits quieter stays and easier access to major national monuments.,researched_first_pass
+CJU,CJU_jeju_city,Jeju City,Jeju City is the practical base for short stays food airport access and urban convenience on the north side of the island.,researched_first_pass
+CJU,CJU_seogwipo,Seogwipo,Seogwipo is stronger for scenic southern-coast stays waterfalls and slower leisure travel.,researched_first_pass
+CJU,CJU_jungmun,Jungmun,Jungmun works best for resort-led stays beaches and major leisure attractions.,researched_first_pass
+OSA,OSA_umeda_and_osaka_station,Umeda and Osaka Station,Umeda and the Osaka Station area are the strongest all-round Osaka base for transport shopping and efficient movement across Kansai.,researched_first_pass
+OSA,OSA_namba_and_shinsaibashi,Namba and Shinsaibashi,Namba and Shinsaibashi are best for first-time visitors who want food nightlife shopping and dense city energy.,researched_first_pass
+OSA,OSA_tennoji,Tennoji,Tennoji works well for a slightly less hectic stay with strong rail links and easier access to southern Osaka.,researched_first_pass
+OSA,OSA_kyobashi,Kyobashi,Kyobashi suits practical rail-heavy stays and a more local business-dining mix than the main tourist districts.,researched_first_pass
+MUC,MUC_altstadt_and_marienplatz,Altstadt and Marienplatz,Altstadt and Marienplatz are the best first-time Munich base for classic sights walkability and central transit.,researched_first_pass
+MUC,MUC_maxvorstadt,Maxvorstadt,Maxvorstadt suits museums cafes and a more intellectual central neighborhood feel.,researched_first_pass
+MUC,MUC_schwabing,Schwabing,Schwabing is stronger for cafes parks and a more relaxed residential atmosphere than the old core.,researched_first_pass
+MUC,MUC_haidhausen,Haidhausen,Haidhausen balances local dining station access and a lively but less tourist-heavy stay.,researched_first_pass
+INN,INN_altstadt,Altstadt,Altstadt is the strongest Innsbruck base for old-town atmosphere mountain views and walkable central access.,researched_first_pass
+INN,INN_main_station_and_wilten,Main Station and Wilten,The station area and Wilten work best for rail-heavy trips and easier hotel pricing near the center.,researched_first_pass
+INN,INN_hungerburg_access_area,Hungerburg access area,The Hungerburg side suits visitors focused on cable-car access and scenic mountain positioning.,researched_first_pass
+ZRH,ZRH_altstadt,Altstadt,Altstadt is the best first-time Zurich base for central walking dining and classic old-city atmosphere.,researched_first_pass
+ZRH,ZRH_city_center_and_bahnhofstrasse,City Center and Bahnhofstrasse,The city center and Bahnhofstrasse suit premium shopping business and straightforward central access.,researched_first_pass
+ZRH,ZRH_zurich_west,Zurich West,Zurich West is stronger for design hotels nightlife and a more contemporary city feel.,researched_first_pass
+ZRH,ZRH_enge_and_lakeside,Enge and lakeside,Enge and the lakeside work well for quieter upscale stays with scenic waterfront access.,researched_first_pass
+MDL,MDL_palace_and_moat_area,Palace and moat area,The palace and moat area is the best Mandalay base for first-time sightseeing and core city access.,researched_first_pass
+MDL,MDL_78th_to_80th_street_core,78th to 80th street core,The central grid around the main commercial avenues is strongest for hotels dining and practical movement.,researched_first_pass
+MDL,MDL_mandalay_hill_side,Mandalay Hill side,The hill side suits temple visits and a slightly calmer stay than the busiest central streets.,researched_first_pass
+PAR,PAR_le_marais,Le Marais,Le Marais is one of the best Paris bases for first-time travelers who want centrality charm dining and walkable sightseeing.,researched_first_pass
+PAR,PAR_saint_germain_des_pres,Saint Germain des Pres,Saint Germain suits polished Left Bank stays with cafes galleries and strong central access.,researched_first_pass
+PAR,PAR_opera_and_grands_boulevards,Opera and Grands Boulevards,Opera and the Grands Boulevards are ideal for shopping theatre and efficient city movement.,researched_first_pass
+PAR,PAR_latin_quarter,Latin Quarter,The Latin Quarter works best for classic Paris atmosphere student energy and walkable Left Bank landmarks.,researched_first_pass
+PAR,PAR_eiffel_tower_and_7th,Eiffel Tower and 7th,The 7th arrondissement suits quieter upscale stays near major monuments and broad boulevards.,researched_first_pass
+AMS,AMS_centrum,Centrum,Centrum is the easiest first-time Amsterdam base for canals museums and walking access to major sights.,researched_first_pass
+AMS,AMS_jordaan,Jordaan,Jordaan suits boutique stays canals cafes and a more local neighborhood atmosphere.,researched_first_pass
+AMS,AMS_museum_quarter,Museum Quarter,The Museum Quarter is strongest for cultural trips polished hotels and a quieter upscale stay.,researched_first_pass
+AMS,AMS_de_pijp,De Pijp,De Pijp works well for food nightlife and a lively local feel south of the canal core.,researched_first_pass
+PER,PER_cbd,CBD,The Perth CBD is the most practical first-time base for business shopping and city transport.,researched_first_pass
+PER,PER_elizabeth_quay_and_waterfront,Elizabeth Quay and waterfront,The waterfront side suits polished modern stays and easier river access.,researched_first_pass
+PER,PER_northbridge,Northbridge,Northbridge is best for nightlife dining and a livelier evening scene than the CBD itself.,researched_first_pass
+PER,PER_fremantle,Fremantle,Fremantle is stronger for heritage coastal stays and a slower local character than central Perth.,researched_first_pass
+MEL,MEL_cbd,CBD,The Melbourne CBD is the best first-time base for laneways transit shopping and broad hotel choice.,researched_first_pass
+MEL,MEL_southbank,Southbank,Southbank suits riverfront hotels arts venues and polished city-center access.,researched_first_pass
+MEL,MEL_fitzroy_and_collingwood,Fitzroy and Collingwood,Fitzroy and Collingwood work best for cafes bars design culture and a more local stay.,researched_first_pass
+MEL,MEL_st_kilda,St Kilda,St Kilda is stronger for beachside leisure and nightlife than for efficient central sightseeing.,researched_first_pass
+MIL,MIL_duomo_and_centro_storico,Duomo and Centro Storico,The Duomo area is the strongest first-time Milan base for classic central access shopping and landmarks.,researched_first_pass
+MIL,MIL_brera,Brera,Brera suits boutique stays art galleries dining and a more polished neighborhood atmosphere.,researched_first_pass
+MIL,MIL_navigli,Navigli,Navigli is best for nightlife canals and a livelier local evening scene.,researched_first_pass
+MIL,MIL_porta_nuova,Porta Nuova,Porta Nuova works well for modern hotels business stays and sleek newer-city access.,researched_first_pass
+CGO,CGO_erqi_and_city_center,Erqi and City Center,The city center is the most practical Zhengzhou base for transport shopping and first-time movement.,researched_first_pass
+CGO,CGO_zhengdong_new_area,Zhengdong New Area,Zhengdong New Area works best for newer hotels business stays and broad modern boulevards.,researched_first_pass
+CGO,CGO_rail_station_area,Rail Station area,The station area suits short stays and onward transport convenience more than neighborhood atmosphere.,researched_first_pass
+KHN,KHN_bayi_square_and_city_center,Bayi Square and City Center,The city center is the strongest Nanchang base for first-time access shopping and urban convenience.,researched_first_pass
+KHN,KHN_honggutan_new_district,Honggutan New District,Honggutan works well for newer hotels business travel and a more modern city setting.,researched_first_pass
+KHN,KHN_tengwangge_side,Tengwangge side,The Tengwangge side is better for river views and heritage interest than purely commercial stays.,researched_first_pass
+NNG,NNG_city_center_and_chaoyang,City Center and Chaoyang,The city center and Chaoyang side are the most practical Nanning base for shopping and movement.,researched_first_pass
+NNG,NNG_langdong_new_area,Langdong New Area,Langdong works for newer business hotels and a cleaner modern urban layout.,researched_first_pass
+NNG,NNG_qingxiu,Qingxiu,Qingxiu suits greener surroundings and a calmer stay with park access.,researched_first_pass
+TNA,TNA_quancheng_square_and_city_center,Quancheng Square and City Center,The city center is the strongest Jinan base for first-time access shopping and key springs-area movement.,researched_first_pass
+TNA,TNA_daming_lake_side,Daming Lake side,Daming Lake is better for scenic heritage stays and a calmer sightseeing-led base.,researched_first_pass
+TNA,TNA_high_tech_zone,High Tech Zone,The High Tech Zone works best for modern business stays and newer hotel stock.,researched_first_pass
+TAO,TAO_shinan_and_waterfront,Shinan and waterfront,Shinan and the waterfront are the best first-time Qingdao base for beaches beer history and central convenience.,researched_first_pass
+TAO,TAO_badaguan,Badaguan,Badaguan suits scenic heritage villas and a quieter seaside stay.,researched_first_pass
+TAO,TAO_laoshan_access_area,Laoshan access area,The Laoshan side is stronger for mountain and resort access than for city-center efficiency.,researched_first_pass
+DRW,DRW_cbd,CBD,The Darwin CBD is the most practical first-time base for waterfront access food and city services.,researched_first_pass
+DRW,DRW_the_waterfront,The Waterfront,The Waterfront works for polished leisure stays with pool and harbour access.,researched_first_pass
+DRW,DRW_parap_and_nightcliff,Parap and Nightcliff,Parap and Nightcliff suit a more local tropical stay with markets and coastal atmosphere.,researched_first_pass
+BPN,BPN_city_center,City Center,The city center is the most practical Balikpapan base for business hotels malls and movement.,researched_first_pass
+BPN,BPN_kemala_and_seafront,Kemala and seafront,The seafront side suits scenic stays and easier beach access than the inner commercial core.,researched_first_pass
+BPN,BPN_new_town_corridor,New town corridor,The newer corridors work best for modern business travel and broader roads.,researched_first_pass
+UPG,UPG_losari,Losari,Losari is the strongest Makassar base for waterfront walks food and first-time city access.,researched_first_pass
+UPG,UPG_city_center,City Center,The city center remains the most practical area for business movement and urban convenience.,researched_first_pass
+UPG,UPG_panakkukang,Panakkukang,Panakkukang works well for malls modern hotels and a more contemporary local base.,researched_first_pass
+HKT,HKT_patong,Patong,Patong is the default Phuket base for nightlife beach access and broad hotel choice.,researched_first_pass
+HKT,HKT_karon_and_kata,Karon and Kata,Karon and Kata suit beach stays with a more relaxed feel than Patong while keeping good resort infrastructure.,researched_first_pass
+HKT,HKT_old_town,Old Town,Phuket Old Town is stronger for heritage cafes and food than for classic beach-first stays.,researched_first_pass
+HKT,HKT_bang_tao_and_laguna,Bang Tao and Laguna,Bang Tao and Laguna are best for upscale resort-led stays and a quieter beach atmosphere.,researched_first_pass
+SFO,SFO_union_square,Union Square,Union Square is the most practical first-time San Francisco base for transit shopping and broad hotel choice.,researched_first_pass
+SFO,SFO_fishermans_wharf_and_north_beach,Fishermans Wharf and North Beach,Fishermans Wharf and North Beach suit sightseeing food and waterfront walks but can feel more visitor-oriented than other districts.,researched_first_pass
+SFO,SFO_soma,SoMa,SoMa works for convention stays museums and easier business access south of Market Street.,researched_first_pass
+SFO,SFO_mission_and_valencia,Mission and Valencia,The Mission suits food nightlife and a more local neighborhood atmosphere than Union Square.,researched_first_pass
+FOC,FOC_sanfang_qixiang_and_city_center,Sanfang Qixiang and City Center,The historic center is the strongest Fuzhou base for first-time access food and urban convenience.,researched_first_pass
+FOC,FOC_taijiang,Taijiang,Taijiang suits shopping and modern commercial stays close to the river.,researched_first_pass
+FOC,FOC_gulou,Gulou,Gulou works well for central movement and a balanced old-new city stay.,researched_first_pass
+NGB,NGB_tianyi_square_and_city_center,Tianyi Square and City Center,The city center is the strongest Ningbo base for shopping transit and first-time movement.,researched_first_pass
+NGB,NGB_old_bund,Old Bund,The Old Bund is better for riverside dining and nightlife than purely practical transport convenience.,researched_first_pass
+NGB,NGB_east_new_town,East New Town,East New Town works best for modern business stays and newer hotels.,researched_first_pass
+BRS,BRS_harbourside_and_old_city,Harbourside and Old City,The harbourside and old city are the best first-time Bristol base for sightseeing dining and walkability.,researched_first_pass
+BRS,BRS_clifton,Clifton,Clifton suits more elegant neighborhood stays near the suspension bridge and green space.,researched_first_pass
+BRS,BRS_stokes_croft,Stokes Croft,Stokes Croft is stronger for nightlife street culture and a more alternative local stay.,researched_first_pass
+CWL,CWL_city_center,City Center,The city center is the most practical Cardiff base for first-time access shopping and rail convenience.,researched_first_pass
+CWL,CWL_cardiff_bay,Cardiff Bay,Cardiff Bay works well for waterfront dining events and a calmer modern stay.,researched_first_pass
+CWL,CWL_canton,Canton,Canton gives a more local neighborhood feel with good food and easier value than the core center.,researched_first_pass
+OXF,OXF_central_oxford,Central Oxford,Central Oxford is the strongest base for first-time college sightseeing and walkable access to the city historic core.,researched_first_pass
+OXF,OXF_jericho,Jericho,Jericho suits boutique stays cafes and a more local neighborhood atmosphere close to the center.,researched_first_pass
+OXF,OXF_summertown,Summertown,Summertown works for quieter longer stays and easier suburban comfort north of the center.,researched_first_pass
+OKA,OKA_naha_kokusai_dori,Naha and Kokusai Dori,Naha around Kokusai Dori is the best first-time Okinawa base for food shopping and urban convenience.,researched_first_pass
+OKA,OKA_tomari_and_port_side,Tomari and port side,Tomari works well for ferry access island connections and practical short stays.,researched_first_pass
+OKA,OKA_chatan_and_american_village,Chatan and American Village,Chatan is better for resort-style coastal leisure and a more casual beach-town atmosphere.,researched_first_pass
+SWA,SWA_city_center,City Center,The city center is the most practical Shantou base for local food and straightforward movement.,researched_first_pass
+SWA,SWA_old_town,Old Town,The old-town side is better for heritage atmosphere and local street character.,researched_first_pass
+SWA,SWA_nanao_access_area,Nanao access area,The Nanao side works best for coastal leisure and nearby island access rather than urban convenience.,researched_first_pass
+HGH,HGH_west_lake_side,West Lake side,The West Lake side is the best first-time Hangzhou base for scenery walking and classic city identity.,researched_first_pass
+HGH,HGH_wulin_square_and_city_center,Wulin Square and City Center,Wulin Square and the city center work for shopping metro access and broad hotel choice.,researched_first_pass
+HGH,HGH_qianjiang_new_city,Qianjiang New City,Qianjiang New City is strongest for modern business stays and newer skyline hotels.,researched_first_pass
+PSR,PSR_city_center,City Center,The city center is the most practical Pescara base for rail access beaches and urban convenience.,researched_first_pass
+PSR,PSR_seafront,Seafront,The seafront works best for beach-focused stays and summer leisure atmosphere.,researched_first_pass
+PSR,PSR_porta_nuova,Porta Nuova,Porta Nuova gives a more local residential base with easier value than the central beach strips.,researched_first_pass
+TPS,TPS_historic_center,Historic Center,The historic center is the strongest Trapani base for first-time stays ferries and walkable old-town atmosphere.,researched_first_pass
+TPS,TPS_port_area,Port Area,The port area works well for island connections and practical movement.,researched_first_pass
+TPS,TPS_ernice_access_side,Erice access side,The Erice access side suits travelers planning hill-town excursions more than pure old-town immersion.,researched_first_pass
+JOG,JOG_malioboro,Malioboro,Malioboro is the strongest Yogyakarta base for first-time access shopping rail convenience and major urban landmarks.,researched_first_pass
+JOG,JOG_prawirotaman,Prawirotaman,Prawirotaman suits cafes guesthouses and a more laid-back traveler atmosphere than Malioboro.,researched_first_pass
+JOG,JOG_kraton_side,Kraton side,The Kraton side works best for heritage and palace-focused stays with stronger old-city context.,researched_first_pass
+OLB,OLB_city_center,City Center,The city center is the practical Olbia base for ferries dining and urban convenience.,researched_first_pass
+OLB,OLB_pittulongu_and_beach_side,Pittulongu and beach side,The beach side is better for coastal leisure stays than for city-center movement.,researched_first_pass
+OLB,OLB_port_and_ferry_side,Port and ferry side,The port side works well for short ferry-linked stays and car-based regional movement.,researched_first_pass
+AHO,AHO_historic_center,Historic Center,The historic center is the best Alghero base for old-town atmosphere dining and walkable coastal access.,researched_first_pass
+AHO,AHO_lido_and_beach_side,Lido and beach side,The beach side suits summer leisure stays and easier resort-style positioning.,researched_first_pass
+AHO,AHO_bastioni_and_harbour,Bastioni and harbour,Bastioni and the harbour balance views nightlife and easy access to the old town.,researched_first_pass
+CJB,CJB_rs_puram_and_city_center,RS Puram and City Center,RS Puram and the city center are the strongest Coimbatore base for shopping food and practical movement.,researched_first_pass
+CJB,CJB_race_course,Race Course,Race Course suits a more polished local stay with good dining and broader roads.,researched_first_pass
+CJB,CJB_avinashi_road,Avinashi Road,Avinashi Road works best for business and airport-oriented stays with modern hotels.,researched_first_pass
+VTZ,VTZ_beach_road_and_rk_beach,Beach Road and RK Beach,Beach Road and RK Beach are the strongest Visakhapatnam base for sea views and first-time city leisure access.,researched_first_pass
+VTZ,VTZ_dwaraka_nagar,Dwaraka Nagar,Dwaraka Nagar works well for shopping city-center access and practical movement.,researched_first_pass
+VTZ,VTZ_mvp_colony,MVP Colony,MVP Colony suits quieter residential stays with easier access to the northern coast side.,researched_first_pass
+MYY,MYY_city_center,City Center,The city center is the most practical Miri base for food shopping and urban convenience.,researched_first_pass
+MYY,MYY_marina_and_waterfront,Marina and waterfront,The marina side suits a more polished modern stay with nightlife and seafront access.,researched_first_pass
+MYY,MYY_lutong_side,Lutong side,Lutong works for business-linked stays and a quieter suburban feel north of central Miri.,researched_first_pass
+CTU,CTU_chunxi_road_and_tianfu_square,Chunxi Road and Tianfu Square,Chunxi Road and Tianfu Square are the strongest first-time Chengdu base for shopping food and central movement.,researched_first_pass
+CTU,CTU_kuanzhai_alleys_and_qingyang,Kuanzhai Alleys and Qingyang,Kuanzhai Alleys and Qingyang suit heritage atmosphere teahouses and a more classic Chengdu feel.,researched_first_pass
+CTU,CTU_taikoo_li_and_jinjiang,Taikoo Li and Jinjiang,Taikoo Li and Jinjiang work best for stylish stays dining and polished central hotels.,researched_first_pass
+AOR,AOR_city_center,City Center,The city center is the most practical Alor Setar base for rail access food and straightforward movement.,researched_first_pass
+AOR,AOR_old_royal_area,Old Royal Area,The old royal area is better for heritage interest and a more local historical context than pure hotel density.,researched_first_pass
+AOR,AOR_south_business_strip,South Business Strip,The southern commercial strips suit newer hotels and car-based convenience.,researched_first_pass
+JHB,JHB_city_center_and_jbcc,City Center and JBCC,The city center and JBCC are the most practical Johor Bahru base for first-time visitors shopping and cross-border movement.,researched_first_pass
+JHB,JHB_puteri_harbour_and_iskandar,Puteri Harbour and Iskandar,Puteri Harbour and the Iskandar side suit family trips and newer resort-style stays away from the old core.,researched_first_pass
+JHB,JHB_mount_austin,Mount Austin,Mount Austin works well for dining cafes and a more lifestyle-led suburban stay.,researched_first_pass
+TGG,TGG_city_center,City Center,The city center is the most practical Kuala Terengganu base for food markets river access and urban convenience.,researched_first_pass
+TGG,TGG_batu_burok,Batu Burok,Batu Burok suits coastal walks beaches and a more relaxed local stay than the commercial center.,researched_first_pass
+TGG,TGG_shahbandar_and_waterfront,Shahbandar and waterfront,The waterfront side works well for river scenery and easier access to heritage areas.,researched_first_pass
+BTU,BTU_city_center,City Center,The city center is the most practical Bintulu base for work trips dining and straightforward local movement.,researched_first_pass
+BTU,BTU_parkcity_commerce_area,Parkcity commerce area,The modern commercial area suits newer hotels and business travel better than older central blocks.,researched_first_pass
+BTU,BTU_waterfront,Waterfront,The waterfront gives a more scenic evening stay and easier river-side access than inland commercial zones.,researched_first_pass
+SBW,SBW_city_center,City Center,The city center is the most practical Sibu base for food shopping and simple movement around town.,researched_first_pass
+SBW,SBW_riverfront,Riverfront,The riverfront is better for local atmosphere scenic walks and access to the town's historic commercial edge.,researched_first_pass
+SBW,SBW_rejang_park_side,Rejang Park side,Rejang Park side works for a quieter residential base with easier road access outside the core.,researched_first_pass
+LBU,LBU_town_center,Town Center,The town center is the most practical Labuan base for ferry access duty-free shopping and everyday convenience.,researched_first_pass
+LBU,LBU_victoria_harbour,Victoria Harbour,The harbour side suits short stays and sea-facing access near the main transport area.,researched_first_pass
+LBU,LBU_beachside_and_resort_strip,Beachside and resort strip,The beachside works better for slower leisure stays than for town-first movement.,researched_first_pass
+SDK,SDK_town_center,Town Center,The town center is the most practical Sandakan base for food markets urban services and onward transport.,researched_first_pass
+SDK,SDK_harbour_square_and_waterfront,Harbour Square and waterfront,The waterfront area is stronger for sea views and evening dining than inland streets.,researched_first_pass
+SDK,SDK_sepilok_access_area,Sepilok access area,The Sepilok side is best for wildlife-focused stays rather than central town convenience.,researched_first_pass
+TWU,TWU_town_center,Town Center,The town center is the most practical Tawau base for markets local food and port-related movement.,researched_first_pass
+TWU,TWU_kubota_central_strip,Kubota central strip,The central strip suits hotels and urban convenience more than scenic leisure stays.,researched_first_pass
+TWU,TWU_airport_corridor,Airport corridor,The airport corridor works best for transit-heavy stays and easier outbound regional movement.,researched_first_pass
+MKZ,MKZ_jonker_and_old_town,Jonker and Old Town,Jonker and the old town are the strongest Malacca base for heritage walks food and first-time sightseeing.,researched_first_pass
+MKZ,MKZ_riverside,Riverside,The riverside balances city-center access and a slightly calmer boutique-hotel atmosphere.,researched_first_pass
+MKZ,MKZ_porto_de_melaka,Porto de Melaka,The coastal side is better for resort-style stays and broader road access than the heritage core.,researched_first_pass
+LYS,LYS_presquile_and_bellecour,Presquile and Bellecour,Presquile and Bellecour are the best first-time Lyon base for centrality dining and walkable city access.,researched_first_pass
+LYS,LYS_vieux_lyon,Vieux Lyon,Vieux Lyon suits heritage atmosphere hillside views and a more classic old-city stay.,researched_first_pass
+LYS,LYS_part_dieu,Part Dieu,Part Dieu works best for rail-heavy trips business stays and practical modern-city convenience.,researched_first_pass
+LYS,LYS_croix_rousse,Croix Rousse,Croix Rousse gives a more local neighborhood feel with markets cafes and a slower rhythm.,researched_first_pass
+SXB,SXB_grande_ile,Grande Ile,Grande Ile is the strongest first-time Strasbourg base for canals old-town atmosphere and sightseeing.,researched_first_pass
+SXB,SXB_petite_france,Petite France,Petite France suits scenic heritage stays and postcard-style Strasbourg views.,researched_first_pass
+SXB,SXB_krutenau,Krutenau,Krutenau works for dining and a more local student-neighborhood feel near the center.,researched_first_pass
+LIL,LIL_vieux_lille,Vieux Lille,Vieux Lille is the best first-time Lille base for charm dining and walkable access to major sights.,researched_first_pass
+LIL,LIL_centre_and_grand_place,Centre and Grand Place,The center and Grand Place area are strongest for transport shopping and practical city movement.,researched_first_pass
+LIL,LIL_euralille,Euralille,Euralille suits rail-heavy trips and modern business stays near the station complex.,researched_first_pass
+NTE,NTE_centre_ville,Centre Ville,Centre Ville is the strongest first-time Nantes base for trams dining and walkable urban access.,researched_first_pass
+NTE,NTE_bouffay_and_old_core,Bouffay and Old Core,Bouffay and the old core suit nightlife heritage and a more atmospheric stay than modern outskirts.,researched_first_pass
+NTE,NTE_ile_de_nantes,Ile de Nantes,Ile de Nantes works well for design culture riverfront walks and newer hotel stock.,researched_first_pass
+MRS,MRS_vieux_port,Vieux Port,Vieux Port is the best first-time Marseille base for harbour views ferries dining and central movement.,researched_first_pass
+MRS,MRS_le_panier,Le Panier,Le Panier suits heritage streets local character and a more atmospheric old-city stay.,researched_first_pass
+MRS,MRS_castellane_and_prado,Castellane and Prado,Castellane and Prado balance modern hotels beach access and easier movement across the southern city.,researched_first_pass
+CEI,CEI_city_center_and_clock_tower,City Center and Clock Tower,The city center around the Clock Tower is the most practical Chiang Rai base for first-time stays food and simple local movement.,researched_scraped_pass
+CEI,CEI_night_bazaar_area,Night Bazaar area,The Night Bazaar area works well for evening food handicrafts and walkable access near the central bus station.,researched_scraped_pass
+CEI,CEI_riverside_and_blue_temple,Riverside and Blue Temple side,The riverside and Blue Temple side suit quieter stays with easier access to scenic temple visits than the densest center.,researched_scraped_pass
+DAD,DAD_hai_chau_and_han_river,Hai Chau and Han River,Hai Chau and the Han River side are the strongest Da Nang base for city-center dining bridges markets and urban convenience.,researched_scraped_pass
+DAD,DAD_my_khe_and_an_thuong,My Khe and An Thuong,My Khe and An Thuong suit beach-focused stays cafes casual dining and a more international visitor-friendly rhythm.,researched_scraped_pass
+DAD,DAD_son_tra_side,Son Tra side,The Son Tra side works for quieter coastal stays and easier access to peninsula scenery while staying close to the city.,researched_scraped_pass
+ILO,ILO_city_proper,City Proper,City Proper is the most practical Iloilo base for civic landmarks heritage streets transport and old commercial access.,researched_scraped_pass
+ILO,ILO_jaro,Jaro,Jaro suits heritage interest cathedral access and a more established residential district feel.,researched_scraped_pass
+ILO,ILO_molo,Molo,Molo is best for visitors interested in Molo Church heritage houses and local food context.,researched_scraped_pass
+ILO,ILO_mandurriao,Mandurriao,Mandurriao works best for newer hotels malls nightlife and business-oriented stays around Iloilo's modern commercial side.,researched_scraped_pass
+KBR,KBR_city_center_and_siti_khadijah,City Center and Siti Khadijah Market,The city center around Siti Khadijah Market is the strongest Kota Bharu base for food markets culture and practical movement.,researched_scraped_pass
+KBR,KBR_wakaf_che_yeh,Wakaf Che Yeh,Wakaf Che Yeh suits market-focused stays and travellers who want a more local southern suburb atmosphere.,researched_scraped_pass
+KBR,KBR_pantai_cahaya_bulan,Pantai Cahaya Bulan,Pantai Cahaya Bulan is better for beach-side local leisure than for city-center efficiency.,researched_scraped_pass
+KJT,KJT_kertajati_airport_area,Kertajati Airport area,Kertajati Airport area is the most practical Majalengka base for flight-linked stays and road access.,researched_scraped_pass
+KJT,KJT_majalengka_town,Majalengka Town,Majalengka Town works for local food services and a straightforward town-center stay.,researched_scraped_pass
+KJT,KJT_panyaweuyan_and_ciremai_foothills,Panyaweuyan and Ciremai Foothills,The Panyaweuyan and Ciremai foothills side is best for scenery terraces outdoor trips and car-based exploration.,researched_scraped_pass
+LBJ,LBJ_town_center_and_harbour,Town Center and Harbour,The town center and harbour are the best Labuan Bajo base for boat trips dive operators restaurants and Komodo departures.,researched_scraped_pass
+LBJ,LBJ_waecicu_beach,Waecicu Beach,Waecicu Beach suits quieter resort stays calm bay swimming sunsets and easier beach relaxation near town.,researched_scraped_pass
+LBJ,LBJ_pede_beach,Pede Beach,Pede Beach balances coastal stays and town access with a more relaxed beach-side feel than the harbour core.,researched_scraped_pass
+PDG,PDG_city_center_and_old_town,City Center and Old Town,The city center and old-town side are the most practical Padang base for markets heritage food and urban movement.,researched_scraped_pass
+PDG,PDG_padang_beach_and_muaro,Padang Beach and Muaro,Padang Beach and Muaro suit waterfront walks sunset views and access to the river-mouth heritage area.,researched_scraped_pass
+PDG,PDG_air_manis_beach,Air Manis Beach,Air Manis Beach works for beach-focused short stays and Malin Kundang sightseeing rather than central-city convenience.,researched_scraped_pass
+PQC,PQC_duong_dong,Duong Dong,Duong Dong is the strongest Phu Quoc base for first-time stays night market access restaurants and practical services.,researched_scraped_pass
+PQC,PQC_long_beach_and_duong_to,Long Beach and Duong To,Long Beach and Duong To suit beach resort stays sunset access and the island's densest visitor infrastructure.,researched_scraped_pass
+PQC,PQC_an_thoi,An Thoi,An Thoi is best for southern island hopping cable-car access and a newer resort-oriented stay.,researched_scraped_pass
+PQC,PQC_ong_lang,Ong Lang,Ong Lang suits quieter boutique beach stays and slower trips away from the main town center.,researched_scraped_pass
+SIN,SIN_marina_bay_and_cbd,Marina Bay and CBD,Marina Bay and the CBD are strongest for skyline hotels business stays waterfront sights and efficient MRT access.,researched_scraped_pass
+SIN,SIN_orchard,Orchard,Orchard works best for shopping hotels and central movement with broad transport and dining options.,researched_scraped_pass
+SIN,SIN_chinatown_and_tanjong_pagar,Chinatown and Tanjong Pagar,Chinatown and Tanjong Pagar balance heritage streets hawker food nightlife and central access.,researched_scraped_pass
+SIN,SIN_kampong_glam_and_bugis,Kampong Glam and Bugis,Kampong Glam and Bugis suit culture cafes boutique shopping and a lively walkable district feel.,researched_scraped_pass
+SIN,SIN_sentosa_and_harbourfront,Sentosa and HarbourFront,Sentosa and HarbourFront are better for resort family attractions beaches and cruise or ferry access than city-center efficiency.,researched_scraped_pass

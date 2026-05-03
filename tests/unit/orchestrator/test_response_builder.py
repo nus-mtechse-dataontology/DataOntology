@@ -1,79 +1,111 @@
+from handlers.response_formatter_handler import ResponseFormatterHandler
+from formatter.web_formatter import WebFormatter
+from formatter.telegram_formatter import TelegramFormatter
 from models.common import ErrorResponse, SuccessResponse
-from models.pipeline import QuestionResponse, ResultSet, Row
-from orchestrator.response_builder import ResponseBuilder
+from models.pipeline import NLQRequest, ResultSet, Row
 
-
-def test_build_returns_success_response_wrapping_question_response():
-    builder = ResponseBuilder()
-    result_set = ResultSet(
+def test_response_formatter_handler_success():
+    formatters = {"web": WebFormatter, "telegram": TelegramFormatter}
+    handler = ResponseFormatterHandler(formatters)
+    
+    request = NLQRequest(
         request_id="req-123",
-        result_set=[Row(data={"value": 1000})],
+        question="Cheapest flight",
+        source="web",
+        request_type="result",
+            result_set=ResultSet(
+                request_id="req-123",
+                type="flights",
+                result_set=[{
+                "f_airline_name": "AirAsia",
+                "f_departure_date": "2024-01-01",
+                "f_trip_type": "normal",
+                "f_cabin_class": "Economy",
+                "cheapest_fare": 100,
+                "f_departure_airport_code": "SIN",
+                "f_destination_airport_code": "BKK"
+            }]
+        )
     )
-
-    result = builder.build(result_set)
-
+    
+    result = handler.handle(request)
+    
     assert isinstance(result, SuccessResponse)
     assert result.request_id == "req-123"
-    assert result.status == "SUCCESS"
-    assert isinstance(result.data, QuestionResponse)
-    assert result.data.request_id == "req-123"
-    assert result.data.response
+    assert "I found 1 matching record" in result.data[0]
 
+def test_response_formatter_handler_no_results():
+    formatters = {"web": WebFormatter}
+    handler = ResponseFormatterHandler(formatters)
+    
+    request = NLQRequest(
+        request_id="req-123",
+        question="Cheapest flight",
+        source="web",
+        request_type="result",
+        result_set=ResultSet(
+            request_id="req-123",
+            type_="flights",
+            result_set=[]
+        )
+    )
+    
+    result = handler.handle(request)
+    
+    assert isinstance(result, SuccessResponse)
+    assert "couldn't find 'em" in result.data[0]
 
-def test_build_returns_error_response_when_input_is_not_result_set():
-    builder = ResponseBuilder()
-
-    result = builder.build({"request_id": "req-123", "result_set": []})  # type: ignore[arg-type]
-
+def test_response_formatter_handler_error_result_set_none():
+    formatters = {"web": WebFormatter}
+    handler = ResponseFormatterHandler(formatters)
+    
+    request = NLQRequest(
+        request_id="req-123",
+        question="Cheapest flight",
+        source="web",
+        request_type="result",
+        result_set=None
+    )
+    
+    result = handler.handle(request)
+    
     assert isinstance(result, ErrorResponse)
-    assert result.request_id == "req-123"
-    assert result.status == "ERROR"
-    assert result.error.component == "response_builder"
-    assert result.error.code
-    assert result.error.message
+    assert "ResultSet is None" in result.error.message
 
-
-def test_build_zero_rows_message_reports_no_records():
-    builder = ResponseBuilder()
-    result_set = ResultSet(request_id="req-123", result_set=[])
-
-    result = builder.build(result_set)
-
-    assert isinstance(result, SuccessResponse)
-    assert result.data.response == "I could not find any matching records."
-
-
-def test_build_single_row_count_matches_displayed_records():
-    builder = ResponseBuilder()
-    result_set = ResultSet(
+def test_response_formatter_handler_error_unknown_source():
+    formatters = {"web": WebFormatter}
+    handler = ResponseFormatterHandler(formatters)
+    
+    request = NLQRequest(
         request_id="req-123",
-        result_set=[Row(data={"value": 1000})],
+        question="Cheapest flight",
+        source="unknown",
+        request_type="result",
+        result_set=ResultSet(request_id="req-123", type_="flights", result_set=[])
     )
+    
+    result = handler.handle(request)
+    
+    assert isinstance(result, ErrorResponse)
+    assert "Unknown source" in result.error.message
 
-    result = builder.build(result_set)
-
-    assert isinstance(result, SuccessResponse)
-    lines = result.data.response.splitlines()
-    assert lines[0].startswith("I found 1 matching record")
-    displayed_rows = [line for line in lines[1:] if line.startswith("1. ")]
-    assert len(displayed_rows) == 1
-
-
-def test_build_multi_row_count_matches_displayed_records():
-    builder = ResponseBuilder()
-    result_set = ResultSet(
+def test_response_formatter_handler_ignores_non_result_request():
+    # Since it's an AbstractHandler, we can mock the next handler
+    class MockHandler:
+        def handle(self, request):
+            return "next_handler_called"
+            
+    formatters = {"web": WebFormatter}
+    handler = ResponseFormatterHandler(formatters)
+    handler.set_next(MockHandler())
+    
+    request = NLQRequest(
         request_id="req-123",
-        result_set=[
-            Row(data={"id": 1, "value": 100}),
-            Row(data={"id": 2, "value": 200}),
-            Row(data={"id": 3, "value": 300}),
-        ],
+        question="Cheapest flight",
+        source="web",
+        request_type="general", # Not "result"
+        result_set=None
     )
-
-    result = builder.build(result_set)
-
-    assert isinstance(result, SuccessResponse)
-    lines = result.data.response.splitlines()
-    assert lines[0].startswith("I found 3 matching records")
-    displayed_rows = [line for line in lines[1:] if line[:2] in {"1.", "2.", "3."}]
-    assert len(displayed_rows) == 3
+    
+    result = handler.handle(request)
+    assert result == "next_handler_called"

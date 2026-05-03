@@ -1,14 +1,15 @@
 """Minimal Telegram Bot API client."""
-
-from __future__ import annotations
-
 import time
+import logging
 
 import requests
 from requests import RequestException
 from requests.exceptions import HTTPError
 
 from adapters.telegram.interfaces import MessageClient
+
+
+_log = logging.getLogger("data_ontology")
 
 
 class TelegramClient(MessageClient):
@@ -29,24 +30,29 @@ class TelegramClient(MessageClient):
             )
             response.raise_for_status()
         except HTTPError as exc:
+            _log.warning(f"Telegram sendTyping failed with status {exc.response.status_code}")
             status = getattr(exc.response, "status_code", "unknown")
             raise RuntimeError(f"Telegram sendChatAction failed with status {status}") from exc
         except RequestException as exc:
+            _log.error("SendTyping error: %s", exc)
             raise RuntimeError(f"Telegram sendChatAction request failed: {exc}") from exc
 
     def send_message(self, chat_id: int, text: str) -> None:
-        payload = {"chat_id": chat_id, "text": text}
+        payload = {"chat_id": chat_id, "text": text, "parse_mode": "MarkdownV2"}
         url = f"{self._base_url}/sendMessage"
 
         for attempt in range(1, self._max_attempts + 1):
             try:
+                _log.info("Telegram Client: Returning Results to User.. ")
                 response = self._session.post(url, json=payload, timeout=self._timeout_seconds)
                 response.raise_for_status()
                 return
             except HTTPError as exc:
+                _log.error("send message error: %s", exc)
                 status = getattr(exc.response, "status_code", "unknown")
                 raise RuntimeError(f"Telegram sendMessage failed with status {status}") from exc
             except RequestException as exc:
+                _log.error("send message error: %s", exc)
                 if attempt < self._max_attempts:
                     time.sleep(self._retry_delay_seconds * attempt)
                     continue

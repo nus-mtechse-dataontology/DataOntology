@@ -105,7 +105,7 @@ def test_upload_happy_path_returns_status(client, app, enabled_user, monkeypatch
     async def fake_jwt_call(self, request):
         return enabled_user
 
-    async def fake_upload_data(session, payload):
+    def fake_upload_data(session, payload):
         return {"status_code": 0, "status": "success", "records_inserted": 1}
 
     monkeypatch.setattr("dependencies.jwt_auth.JWTAuth.__call__", fake_jwt_call)

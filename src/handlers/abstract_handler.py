@@ -17,7 +17,7 @@ class AbstractHandler(Handler):
 		self._component_name = component_name
 		self._semantics = {}
 		self._log = logging.getLogger("data_ontology")
-		self._root = os.getenv("PROJECT_PATH", "var/task")
+		self._root = os.getenv("PROJECT_PATH") or str(Path(__file__).resolve().parents[2])
 		self._next_handler: Handler | None = None
 	
 	def set_next(self, handler: Handler) -> Handler:

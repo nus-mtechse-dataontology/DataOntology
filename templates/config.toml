@@ -75,6 +75,14 @@ redoc_url = ""
 reload = false
 scheme = "http"
 
+[llm]
+provider = "gemini"
+timeout_seconds = 30
+[llm.providers.gemini]
+model = "gemini-2.5-flash"
+[llm.providers.openai]
+model = "gpt-5.4-nano"
+
 [jwt]
 expire_mins = 15
 algo = "HS256"
@@ -86,7 +94,7 @@ class = "@driver_class@"
 options = {}
 
 [datasource.database]
-drivername = "postgresql+psycopg2"
+drivername = "@drivername@"
 name = "data_ontology"
 host = "@db_host@"
 port = @db_port@

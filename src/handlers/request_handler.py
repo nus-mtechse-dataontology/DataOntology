@@ -18,9 +18,15 @@ class RequestHandler(AbstractHandler):
 		
 		self._log.info("RequestHandler: Validating Request...")
 		
-		if request.request_type == "request":
+		if request.request_type == "flight":
 			request.request_id = request_id
 			request.request_type = "prompt"
+		elif request.request_type == "request":
+			request.request_id = request_id
+			request.request_type = "general"
+		else:
+			# Pass through for already processed or specific types
+			request.request_id = request_id
 		
 		self._log.info("RequestHandler: NLQ Request validated, passing to the next handler...")
 		return super().handle(request)
