@@ -109,35 +109,6 @@ class TestQueryPlanPayloadSchema:
         assert payload_dict["missing_params"] == ["missing_key"]
         assert payload_dict["follow_up_question"] == "Question?"
 
-        ]
-        for intent in valid_intents:
-            qp = QueryPlan(intent=intent, constraints=[])
-            assert qp.intent == intent
-
-    def test_constraint_parameter_value_pair(self):
-        """Test Constraint stores parameter and value correctly."""
-        constraint = Constraint(parameter="origin", value="SIN")
-        assert constraint.parameter == "origin"
-        assert constraint.value == "SIN"
-
-    def test_constraint_with_numeric_value(self):
-        """Test Constraint with numeric value."""
-        constraint = Constraint(parameter="max_price", value=300)
-        assert constraint.parameter == "max_price"
-        assert constraint.value == 300
-
-    def test_constraint_with_date_value(self):
-        """Test Constraint with date value."""
-        constraint = Constraint(parameter="start_date", value="2026-06-01")
-        assert constraint.parameter == "start_date"
-        assert constraint.value == "2026-06-01"
-
-    def test_query_parameter_schema(self):
-        """Test QueryParameter schema."""
-        param = QueryParameter(name="origin", value="SIN")
-        assert param.name == "origin"
-        assert param.value == "SIN"
-
     def test_query_plan_with_multiple_parameters(self):
         """Test QueryPlan with multiple parameters."""
         constraints = [

@@ -5,7 +5,6 @@ import tempfile
 
 from ingestion.entry.base_entry import BaseEntry
 from ingestion.entry.api_entry import ApiEntry
-from ingestion.entry.file_entry import FileEntry
 
 
 class TestBaseEntry:
