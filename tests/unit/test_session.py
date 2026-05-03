@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock, PropertyMock
 import logging
 
 from session.db_session import DBSession
-from session.session import app_session
+from session.session import Session
 
 
 class TestDBSession:
@@ -118,16 +118,35 @@ class TestDBSession:
             assert session._config['datasource']['database']['port'] == 1234
 
 
-class TestAppSession:
-    """Test app_session module-level functionality"""
+class TestSessionAbstract:
+    """Test Session abstract base class"""
     
-    def test_app_session_module_exists(self):
-        """Test app_session module can be imported"""
-        # If this test passes, module import was successful
-        assert app_session is not None
+    def test_session_is_abstract(self):
+        """Test Session is an abstract base class"""
+        from abc import ABC
+        assert issubclass(Session, ABC)
     
-    def test_app_session_has_session_var(self):
-        """Test app_session module contains session variable"""
-        # The module should export a session object
-        import session.session as session_module
-        assert hasattr(session_module, 'app_session') or True  # May be None by default
+    def test_session_initialization_creates_logger(self):
+        """Test Session initializes with logger"""
+        # Cannot instantiate abstract class, so test through a concrete implementation
+        class ConcreteSession(Session):
+            def create_session(self):
+                pass
+        
+        session = ConcreteSession()
+        assert session._log is not None
+        assert isinstance(session._log, logging.Logger)
+    
+    def test_session_has_create_session_method(self):
+        """Test Session defines create_session abstract method"""
+        assert hasattr(Session, 'create_session')
+    
+    def test_concrete_session_implementation(self):
+        """Test creating a concrete Session implementation"""
+        class TestSession(Session):
+            def create_session(self):
+                return "test_session"
+        
+        session = TestSession()
+        assert session.create_session() == "test_session"
+        assert session._log is not None
