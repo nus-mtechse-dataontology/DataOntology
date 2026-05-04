@@ -7,6 +7,7 @@ dependencies = [
   "uvicorn[standard]",
   "pydantic",
   "pydantic-ai",
+  "fastmcp==3.2.0",
   "python-dotenv",
   "sqlmodel>=0.0.37",
   "asyncpg>=0.31.0",
