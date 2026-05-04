@@ -44,7 +44,7 @@ ENV PROJECT_PATH=/var/task \
     AWS_LWA_ASYNC_INIT=true \
     AWS_LAMBDA_FUNCTION_NAME="local-testing" \
     AWS_LWA_READINESS_CHECK_PATH="/actuator/health/liveness"\
-    GRAPHDB_URL="http://47.130.183.173:7200/repositories/data-ontology"
+    GRAPHDB_URL="http://47.130.183.173:7200/repositories/dataontology"
 ENTRYPOINT []
 
 # Lambda Web Adapter runs as extension automatically; run web app process directly.
