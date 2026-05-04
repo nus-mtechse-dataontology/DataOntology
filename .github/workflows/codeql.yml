@@ -1,0 +1,12 @@
+name: Security Scan
+on:
+  workflow_dispatch: # Enables manual triggering
+  push:
+    branches: [main]
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Vulnerability Scanner
+        uses: some-actions/vulnerability-scanner@v1
