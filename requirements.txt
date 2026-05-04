@@ -107,8 +107,8 @@ pydantic==2.12.5
 pydantic-ai==1.89.1
 pydantic-ai-slim==1.89.1
 pydantic-core==2.41.5
-pydantic-evals==1.70.0
-pydantic-graph==1.70.0
+pydantic-evals==1.89.1
+pydantic-graph==1.89.1
 pydantic-settings==2.13.1
 pygments==2.19.2
 pyjwt==2.12.1
