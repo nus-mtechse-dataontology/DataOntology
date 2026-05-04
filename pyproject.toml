@@ -6,6 +6,7 @@ dependencies = [
   "fastapi",
   "python-multipart",
   "uvicorn[standard]",
+  "typer==0.24.1",
   "pydantic",
   "pydantic-ai-slim[openai,google]==1.89.1",
   "python-dotenv",
