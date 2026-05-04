@@ -4,9 +4,10 @@ version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
   "fastapi",
+  "python-multipart",
   "uvicorn[standard]",
   "pydantic",
-  "pydantic-ai==1.89.1",
+  "pydantic-ai-slim[openai,google]==1.89.1",
   "python-dotenv",
   "sqlmodel>=0.0.37",
   "asyncpg>=0.31.0",
