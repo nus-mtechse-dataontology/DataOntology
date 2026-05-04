@@ -10,9 +10,9 @@ FROM public.ecr.aws/lambda/python:3.14
 
 # SECURITY PATCH: Resolve glibc vulnerabilities (CVE-2026-4046)
 # Amazon Linux 2023 requires dnf to pull the latest security updates.
+# Force dnf to use a repository version that includes the glibc fix
 RUN dnf clean all && \
-    dnf makecache && \
-    dnf update -y glibc glibc-common glibc-langpack-en glibc-minimal-langpack && \
+    dnf update -y glibc --releasever 2023.11.20260427 && \
     dnf clean all
 
 RUN rpm -q glibc
@@ -44,7 +44,7 @@ ENV PROJECT_PATH=/var/task \
     AWS_LWA_ASYNC_INIT=true \
     AWS_LAMBDA_FUNCTION_NAME="local-testing" \
     AWS_LWA_READINESS_CHECK_PATH="/actuator/health/liveness"\
-    GRAPHDB_URL="http://172.31.43.149:7200/repositories/data-ontology"
+    GRAPHDB_URL="http://47.130.183.173:7200/repositories/dataontology"
 ENTRYPOINT []
 
 # Lambda Web Adapter runs as extension automatically; run web app process directly.
