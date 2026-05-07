@@ -334,3 +334,25 @@ jobs:
             --head "$sync_branch" \
             --title "Auto-sync release deployment to master" \
             --body "Automated PR created after successful deployment from push to release."
+
+  # 6. DEPLOY: Render Deployment (main branch only)
+  deploy-render:
+    needs:
+      - snyk-scan
+      - sonarqube-scan
+      - gitleaks-scan
+      - container-scan
+    # Deploy after scans on PR to main branch only
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Trigger Render Deployment
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          echo "Triggering Render deployment to UAT"
+          # Send a POST request to the Render Deploy Hook
+          curl -X POST "$RENDER_DEPLOY_HOOK"
+          echo "Deployment to UAT triggered successfully!"
