@@ -1,46 +1,46 @@
-name: render.workflow.yml
-on:
-  push:
-    branches:
-      - '**'
-  pull_request:
-    branches:
-      - 'release'
+# name: render.workflow.yml
+# on:
+#   push:
+#     branches:
+#       - '**'
+#   pull_request:
+#     branches:
+#       - 'release'
 
-permissions:
-  contents: read
+# permissions:
+#   contents: read
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Set Up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.14"
-      - name: Install Dependencies
-        run: |
-          python -m pip install -U pip
-          pip install -r requirements.txt
-      - name: Run Pytest
-        run: |
-          pytest
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v6
+#       - name: Set Up Python
+#         uses: actions/setup-python@v6
+#         with:
+#           python-version: "3.14"
+#       - name: Install Dependencies
+#         run: |
+#           python -m pip install -U pip
+#           pip install -r requirements.txt
+#       - name: Run Pytest
+#         run: |
+#           pytest
 
-  deploy:
-    needs: test
-    env:
-      TARGET_ENV: ${{ case(github.ref == 'ref/heads/release', 'PRD', 'UAT') }}
-    environment: ${{ case(github.ref == 'ref/heads/release', 'PRD', 'UAT') }}
-    runs-on: ubuntu-latest
-    permissions:
-      deployments: write
-      contents: read
-    steps:
-      - env:
-          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
-        run: |
-          echo "Triggering Render deployment to ${{ env.TARGET_ENV }}"
-          # Send a POST request to the Render Deploy Hook
-          curl -X POST "$RENDER_DEPLOY_HOOK"
-          echo "Deployment to ${{ env.TARGET_ENV }} triggered successfully!"
+#   deploy:
+#     needs: test
+#     env:
+#       TARGET_ENV: ${{ case(github.ref == 'ref/heads/release', 'PRD', 'UAT') }}
+#     environment: ${{ case(github.ref == 'ref/heads/release', 'PRD', 'UAT') }}
+#     runs-on: ubuntu-latest
+#     permissions:
+#       deployments: write
+#       contents: read
+#     steps:
+#       - env:
+#           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+#         run: |
+#           echo "Triggering Render deployment to ${{ env.TARGET_ENV }}"
+#           # Send a POST request to the Render Deploy Hook
+#           curl -X POST "$RENDER_DEPLOY_HOOK"
+#           echo "Deployment to ${{ env.TARGET_ENV }} triggered successfully!"
