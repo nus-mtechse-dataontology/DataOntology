@@ -28,9 +28,9 @@ from .response import (
     format_flight_count, format_flight_with_destination,
     format_good_weather_destinations, format_highlights, format_language,
     format_language_destinations, format_neighborhoods, format_overview,
-    format_route_list, format_route_statistics, format_safe_destinations,
-    format_safety, format_solo_female_destinations, format_table,
-    format_timezone, format_transport, format_transit_route, format_travel_styles,
+    format_round_trip, format_route_list, format_route_statistics,
+    format_safe_destinations, format_safety, format_solo_female_destinations,
+    format_table, format_timezone, format_transport, format_transit_route, format_travel_styles,
     format_vacation_plan, format_visa_check, format_visa_duration,
     format_visa_list, format_weather,
 )
@@ -215,6 +215,51 @@ class GraphDbPipeline:
                 print(format_table(self._friendly_columns(rows), intent_name, params))
             return query_plan
         
+        # ── round_trip_on_route ──────────────────────────────────────
+        if intent_name == "round_trip_on_route":
+            departure_date = params.get("departure_date")
+            return_date    = params.get("return_date")
+
+            # Outbound leg
+            if departure_date:
+                # Specific outbound date — use as single-day window, no day filter
+                outbound_params = {**params,
+                                   "start_date": departure_date,
+                                   "end_date":   departure_date}
+                outbound_params.pop("day_type", None)
+            else:
+                # Month-range — filter to Fridays
+                outbound_params = {**params, "day_type": "friday"}
+
+            print("[Phase 3] SQL — outbound leg")
+            outbound_rows = self._run_sql(intent_def, outbound_params, intent_name) or []
+            self._enrich_destination_names(outbound_rows)
+
+            # Return leg (swap origin ↔ destination)
+            ret_origin = params.get("destination")
+            ret_dest   = params.get("origin")
+            if return_date:
+                # Specific return date — use as single-day window, no day filter
+                return_params = {**params,
+                                 "origin":      ret_origin,
+                                 "destination": ret_dest,
+                                 "start_date":  return_date,
+                                 "end_date":    return_date}
+                return_params.pop("day_type", None)
+            else:
+                # Month-range — filter to Sundays
+                return_params = {**params,
+                                 "origin":      ret_origin,
+                                 "destination": ret_dest,
+                                 "day_type":    "sunday"}
+
+            print("[Phase 4] SQL — return leg")
+            return_rows = self._run_sql(intent_def, return_params, intent_name) or []
+            self._enrich_destination_names(return_rows)
+
+            print(format_round_trip(outbound_rows, return_rows, params))
+            return query_plan
+
         # ── sql_first ────────────────────────────────────────────────
         if phase in self.SQL_PHASES:
             print("[Phase 3] SQL execution")

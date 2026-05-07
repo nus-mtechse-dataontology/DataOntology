@@ -152,7 +152,7 @@ def compile_sql(intent_def: dict, params: dict, intent_name: str = "") -> tuple[
 
     if "max_price" in params and "max_price" not in placeholders:
         if "max_price" in note:
-            template = _insert_before_order(template, "HAVING MIN(f.f_total_amount_fare_total) <= :max_price")
+            template = _insert_before_order(template, "HAVING MIN(f.f_total_amount_fare_total) * 2 <= :max_price")
             bound["max_price"] = params["max_price"]
 
     if "day_type" in params and "day_type" not in placeholders:
@@ -167,6 +167,16 @@ def compile_sql(intent_def: dict, params: dict, intent_name: str = "") -> tuple[
                 template = _insert_before_group_or_order(
                     template,
                     "AND EXTRACT(ISODOW FROM CAST(f.f_departure_date AS timestamp)) BETWEEN 1 AND 5",
+                )
+            elif day_type == "friday":
+                template = _insert_before_group_or_order(
+                    template,
+                    "AND EXTRACT(ISODOW FROM CAST(f.f_departure_date AS timestamp)) = 5",
+                )
+            elif day_type == "sunday":
+                template = _insert_before_group_or_order(
+                    template,
+                    "AND EXTRACT(ISODOW FROM CAST(f.f_departure_date AS timestamp)) = 7",
                 )
 
     # --- destinations_by_duration: dynamic HAVING ---
