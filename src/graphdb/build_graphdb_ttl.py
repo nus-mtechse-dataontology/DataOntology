@@ -2,7 +2,7 @@ import csv
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional
 
 # Tables that exist in RDS and can be synced from there.
 # dim_airline_coverage is intentionally excluded: the RDS schema (f_airport_code,
@@ -27,10 +27,10 @@ class BuildConfig:
     # When set, the 7 core dimension tables are fetched from this PostgreSQL URL
     # instead of the local CSV files. All other tables always come from CSV.
     # Format: postgresql://user:password@host:port/dbname
-    db_url: str | None = field(default=None)
+    db_url: Optional[str] = field(default=None)
     # When set, enrichment CSVs are downloaded from s3://<s3_bucket>/enrichment/
     # and the output TTL files are uploaded to s3://<s3_bucket>/output/
-    s3_bucket: str | None = field(default=None)
+    s3_bucket: Optional[str] = field(default=None)
 
 
 def load_rows(path: Path) -> list[dict[str, str]]:
@@ -667,13 +667,13 @@ def build_dml(config: BuildConfig) -> str:
 
 
 def download_csvs_from_s3(config: BuildConfig) -> None:
-    """Download all CSVs from s3://<bucket>/enrichment/ into config.tmp_root."""
+    """Download all CSVs from s3://<bucket>/gen_prep_ttl/ into config.tmp_root."""
     import boto3  # lazy import — only needed when s3_bucket is set
 
     config.tmp_root.mkdir(parents=True, exist_ok=True)
     s3 = boto3.client("s3")
     paginator = s3.get_paginator("list_objects_v2")
-    for page in paginator.paginate(Bucket=config.s3_bucket, Prefix="enrichment/"):
+    for page in paginator.paginate(Bucket=config.s3_bucket, Prefix="gen_prep_ttl/"):
         for obj in page.get("Contents", []):
             key = obj["Key"]
             filename = key.split("/")[-1]
@@ -685,17 +685,20 @@ def download_csvs_from_s3(config: BuildConfig) -> None:
 
 
 def upload_ttl_to_s3(config: BuildConfig) -> None:
-    """Upload the generated TTL files to s3://<bucket>/output/."""
-    import boto3  # lazy import — only needed when s3_bucket is set
+    """Upload the generated TTL files to s3://<bucket>/output/ with a timestamp suffix."""
+    import boto3
+    from datetime import datetime, timezone
 
     s3 = boto3.client("s3")
+    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     for ttl_path in (config.ddl_ttl, config.dml_ttl):
-        key = f"output/{ttl_path.name}"
+        stem = ttl_path.stem  # e.g. data_ontology_ddl
+        key = f"output/{stem}_{ts}.ttl"
         s3.upload_file(str(ttl_path), config.s3_bucket, key)
         print(f"Uploaded {ttl_path.name} → s3://{config.s3_bucket}/{key}")
 
 
-def default_config(repo_root: Path, db_url: str | None = None, s3_bucket: str | None = None) -> BuildConfig:
+def default_config(repo_root: Path, db_url: Optional[str] = None, s3_bucket: Optional[str] = None) -> BuildConfig:
     return BuildConfig(
         tmp_root=repo_root / "graphdb" / "csv_files",
         ddl_ttl=repo_root / "graphdb" / "data_ontology_ddl.ttl",
