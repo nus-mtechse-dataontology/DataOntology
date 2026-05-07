@@ -345,6 +345,7 @@ jobs:
     # Deploy after scans on PR to main branch only
     if: github.event_name == 'pull_request' && github.base_ref == 'main'
     runs-on: ubuntu-latest
+    environment: UAT
     permissions:
       contents: read
     steps:
