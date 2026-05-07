@@ -150,6 +150,11 @@ def compile_sql(intent_def: dict, params: dict, intent_name: str = "") -> tuple[
             template = _insert_before_group_or_order(template, "AND f.f_cabin_class = :cabin_class")
             bound["cabin_class"] = params["cabin_class"]
 
+    if "max_price" in params and "max_price" not in placeholders:
+        if "max_price" in note:
+            template = _insert_before_order(template, "HAVING MIN(f.f_total_amount_fare_total) <= :max_price")
+            bound["max_price"] = params["max_price"]
+
     if "day_type" in params and "day_type" not in placeholders:
         if "day_type" in note:
             day_type = str(params["day_type"]).lower()

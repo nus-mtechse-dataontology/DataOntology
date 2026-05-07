@@ -903,11 +903,16 @@
     "destinations_by_attraction_type": {
       "category": "hybrid",
       "execution_phase": "sparql_then_sql",
-      "description": "Find destinations that have attractions of a specific type (beach, museum, nightlife, religious_site, nature), then check real flights from origin.",
+      "description": "Find destinations reachable from any origin that have attractions of a specific type (beach, museum, nightlife, religious_site, nature, landmark, historical, shopping, adventure, wellness), then check real flight fares. Works for any origin airport worldwide, not just SIN. Use this intent — not flights_by_travel_style — whenever the user says 'beach holiday', 'museum trip', 'nightlife destination', or names any attraction type, especially when combined with a budget.",
       "examples": [
-        "Which destinations from my results have beach attractions?",
-        "Which cities have nightlife attractions reachable from SIN?",
-        "Which destinations have religious sites worth visiting?"
+        "Where can I go for a beach holiday from SIN in June 2026?",
+        "Beach destinations from KUL in July 2026?",
+        "Where can I fly for a museum trip from HKG in August 2026?",
+        "Nightlife destinations reachable from SIN in June 2026?",
+        "Destinations from SIN under SGD 300 in June 2026 with beach attractions?",
+        "Cheap beach destinations from KUL under MYR 500 in July 2026?",
+        "Which cities have religious sites reachable from SIN in June 2026?",
+        "Adventure destinations from HKG in August 2026 under HKD 2000?"
       ],
       "required_params": [
         "origin",
@@ -916,6 +921,8 @@
         "end_date"
       ],
       "optional_params": [
+        "max_price",
+        "currency_code",
         "limit"
       ],
       "enrichment_triggers": [
@@ -923,7 +930,8 @@
         "destination_overview"
       ],
       "sparql_template": "PREFIX ex: <http://dataontology.example/graph/> SELECT DISTINCT ?airportCode WHERE { ?city a ex:City ; ex:prop_hasAttraction ?attraction . ?attraction ex:prop_attractionType :attraction_type . ?airport a ex:Airport ; ex:prop_inCity ?city ; ex:prop_airportCode ?airportCode . }",
-      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit"
+      "sql_template": "SELECT f.f_destination_airport_code AS destination, f.f_currency_code, MIN(f.f_total_amount_fare_total) AS min_fare FROM fact_flight_info f WHERE f.f_departure_airport_code = :origin AND f.f_destination_airport_code IN :destination_airport_codes AND date(f.f_departure_date) BETWEEN date(:start_date) AND date(:end_date) GROUP BY f.f_destination_airport_code, f.f_currency_code ORDER BY min_fare ASC LIMIT :limit",
+      "note": "Append AND f.f_currency_code = :currency_code in WHERE clause if currency_code provided, so budget and fares are in the same currency. Append HAVING MIN(f.f_total_amount_fare_total) <= :max_price after GROUP BY if max_price provided. Airport name, city, country resolved via GraphDB enrichment."
     },
     "destinations_by_festival_type": {
       "category": "hybrid",

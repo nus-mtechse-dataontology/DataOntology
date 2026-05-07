@@ -467,6 +467,8 @@ class GraphDbPipeline:
                 print(format_destinations_by_season(rows, params))
             elif intent_name == "destinations_good_weather_in_month":
                 print(format_good_weather_destinations(rows, params))
+            elif intent_name == "destination_safety":
+                print(format_safety(rows, params))
             else:
                 print(format_table(self._friendly_columns(rows), intent_name, params))
             return query_plan
