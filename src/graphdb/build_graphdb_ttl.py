@@ -1,7 +1,22 @@
 import csv
-from dataclasses import dataclass
+import os
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterable
+
+# Tables that exist in RDS and can be synced from there.
+# dim_airline_coverage is intentionally excluded: the RDS schema (f_airport_code,
+# f_airline_code, f_coverage) differs from the route-pair schema (f_origin_airport_code,
+# f_target_airport_code) that build_dml() needs to construct Route nodes.
+_RDS_TABLES = {
+    "dim_accounts",
+    "dim_aircraft",
+    "dim_airline",
+    "dim_airport",
+    "dim_city",
+    "dim_country",
+    "dim_currency_rate",
+}
 
 
 @dataclass(frozen=True)
@@ -9,11 +24,47 @@ class BuildConfig:
     tmp_root: Path
     ddl_ttl: Path
     dml_ttl: Path
+    # When set, the 7 core dimension tables are fetched from this PostgreSQL URL
+    # instead of the local CSV files. All other tables always come from CSV.
+    # Format: postgresql://user:password@host:port/dbname
+    db_url: str | None = field(default=None)
+    # When set, enrichment CSVs are downloaded from s3://<s3_bucket>/enrichment/
+    # and the output TTL files are uploaded to s3://<s3_bucket>/output/
+    s3_bucket: str | None = field(default=None)
 
 
 def load_rows(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
+
+
+def load_rows_from_pg(db_url: str, table_name: str) -> list[dict[str, str]]:
+    """Query a PostgreSQL table and return rows as string-valued dicts.
+
+    Values are normalised to str (None becomes empty string) to match the
+    csv.DictReader output so the rest of build_dml() works without changes.
+    """
+    import psycopg2  # lazy import — not required in CSV-only mode
+
+    conn = psycopg2.connect(db_url)
+    try:
+        with conn.cursor() as cur:
+            cur.execute(f"SELECT * FROM {table_name}")  # noqa: S608 — table_name is a trusted internal constant
+            cols = [desc[0] for desc in cur.description]
+            return [
+                {col: ("" if val is None else str(val)) for col, val in zip(cols, row)}
+                for row in cur.fetchall()
+            ]
+    finally:
+        conn.close()
+
+
+def _load(config: BuildConfig, table_name: str) -> list[dict[str, str]]:
+    """Return rows from RDS when db_url is set and the table is RDS-backed,
+    otherwise fall back to the local CSV file."""
+    if config.db_url and table_name in _RDS_TABLES:
+        return load_rows_from_pg(config.db_url, table_name)
+    return load_rows(config.tmp_root / f"{table_name}.csv")
 
 
 def ttl_literal(value: str) -> str:
@@ -202,13 +253,18 @@ def build_ddl() -> str:
 
 def build_dml(config: BuildConfig) -> str:
     tmp = config.tmp_root
-    accounts = load_rows(tmp / "dim_accounts.csv")
-    aircraft = load_rows(tmp / "dim_aircraft.csv")
-    airlines = load_rows(tmp / "dim_airline.csv")
+    # RDS-backed tables: fetched from PostgreSQL when config.db_url is set
+    accounts = _load(config, "dim_accounts")
+    aircraft = _load(config, "dim_aircraft")
+    airlines = _load(config, "dim_airline")
+    airports = _load(config, "dim_airport")
+    cities = _load(config, "dim_city")
+    countries = _load(config, "dim_country")
+    currency_rates = _load(config, "dim_currency_rate")
+    # CSV-only: schema differs from route-pair shape expected by Route node builder
     airline_coverage = load_rows(tmp / "dim_airline_coverage.csv")
-    airports = load_rows(tmp / "dim_airport.csv")
+    # CSV-only: enrichment tables with no RDS counterpart
     airport_attributes = load_rows(tmp / "dim_airport_attribute.csv")
-    cities = load_rows(tmp / "dim_city.csv")
     city_country_enrichment = load_rows(tmp / "dim_city_country_enrichment.csv")
     city_attractions = load_rows(tmp / "dim_city_attraction.csv")
     city_cuisines = load_rows(tmp / "dim_city_cuisine.csv")
@@ -218,10 +274,8 @@ def build_dml(config: BuildConfig) -> str:
     city_safety = load_rows(tmp / "dim_city_safety.csv")
     city_timezones = load_rows(tmp / "dim_city_timezone.csv")
     city_travel_styles = load_rows(tmp / "dim_city_travel_style.csv")
-    countries = load_rows(tmp / "dim_country.csv")
     country_visa_policy = load_rows(tmp / "dim_country_visa_policy.csv")
     currencies = load_rows(tmp / "dim_currency.csv")
-    currency_rates = load_rows(tmp / "dim_currency_rate.csv")
     subcity_areas = load_rows(tmp / "dim_subcity_area.csv")
     transport_modes = load_rows(tmp / "dim_transport_mode.csv")
     visa_policies = load_rows(tmp / "dim_visa_policy.csv")
@@ -612,18 +666,91 @@ def build_dml(config: BuildConfig) -> str:
     return "\n".join(lines) + "\n"
 
 
-def default_config(repo_root: Path) -> BuildConfig:
+def download_csvs_from_s3(config: BuildConfig) -> None:
+    """Download all CSVs from s3://<bucket>/enrichment/ into config.tmp_root."""
+    import boto3  # lazy import — only needed when s3_bucket is set
+
+    config.tmp_root.mkdir(parents=True, exist_ok=True)
+    s3 = boto3.client("s3")
+    paginator = s3.get_paginator("list_objects_v2")
+    for page in paginator.paginate(Bucket=config.s3_bucket, Prefix="enrichment/"):
+        for obj in page.get("Contents", []):
+            key = obj["Key"]
+            filename = key.split("/")[-1]
+            if not filename.endswith(".csv"):
+                continue
+            dest = config.tmp_root / filename
+            s3.download_file(config.s3_bucket, key, str(dest))
+            print(f"Downloaded {key} → {dest}")
+
+
+def upload_ttl_to_s3(config: BuildConfig) -> None:
+    """Upload the generated TTL files to s3://<bucket>/output/."""
+    import boto3  # lazy import — only needed when s3_bucket is set
+
+    s3 = boto3.client("s3")
+    for ttl_path in (config.ddl_ttl, config.dml_ttl):
+        key = f"output/{ttl_path.name}"
+        s3.upload_file(str(ttl_path), config.s3_bucket, key)
+        print(f"Uploaded {ttl_path.name} → s3://{config.s3_bucket}/{key}")
+
+
+def default_config(repo_root: Path, db_url: str | None = None, s3_bucket: str | None = None) -> BuildConfig:
     return BuildConfig(
         tmp_root=repo_root / "graphdb" / "csv_files",
         ddl_ttl=repo_root / "graphdb" / "data_ontology_ddl.ttl",
         dml_ttl=repo_root / "graphdb" / "data_ontology_dml.ttl",
+        db_url=db_url,
+        s3_bucket=s3_bucket,
     )
 
 
 if __name__ == "__main__":
-    repo_root = Path(__file__).resolve().parents[1]
-    config = default_config(repo_root)
+    # To run on EC2 (SSMBridgeInstance), set these env vars before executing:
+    #
+    #   export DB_HOST=<RDSEndpoint from CloudFormation Outputs>
+    #   export DB_USER=dbadmin
+    #   export DB_PASSWORD=<MasterDBPassword used during sam deploy>
+    #   export DB_NAME=data_ontology
+    #   export DB_PORT=5432
+    #   export S3_BUCKET=<your S3 bucket name>
+    #
+    # Then run: python build_graphdb_ttl.py
+    #
+    # Accept either a full DB_URL or the individual vars above
+    db_url = os.environ.get("DB_URL")
+    if not db_url:
+        host = os.environ.get("DB_HOST")
+        port = os.environ.get("DB_PORT", "5432")
+        user = os.environ.get("DB_USER")
+        password = os.environ.get("DB_PASSWORD")
+        name = os.environ.get("DB_NAME")
+        if host and user and password and name:
+            db_url = f"postgresql://{user}:{password}@{host}:{port}/{name}?sslmode=require"
+    s3_bucket = os.environ.get("S3_BUCKET")
+
+    if s3_bucket:
+        # Running on EC2/Lambda — use /tmp so the script works without the full repo
+        tmp_root = Path("/tmp/graphdb_csv")
+        config = BuildConfig(
+            tmp_root=tmp_root,
+            ddl_ttl=Path("/tmp/data_ontology_ddl.ttl"),
+            dml_ttl=Path("/tmp/data_ontology_dml.ttl"),
+            db_url=db_url,
+            s3_bucket=s3_bucket,
+        )
+    else:
+        # Running locally inside the repo — paths relative to repo root
+        repo_root = Path(__file__).resolve().parents[1]
+        config = default_config(repo_root, db_url=db_url)
+
+    if config.s3_bucket:
+        download_csvs_from_s3(config)
+
     config.ddl_ttl.write_text(build_ddl(), encoding="utf-8")
     config.dml_ttl.write_text(build_dml(config), encoding="utf-8")
     print(f"Wrote {config.ddl_ttl}")
     print(f"Wrote {config.dml_ttl}")
+
+    if config.s3_bucket:
+        upload_ttl_to_s3(config)
