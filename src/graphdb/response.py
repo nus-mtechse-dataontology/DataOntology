@@ -1047,6 +1047,7 @@ def format_weather(rows: list[dict], params: dict) -> str:
     airport_code = params.get("destination_airport_code", "")
     city_label   = params.get("city_name") or airport_code   # L1
     month_num    = params.get("month_num")
+    year         = params.get("year", "")
 
     # Filter to requested month; if none specified show all best months
     if month_num:
@@ -1064,7 +1065,8 @@ def format_weather(rows: list[dict], params: dict) -> str:
         rain  = r.get("avgRainfallMm", "")
         summary = r.get("weatherSummary", "")
 
-        header = f"{city_label} in {mname}" if mname else city_label
+        year_suffix = f" {year}" if year else ""
+        header = f"{city_label} in {mname}{year_suffix}" if mname else city_label
         lines.append(f"\n{header}\n")
         parts = []
         if temp:
@@ -1084,12 +1086,14 @@ def format_country_weather(rows: list[dict], params: dict) -> str:
     """country_weather_by_month — show one weather row per city in a country."""
     country_name = params.get("country_name", "that country")
     month_num = params.get("month_num")
+    year      = params.get("year", "")
     month_label = MONTH_NAMES[int(month_num) - 1] if str(month_num).isdigit() else "the selected month"
 
     if not rows:
         return f"\n  No weather data found for {country_name} in {month_label}.\n"
 
-    lines = [f"\nWeather in {country_name.title()} in {month_label}\n"]
+    year_suffix = f" {year}" if year else ""
+    lines = [f"\nWeather in {country_name.title()} in {month_label}{year_suffix}\n"]
     seen: set[str] = set()
     for r in rows:
         city = r.get("cityName", "")
@@ -2322,6 +2326,44 @@ def format_good_weather_destinations(rows: list[dict], params: dict) -> str:
         lines.append(f"  {country}")
         for entry in sorted(by_country[country]):
             lines.append(f"    • {entry}")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def format_round_trip(outbound_rows: list[dict], return_rows: list[dict], params: dict) -> str:
+    """round_trip_on_route — Friday outbound + Sunday return, two sections."""
+    origin = params.get("origin", "")
+    destination = params.get("destination", "")
+
+    def _leg_lines(rows: list[dict]) -> list[str]:
+        if not rows:
+            return ["  No flights found for these dates."]
+        lines = []
+        for r in rows[:5]:
+            dep      = _fmt_dt(r.get("f_departure_date", ""))
+            arr      = _fmt_dt(r.get("f_arrival_date", ""))
+            airline  = r.get("f_airline_code", "")
+            fare_raw = r.get("f_total_amount_fare_total", "")
+            curr     = r.get("f_currency_code", "")
+            duration = r.get("f_flight_duration", "")
+            dur_str  = f" · {_fmt_dur(duration)}" if duration else ""
+            fare_str = _fmt_fare(fare_raw, curr)
+            parts    = [airline, f"{dep} → {arr}{dur_str}", fare_str]
+            lines.append(f"  • {' | '.join(p for p in parts if p)}")
+        return lines
+
+    dep_label = _fmt_dt(params.get("departure_date", "") + "T00:00") if params.get("departure_date") else "Fri"
+    ret_label = _fmt_dt(params.get("return_date", "") + "T00:00")    if params.get("return_date")    else "Sun"
+    # Strip the time portion if we just synthesised it
+    dep_label = dep_label.replace(" 00:00", "")
+    ret_label = ret_label.replace(" 00:00", "")
+
+    lines = [f"\n{origin} ↔ {destination} — Round Trip\n",
+             f"  Outbound ({dep_label})  {origin} → {destination}"]
+    lines.extend(_leg_lines(outbound_rows))
+    lines.append("")
+    lines.append(f"  Return ({ret_label})    {destination} → {origin}")
+    lines.extend(_leg_lines(return_rows))
     lines.append("")
     return "\n".join(lines)
 
