@@ -8,8 +8,7 @@ from drivers.driver import Driver
 
 class PostgresDriver(Driver):
 	def __init__(self, config: dict):
-		super().__init__()
-		self._config = config
+		super().__init__(config)
 		self._root = os.getenv("PROJECT_PATH", os.getcwd())
 	
 	def get_connection(self) -> str | URL:

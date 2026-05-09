@@ -100,7 +100,6 @@ class = "PostgresDriver"
 options = {}
 
 [datasource.database]
-connection_url = "sqlite:///database.db"
 drivername = "postgresql+psycopg2"
 name = "data_ontology"
 host = "localhost"
