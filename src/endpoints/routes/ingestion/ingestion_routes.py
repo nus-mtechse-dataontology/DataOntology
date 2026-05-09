@@ -2,17 +2,11 @@ import asyncio
 
 from fastapi import APIRouter, Request, Depends, status
 from fastapi.responses import JSONResponse
-import json
-
-from sqlalchemy import inspect
-from sqlalchemy.schema import MetaData
-from sqlmodel import Session
 
 from dependencies.jwt_auth import JWTAuth
-from ingestion.source.manual_source.manual_ingestion import ManualIngestion
+from ingestion.services.ingestion_service import IngestionService
 from models.ingestion_model import IngestionModel
 from models.users import UserModel
-from session.db_session import DBSession
 
 
 ingestion_router = APIRouter(prefix="/ingestion", tags=["ingestion"])
@@ -20,13 +14,11 @@ ingestion_router = APIRouter(prefix="/ingestion", tags=["ingestion"])
 
 @ingestion_router.get('/get_schema')
 async def get_schema(request: Request, user: UserModel = Depends(JWTAuth())) -> JSONResponse:
-	session = request.app.state.session
-	
 	if not user.disabled:
 		task = await asyncio.gather(
 			asyncio.to_thread(
 				get_schema_from_db,
-				session=session
+				ingestion_service=request.app.state.ingestion_service
 			)
 		)
 		result = task[0]
@@ -44,12 +36,11 @@ async def get_schema(request: Request, user: UserModel = Depends(JWTAuth())) -> 
 @ingestion_router.get("/view/{table}")
 async def view(request: Request, table: str, user: UserModel = Depends(JWTAuth())) -> JSONResponse:
 	if not user.disabled:
-		session = request.app.state.session
 		task = await asyncio.gather(
 			asyncio.to_thread(
 				get_table_data,
-				session=session,
-				table=table
+				ingestion_service=request.app.state.ingestion_service,
+				table_name=table
 			)
 		)
 		
@@ -76,7 +67,7 @@ async def upload(request: Request, payload: IngestionModel, user: UserModel = De
 		task = await asyncio.gather(
 			asyncio.to_thread(
 				upload_data,
-				session=request.app.state.session,
+				ingestion_service=request.app.state.ingestion_service,
 				payload=payload
 			)
 		)
@@ -98,59 +89,13 @@ async def upload(request: Request, payload: IngestionModel, user: UserModel = De
 		)
 
 
-def get_table_data(session: DBSession, table: str):
-	metadata = MetaData(schema=None)
-	metadata.reflect(
-		bind=session.engine,
-		only=[table],
-		views=True
-	)
-	
-	db_table = metadata.tables[table]
-	statement = db_table.select()
-	
-	with Session(bind=session.engine) as db_session:
-		results = db_session.exec(statement)
-		rows = [dict(r) for r in results.mappings().all()]
-		return json.loads(json.dumps(rows, default=str))
+def get_table_data(ingestion_service: IngestionService, table_name: str):
+	return ingestion_service.get_table_data(table_name)
 
 
-def get_schema_from_db(session: DBSession) -> list[dict[str, str | bool | None]]:
-	inspector = inspect(session.engine)
-	tables = inspector.get_table_names()
-	
-	table_lists = []
-	
-	for table in tables:
-		if table == "dim_accounts":
-			continue
-		
-		table_schema = {
-			"name": table,
-			"description": "",
-			"cols": []
-		}
-		for col in inspector.get_columns(table):
-			if not col["autoincrement"]:
-				table_schema["cols"].append(
-					{
-						"name": col["name"],
-						"type": str(col["type"]),
-						"nullable": col["nullable"],
-						"default": col["default"],
-						"autoincrement": col["autoincrement"],
-						"comment": col["comment"]
-					}
-				)
-			else:
-				continue
-		
-		table_lists.append(table_schema)
-	
-	return table_lists
+def get_schema_from_db(ingestion_service: IngestionService) -> list[dict[str, str | bool | None]]:
+	return ingestion_service.get_schema_from_db()
 
 
-def upload_data(session: DBSession, payload: IngestionModel) -> dict[str, str | int]:
-	manual_ingestion = ManualIngestion(session, payload)
-	upload_status = manual_ingestion.ingest()
-	return upload_status
+def upload_data(ingestion_service: IngestionService, payload: IngestionModel) -> dict[str, str | int]:
+	return ingestion_service.upload_to_db(payload)

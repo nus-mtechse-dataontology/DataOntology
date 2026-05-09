@@ -27,6 +27,8 @@ from adapters.telegram import TelegramWebhookHandler, TelegramClient, TelegramUp
 from dao.fact_flight_info_dao import FactFlightInfoDAO
 from handlers import *
 from services.auth.jwt_handler import JWTHandler
+from ingestion.services.ingestion_service import IngestionService
+from dao.ingestion_dao import IngestionDAO
 from dao.registration_dao import RegistrationDAO
 from services.auth.authentication_service import AuthenticationService
 from services.registration.registration_service import RegistrationService
@@ -104,6 +106,7 @@ async def startup(app: FastAPI):
     account_dao = AccountsDAO(session.engine)
     registration_dao = RegistrationDAO(session.engine)
     fact_flight_info_dao = FactFlightInfoDAO(session.engine)
+    ingestion_dao = IngestionDAO(session.engine)
     
     jwt_handler = JWTHandler(
         secrets.token_urlsafe(32),
@@ -188,5 +191,6 @@ async def startup(app: FastAPI):
     app.state.telegram_handler = telegram_handler
     app.state.configured_secret = configured_secret
     app.state.registration = RegistrationService(registration_dao, account_dao)
+    app.state.ingestion_service = IngestionService(ingestion_dao)
     
     yield

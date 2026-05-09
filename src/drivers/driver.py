@@ -4,7 +4,8 @@ from sqlalchemy import URL
 
 
 class Driver(ABC):
-	def __init__(self):
+	def __init__(self, config: dict):
+		self._config = config
 		self._connection_url: str | URL | None = None
 	
 	@abstractmethod
