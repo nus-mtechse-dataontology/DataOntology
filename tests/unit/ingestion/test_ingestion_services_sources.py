@@ -13,11 +13,12 @@ from ingestion.source.api_source.country_api_ingestion import CountryApiIngestio
 from ingestion.source.api_source.flight_search_api_ingestion import FlightSearchApiIngestion
 
 
-def test_ingestion_service_stub_methods_are_callable():
-    service = IngestionService()
-    assert service.start_ingestion() is None
-    assert service._get_data() is None
-    assert service._upload_to_db() is None
+def test_ingestion_service_methods_are_callable():
+    service = IngestionService(Mock())
+    assert service.upload_to_db(Mock()) is not None
+    assert service.truncate_table("table") is not None
+    assert service.get_table_data("table") is not None
+    assert service.get_schema_from_db() is not None
 
 
 def test_flight_search_service_insert_flights_logs_payload():

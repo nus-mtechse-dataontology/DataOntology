@@ -13,6 +13,7 @@ def app():
     app = FastAPI()
     app.include_router(ingestion_router)
     app.state.session = Mock()
+    app.state.ingestion_service = Mock()
     return app
 
 
@@ -47,38 +48,28 @@ def test_get_schema_happy_path_returns_tables(client, app, enabled_user, monkeyp
     async def fake_jwt_call(self, request):
         return enabled_user
 
-    class FakeInspector:
-        def get_table_names(self):
-            return ["table_a"]
+    def fake_get_schema(ingestion_service):
+        return [
+            {
+                "name": "table_a",
+                "description": "",
+                "cols": [
+                    {
+                        "name": "name",
+                        "type": "TEXT",
+                        "nullable": True,
+                        "default": None,
+                        "autoincrement": False,
+                        "comment": None,
+                    }
+                ],
+            }
+        ]
 
-        def get_columns(self, table):
-            return [
-                {
-                    "name": "id",
-                    "type": "INTEGER",
-                    "nullable": False,
-                    "default": None,
-                    "autoincrement": True,
-                    "comment": None,
-                },
-                {
-                    "name": "name",
-                    "type": "TEXT",
-                    "nullable": True,
-                    "default": None,
-                    "autoincrement": False,
-                    "comment": None,
-                },
-            ]
-
-    def fake_inspect(engine):
-        return FakeInspector()
-
-    app.state.session.engine = Mock()
     monkeypatch.setattr("dependencies.jwt_auth.JWTAuth.__call__", fake_jwt_call)
     monkeypatch.setattr(
-        "endpoints.routes.ingestion.ingestion_routes.inspect",
-        fake_inspect,
+        "endpoints.routes.ingestion.ingestion_routes.get_schema_from_db",
+        fake_get_schema,
     )
 
     response = client.get("/ingestion/get_schema", headers={"Authorization": "Bearer token"})
@@ -105,7 +96,7 @@ def test_upload_happy_path_returns_status(client, app, enabled_user, monkeypatch
     async def fake_jwt_call(self, request):
         return enabled_user
 
-    def fake_upload_data(session, payload):
+    def fake_upload_data(ingestion_service, payload):
         return {"status_code": 0, "status": "success", "records_inserted": 1}
 
     monkeypatch.setattr("dependencies.jwt_auth.JWTAuth.__call__", fake_jwt_call)
@@ -149,7 +140,7 @@ def test_upload_missing_payload_fields_returns_422(client, app, enabled_user, mo
     response = client.post(
         "/ingestion/upload",
         headers={"Authorization": "Bearer token"},
-        json={"table_name": "t"},
+        json={},
     )
 
     assert response.status_code == 422
