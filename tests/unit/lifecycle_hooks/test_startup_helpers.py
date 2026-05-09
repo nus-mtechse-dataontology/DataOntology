@@ -1,7 +1,7 @@
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
+import tomllib
 
 import lifecycle_hooks.startup as startup
 
@@ -17,6 +17,12 @@ def test_load_env_loads_both_files(tmp_path, monkeypatch):
     startup.load_env(tmp_path)
 
     assert calls == [(".env", False), ("local.env", False)]
+
+
+def test_load_env_handles_none_load_dotenv(tmp_path, monkeypatch):
+    monkeypatch.setattr(startup, "load_dotenv", None)
+    # Should not raise any exception
+    startup.load_env(tmp_path)
 
 
 def test_load_config_reads_project_path(tmp_path, monkeypatch):
@@ -36,6 +42,16 @@ algo = "HS256"
 
     assert config["jwt"]["expire_mins"] == 15
     assert config["jwt"]["algo"] == "HS256"
+
+
+def test_load_config_decode_error(tmp_path, monkeypatch):
+    resources = tmp_path / "resources"
+    resources.mkdir(parents=True, exist_ok=True)
+    (resources / "config.toml").write_text("invalid toml", encoding="utf-8")
+    monkeypatch.setenv("PROJECT_PATH", str(tmp_path))
+
+    with pytest.raises(tomllib.TOMLDecodeError):
+        startup.load_config()
 
 
 def test_get_key_returns_token_string():

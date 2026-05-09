@@ -7,7 +7,7 @@ INSERT INTO dim_country (f_country_code, f_country_name) VALUES
   ('TH', 'Thailand'),
   ('MY', 'Malaysia'),
   ('JP', 'Japan')
-ON CONFLICT DO NOTHING;
+ON CONFLICT (f_country_code) DO NOTHING;
 
 -- Cities
 INSERT INTO dim_city (f_city_code, f_city_name, f_country_code) VALUES
@@ -16,7 +16,7 @@ INSERT INTO dim_city (f_city_code, f_city_name, f_country_code) VALUES
   ('CNX', 'Chiang Mai',     'TH'),
   ('KUL', 'Kuala Lumpur',   'MY'),
   ('NRT', 'Tokyo',          'JP')
-ON CONFLICT DO NOTHING;
+ON CONFLICT (f_city_code) DO NOTHING;
 
 -- Airports
 INSERT INTO dim_airport (f_airport_code, f_airport_name, f_city_code) VALUES
@@ -25,7 +25,7 @@ INSERT INTO dim_airport (f_airport_code, f_airport_name, f_city_code) VALUES
   ('CNX', 'Chiang Mai International Airport','CNX'),
   ('KUL', 'Kuala Lumpur International',      'KUL'),
   ('NRT', 'Narita International Airport',    'NRT')
-ON CONFLICT DO NOTHING;
+ON CONFLICT (f_airport_code) DO NOTHING;
 
 -- Airlines
 INSERT INTO dim_airline (f_airline_code, f_airline_name) VALUES
@@ -33,27 +33,22 @@ INSERT INTO dim_airline (f_airline_code, f_airline_name) VALUES
   ('TG', 'Thai Airways'),
   ('AK', 'AirAsia'),
   ('MH', 'Malaysia Airlines')
-ON CONFLICT DO NOTHING;
+ON CONFLICT (f_airline_code) DO NOTHING;
 
 -- Aircraft
 INSERT INTO dim_aircraft (f_aircraft_code, f_aircraft_model) VALUES
   ('773', 'Boeing 777-300'),
   ('320', 'Airbus A320'),
   ('333', 'Airbus A330-300')
-ON CONFLICT DO NOTHING;
+ON CONFLICT (f_aircraft_code) DO NOTHING;
 
 -- Currency
 INSERT INTO dim_currency_rate (f_currency_code, f_currency_name, f_currency_rate) VALUES
   ('SGD', 'Singapore Dollar', 1.00),
   ('THB', 'Thai Baht',        0.037)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (f_currency_code) DO NOTHING;
 
 -- fact_flight_info
--- SIN → BKK (multiple airlines, cabin classes, seat availability) — covers intents 1,4,5,6
--- SIN → CNX (Thailand, different city)                            — covers intent 3
--- SIN → KUL (Malaysia, cheap)                                     — covers intent 2
--- SIN → NRT (Japan, expensive)                                     — covers intent 2
-
 INSERT INTO fact_flight_info (
   f_flight_combination, f_departure_airport_code, f_destination_airport_code,
   f_airline_code, f_currency_code, f_aircraft_code,
@@ -74,15 +69,15 @@ INSERT INTO fact_flight_info (
   -- SIN → BKK, Thai Airways, Business (last seat urgency)
   (1006, 'SIN', 'BKK', 'TG', 'SGD', '333', '2025-06-12 16:00', '2025-06-12 19:30', 'Business','OW', 1,  210, 480.00),
 
-  -- SIN → CNX (Chiang Mai, Thailand) — destinations_by_country_from_origin
+  -- SIN → CNX (Chiang Mai, Thailand)
   (2001, 'SIN', 'CNX', 'AK', 'SGD', '320', '2025-06-07 07:00', '2025-06-07 11:30', 'Economy', 'OW', 20, 270, 112.00),
   (2002, 'SIN', 'CNX', 'TG', 'SGD', '333', '2025-06-15 13:00', '2025-06-15 17:30', 'Economy', 'OW', 8,  270, 178.00),
 
-  -- SIN → KUL (cheap, under budget) — destinations_under_budget
+  -- SIN → KUL (cheap, under budget)
   (3001, 'SIN', 'KUL', 'AK', 'SGD', '320', '2025-06-03 06:00', '2025-06-03 07:30', 'Economy', 'OW', 30, 90,  55.00),
   (3002, 'SIN', 'KUL', 'MH', 'SGD', '320', '2025-06-03 12:00', '2025-06-03 13:30', 'Economy', 'OW', 15, 90,  72.00),
 
-  -- SIN → NRT (expensive, over budget) — destinations_under_budget (should NOT appear for budget 300)
+  -- SIN → NRT (expensive, over budget)
   (4001, 'SIN', 'NRT', 'SQ', 'SGD', '773', '2025-06-05 09:00', '2025-06-05 17:00', 'Economy', 'OW', 10, 480, 450.00),
   (4002, 'SIN', 'NRT', 'SQ', 'SGD', '773', '2025-06-05 09:00', '2025-06-05 17:00', 'Business','OW', 4,  480, 1200.00)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (f_flight_combination) DO NOTHING;
