@@ -123,7 +123,7 @@ jobs:
           uv pip install --system .[dev] pytest-cov
 
       - name: Run Tests for Sonar Coverage
-        run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-config=pyproject.toml
+        run: COVERAGE_CORE=pytrace uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-report=term-missing --cov-fail-under=80 --cov-config=pyproject.toml
 
       # --- SONARQUBE (Python Logic Scan) ---
       - name: SonarQube Scan
