@@ -1187,7 +1187,7 @@
     },
     "destination_overview": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "Resolve full destination context for an airport code: airport name, city, country, continent, region, capital city of the country, safety tier, solo-female safety rating, and cost of living index.",
@@ -1205,7 +1205,7 @@
     },
     "destination_weather_by_month": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "Return monthly weather observations for a destination city: average temperature, rainfall, weather profile, season, and best-time-to-visit flag.",
@@ -1253,7 +1253,7 @@
     },
     "best_months_to_visit": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "Return only the months flagged as best time to visit for a destination city.",
@@ -1268,7 +1268,7 @@
     },
     "destination_attractions": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "List attractions at a destination city: name, type (landmark, museum, beach, nightlife, nature, religious_site, etc.), and tier (must_see, popular, local_gem).",
@@ -1288,7 +1288,7 @@
     },
     "destination_festivals": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "List festivals and events at a destination city, with month and festival type.",
@@ -1308,7 +1308,7 @@
     },
     "destination_travel_styles": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "List all travel style tags associated with a destination city.",
@@ -1324,7 +1324,7 @@
     },
     "destination_safety": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "Return safety information for a destination city: safety tier (very_safe, safe, moderate, caution) and solo-female safety rating.",
@@ -1341,7 +1341,7 @@
     },
     "destination_transport": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "List available transport modes at a destination city and whether public transport is widely used in that country.",
@@ -1357,7 +1357,7 @@
     },
     "destination_cuisines": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "List cuisine types available at a destination city.",
@@ -1372,7 +1372,7 @@
     },
     "destination_neighborhoods": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "List notable neighborhoods and districts in a destination city with summaries.",
@@ -1388,7 +1388,7 @@
     },
     "destination_language": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "Return the primary language(s) spoken at a destination city.",
@@ -1403,7 +1403,7 @@
     },
     "destination_timezone": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "Return the timezone and UTC offset for a destination city.",
@@ -1418,7 +1418,7 @@
     },
     "destination_currency": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "Return the local currency for a destination country, including currency code, name, and exchange rate.",
@@ -1434,7 +1434,7 @@
     },
     "airport_amenities": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_airport_code",
       "description": "Return amenity details for an airport: type, terminal count, international status, transit hotel availability, and lounge availability.",
@@ -1452,7 +1452,7 @@
     },
     "visa_check_for_destination": {
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "requires_business_result": true,
       "input_from": "destination_country_code",
       "description": "Check visa requirements between a passport country and a destination country. Returns visa required flag, policy name, description, online apply URL, and visa duration.",
@@ -1484,7 +1484,7 @@
     },
     "destination_vacation_plan": {
       "category": "graphdb_primary",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "sparql_type": "construct",
       "description": "Generate a personalised tour-guide-style vacation summary for a destination city. Issues one SPARQL CONSTRUCT query that traverses the full destination subgraph in a single round-trip — airport → city → country → currency, language, transport, travel styles, weather, neighbourhoods, cuisines, attractions, festivals — then a conditional SELECT for visa check when passport_country_code is available. Formats the combined graph result as a structured markdown narrative in the voice of a helpful tour guide.",
       "examples": [
@@ -1511,7 +1511,7 @@
     "destination_highlights": {
       "description": "Returns a compact highlights summary for a destination: what to see/do (attractions by tier), any festivals in the specified month, and weather context for that month. Use when the user asks what is good, what to do, what is worth doing, or what is happening in a city, especially with a month specified.",
       "category": "enrichment",
-      "execution_phase": "sparql_first",
+      "execution_phase": "sql_then_sparql",
       "sparql_type": "select",
       "required_params": [
         "destination_airport_code"
