@@ -175,7 +175,7 @@ def test_extract_country_code_not_found(pipeline):
 
 def test_run_once_prefilled_plan(pipeline):
     prefilled_plan = {"intent": "test_intent", "parameters": {}}
-    semantics = {"intents": {"test_intent": {"execution_phase": "sql_first"}}}
+    semantics = {"intents": {"test_intent": {"execution_phase": "sql_only"}}}
     
     with patch("graphdb.pipeline.validate", return_value=(True, "")):
         with patch.object(pipeline, "_run_sql", return_value=[{"id": 1}]):
@@ -302,7 +302,7 @@ def test_run_once_round_trip(pipeline):
     semantics = {
         "intents": {
             "round_trip_on_route": {
-                "execution_phase": "sql_first",
+                "execution_phase": "sql_only",
             }
         }
     }
@@ -321,7 +321,7 @@ def test_run_once_round_trip_no_dates(pipeline):
     semantics = {
         "intents": {
             "round_trip_on_route": {
-                "execution_phase": "sql_first",
+                "execution_phase": "sql_only",
             }
         }
     }
@@ -336,11 +336,11 @@ def test_run_once_round_trip_no_dates(pipeline):
                     res = pipeline.run_once("question", semantics, "intents", "schema")
                     assert res == query_plan
 
-def test_run_once_sql_first_success(pipeline):
+def test_run_once_sql_only_success(pipeline):
     semantics = {
         "intents": {
             "sql_intent": {
-                "execution_phase": "sql_first",
+                "execution_phase": "sql_only",
             }
         }
     }
@@ -353,11 +353,11 @@ def test_run_once_sql_first_success(pipeline):
                     res = pipeline.run_once("question", semantics, "intents", "schema")
                     assert res == query_plan
 
-def test_run_once_sql_first_no_rows_trip_r(pipeline):
+def test_run_once_sql_only_no_rows_trip_r(pipeline):
     semantics = {
         "intents": {
             "sql_intent": {
-                "execution_phase": "sql_first",
+                "execution_phase": "sql_only",
             }
         }
     }
@@ -369,11 +369,11 @@ def test_run_once_sql_first_no_rows_trip_r(pipeline):
                 res = pipeline.run_once("question", semantics, "intents", "schema")
                 assert res == query_plan
 
-def test_run_once_sql_first_date_out_of_range(pipeline):
+def test_run_once_sql_only_date_out_of_range(pipeline):
     semantics = {
         "intents": {
             "sql_intent": {
-                "execution_phase": "sql_first",
+                "execution_phase": "sql_only",
             }
         }
     }
@@ -385,14 +385,14 @@ def test_run_once_sql_first_date_out_of_range(pipeline):
                 res = pipeline.run_once("question", semantics, "intents", "schema")
                 assert res == query_plan
 
-def test_run_once_sql_first_transit_success(pipeline):
+def test_run_once_sql_only_transit_success(pipeline):
     semantics = {
         "intents": {
             "cheapest_flight_on_route": {
-                "execution_phase": "sql_first",
+                "execution_phase": "sql_only",
             },
             "cheapest_transit_route": {
-                "execution_phase": "sql_first",
+                "execution_phase": "sql_only",
             }
         }
     }
@@ -406,11 +406,11 @@ def test_run_once_sql_first_transit_success(pipeline):
                     res = pipeline.run_once("question", semantics, "intents", "schema")
                     assert res == query_plan
 
-def test_run_once_sql_first_no_results(pipeline):
+def test_run_once_sql_only_no_results(pipeline):
     semantics = {
         "intents": {
             "sql_intent": {
-                "execution_phase": "sql_first",
+                "execution_phase": "sql_only",
             }
         }
     }
@@ -426,7 +426,7 @@ def test_run_once_sql_aggregate_intent(pipeline):
     semantics = {
         "intents": {
             "cheapest_month_for_route": {
-                "execution_phase": "sql_first",
+                "execution_phase": "sql_only",
             }
         }
     }
@@ -443,7 +443,7 @@ def test_run_once_sql_enrichment_success(pipeline):
     semantics = {
         "intents": {
             "sql_intent": {
-                "execution_phase": "sql_first",
+                "execution_phase": "sql_only",
                 "enrichment_triggers": True
             },
             "destination_vacation_plan": {
@@ -474,7 +474,7 @@ def test_run_once_sql_enrichment_conn_error(pipeline):
     semantics = {
         "intents": {
             "sql_intent": {
-                "execution_phase": "sql_first",
+                "execution_phase": "sql_only",
                 "enrichment_triggers": True
             },
             "destination_vacation_plan": {

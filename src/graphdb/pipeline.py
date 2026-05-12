@@ -39,8 +39,8 @@ from .validator import print_query_plan, validate
 
 
 class GraphDbPipeline:
-    SPARQL_ONLY_PHASES = ("sparql_only", "sparql_first")
-    SQL_PHASES = ("sql_first",)
+    SPARQL_ONLY_PHASES = ("sparql_only", "sql_then_sparql")
+    SQL_PHASES = ("sql_only",)
     HYBRID_PHASES = ("sparql_then_sql",)
     
     # Maps raw SQL column names → user-friendly table headers
@@ -158,7 +158,7 @@ class GraphDbPipeline:
         intent_name = query_plan["intent"]
         params = query_plan.get("parameters", {})
         intent_def = semantics["intents"][intent_name]
-        phase = intent_def.get("execution_phase", "sql_first")
+        phase = intent_def.get("execution_phase", "sql_only")
         sparql_type = intent_def.get("sparql_type", "select")
         
         print(f"\n  execution_phase : {phase}")
@@ -260,7 +260,7 @@ class GraphDbPipeline:
             print(format_round_trip(outbound_rows, return_rows, params))
             return query_plan
 
-        # ── sql_first ────────────────────────────────────────────────
+        # ── sql_only ─────────────────────────────────────────────────
         if phase in self.SQL_PHASES:
             print("[Phase 3] SQL execution")
             rows = self._run_sql(intent_def, params, intent_name)
@@ -370,7 +370,7 @@ class GraphDbPipeline:
             print(format_table(self._friendly_columns(rows), intent_name, params))
             return query_plan
         
-        # ── sparql_only / sparql_first ───────────────────────────────
+        # ── sparql_only / sql_then_sparql ────────────────────────────
         if phase in self.SPARQL_ONLY_PHASES:
             sparql_template = intent_def.get("sparql_template", "")
             if not sparql_template:
@@ -422,7 +422,7 @@ class GraphDbPipeline:
                 print(output)
                 return query_plan
             
-            # ── Standard SELECT (sparql_only / sparql_first) ──────────
+            # ── Standard SELECT (sparql_only / sql_then_sparql) ───────
             print("[Phase 3] SPARQL SELECT")
             sparql_str = compile_sparql(sparql_template, params)
             print("  [sparql] Executing SELECT...")
