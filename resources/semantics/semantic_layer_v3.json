@@ -345,7 +345,7 @@
   "intents": {
     "cheapest_flight_on_route": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Find the cheapest estimated round-trip fare for a direct route between two airports within a departure date window. Fare shown is 2x one-way as round-trip estimate. Use cheapest_oneway_on_route if user explicitly asks for one-way price.",
       "examples": [
         "What is the cheapest round trip from SIN to BKK in June 2026?",
@@ -380,7 +380,7 @@
     },
     "cheapest_flight_by_airline": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Find the cheapest flight fare offered by a specific airline on a route within a date window.",
       "examples": [
         "What is the cheapest Singapore Airlines flight from SIN to NRT in June 2026?",
@@ -408,7 +408,7 @@
     },
     "route_statistics": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Return summary statistics for a route: average fare, minimum fare, maximum fare, average flight duration, and total flight count within a date window.",
       "examples": [
         "What is the average fare from SIN to NRT in June 2026?",
@@ -429,7 +429,7 @@
     },
     "flights_on_date": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "List all available flights on an exact departure date between two airports.",
       "examples": [
         "Show me all flights from SIN to BKK on 2026-05-30.",
@@ -455,7 +455,7 @@
     },
     "all_flights_on_date": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "List all flights departing from an origin airport on an exact date, to any destination. Use when no specific destination is given.",
       "examples": [
         "What flights are available from SIN on 30 May 2026?",
@@ -478,7 +478,7 @@
     },
     "next_available_flight": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Find the earliest available flight on a specific route from a given date onwards.",
       "examples": [
         "What is the first available flight from SIN to NRT?",
@@ -502,7 +502,7 @@
     },
     "cheapest_month_for_route": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Identify which calendar month has the lowest average flight fare for a route within a broader date window.",
       "examples": [
         "What month is cheapest to fly from SIN to BKK?",
@@ -527,7 +527,7 @@
     },
     "shortest_flight_on_route": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Find the fastest flight option between two specific airports within a date window, ordered by flight duration.",
       "examples": [
         "What is the fastest flight from SIN to BKK in June 2026?",
@@ -552,7 +552,7 @@
     },
     "shortest_flight_from_origin": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Find the shortest flight(s) from an origin airport to any destination within a date window. No destination filter — returns the absolute quickest reachable places.",
       "examples": [
         "What is the shortest flight from SIN to any destination in June 2026?",
@@ -575,7 +575,7 @@
     },
     "all_destinations_from_origin": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "List all distinct destinations reachable from an origin airport within a date window with their cheapest fare. No budget cap — returns everything available.",
       "examples": [
         "Where can I fly from SIN in June 2026?",
@@ -602,7 +602,7 @@
     },
     "destinations_under_budget": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "List all reachable destinations from an origin airport whose cheapest flight fare falls within a maximum budget, within a departure date window. Budget covers flight fare only — hotel, activities and ground costs are not included.",
       "examples": [
         "Where can I fly from SIN with a flight fare under SGD 200 in June 2026?",
@@ -663,7 +663,7 @@
     },
     "round_trip_on_route": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Show both legs of a round trip for any route worldwide. Use this intent — not route_fare_options — whenever the user says 'weekend trip', 'return trip', 'round trip', 'fly back', 'going on X coming back on Y', or implies both outbound and return legs. Two patterns: (1) Specific dates — provide departure_date for outbound and return_date for return leg; start_date/end_date are not needed. (2) Month range — provide start_date/end_date only; pipeline auto-filters outbound to Fridays and return to Sundays.",
       "examples": [
         "SIN to BKK going 28 June coming back 2 July 2026",
@@ -698,7 +698,7 @@
     },
     "route_fare_options": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "List all available one-way flight fare options for a specific route and departure date window, ordered by price. Use this for one-way flight browsing only. For round trips or weekend trips, use round_trip_on_route instead.",
       "examples": [
         "What are all flight options from SIN to HKG in July 2026?",
@@ -726,7 +726,7 @@
     },
     "airlines_on_route": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "List all airlines operating flights between two airports within a departure date window, with cheapest fare, average duration, and flight count.",
       "examples": [
         "Which airlines fly from SIN to BKK in June 2026?",
@@ -751,7 +751,7 @@
     },
     "aircraft_on_route": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "List which aircraft types are used on a route within a date window, with the airlines that operate them.",
       "examples": [
         "What aircraft does Singapore Airlines use on the SIN to NRT route?",
@@ -802,7 +802,7 @@
     },
     "flight_count_on_route": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Return how many distinct flight combinations are available on a route within a date window, and how many airlines serve it.",
       "examples": [
         "How many flights are available from SIN to BKK in June 2026?",
@@ -821,7 +821,7 @@
     },
     "destinations_by_duration": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Find destinations reachable from an origin with flight duration within specified bounds. Use max_duration_mins for short-haul (e.g. under 2 hours = 120 mins), min_duration_mins for long-haul (e.g. over 10 hours = 600 mins).",
       "examples": [
         "Which destinations from SIN have a flight duration under 2 hours?",
@@ -1862,7 +1862,7 @@
     },
     "cheapest_transit_route": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Find cheapest two-leg connecting flight between two airports that have no direct service. Self-joins fact_flight_info on transit hub with a minimum 2-hour layover. Used as auto-fallback when cheapest_flight_on_route returns no results, and also directly when user asks for connecting flights.",
       "examples": [
         "Cheapest flight from FRA to SYD on 1 June 2026?",
@@ -1902,7 +1902,7 @@
     },
     "cheapest_oneway_on_route": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "Find the cheapest ONE-WAY flight fare for a direct route between two airports within a departure date window. Use ONLY when user explicitly says 'one-way', 'one way', 'single', 'outbound only', or 'one leg'. Default to cheapest_flight_on_route (round-trip) otherwise.",
       "examples": [
         "Cheapest one-way from SIN to BKK in June 2026?",
@@ -1932,7 +1932,7 @@
     },
     "destinations_under_budget_oneway": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "List destinations from an origin where the ONE-WAY fare is within a budget. Use ONLY when user explicitly says 'one-way', 'one way', or 'outbound only'. Default to destinations_under_budget (round-trip) otherwise.",
       "examples": [
         "Where can I fly one-way from SIN for under SGD 150 in June 2026?",
@@ -1961,7 +1961,7 @@
     },
     "all_destinations_oneway": {
       "category": "primary",
-      "execution_phase": "sql_first",
+      "execution_phase": "sql_only",
       "description": "List all destinations reachable from an origin with their cheapest ONE-WAY fare. Use ONLY when user explicitly says 'one-way', 'one way', 'outbound only', or 'single leg'. Default to all_destinations_from_origin (round-trip) otherwise.",
       "examples": [
         "Where can I fly one-way from SIN in June 2026?",
